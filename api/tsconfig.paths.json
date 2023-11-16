@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"@src/*": ["src/*"],
+			"@portAuthorization/*": ["src/Authorization/Port/*"],
+			"@portSettlement/*": ["src/Settlement/Port/*"],
+			"@portManagement/*": ["src/Management/Port/*"],
+			"@portRegister/*": ["src/Management/Register/Port/*"],
+			"@portValuesTransfer/*": ["src/ValuesTransfer/Port/*"],
+			"@dtoAuthorization/*": ["src/Authorization/Domain/Dto/*"],
+			"@dtoSettlement/*": ["src/Settlement/Domain/Dto/*"],
+			"@dtoManagement/*": ["src/Management/Domain/Dto/*"],
+			"@dtoRegister/*": ["src/Management/Register/Domain/Dto/*"],
+			"@dtoValuesTransfer/*": ["src/ValuesTransfer/Domain/Dto/*"]
+		}
+	}
+}
