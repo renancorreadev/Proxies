@@ -6,7 +6,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-contract PizzaV4 is Initializable, UUPSUpgradeable, OwnableUpgradeable {
+contract PizzaV5 is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     uint256 public slices;
 
     mapping(uint => string) public sliceNames;
@@ -42,6 +42,6 @@ contract PizzaV4 is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     }
 
     function pizzaVersion() external pure returns (uint256) {
-      return 4;
+        return 5;
     }
 }
