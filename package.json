@@ -4,9 +4,26 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "turbo run build --parallel",
+    "dev": "turbo run dev --parallel",
+    "start": "turbo run start --parallel",
+    "lint": "turbo run lint --parallel",
+    "lint:fix": "turbo run lint:fix --parallel",
+    "typecheck": "turbo run typecheck --parallel",
+    "prettier": "prettier --check \"**/*.{ts,tsx,md}\"",
+    "prettier:fix": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "husky": "^8.0.3",
+    "prettier": "^2.8.7",
+    "start-server-and-test": "^2.0.0",
+    "turbo": "^1.8.8"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }

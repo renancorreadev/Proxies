@@ -21,6 +21,13 @@ interface IClientStorage {
     PaymentStatus paymentStatus;
     AddressLocal addressLocal;
   }
+
+  function getClientData(uint256 clientId) external view returns (ClientData memory);
+  function getClientName(uint256 clientId) external view returns (string memory);
+  function getClientAge(uint256 clientId) external view returns (uint256);
+  function getClientWalletAddress(uint256 clientId) external view returns (address);
+  function getClientPaymentStatus(uint256 clientId) external view returns (PaymentStatus);
+  function getClientAddressLocal(uint256 clientId) external view returns (AddressLocal memory);
 }
 
 abstract contract ClientStorage is IClientStorage {
@@ -42,27 +49,27 @@ abstract contract ClientStorage is IClientStorage {
 
 
   /// @dev getters storage to client data
-  function getClientData(uint256 clientId) public view returns (ClientData memory) {
+  function getClientData(uint256 clientId) public view override returns (ClientData memory) {
       return clientMappingStorage[clientId];
   }
 
-  function getClientName(uint256 clientId) public view returns (string memory) {
+  function getClientName(uint256 clientId) public view override returns (string memory) {
       return clientMappingStorage[clientId].name;
   }
 
-  function getClientAge(uint256 clientId) public view  returns (uint256) {
+  function getClientAge(uint256 clientId) public view  override returns (uint256) {
       return clientMappingStorage[clientId].age;
   }
 
-  function getClientWalletAddress(uint256 clientId) public view returns (address) {
+  function getClientWalletAddress(uint256 clientId) public view override returns (address) {
       return clientMappingStorage[clientId].WalletAddress;
   }
 
-  function getClientPaymentStatus(uint256 clientId) public view returns (PaymentStatus) {
+  function getClientPaymentStatus(uint256 clientId) public view override returns (PaymentStatus) {
       return clientMappingStorage[clientId].paymentStatus;
   }
 
-  function getClientAddressLocal(uint256 clientId) public view  returns (AddressLocal memory) {
+  function getClientAddressLocal(uint256 clientId) public view  override returns (AddressLocal memory) {
       return clientMappingStorage[clientId].addressLocal;
   }
 
