@@ -3,19 +3,17 @@ import { getImplementationAddress } from '@openzeppelin/upgrades-core';
 import {JsonRpcProvider} from "@ethersproject/providers";
 import fs from 'fs';
 
-
 const provider = new JsonRpcProvider("http://192.168.15.200:5100");
-const SLICES = 8;
 
 async function main() {
   // Deploy the contract
 
-  const PizzaFactory = await ethers.getContractFactory("Pizza");
+  const contractFactory = await ethers.getContractFactory("ClientManager");
 
-  const deployContractPizza = await upgrades.deployProxy(PizzaFactory, [SLICES], { initializer: 'initialize' });
-  await deployContractPizza.waitForDeployment();
+  const deployContract = await upgrades.deployProxy(contractFactory, [], { initializer: 'initialize' });
+  await deployContract.waitForDeployment();
 
-  const proxyAddress = await deployContractPizza.getAddress();
+  const proxyAddress = await deployContract.getAddress();
   const newImplementationAddress = await getImplementationAddress(provider, proxyAddress);
 
   const data = {

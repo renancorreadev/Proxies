@@ -6,14 +6,15 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-contract Pizza is Initializable, UUPSUpgradeable, OwnableUpgradeable {
-    uint256 public slices;
+import {ClientStorage} from "./storage/ClientStorage.sol";
 
-    ///@dev no constructor in upgradable contracts. Instead we have initializers
-    ///@param _sliceCount initial number of slices for the pizza
-    function initialize(uint256 _sliceCount) public initializer {
-        slices = _sliceCount;
+// interfaces
+import {IClient} from "./interfaces/Iclient.sol";
 
+contract ClientManager is Initializable, UUPSUpgradeable, OwnableUpgradeable, ClientStorage, IClient {
+
+    function initialize() public initializer {
+        __ClientStorageInit();
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init(msg.sender);
     }
@@ -21,9 +22,7 @@ contract Pizza is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     ///@dev required by the OZ UUPS module
     function _authorizeUpgrade(address) internal override onlyOwner {}
 
-    ///@dev decrements the slices when called
-    function eatSlice() external {
-        require(slices > 1, "no slices left");
-        slices -= 1;
-    }
+    function registerClient(ClientData calldata newClient) external {
+        _registerClient(newClient);
+    }    
 }
