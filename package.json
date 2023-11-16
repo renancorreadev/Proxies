@@ -2,7 +2,7 @@
   "name": "hardhat-project",
   "scripts": {
     "verify": "npx hardhat verify --network mumbai 0x74dC770ab1e2Ac3a001ee220765fc1af37758a27",
-    "deploy": "npx hardhat run ./scripts/deploy.ts --network mumbai",
+    "deploy": "npx hardhat run ./scripts/deploy.ts --network firefly",
     "upgrade": "npx hardhat run ./scripts/upgradeProxy.ts --network mumbai",
     "test": "npx hardhat test"
   },

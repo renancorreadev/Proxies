@@ -1,12 +1,12 @@
 import { ethers, upgrades } from "hardhat";
 import {JsonRpcProvider} from "@ethersproject/providers";
-import { exec } from "child_process";
+// import { exec } from "child_process";
 import { getImplementationAddress } from '@openzeppelin/upgrades-core';
-
+import fs from 'fs';
 
 
 const proxyAddress = "0x74dC770ab1e2Ac3a001ee220765fc1af37758a27"
-const provider = new JsonRpcProvider("https://polygon-mumbai.infura.io/v3/60786ed4ffd74c75b4b0bb369cde55f7");
+const provider = new JsonRpcProvider("http://192.168.15.200:5100");
 
 async function main() {
   const newContractVersion = await ethers.getContractFactory("PizzaV5");
@@ -22,17 +22,24 @@ async function main() {
   console.log("Contract updated deployed to:", await upgradeContract.getAddress());
   console.log("New implementation address:", newImplementationAddress);
 
-  exec(`npx hardhat verify --network mumbai ${newImplementationAddress}`, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Erro ao executar o comando: ${error.message}`);
-      return;
-    }
-    if (stderr) {
-      console.error(`Erro no stderr: ${stderr}`);
-      return;
-    }
-    console.log(`Resultado do comando: ${stdout}`);
-  });
+  const data = {
+    proxyAddress: proxyAddress,
+    implementationAddress: newImplementationAddress
+  };
+
+  fs.writeFileSync('updatedContracts.json', JSON.stringify(data, null, 2));
+
+  // exec(`npx hardhat verify --network mumbai ${newImplementationAddress}`, (error, stdout, stderr) => {
+  //   if (error) {
+  //     console.error(`Erro ao executar o comando: ${error.message}`);
+  //     return;
+  //   }
+  //   if (stderr) {
+  //     console.error(`Erro no stderr: ${stderr}`);
+  //     return;
+  //   }
+  //   console.log(`Resultado do comando: ${stdout}`);
+  // });
 }
   
 
