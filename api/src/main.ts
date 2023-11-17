@@ -26,7 +26,7 @@ async function bootstrap() {
 	const config = new DocumentBuilder()
 		.setTitle('ClientManager Api')
 		.setDescription(
-			'O ClientManagerAPI , é uma plataforma digital de serviços que facilita a sua gestão de clientes pela tecnologia de blokchain, com a tecnologia de blockchain todos dados são imutaveis e transparentes. ',
+			'O ClientManagerAPI , é uma plataforma digital de serviços que facilita a sua gestão de clientes pela tecnologia de Blockchain, com a tecnologia de blockchain todos dados são imutaveis e transparentes. ',
 		)
 		.setVersion('1.0.0')
 		.build();
