@@ -11,8 +11,6 @@ async function bootstrap() {
 		logger: ['error', 'log'],
 	});
 
-	//app.setGlobalPrefix('api/elo/v1');
-
 	app.useGlobalPipes(
 		new ValidationPipe({
 			transform: true,
