@@ -1,8 +1,7 @@
 # CLient Management API Blockchain 
 
-Eu tenho um back end NestJS com typescript configurado para usar o contexto de port, adapters com inputs e outputs com arquitetura hexagonal. 
 
-as pastas são organizada assim: 
+# Arquitetura Hexagonal
 
 ```log
 api/
