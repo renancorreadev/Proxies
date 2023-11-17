@@ -1,5 +1,7 @@
 import { RegisterClientRequestDto } from '@src/modules/Blockchain/Client/Domain/Dto/HTTPRequest/ClientBlockchainRequestDto';
+import { ClientData } from '../../Adapter/Output/ClientBlockchainConnectorAdapter';
 
 export interface ClientBlockchainTokenUseCase {
-	registerClient(authorizationRequestDto: RegisterClientRequestDto): Promise<any>;
+	getClientData(clientId: number): Promise<ClientData>;
+	registerClient(registerClientDTO: RegisterClientRequestDto): Promise<any>;
 }

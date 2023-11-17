@@ -4,6 +4,7 @@
 		"paths": {
 			"@blockchain/*": ["./blockchain/typechain/*"],
 			"@blockchain": ["./blockchain/typechain"],
+			"@helper/": ["./api/src/helper/*"],
 			"@/*": ["./api/*"],
 			"@src/*": ["./api/src/*"],
 			"@portAuthorization/*": ["./api/src/Authorization/Port/*"],

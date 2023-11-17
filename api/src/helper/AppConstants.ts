@@ -1,6 +1,6 @@
 export enum BaseUrls {
 	API_BASE_URL = '/api/v1',
-	CLIENT_BLOCKCHAIN = 'client/new',
+	CLIENT_BLOCKCHAIN = 'client/',
 }
 
 export const enum DependencyInjectionTokens {
