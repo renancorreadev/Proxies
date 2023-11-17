@@ -1,18 +1,21 @@
 {
 	"compilerOptions": {
-		"baseUrl": ".",
+		"baseUrl": "../",
 		"paths": {
-			"@src/*": ["src/*"],
-			"@portAuthorization/*": ["src/Authorization/Port/*"],
-			"@portSettlement/*": ["src/Settlement/Port/*"],
-			"@portManagement/*": ["src/Management/Port/*"],
-			"@portRegister/*": ["src/Management/Register/Port/*"],
-			"@portValuesTransfer/*": ["src/ValuesTransfer/Port/*"],
-			"@dtoAuthorization/*": ["src/Authorization/Domain/Dto/*"],
-			"@dtoSettlement/*": ["src/Settlement/Domain/Dto/*"],
-			"@dtoManagement/*": ["src/Management/Domain/Dto/*"],
-			"@dtoRegister/*": ["src/Management/Register/Domain/Dto/*"],
-			"@dtoValuesTransfer/*": ["src/ValuesTransfer/Domain/Dto/*"]
+			"@blockchain/*": ["./blockchain/typechain/*"],
+			"@blockchain": ["./blockchain/typechain"],
+			"@/*": ["./api/*"],
+			"@src/*": ["./api/src/*"],
+			"@portAuthorization/*": ["./api/src/Authorization/Port/*"],
+			"@portSettlement/*": ["./api/src/Settlement/Port/*"],
+			"@portManagement/*": ["./api/src/Management/Port/*"],
+			"@portRegister/*": ["./api/src/Management/Register/Port/*"],
+			"@portValuesTransfer/*": ["./api/src/ValuesTransfer/Port/*"],
+			"@dtoAuthorization/*": ["./api/src/Authorization/Domain/Dto/*"],
+			"@dtoSettlement/*": ["./api/src/Settlement/Domain/Dto/*"],
+			"@dtoManagement/*": ["./api/src/Management/Domain/Dto/*"],
+			"@dtoRegister/*": ["./api/src/Management/Register/Domain/Dto/*"],
+			"@dtoValuesTransfer/*": ["./api/src/ValuesTransfer/Domain/Dto/*"]
 		}
 	}
 }

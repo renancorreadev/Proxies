@@ -4,8 +4,8 @@ export enum BaseUrls {
 }
 
 export const enum DependencyInjectionTokens {
-	AUTHORIZATION_TOKEN_USE_CASE = 'AuthorizationUseCase',
-	AUTHORIZATION_TOKEN_OUTPUT_PORT = 'AuthorizationOutputPort',
+	CLIENT_BLOCKCHAIN_TOKEN_USE_CASE = 'ClientBlockchainTokenUseCase',
+	CLIENTBLOCKCHAIN_TOKEN_OUTPUT_PORT = 'ClientBlockchainTokenOutputPort',
 }
 
 export const enum Hosts {

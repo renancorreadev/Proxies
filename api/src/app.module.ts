@@ -13,11 +13,11 @@ import { DependencyInjectionTokens } from './helper/AppConstants';
 	providers: [
 		{
 			useClass: ClientBlockchainService,
-			provide: DependencyInjectionTokens.AUTHORIZATION_TOKEN_USE_CASE,
+			provide: DependencyInjectionTokens.CLIENT_BLOCKCHAIN_TOKEN_USE_CASE,
 		},
 		{
 			useClass: ClientBlockchainAdapter,
-			provide: DependencyInjectionTokens.AUTHORIZATION_TOKEN_OUTPUT_PORT,
+			provide: DependencyInjectionTokens.CLIENTBLOCKCHAIN_TOKEN_OUTPUT_PORT,
 		},
 	],
 })

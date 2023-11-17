@@ -1,34 +1,50 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class ClientBlockchainRequestDto {
-	@ApiProperty({ type: 'string', required: true, description: 'Accreditor Name', example: 'Cielo, Getnet, Stone' })
-	@IsNotEmpty()
-	@IsString()
-	accreditorName: string;
+class AddressLocalDto {
+  @ApiProperty({ type: String, required: true, example: 'City' })
+  @IsNotEmpty()
+  @IsString()
+  City: string;
 
-	@ApiProperty({ type: 'number', required: true, example: 1 })
-	@IsNotEmpty()
-	@IsNumber()
-	nrId: number;
+  @ApiProperty({ type: String, required: true, example: 'Street' })
+  @IsNotEmpty()
+  @IsString()
+  Street: string;
 
-	@ApiProperty({ type: 'number', required: true, description: 'Merchant Category Code', example: 1414 })
-	@IsNotEmpty()
-	@IsNumber()
-	mcc: number;
+  @ApiProperty({ type: Number, required: true, example: 'PostalCode' })
+  @IsNotEmpty()
+  @IsNumber()
+  PostalCode: number;
 
-	@ApiProperty({ type: 'number', required: true, description: 'Pan number', example: 65006500 })
-	@IsNotEmpty()
-	@IsNumber()
-	pan: number;
+  @ApiProperty({ type: String, required: true, example: 'HouseNumber' })
+  @IsNotEmpty()
+  @IsString()
+  HouseNumber: string;
+}
 
-	@ApiProperty({ type: 'number', required: true, example: 9955151 })
-	@IsNotEmpty()
-	@IsNumber()
-	productBin: number;
+export class RegisterClientRequestDto {
+  @ApiProperty({ type: String, required: true, example: 'Client Name' })
+  @IsNotEmpty()
+  @IsString()
+  name: string;
 
-	@ApiProperty({ type: 'number', required: true, example: 15000 })
-	@IsNotEmpty()
-	@IsNumber()
-	saleValue: number;
+  @ApiProperty({ type: Number, required: true, example: 30 })
+  @IsNotEmpty()
+  @IsNumber()
+  age: number;
+
+  @ApiProperty({ type: String, required: true, example: 'Wallet Address' })
+  @IsNotEmpty()
+  @IsString()
+  WalletAddress: string;
+
+  @ApiProperty({ type: Number, required: true, example: 1 })
+  @IsNotEmpty()
+  @IsNumber()
+  paymentStatus: number;
+
+  @ApiProperty({ type: AddressLocalDto, required: true })
+  @IsNotEmpty()
+  address: AddressLocalDto;
 }
