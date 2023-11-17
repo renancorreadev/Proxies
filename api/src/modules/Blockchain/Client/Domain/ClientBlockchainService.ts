@@ -19,8 +19,8 @@ export class ClientBlockchainService implements ClientBlockchainTokenUseCase {
 
 			return 'Cliente registrado com sucesso!';
 		} catch (e) {
-			this.logger.error(`Error in Authorization Service: ${JSON.stringify(e)}`);
-			throw new Error('An error ocurred while creating authorization token');
+			this.logger.error(`Error in Client Blockchain Service: ${JSON.stringify(e)}`);
+			throw new Error('An error ocurred while creating the client');
 		}
 	}
 }
