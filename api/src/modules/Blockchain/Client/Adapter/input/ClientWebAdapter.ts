@@ -11,24 +11,25 @@ import {
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { BaseUrls, DependencyInjectionTokens } from '@src/helper/AppConstants';
-import { AuthorizationTokenUseCase } from '../../Port/Input/AuthorizationTokenUseCase';
-import { AuthorizationRequestDto } from '../../Domain/Dto/RequestsDtos/AuthorizationRequestDto';
+import { ClientBlockchainTokenUseCase } from '../../Port/Input/ClientBlockchainTokenUseCase';
+import { ClientBlockchainRequestDto } from '../../Domain/Dto/HTTPRequest/ClientBlockchainRequestDto';
 
 @Controller({
-	path: BaseUrls.AUTHORIZATION,
+	path: BaseUrls.CLIENT_BLOCKCHAIN,
 })
-@ApiTags('Authorization')
-export class AuthorizationWebAdapter {
-	private readonly logger = new Logger('AuthorizationWebAdapter');
+
+@ApiTags('Blockchain')
+export class ClientWebAdapter {
+	private readonly logger = new Logger('ClientWebAdapter');
 	constructor(
 		@Inject(DependencyInjectionTokens.AUTHORIZATION_TOKEN_USE_CASE)
-		private authorizationService: AuthorizationTokenUseCase,
+		private authorizationService: ClientBlockchainTokenUseCase,
 	) {}
 
-	@ApiBody({ required: true, type: AuthorizationRequestDto })
+	@ApiBody({ required: true, type: ClientBlockchainRequestDto })
 	@ApiOperation({
-		summary: 'Mint a new Authorization',
-		description: 'Mint a new Authorization',
+		summary: 'Register a new Client on blockchain',
+		description: 'This route is used to register a new Client on blockchain',
 	})
 	@ApiOkResponse({
 		description: 'Success operation',
@@ -40,7 +41,7 @@ export class AuthorizationWebAdapter {
 	@ApiNotFoundResponse({ description: 'Segment not found' })
 	@ApiInternalServerErrorResponse({ description: 'Unexpected error' })
 	@Post('/')
-	async createNewAuthorization(@Body() authorizationRequestDto: AuthorizationRequestDto): Promise<string> {
+	async createNewAuthorization(@Body() authorizationRequestDto: ClientBlockchainRequestDto): Promise<string> {
 		this.logger.log('----------PROCESS BEGIN ----------');
 		this.logger.log(`Running Authorization web adapter`);
 		this.logger.log(`Data: ${JSON.stringify(authorizationRequestDto)}`);

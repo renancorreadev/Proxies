@@ -26,9 +26,9 @@ async function bootstrap() {
 	app.setGlobalPrefix(BaseUrls.API_BASE_URL);
 
 	const config = new DocumentBuilder()
-		.setTitle('WHIZZ')
+		.setTitle('ClientManager Api')
 		.setDescription(
-			'O Whizz, é uma plataforma digital de serviços que facilita a inserção da Instituição Financeira na economia tokenizada ofertando catálogo de produtos para gestão de chaves, execução de Smart Contracts e interoperabilidade entre redes. \n - O Whizz simplifica o desenvolvimento da infraestrutura das instituições para agilizar a inserção em nova economia tokenizada, com segurança e credibilidade, diferentemente da própria Institução Financeira desenvolver uma solução internamente.',
+			'O ClientManagerAPI , é uma plataforma digital de serviços que facilita a sua gestão de clientes pela tecnologia de blokchain, com a tecnologia de blockchain todos dados são imutaveis e transparentes. ',
 		)
 		.setVersion('1.0.0')
 		.build();

@@ -1,22 +1,22 @@
 import { Module } from '@nestjs/common';
-import { AuthorizationBlockChainAdapter } from './Blockchain/Adapter/Output/AuthorizationBlockChainAdapter';
-import { AuthorizationWebAdapter } from './Blockchain/Adapter/input/AuthorizationWebAdapter';
-import { AuthorizationService } from './Blockchain/Domain/AuthorizationService';
+import { ClientBlockchainAdapter } from './modules/Blockchain/Client/Adapter/Output/ClientBlockchainAdapter';
+import { ClientWebAdapter } from './modules/Blockchain/Client/Adapter/input/ClientWebAdapter';
+import { ClientBlockchainService } from './modules/Blockchain/Client/Domain/ClientBlockchainService';
 
 import { DependencyInjectionTokens } from './helper/AppConstants';
 
 @Module({
 	imports: [],
 	controllers: [
-		AuthorizationWebAdapter,
+		ClientWebAdapter,
 	],
 	providers: [
 		{
-			useClass: AuthorizationService,
+			useClass: ClientBlockchainService,
 			provide: DependencyInjectionTokens.AUTHORIZATION_TOKEN_USE_CASE,
 		},
 		{
-			useClass: AuthorizationBlockChainAdapter,
+			useClass: ClientBlockchainAdapter,
 			provide: DependencyInjectionTokens.AUTHORIZATION_TOKEN_OUTPUT_PORT,
 		},
 	],

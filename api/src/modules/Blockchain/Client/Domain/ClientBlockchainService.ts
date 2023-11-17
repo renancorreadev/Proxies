@@ -1,18 +1,18 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 
 import { DependencyInjectionTokens } from '@src/helper/AppConstants';
-import { AuthorizationTokenUseCase } from '../Port/Input/AuthorizationTokenUseCase';
-import { AuthorizationTokenOutputPort } from '../Port/Output/AuthorizationTokenOutputPort';
-import { AuthorizationRequestDto } from './Dto/RequestsDtos/AuthorizationRequestDto';
+import { ClientBlockchainTokenUseCase } from '../Port/Input/ClientBlockchainTokenUseCase';
+import { ClientBlockchainTokenOutputPort } from '../Port/Output/ClientBlockchainTokenOutputPort';
+import { ClientBlockchainRequestDto } from './Dto/HTTPRequest/ClientBlockchainRequestDto';
 
 @Injectable()
-export class AuthorizationService implements AuthorizationTokenUseCase {
-	private readonly logger = new Logger('AuthorizationService');
+export class ClientBlockchainService implements ClientBlockchainTokenUseCase {
+	private readonly logger = new Logger('ClientBlockchainService');
 	constructor(
 		@Inject(DependencyInjectionTokens.AUTHORIZATION_TOKEN_OUTPUT_PORT)
-		private readonly authorizationTokenAdapter: AuthorizationTokenOutputPort,
+		private readonly authorizationTokenAdapter: ClientBlockchainTokenOutputPort,
 	) {}
-	async createAuthorizationToken(authorizationRequestDto: AuthorizationRequestDto): Promise<string> {
+	async createAuthorizationToken(authorizationRequestDto: ClientBlockchainRequestDto): Promise<string> {
 		try {
 			// const accreditorHosts = nodesAccreditorHosts(authorizationRequestDto.accreditorName, authorizationRequestDto);
 

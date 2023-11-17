@@ -1,13 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { AuthorizationRequestDto } from '@src/Blockchain/Domain/Dto/RequestsDtos/AuthorizationRequestDto';
+import { ClientBlockchainRequestDto } from '@src/modules/Blockchain/Client/Domain/Dto/HTTPRequest/ClientBlockchainRequestDto';
 import { config } from 'dotenv';
-import { AuthorizationTokenOutputPort } from '@src/Blockchain/Port/Output/AuthorizationTokenOutputPort';
+import { ClientBlockchainTokenOutputPort } from '@src/modules/Blockchain/Client/Port/Output/ClientBlockchainTokenOutputPort';
 
 config();
 
 @Injectable()
-export class AuthorizationBlockChainAdapter implements AuthorizationTokenOutputPort {
-	private readonly logger = new Logger('AuthorizationAdapter');
+export class ClientBlockchainAdapter implements ClientBlockchainTokenOutputPort {
+	private readonly logger = new Logger('ClientBlockchainAdapter');
 	private url: string;
 	private urlMetadata: string;
 
@@ -16,7 +16,7 @@ export class AuthorizationBlockChainAdapter implements AuthorizationTokenOutputP
 	// 	this.urlMetadata = `${host}/api/v1/namespaces/default/apis/authorization${accreditorName}/invoke/setTokenURI`;
 	// }
 
-	async createAuthorizationToken(authorizationInput: AuthorizationRequestDto): Promise<any> {
+	async createAuthorizationToken(authorizationInput: ClientBlockchainRequestDto): Promise<any> {
 		try {
 		} catch (e) {
 			const errorMessage = e.response ? e.response.data : e.message;

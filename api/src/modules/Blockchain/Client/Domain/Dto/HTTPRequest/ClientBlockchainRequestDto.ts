@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class AuthorizationRequestDto {
+export class ClientBlockchainRequestDto {
 	@ApiProperty({ type: 'string', required: true, description: 'Accreditor Name', example: 'Cielo, Getnet, Stone' })
 	@IsNotEmpty()
 	@IsString()
