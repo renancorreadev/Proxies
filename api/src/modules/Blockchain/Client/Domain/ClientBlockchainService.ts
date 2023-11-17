@@ -20,7 +20,7 @@ export class ClientBlockchainService implements ClientBlockchainTokenUseCase {
     constructor(
         @Inject(DependencyInjectionTokens.CLIENTBLOCKCHAIN_TOKEN_OUTPUT_PORT)
         private readonly clientBlockchainTokenAdapter: ClientBlockchainTokenOutputPort,
-    ) {}
+    ) { }
 
     /**
      * Registers a client in the blockchain.
@@ -41,7 +41,7 @@ export class ClientBlockchainService implements ClientBlockchainTokenUseCase {
     async getClientData(clientId: number): Promise<ClientData> {
         try {
             return await this.clientBlockchainTokenAdapter.getClientData(clientId);
-        } catch(e) {
+        } catch (e) {
             this.logger.error(`Error in Client Blockchain Service: ${JSON.stringify(e)}`);
             throw new Error('An error ocurred while get the client');
         }

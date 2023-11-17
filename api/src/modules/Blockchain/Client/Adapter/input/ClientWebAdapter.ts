@@ -24,7 +24,7 @@ export class ClientWebAdapter {
 	constructor(
 		@Inject(DependencyInjectionTokens.CLIENT_BLOCKCHAIN_TOKEN_USE_CASE)
 		private clientBlockchainService: ClientBlockchainTokenUseCase,
-	) {}
+	) { }
 
 	/// --------------------------------------------------------------------------------------
 	/// ------------------------      REGISTER NEW CLIENT POST           ---------------------
@@ -65,7 +65,7 @@ export class ClientWebAdapter {
 		description: 'Success operation',
 		type: GetClientDataResponse,
 	})
-	
+
 	@ApiBadRequestResponse({ description: 'Bad request' })
 	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
 	@ApiForbiddenResponse({ description: 'Forbidden' })

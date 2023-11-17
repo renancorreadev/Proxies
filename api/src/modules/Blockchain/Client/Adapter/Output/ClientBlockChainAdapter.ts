@@ -13,8 +13,8 @@ config();
 export class ClientBlockchainAdapter implements ClientBlockchainTokenOutputPort {
 	private readonly logger = new Logger('ClientBlockchainAdapter');
 	private contractInstance: ClientBlockchainConnectorAdapter;
-	
-	constructor () {
+
+	constructor() {
 		this.contractInstance = new ClientBlockchainConnectorAdapter(
 			process.env.CONTRACT_ADDRESS,
 			process.env.PROVIDER,
@@ -27,7 +27,7 @@ export class ClientBlockchainAdapter implements ClientBlockchainTokenOutputPort 
 		try {
 			const { name, age, WalletAddress, paymentStatus, address } = registerClientBlockchainDto;
 
-			const addressLocal: AddressLocal  = {
+			const addressLocal: AddressLocal = {
 				City: address.City,
 				Street: address.Street,
 				PostalCode: address.PostalCode,
@@ -52,7 +52,7 @@ export class ClientBlockchainAdapter implements ClientBlockchainTokenOutputPort 
 	async getClientData(clientId: number): Promise<ClientData> {
 		try {
 			return await this.contractInstance.getClientData(clientId);
-	} catch (e) {
+		} catch (e) {
 			const errorMessage = e.response ? e.response.data : e.message;
 			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
 			throw new Error(`An error ocurred in read contract getClientData on blockchain `);
