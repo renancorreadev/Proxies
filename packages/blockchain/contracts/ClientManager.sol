@@ -11,8 +11,13 @@ import {ClientStorage} from "./storage/ClientStorage.sol";
 // interfaces
 import {IClient} from "./interfaces/Iclient.sol";
 
-contract ClientManager is Initializable, UUPSUpgradeable, OwnableUpgradeable, ClientStorage, IClient {
-
+contract ClientManager is
+    Initializable,
+    UUPSUpgradeable,
+    OwnableUpgradeable,
+    ClientStorage,
+    IClient
+{
     function initialize() external initializer {
         __ClientStorageInit();
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
@@ -24,7 +29,8 @@ contract ClientManager is Initializable, UUPSUpgradeable, OwnableUpgradeable, Cl
 
     function registerClient(ClientData calldata newClient) external {
         _registerClient(newClient);
-    }   
+    }
+
     function getVersion() external pure returns (string memory) {
         return "1.3";
     }

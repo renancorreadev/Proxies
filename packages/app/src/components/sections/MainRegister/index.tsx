@@ -1,10 +1,9 @@
-import {RegisterClientCard} from '../../Actions/RegisterClientCard'
+import { RegisterClientCard } from "../../Actions/RegisterClientCard";
 
-export function  MainRegister() {
-
+export function MainRegister() {
   return (
     <main>
       <RegisterClientCard />
     </main>
-  )
+  );
 }

@@ -8,8 +8,9 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "pnpm workspace app build && yarn workspace api build && yarn workspace service build",
-    "test": "pnpm workspace app test && yarn workspace api test && yarn workspace service test"
+    "init": "lerna bootstrap -- --use-workspaces",
+    "build": "pnpm recursive run build",
+    "test": "pnpm recursive run test"
   },
   "keywords": [],
   "author": "",

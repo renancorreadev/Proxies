@@ -22,11 +22,7 @@ interface IClientStorage {
         AddressLocal addressLocal;
     }
 
-    event ClientRegistered(
-        uint256 indexed clientId ,
-        string name,
-        uint256 age
-    );
+    event ClientRegistered(uint256 indexed clientId, string name, uint256 age);
 
     function getClientData(
         uint256 clientId
@@ -67,11 +63,7 @@ abstract contract ClientStorage is IClientStorage {
 
         clientMappingStorage[nextId] = newClient;
 
-        emit ClientRegistered(
-            nextId,
-            newClient.name,
-            newClient.age
-        );
+        emit ClientRegistered(nextId, newClient.name, newClient.age);
     }
 
     /// @dev getters storage to client data
