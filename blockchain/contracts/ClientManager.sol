@@ -13,7 +13,7 @@ import {IClient} from "./interfaces/Iclient.sol";
 
 contract ClientManager is Initializable, UUPSUpgradeable, OwnableUpgradeable, ClientStorage, IClient {
 
-    function initialize() internal initializer {
+    function initialize() external initializer {
         __ClientStorageInit();
         ///@dev as there is no constructor, we need to initialise the OwnableUpgradeable explicitly
         __Ownable_init(msg.sender);
@@ -24,5 +24,9 @@ contract ClientManager is Initializable, UUPSUpgradeable, OwnableUpgradeable, Cl
 
     function registerClient(ClientData calldata newClient) external {
         _registerClient(newClient);
-    }    
+    }   
+
+    function getVersion() external pure returns (string memory) {
+        return "1.1";
+    }
 }

@@ -5,11 +5,11 @@ import { getImplementationAddress } from '@openzeppelin/upgrades-core';
 import fs from 'fs';
 
 
-const proxyAddress = "0x74dC770ab1e2Ac3a001ee220765fc1af37758a27"
+const proxyAddress = "0xF75bD2B5282c2B7caFA289A0565d511707B7E5D1"
 const provider = new JsonRpcProvider("http://192.168.15.200:5100");
 
 async function main() {
-  const newContractVersion = await ethers.getContractFactory("PizzaV5");
+  const newContractVersion = await ethers.getContractFactory("ClientManagerV2");
 
   const upgradeContract =  await upgrades.upgradeProxy(proxyAddress, newContractVersion);
 
@@ -28,18 +28,6 @@ async function main() {
   };
 
   fs.writeFileSync('updatedContracts.json', JSON.stringify(data, null, 2));
-
-  // exec(`npx hardhat verify --network mumbai ${newImplementationAddress}`, (error, stdout, stderr) => {
-  //   if (error) {
-  //     console.error(`Erro ao executar o comando: ${error.message}`);
-  //     return;
-  //   }
-  //   if (stderr) {
-  //     console.error(`Erro no stderr: ${stderr}`);
-  //     return;
-  //   }
-  //   console.log(`Resultado do comando: ${stdout}`);
-  // });
 }
   
 
