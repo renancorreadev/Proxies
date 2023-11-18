@@ -2,8 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { config } from 'dotenv';
 import { ClientBlockchainTokenOutputPort } from '@src/modules/Blockchain/Client/Port/Output/ClientBlockchainTokenOutputPort';
 
-
-// DTO 
+// DTO
 import { RegisterClientRequestDto } from '@src/modules/Blockchain/Client/Domain/Dto/HTTPRequest/ClientBlockchainRequestDto';
 import { AddressLocal, ClientBlockchainConnectorAdapter, ClientData } from './ClientBlockchainConnectorAdapter';
 
@@ -18,10 +17,9 @@ export class ClientBlockchainAdapter implements ClientBlockchainTokenOutputPort 
 		this.contractInstance = new ClientBlockchainConnectorAdapter(
 			process.env.CONTRACT_ADDRESS,
 			process.env.PROVIDER,
-			process.env.PRIVATE_KEY
+			process.env.PRIVATE_KEY,
 		);
 	}
-
 
 	async registerClient(registerClientBlockchainDto: RegisterClientRequestDto): Promise<any> {
 		try {
@@ -31,15 +29,15 @@ export class ClientBlockchainAdapter implements ClientBlockchainTokenOutputPort 
 				City: address.City,
 				Street: address.Street,
 				PostalCode: address.PostalCode,
-				HouseNumber: Number(address.HouseNumber)
-			}
+				HouseNumber: Number(address.HouseNumber),
+			};
 			const payload: ClientData = {
 				name,
 				age,
 				WalletAddress,
 				paymentStatus,
-				addressLocal
-			}
+				addressLocal,
+			};
 
 			return await this.contractInstance.registerClient(payload);
 		} catch (e) {
