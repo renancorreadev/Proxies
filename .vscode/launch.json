@@ -12,6 +12,14 @@
 			"cwd": "${workspaceRoot}/api",
 			"console": "integratedTerminal",
 			"protocol": "inspector"
+		},
+		{
+			"name": "Launch Blockchain Monitor",
+			"type": "go",
+			"request": "launch",
+			"program": "${workspaceFolder}blockmonitor/cmd/myapp/main.go",
+			"env": {},
+			"args": []
 		}
 	]
 }

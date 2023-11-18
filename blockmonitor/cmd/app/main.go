@@ -1,17 +1,18 @@
 package main
 
 import (
-	"blockmonitor/domain/blockchain"
+	"blockmonitor/internal/app/repository"
+	"blockmonitor/internal/app/usecase"
 	"bytes"
 	"context"
 	"encoding/json"
 	"log"
 	"os"
 
-	"github.com/joho/godotenv"
-
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/joho/godotenv"
 )
 
 // ContractABI representa o arquivo ABI completo
@@ -29,8 +30,8 @@ func main() {
 
 	ethereumNodeURL := os.Getenv("BLOCKCHAIN_NODE_RPC")
 	contractAddressHex := os.Getenv("CONTRACT_ADDRESS")
-	filePath := os.Getenv("FILE_PATH")
 	abiPath := os.Getenv("ABI_PATH")
+	filePath := os.Getenv("FILE_PATH")
 
 	// Carregar e analisar a ABI do contrato
 	abiFile, err := os.ReadFile(abiPath)
@@ -50,12 +51,18 @@ func main() {
 
 	contractAddress := common.HexToAddress(contractAddressHex)
 
-	client, err := blockchain.ConnectToEthereumNode(ethereumNodeURL)
+	// Conectar ao nó Ethereum
+	client, err := ethclient.Dial(ethereumNodeURL)
 	if err != nil {
 		log.Fatalf("Erro ao conectar ao nó Ethereum: %v", err)
 	}
 
-	go blockchain.PollClientRegistrationEvents(client, contractAddress, parsedABI, filePath)
+	// Configurando o repositório e o caso de uso
+	blockchainRepo := repository.NewBlockchainRepository(parsedABI)
+	eventProcessor := usecase.NewClientEventProcessor(client, contractAddress, parsedABI, blockchainRepo)
+
+	// Iniciar a sondagem de eventos de registro de clientes
+	go eventProcessor.PollClientRegistrationEvents(filePath)
 
 	<-context.Background().Done()
 }
