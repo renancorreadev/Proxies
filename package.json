@@ -1,0 +1,20 @@
+{
+  "name": "client-management-blockchain",
+  "version": "1.0.0",
+  "description": "A Client Management in Blockchain",
+  "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "pnpm workspace app build && yarn workspace api build && yarn workspace service build",
+    "test": "pnpm workspace app test && yarn workspace api test && yarn workspace service test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  }
+}
