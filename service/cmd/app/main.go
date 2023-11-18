@@ -15,7 +15,6 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// ContractABI representa o arquivo ABI completo
 type ContractABI struct {
 	ABI json.RawMessage `json:"abi"`
 }
