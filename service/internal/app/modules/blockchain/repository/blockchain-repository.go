@@ -1,9 +1,9 @@
 package repository
 
 import (
-	"blockmonitor/internal/app/modules/blockchain/domain"
 	"errors"
 	"math/big"
+	"service/internal/app/modules/blockchain/domain"
 
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/core/types"

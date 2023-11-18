@@ -1,13 +1,13 @@
 package usecase
 
 import (
-	"blockmonitor/internal/app/modules/blockchain/domain"
-	"blockmonitor/internal/app/modules/blockchain/repository"
 	"context"
 	"encoding/json"
 	"log"
 	"math/big"
 	"os"
+	"service/internal/app/modules/blockchain/domain"
+	"service/internal/app/modules/blockchain/repository"
 	"time"
 
 	"github.com/ethereum/go-ethereum"

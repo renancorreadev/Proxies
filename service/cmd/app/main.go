@@ -1,13 +1,13 @@
 package main
 
 import (
-	"blockmonitor/internal/app/modules/blockchain/repository"
-	"blockmonitor/internal/app/modules/blockchain/usecase"
 	"bytes"
 	"context"
 	"encoding/json"
 	"log"
 	"os"
+	"service/internal/app/modules/blockchain/repository"
+	"service/internal/app/modules/blockchain/usecase"
 
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"

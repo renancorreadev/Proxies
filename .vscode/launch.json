@@ -5,8 +5,16 @@
 			"type": "node",
 			"request": "launch",
 			"name": "Debug Nest Framework",
-			"args": ["${workspaceFolder}/api/src/main.ts"],
-		  "runtimeArgs": ["--nolazy", "-r", "ts-node/register", "-r", "tsconfig-paths/register"],	
+			"args": [
+				"${workspaceFolder}/api/src/main.ts"
+			],
+			"runtimeArgs": [
+				"--nolazy",
+				"-r",
+				"ts-node/register",
+				"-r",
+				"tsconfig-paths/register"
+			],
 			"sourceMaps": true,
 			"envFile": "${workspaceFolder}/api/.env",
 			"cwd": "${workspaceRoot}/api",
@@ -17,7 +25,7 @@
 			"name": "Launch Blockchain Monitor",
 			"type": "go",
 			"request": "launch",
-			"program": "${workspaceFolder}blockmonitor/cmd/myapp/main.go",
+			"program": "${workspaceFolder}service/cmd/myapp/main.go",
 			"env": {},
 			"args": []
 		}
