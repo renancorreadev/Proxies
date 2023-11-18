@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"blockmonitor/internal/app/domain"
-	"blockmonitor/internal/app/repository"
+	"blockmonitor/internal/app/modules/blockchain/domain"
+	"blockmonitor/internal/app/modules/blockchain/repository"
 	"context"
 	"encoding/json"
 	"log"

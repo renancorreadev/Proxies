@@ -1,8 +1,8 @@
 package main
 
 import (
-	"blockmonitor/internal/app/repository"
-	"blockmonitor/internal/app/usecase"
+	"blockmonitor/internal/app/modules/blockchain/repository"
+	"blockmonitor/internal/app/modules/blockchain/usecase"
 	"bytes"
 	"context"
 	"encoding/json"

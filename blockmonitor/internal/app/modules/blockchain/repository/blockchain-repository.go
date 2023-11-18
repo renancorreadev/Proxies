@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"blockmonitor/internal/app/domain"
+	"blockmonitor/internal/app/modules/blockchain/domain"
 	"errors"
 	"math/big"
 
