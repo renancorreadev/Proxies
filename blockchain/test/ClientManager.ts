@@ -68,7 +68,6 @@ describe("ClientManager", function () {
   it("should retrieve client complete data with id", async function () {
     const retrievedData = await clientManager.getClientData(1);
 
-    // Converter os dados para o formato apropriado antes da comparação
     const formattedRetrievedData = {
       name: retrievedData.name,
       age: Number(retrievedData.age),
