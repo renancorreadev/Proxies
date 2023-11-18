@@ -1,18 +1,20 @@
 package main
 
 import (
-	"blockmonitor/blockchain"
+	"blockmonitor/domain/blockchain"
 	"bytes"
 	"context"
 	"encoding/json"
 	"log"
 	"os"
 
+	"github.com/joho/godotenv"
+
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
 )
 
-// Strutura para representar o arquivo ABI completo
+// ContractABI representa o arquivo ABI completo
 type ContractABI struct {
 	ABI json.RawMessage `json:"abi"`
 }
@@ -20,10 +22,15 @@ type ContractABI struct {
 func main() {
 	log.Println("Starting block monitor...")
 
-	const ethereumNodeURL = "http://localhost:5100"
-	const contractAddressHex = "0xEB9e9E2DbC00fC320AC66413F169adD6abe7c222"
-	const filePath = "./fileOutput/test.json"
-	const abiPath = "../blockchain/artifacts/contracts/ClientManager.sol/ClientManager.json"
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("Erro ao carregar o arquivo .env: %v", err)
+	}
+
+	ethereumNodeURL := os.Getenv("BLOCKCHAIN_NODE_RPC")
+	contractAddressHex := os.Getenv("CONTRACT_ADDRESS")
+	filePath := os.Getenv("FILE_PATH")
+	abiPath := os.Getenv("ABI_PATH")
 
 	// Carregar e analisar a ABI do contrato
 	abiFile, err := os.ReadFile(abiPath)
@@ -48,35 +55,7 @@ func main() {
 		log.Fatalf("Erro ao conectar ao nó Ethereum: %v", err)
 	}
 
-	// // Criação de um canal para escutar sinais de interrupção
-	// stopChan := make(chan os.Signal, 1)
-	// signal.Notify(stopChan, syscall.SIGINT, syscall.SIGTERM)
-
-	// // Goroutine para monitoramento de blocos
-	// go func() {
-	// 	for {
-	// 		select {
-	// 		case <-stopChan: // Encerra a goroutine se um sinal de interrupção for recebido
-	// 			log.Println("Encerrando o monitoramento de blocos.")
-	// 			return
-	// 		case <-time.After(3 * time.Second):
-	// 			blockNumber, err := client.BlockNumber(context.Background())
-	// 			if err != nil {
-	// 				log.Printf("Erro ao obter o número do bloco mais recente: %v", err)
-	// 				// Implementar lógica de reintento aqui, se necessário
-	// 			} else {
-	// 				log.Printf("Número do bloco mais recente: %v", blockNumber)
-	// 			}
-	// 		}
-	// 	}
-	// }()
-
-	// // Aguarda por um sinal de interrupção
-	// <-stopChan
-	// log.Println("Programa encerrado.")
-
 	go blockchain.PollClientRegistrationEvents(client, contractAddress, parsedABI, filePath)
 
-	// Manter o programa em execução
 	<-context.Background().Done()
 }

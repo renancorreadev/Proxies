@@ -25,8 +25,7 @@ contract ClientManager is Initializable, UUPSUpgradeable, OwnableUpgradeable, Cl
     function registerClient(ClientData calldata newClient) external {
         _registerClient(newClient);
     }   
-
     function getVersion() external pure returns (string memory) {
-        return "1.1";
+        return "1.3";
     }
 }

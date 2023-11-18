@@ -5,11 +5,11 @@ import { getImplementationAddress } from '@openzeppelin/upgrades-core';
 import fs from 'fs';
 
 
-const proxyAddress = "0xF75bD2B5282c2B7caFA289A0565d511707B7E5D1"
+const proxyAddress = "0xEB9e9E2DbC00fC320AC66413F169adD6abe7c222"
 const provider = new JsonRpcProvider("http://192.168.15.200:5100");
 
 async function main() {
-  const newContractVersion = await ethers.getContractFactory("ClientManagerV2");
+  const newContractVersion = await ethers.getContractFactory("ClientManager");
 
   const upgradeContract =  await upgrades.upgradeProxy(proxyAddress, newContractVersion);
 
