@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "init": "lerna bootstrap -- --use-workspaces",
+    "sc": "lerna run --scope smart-contracts compile",
     "build": "pnpm recursive run build",
     "test": "pnpm recursive run test"
   },
