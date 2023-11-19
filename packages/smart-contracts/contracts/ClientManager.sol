@@ -8,15 +8,11 @@ import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/Own
 
 import {ClientStorage} from "./storage/ClientStorage.sol";
 
-// interfaces
-import {IClient} from "./interfaces/Iclient.sol";
-
 contract ClientManager is
     Initializable,
     UUPSUpgradeable,
     OwnableUpgradeable,
-    ClientStorage,
-    IClient
+    ClientStorage
 {
     function initialize() external initializer {
         __ClientStorageInit();

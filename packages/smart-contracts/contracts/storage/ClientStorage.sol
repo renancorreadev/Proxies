@@ -1,51 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-interface IClientStorage {
-    enum PaymentStatus {
-        NOT_PAID,
-        PAID
-    }
-
-    struct AddressLocal {
-        string City;
-        string Street;
-        uint PostalCode;
-        uint HouseNumber;
-    }
-
-    struct ClientData {
-        string name;
-        uint age;
-        address WalletAddress;
-        PaymentStatus paymentStatus;
-        AddressLocal addressLocal;
-    }
-
-    event ClientRegistered(uint256 indexed clientId, string name, uint256 age);
-
-    function getClientData(
-        uint256 clientId
-    ) external view returns (ClientData memory);
-
-    function getClientName(
-        uint256 clientId
-    ) external view returns (string memory);
-
-    function getClientAge(uint256 clientId) external view returns (uint256);
-
-    function getClientWalletAddress(
-        uint256 clientId
-    ) external view returns (address);
-
-    function getClientPaymentStatus(
-        uint256 clientId
-    ) external view returns (PaymentStatus);
-
-    function getClientAddressLocal(
-        uint256 clientId
-    ) external view returns (AddressLocal memory);
-}
+import {IClientStorage} from "../interfaces/IClientStorage.sol";
 
 abstract contract ClientStorage is IClientStorage {
     /// @dev global variables for client Storage
@@ -105,5 +61,8 @@ abstract contract ClientStorage is IClientStorage {
 
     function getNextId() private returns (uint256) {
         return ++currentId;
+    }
+    function isClientExists(uint256 clientId) public view override returns (bool) {
+        return bytes(clientMappingStorage[clientId].name).length > 0;
     }
 }

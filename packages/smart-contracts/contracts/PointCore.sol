@@ -4,14 +4,20 @@ pragma solidity ^0.8.20;
 import {PointStorage} from "./storage/PointStorage.sol";
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
+import {IClientStorage} from "./interfaces/IClientStorage.sol";
+
 contract PointCore is OwnableUpgradeable, PointStorage {
+    IClientStorage public clientStorage;
+
+
     modifier validClient(uint256 clientId) {
-        if (clientPoints[clientId] == 0) revert InvalidClientID(clientId);
+        require(clientStorage.isClientExists(clientId), "InvalidClientID");
         _;
     }
 
-    function initialize() public initializer {
+    function initialize(address _clientStorage) public initializer {
         __Ownable_init(msg.sender);
+        clientStorage = IClientStorage(_clientStorage);
     }
 
     function addPoints(
@@ -32,4 +38,14 @@ contract PointCore is OwnableUpgradeable, PointStorage {
         clientPoints[clientId] -= points;
         emit PointsRemoved(clientId, points);
     }
+
+      /**
+     * @dev Returns the total points of a given client.
+     * @param clientId The ID of the client.
+     * @return Total points of the client.
+     */
+    function getClientPoints(uint256 clientId) public view validClient(clientId) returns (uint) {
+        return clientPoints[clientId];
+    }
+
 }
