@@ -4,8 +4,9 @@
     "verify": "npx hardhat verify --network mumbai 0x74dC770ab1e2Ac3a001ee220765fc1af37758a27",
     "deploy": "npx hardhat run ./scripts/deploy.ts --network firefly",
     "upgrade": "npx hardhat run ./scripts/upgradeProxy.ts --network firefly",
-    "compile": "npx hardhat compile",
-    "test": "npx hardhat test"
+    "compile": "pnpm hardhat compile",
+    "test": "npx hardhat test",
+    "clean": "rm -rf node_modules"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^3.0.0",
@@ -14,5 +15,8 @@
     "@openzeppelin/hardhat-upgrades": "^2.4.1",
     "dotenv": "^16.3.1",
     "hardhat": "^2.19.1"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.0"
   }
 }

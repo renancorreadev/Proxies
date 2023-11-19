@@ -20,7 +20,8 @@
 		"test:watch": "mocha --timeout 5000 --watch --require ts-node/register ./test/**/*.spec.ts",
 		"test:cov": "nyc --reporter=lcov --timeout 5000 npm run test",
 		"test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/mocha --runInBand",
-		"test:single": "mocha --require ts-node/register -r tsconfig-paths/register"
+		"test:single": "mocha --require ts-node/register -r tsconfig-paths/register",
+		"clean": "rm -rf node_modules"
 	},
 	"dependencies": {
 		"@nestjs/class-transformer": "^0.4.0",
