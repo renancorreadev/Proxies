@@ -121,4 +121,35 @@ describe("PointCore", function () {
     const nftBalance = await pointCoreInstance.balanceOf(owner.address, 1);
     expect(nftBalance).to.equal(1);
   });
+
+  it("Should allow changing point and test NFT thresholds for each level", async function () {
+    // Alterar os limiares de pontos
+    await pointCoreInstance.setPointThresholds(300, 600, 1200);
+
+    // Adicionar pontos e verificar se os novos limiares estão funcionando
+    await pointCoreInstance.addPoints(1, 300);
+    const nftBalance = await pointCoreInstance.balanceOf(owner.address, 1); // Substitua 1 pelo ID do NFT Premium com novo limiar
+    expect(nftBalance).to.equal(1);
+  });
+
+  it("Should correctly remove points from a client", async function () {
+    // Adicionar e depois remover pontos
+    await pointCoreInstance.addPoints(1, 200);
+    await pointCoreInstance.removePoints(1, 100);
+
+    // Verificar a pontuação atual
+    const currentPoints = await pointCoreInstance.getClientPoints(1);
+    expect(currentPoints).to.equal(100);
+  });
+
+  it("Should burn the max level NFT when points are reset", async function () {
+    // Add 1000 points to the client to reach the max level
+    await pointCoreInstance.addPoints(1, 1000);
+
+    /// @dev add more points to reach the max level and burn the max level NFT
+    await pointCoreInstance.addPoints(1, 4);
+    // Verificar se o NFT do nível máximo foi queimado
+    const nftBalance = await pointCoreInstance.balanceOf(owner.address, 3);
+    expect(Number(nftBalance.toString())).to.equal(0);
+  });
 });

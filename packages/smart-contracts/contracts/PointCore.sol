@@ -110,6 +110,7 @@ contract PointCore is
         address clientAddress = clientStorage.getClientWalletAddress(clientId);
 
         if (newLevel != currentLevel) {
+            // Queime o NFT do nível anterior, se existir
             if (
                 currentLevel != 0 && balanceOf(clientAddress, currentLevel) > 0
             ) {
@@ -117,15 +118,15 @@ contract PointCore is
                 emitBurnEvent(clientId, currentLevel);
             }
 
-            if (balanceOf(clientAddress, newLevel) == 0) {
-                _mint(clientAddress, newLevel, 1, "");
-                emitMintEvent(clientId, newLevel);
-            }
+            // Minta um novo NFT do novo nível
+            _mint(clientAddress, newLevel, 1, "");
+            emitMintEvent(clientId, newLevel);
 
             clientLevel[clientId] = newLevel;
             emit ClientPointsChanged(clientId, clientPoints[clientId]);
 
             if (newLevel == CUSTOMER_TITANIUM) {
+                // Zere os pontos do cliente apenas se ele atingir o nível CUSTOMER_TITANIUM
                 clientPoints[clientId] = 0;
                 emit ClientPointsReset(clientId);
             }
