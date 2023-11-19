@@ -7,11 +7,11 @@
 
 ![Alt text](docs/images/plainning.png)
 
-* Inicia se o desenvolvimento da feature na blockckchain com os contratos inteligentes que são atualizaveis com o  
+1. Inicia se o desenvolvimento da feature na blockckchain com os contratos inteligentes que são atualizaveis com o  
 ERC1967Proxy.
-* Parte para o desenvolvimento da solução da feature na escuta dos eventos com o micro serviço desenvolvido em Go para gerenciamento de eventos e acionamentos de cronJobs. 
-* Parte se para o desenvolvimento da solução da feature para o back-end, desenvolvendo-se os casos de uso, rotas, entidades e dominios para se atender. 
-* Parte se para o desenvolvimento da solução no front end no React. 
+2. Parte para o desenvolvimento da solução da feature na escuta dos eventos com o micro serviço desenvolvido em Go para gerenciamento de eventos e acionamentos de cronJobs. 
+3. Parte se para o desenvolvimento da solução da feature para o back-end, desenvolvendo-se os casos de uso, rotas, entidades e dominios para se atender. 
+4. Parte se para o desenvolvimento da solução no front end no React. 
 
 
 ## Estrutura de pastas
