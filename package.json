@@ -14,6 +14,7 @@
     "bs": "lerna run --scope blockchain-service --stream dev",
     "api": "lerna run --scope client-manager-api --stream dev",
     "ui": "lerna run --scope client-manager-ui --stream dev",
+    "sc-test": "lerna run --scope smart-contracts test",
     "clean": "lerna run clean",
     "build": "pnpm recursive run build",
     "test": "pnpm recursive run test"

@@ -8,15 +8,21 @@ describe("ClientManager", function () {
   let clientData: any;
 
   async function deployClientManagerFixture() {
-    [owner] = await ethers.getSigners();
-    const ClientManagerContract = await ethers.getContractFactory("ClientManager");
+    const [owner] = await ethers.getSigners();
 
-    clientManager = (await upgrades.deployProxy(ClientManagerContract, [], { initializer: 'initialize' })) as unknown as ClientManager;
+    const ClientManagerContract = await ethers.getContractFactory(
+      "ClientManager"
+    );
+
+    clientManager = (await upgrades.deployProxy(ClientManagerContract, [], {
+      initializer: "initialize",
+    })) as unknown as ClientManager;
     return { clientManager, owner };
   }
 
   beforeEach(async function () {
-    const { clientManager: newClientManager, owner: newOwner } = await deployClientManagerFixture();
+    const { clientManager: newClientManager, owner: newOwner } =
+      await deployClientManagerFixture();
     clientManager = newClientManager;
     owner = newOwner;
 
@@ -29,8 +35,8 @@ describe("ClientManager", function () {
         City: "Test City",
         Street: "Test Street",
         PostalCode: 12345,
-        HouseNumber: 67
-      }
+        HouseNumber: 67,
+      },
     };
 
     await clientManager.registerClient(clientData);
@@ -42,7 +48,9 @@ describe("ClientManager", function () {
     expect(retrievedData.age).to.equal(clientData.age);
     expect(retrievedData.WalletAddress).to.equal(clientData.WalletAddress);
     expect(retrievedData.paymentStatus).to.equal(clientData.paymentStatus);
-    expect(retrievedData.addressLocal.City).to.equal(clientData.addressLocal.City);
+    expect(retrievedData.addressLocal.City).to.equal(
+      clientData.addressLocal.City
+    );
   });
 
   it("Should retrieve client name", async function () {
@@ -53,17 +61,19 @@ describe("ClientManager", function () {
   it("Should retrieve client age", async function () {
     const retrievedAge = await clientManager.getClientAge(1);
     expect(retrievedAge).to.equal(30);
-  })
+  });
 
   it("Should retrieve client payment status", async function () {
-    const retrievedPaymentStatus = await clientManager.getClientPaymentStatus(1);
+    const retrievedPaymentStatus = await clientManager.getClientPaymentStatus(
+      1
+    );
     expect(retrievedPaymentStatus).to.equal(0);
-  })
+  });
 
   it("Should retrieve client address Local", async function () {
     const retrievedPaymentStatus = await clientManager.getClientAddressLocal(1);
     expect(retrievedPaymentStatus.HouseNumber).to.equal(67);
-  })
+  });
 
   it("should retrieve client complete data with id", async function () {
     const retrievedData = await clientManager.getClientData(1);
@@ -77,12 +87,10 @@ describe("ClientManager", function () {
         City: retrievedData.addressLocal.City,
         Street: retrievedData.addressLocal.Street,
         PostalCode: Number(retrievedData.addressLocal.PostalCode),
-        HouseNumber: Number(retrievedData.addressLocal.HouseNumber)
-      }
+        HouseNumber: Number(retrievedData.addressLocal.HouseNumber),
+      },
     };
 
     expect(formattedRetrievedData).to.deep.equal(clientData);
   });
-
-
 });
