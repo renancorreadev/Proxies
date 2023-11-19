@@ -9,6 +9,8 @@
   ],
   "scripts": {
     "sc": "lerna run --scope smart-contracts compile",
+    "bs": "lerna run --scope blockchain-service run-service",
+    "api": "lerna run --scope client-manager-api --stream dev",
     "clean": "lerna run clean",
     "build": "pnpm recursive run build",
     "test": "pnpm recursive run test"

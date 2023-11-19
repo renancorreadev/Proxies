@@ -2,21 +2,51 @@
 	"compilerOptions": {
 		"baseUrl": "../",
 		"paths": {
-			"@blockchain/*": ["./blockchain/typechain/*"],
-			"@blockchain": ["./blockchain/typechain"],
-			"@helper/": ["./api/src/helper/*"],
-			"@/*": ["./api/*"],
-			"@src/*": ["./api/src/*"],
-			"@portAuthorization/*": ["./api/src/Authorization/Port/*"],
-			"@portSettlement/*": ["./api/src/Settlement/Port/*"],
-			"@portManagement/*": ["./api/src/Management/Port/*"],
-			"@portRegister/*": ["./api/src/Management/Register/Port/*"],
-			"@portValuesTransfer/*": ["./api/src/ValuesTransfer/Port/*"],
-			"@dtoAuthorization/*": ["./api/src/Authorization/Domain/Dto/*"],
-			"@dtoSettlement/*": ["./api/src/Settlement/Domain/Dto/*"],
-			"@dtoManagement/*": ["./api/src/Management/Domain/Dto/*"],
-			"@dtoRegister/*": ["./api/src/Management/Register/Domain/Dto/*"],
-			"@dtoValuesTransfer/*": ["./api/src/ValuesTransfer/Domain/Dto/*"]
+			"@smart-contracts/*": [
+				"./smart-contracts/typechain/*"
+			],
+			"@smart-contracts": [
+				"./smart-contracts/typechain"
+			],
+			"@helper/": [
+				"./api/src/helper/*"
+			],
+			"@/*": [
+				"./api/*"
+			],
+			"@src/*": [
+				"./api/src/*"
+			],
+			"@portAuthorization/*": [
+				"./api/src/Authorization/Port/*"
+			],
+			"@portSettlement/*": [
+				"./api/src/Settlement/Port/*"
+			],
+			"@portManagement/*": [
+				"./api/src/Management/Port/*"
+			],
+			"@portRegister/*": [
+				"./api/src/Management/Register/Port/*"
+			],
+			"@portValuesTransfer/*": [
+				"./api/src/ValuesTransfer/Port/*"
+			],
+			"@dtoAuthorization/*": [
+				"./api/src/Authorization/Domain/Dto/*"
+			],
+			"@dtoSettlement/*": [
+				"./api/src/Settlement/Domain/Dto/*"
+			],
+			"@dtoManagement/*": [
+				"./api/src/Management/Domain/Dto/*"
+			],
+			"@dtoRegister/*": [
+				"./api/src/Management/Register/Domain/Dto/*"
+			],
+			"@dtoValuesTransfer/*": [
+				"./api/src/ValuesTransfer/Domain/Dto/*"
+			]
 		}
 	}
 }
