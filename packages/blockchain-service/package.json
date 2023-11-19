@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "run-service": "go run cmd/app/main.go"
+    "dev": "go run cmd/app/main.go"
   },
   "keywords": [],
   "author": "",
