@@ -16,11 +16,6 @@ contract BadgeToken is
     uint256 public constant CUSTOMER_GOLD = 2;
     uint256 public constant CUSTOMER_TITANIUM = 3;
 
-    function initialize(string memory uri) public initializer {
-        __ERC1155_init(uri);
-        __Ownable_init(msg.sender);
-    }
-
     function mint(
         address account,
         uint256 id,

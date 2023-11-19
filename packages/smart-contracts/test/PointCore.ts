@@ -23,9 +23,10 @@ describe("PointCore", function () {
     const proxyAddress = await clientManager.getAddress();
 
     const pointContract = await ethers.getContractFactory("PointCore");
+
     pointCoreInstance = (await upgrades.deployProxy(
       pointContract,
-      [proxyAddress],
+      [proxyAddress, "http://localhost:3000/api/metadata/"],
       {
         initializer: "initialize",
       }
@@ -78,6 +79,46 @@ describe("PointCore", function () {
 
     await expect(
       pointCoreInstance.addPoints(nonExistentClientId, pointsToAdd)
-    ).to.be.revertedWith("InvalidClientID");
+    ).to.be.revertedWith("InvalidClientID on PointCore");
+  });
+
+  it("Should reset points when reaching the maximum level", async function () {
+    // Add 1000 points to the client (max point)
+    await pointCoreInstance.addPoints(1, 1000);
+
+    // verify that the client has 0 points after reaching the maximum level
+    const pointsAfterMaxLevel = await pointCoreInstance.getClientPoints(1);
+    expect(pointsAfterMaxLevel).to.equal(0);
+  });
+
+  it("Should burn the previous level NFT when advancing to a new level", async function () {
+    // Primeiro, adicione pontos suficientes para alcançar o nível Premium
+    await pointCoreInstance.addPoints(1, 200);
+
+    // Em seguida, adicione mais pontos para alcançar o nível Gold
+    await pointCoreInstance.addPoints(1, 300); // Totalizando 500 pontos
+
+    // Verifique se o NFT Premium foi queimado
+    const previousLevelNftBalance = await pointCoreInstance.balanceOf(
+      owner.address,
+      1
+    ); // Substitua 1 pelo ID do NFT Premium
+    expect(previousLevelNftBalance).to.equal(0);
+
+    // Verifique se o NFT Gold foi emitido
+    const newLevelNftBalance = await pointCoreInstance.balanceOf(
+      owner.address,
+      2
+    ); // Substitua 2 pelo ID do NFT Gold
+    expect(newLevelNftBalance).to.equal(1);
+  });
+
+  it("Should mint a new NFT when reaching a new level", async function () {
+    // Suponha que 200 pontos sejam suficientes para o nível Premium
+    await pointCoreInstance.addPoints(1, 200);
+
+    // Verifique se o NFT foi emitido corretamente
+    const nftBalance = await pointCoreInstance.balanceOf(owner.address, 1);
+    expect(nftBalance).to.equal(1);
   });
 });
