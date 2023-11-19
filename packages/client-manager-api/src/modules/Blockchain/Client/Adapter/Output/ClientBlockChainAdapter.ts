@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { config } from 'dotenv';
-import { ClientBlockchainTokenOutputPort } from '@src/modules/Blockchain/Client/Port/Output/ClientBlockchainTokenOutputPort';
+import { ClientBlockchainTokenOutputPort } from 'client-manager-api/src/modules/Blockchain/Client/Port/Output/ClientBlockchainTokenOutputPort';
 
 // DTO
-import { RegisterClientRequestDto } from '@src/modules/Blockchain/Client/Domain/Dto/HTTPRequest/ClientBlockchainRequestDto';
+import { RegisterClientRequestDto } from 'client-manager-api/src/modules/Blockchain/Client/Domain/Dto/HTTPRequest/ClientBlockchainRequestDto';
 import { AddressLocal, ClientBlockchainConnectorAdapter, ClientData } from './ClientBlockchainConnectorAdapter';
 
 config();

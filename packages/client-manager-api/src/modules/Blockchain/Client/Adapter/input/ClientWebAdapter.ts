@@ -10,21 +10,23 @@ import {
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { BaseUrls, DependencyInjectionTokens } from '@src/helper/AppConstants';
+import { BaseUrls, DependencyInjectionTokens } from 'client-manager-api/src/helper/AppConstants';
 import { ClientBlockchainTokenUseCase } from '../../Port/Input/ClientBlockchainTokenUseCase';
-import { GetClientDataResponse, RegisterClientRequestDto } from '../../Domain/Dto/HTTPRequest/ClientBlockchainRequestDto';
+import {
+	GetClientDataResponse,
+	RegisterClientRequestDto,
+} from '../../Domain/Dto/HTTPRequest/ClientBlockchainRequestDto';
 
 @Controller({
 	path: BaseUrls.CLIENT_BLOCKCHAIN,
 })
-
 @ApiTags('Blockchain')
 export class ClientWebAdapter {
 	private readonly logger = new Logger('ClientWebAdapter');
 	constructor(
 		@Inject(DependencyInjectionTokens.CLIENT_BLOCKCHAIN_TOKEN_USE_CASE)
 		private clientBlockchainService: ClientBlockchainTokenUseCase,
-	) { }
+	) {}
 
 	/// --------------------------------------------------------------------------------------
 	/// ------------------------      REGISTER NEW CLIENT POST           ---------------------
@@ -65,7 +67,6 @@ export class ClientWebAdapter {
 		description: 'Success operation',
 		type: GetClientDataResponse,
 	})
-
 	@ApiBadRequestResponse({ description: 'Bad request' })
 	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
 	@ApiForbiddenResponse({ description: 'Forbidden' })
