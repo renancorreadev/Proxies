@@ -8,6 +8,7 @@ describe("ClientManager", function () {
   let clientData: any;
 
   async function deployClientManagerFixture() {
+    // @ts-ignore
     const [owner] = await ethers.getSigners();
 
     const ClientManagerContract = await ethers.getContractFactory(

@@ -207,6 +207,203 @@ importers:
 
   packages/blockchain-service: {}
 
+  packages/client-manager-api:
+    dependencies:
+      '@nestjs/class-transformer':
+        specifier: ^0.4.0
+        version: 0.4.0
+      '@nestjs/common':
+        specifier: ^10.0.0
+        version: 10.0.0(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/core':
+        specifier: ^10.0.0
+        version: 10.0.0(@nestjs/common@10.0.0)(@nestjs/platform-express@10.0.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/platform-express':
+        specifier: ^10.0.0
+        version: 10.0.0(@nestjs/common@10.0.0)(@nestjs/core@10.0.0)
+      '@nestjs/swagger':
+        specifier: ^7.1.2
+        version: 7.1.2(@nestjs/common@10.0.0)(@nestjs/core@10.0.0)(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)
+      '@sequelize/core':
+        specifier: ^7.0.0-alpha.27
+        version: 7.0.0-alpha.27(pg@8.11.1)
+      '@truffle/hdwallet-provider':
+        specifier: ^2.1.13
+        version: 2.1.13(@babel/core@7.23.3)
+      '@types/web3':
+        specifier: ^1.2.2
+        version: 1.2.2(typescript@5.1.3)
+      axios:
+        specifier: ^1.5.0
+        version: 1.5.0
+      body-parser:
+        specifier: ^1.20.2
+        version: 1.20.2
+      class-transformer:
+        specifier: ^0.5.1
+        version: 0.5.1
+      class-validator:
+        specifier: ^0.14.0
+        version: 0.14.0
+      elliptic:
+        specifier: ^6.5.4
+        version: 6.5.4
+      ethers:
+        specifier: ^6.8.1
+        version: 6.8.1
+      pg:
+        specifier: ^8.11.1
+        version: 8.11.1
+      reflect-metadata:
+        specifier: ^0.1.13
+        version: 0.1.13
+      rxjs:
+        specifier: ^7.8.1
+        version: 7.8.1
+      sequelize:
+        specifier: ^6.32.1
+        version: 6.32.1(pg@8.11.1)
+      sinon-chai:
+        specifier: ^3.7.0
+        version: 3.7.0(chai@4.3.8)(sinon@15.2.0)
+      typeorm:
+        specifier: ^0.3.17
+        version: 0.3.17(pg@8.11.1)(ts-node@10.9.1)
+    devDependencies:
+      '@nestjs/cli':
+        specifier: ^10.0.0
+        version: 10.0.0
+      '@nestjs/schematics':
+        specifier: ^10.0.0
+        version: 10.0.0(chokidar@3.5.3)(typescript@5.1.3)
+      '@nestjs/testing':
+        specifier: ^10.2.3
+        version: 10.2.3(@nestjs/common@10.0.0)(@nestjs/core@10.0.0)(@nestjs/platform-express@10.0.0)
+      '@types/bignumber.js':
+        specifier: ^5.0.0
+        version: 5.0.0
+      '@types/chai':
+        specifier: ^4.3.5
+        version: 4.3.5
+      '@types/chai-as-promised':
+        specifier: ^7.1.6
+        version: 7.1.6
+      '@types/express':
+        specifier: ^4.17.17
+        version: 4.17.17
+      '@types/mocha':
+        specifier: ^10.0.1
+        version: 10.0.1
+      '@types/node':
+        specifier: ^20.4.8
+        version: 20.4.8
+      '@types/sinon':
+        specifier: ^10.0.16
+        version: 10.0.16
+      '@types/supertest':
+        specifier: ^2.0.12
+        version: 2.0.12
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^5.59.11
+        version: 5.59.11(@typescript-eslint/parser@5.59.11)(eslint@8.42.0)(typescript@5.1.3)
+      '@typescript-eslint/parser':
+        specifier: ^5.59.11
+        version: 5.59.11(eslint@8.42.0)(typescript@5.1.3)
+      axios-mock-adapter:
+        specifier: ^1.22.0
+        version: 1.22.0(axios@1.5.0)
+      chai:
+        specifier: ^4.3.8
+        version: 4.3.8
+      chai-as-promised:
+        specifier: ^7.1.1
+        version: 7.1.1(chai@4.3.8)
+      cypress-multi-reporters:
+        specifier: ^1.6.3
+        version: 1.6.3(mocha@10.2.0)
+      dotenv:
+        specifier: ^16.3.1
+        version: 16.3.1
+      eslint:
+        specifier: ^8.42.0
+        version: 8.42.0
+      eslint-config-prettier:
+        specifier: ^8.8.0
+        version: 8.8.0(eslint@8.42.0)
+      eslint-plugin-prettier:
+        specifier: ^4.2.1
+        version: 4.2.1(eslint-config-prettier@8.8.0)(eslint@8.42.0)(prettier@2.8.8)
+      mocha:
+        specifier: ^10.2.0
+        version: 10.2.0
+      nyc:
+        specifier: ^15.1.0
+        version: 15.1.0
+      prettier:
+        specifier: ^2.8.8
+        version: 2.8.8
+      sinon:
+        specifier: ^15.2.0
+        version: 15.2.0
+      source-map-support:
+        specifier: ^0.5.21
+        version: 0.5.21
+      supertest:
+        specifier: ^6.3.3
+        version: 6.3.3
+      ts-loader:
+        specifier: ^9.4.3
+        version: 9.4.3(typescript@5.1.3)(webpack@5.89.0)
+      ts-node:
+        specifier: ^10.9.1
+        version: 10.9.1(@types/node@20.4.8)(typescript@5.1.3)
+      tsconfig-paths:
+        specifier: ^4.2.0
+        version: 4.2.0
+      typescript:
+        specifier: ^5.1.3
+        version: 5.1.3
+
+  packages/client-manager-ui:
+    dependencies:
+      next:
+        specifier: 14.0.3
+        version: 14.0.3(react-dom@18.0.0)(react@18.0.0)
+      react:
+        specifier: ^18
+        version: 18.0.0
+      react-dom:
+        specifier: ^18
+        version: 18.0.0(react@18.0.0)
+    devDependencies:
+      '@types/node':
+        specifier: ^20
+        version: 20.4.8
+      '@types/react':
+        specifier: ^18
+        version: 18.0.0
+      '@types/react-dom':
+        specifier: ^18
+        version: 18.0.0
+      autoprefixer:
+        specifier: ^10.0.1
+        version: 10.0.1(postcss@8.0.0)
+      eslint:
+        specifier: ^8
+        version: 8.42.0
+      eslint-config-next:
+        specifier: 14.0.3
+        version: 14.0.3(eslint@8.42.0)(typescript@5.1.3)
+      postcss:
+        specifier: ^8
+        version: 8.0.0
+      tailwindcss:
+        specifier: ^3.3.0
+        version: 3.3.0(postcss@8.0.0)
+      typescript:
+        specifier: ^5
+        version: 5.1.3
+
   packages/smart-contracts:
     dependencies:
       '@openzeppelin/contracts':
@@ -13659,7 +13856,7 @@ packages:
   /wide-align@1.1.5:
     resolution: {integrity: sha512-eDMORYaPNZ4sQIuuYPDHdQvf4gyCF9rEEV/yPxGfwPkRodwEgiMUUXTx/dex+Me0wxx53S+NgUHaP7y3MGlDmg==}
     dependencies:
-      string-width: 1.0.2
+      string-width: 4.2.3
     dev: true
 
   /windows-release@4.0.0:
@@ -13920,11 +14117,11 @@ packages:
   /yargs-parser@20.2.4:
     resolution: {integrity: sha512-WOkpgNhPTlE73h4VFAFsOnomJVaovO8VqLDzy5saChRBFQFBoMYirowyW+Q9HB4HFF4Z7VZTiG3iSzJJA29yRA==}
     engines: {node: '>=10'}
+    dev: true
 
   /yargs-parser@20.2.9:
     resolution: {integrity: sha512-y11nGElTIV+CT3Zv9t7VKl+Q3hTQoT9a1Qzezhhl6Rp21gJ/IVTW7Z3y9EWXhuUBC2Shnf+DX0antecpAwSP8w==}
     engines: {node: '>=10'}
-    dev: true
 
   /yargs-parser@21.1.1:
     resolution: {integrity: sha512-tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==}
@@ -13967,7 +14164,7 @@ packages:
       require-directory: 2.1.1
       string-width: 4.2.3
       y18n: 5.0.8
-      yargs-parser: 20.2.4
+      yargs-parser: 20.2.9
 
   /yargs@17.7.2:
     resolution: {integrity: sha512-7dSzzRQ++CKnNI/krKnYRV7JKKPUXMEh61soaHKg9mrWEhzFWhFnxPxGl+69cD1Ou63C13NUPCnmIcrvqCuM6w==}

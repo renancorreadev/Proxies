@@ -5,7 +5,7 @@
     "deploy": "npx hardhat run ./scripts/deploy.ts --network firefly",
     "upgrade": "npx hardhat run ./scripts/upgradeProxy.ts --network firefly",
     "compile": "pnpm hardhat compile",
-    "test": "npx hardhat test",
+    "test": "pnpm hardhat test",
     "clean": "rm -rf node_modules"
   },
   "devDependencies": {
