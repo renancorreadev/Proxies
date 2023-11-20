@@ -2,11 +2,6 @@
 pragma solidity ^0.8.20;
 
 interface IPointCore {
-    /// @dev errors
-    error InvalidClientLevel();
-    error ClientAlreadyHasToken();
-    error ClientDoesNotHaveToken();
-
     /// @dev events Minted ommited from this contract
     event CustomerTitaniumMinted(
         uint256 indexed clientId,

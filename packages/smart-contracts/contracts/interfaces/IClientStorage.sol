@@ -23,28 +23,4 @@ interface IClientStorage {
     }
 
     event ClientRegistered(uint256 indexed clientId, string name, uint256 age);
-
-    function getClientData(
-        uint256 clientId
-    ) external view returns (ClientData memory);
-
-    function getClientName(
-        uint256 clientId
-    ) external view returns (string memory);
-
-    function getClientAge(uint256 clientId) external view returns (uint256);
-
-    function getClientWalletAddress(
-        uint256 clientId
-    ) external view returns (address);
-
-    function getClientPaymentStatus(
-        uint256 clientId
-    ) external view returns (PaymentStatus);
-
-    function getClientAddressLocal(
-        uint256 clientId
-    ) external view returns (AddressLocal memory);
-
-    function isClientExists(uint256 clientId) external view returns (bool);
 }

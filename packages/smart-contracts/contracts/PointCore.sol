@@ -9,7 +9,7 @@ import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Ini
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
-import {IClientStorage} from "./interfaces/IClientStorage.sol";
+import {ClientManager} from "./ClientManager.sol";
 import {IPointCore} from "./interfaces/IPointCore.sol";
 
 contract PointCore is
@@ -20,7 +20,7 @@ contract PointCore is
     PointStorage,
     BadgeToken
 {
-    IClientStorage public clientStorage;
+    ClientManager public clientManager;
 
     uint256 public pointsForPremium;
     uint256 public pointsForGold;
@@ -28,7 +28,7 @@ contract PointCore is
 
     modifier validClient(uint256 clientId) {
         require(
-            clientStorage.isClientExists(clientId),
+            clientManager.isClientExists(clientId),
             "InvalidClientID on PointCore"
         );
         _;
@@ -39,7 +39,7 @@ contract PointCore is
         string memory uri
     ) public initializer {
         __Ownable_init(msg.sender);
-        clientStorage = IClientStorage(_clientStorage);
+        clientManager = ClientManager(_clientStorage);
         __ERC1155_init(uri);
 
         setPointThresholds(200, 500, 1000);
@@ -116,7 +116,7 @@ contract PointCore is
             newLevel = CUSTOMER_PREMIUM;
         }
 
-        address clientAddress = clientStorage.getClientWalletAddress(clientId);
+        address clientAddress = clientManager.getClientWalletAddress(clientId);
 
         if (newLevel != currentLevel) {
             burnPreviousLevelToken(clientId, clientAddress, currentLevel);
@@ -145,7 +145,7 @@ contract PointCore is
     }
 
     function emitMintEvent(uint256 clientId, uint256 level) internal {
-        address clientAddress = clientStorage.getClientWalletAddress(clientId);
+        address clientAddress = clientManager.getClientWalletAddress(clientId);
         if (level == CUSTOMER_TITANIUM) {
             emit CustomerTitaniumMinted(clientId, clientAddress);
         } else if (level == CUSTOMER_GOLD) {
@@ -156,7 +156,7 @@ contract PointCore is
     }
 
     function emitBurnEvent(uint256 clientId, uint256 burnedLevel) internal {
-        address clientAddress = clientStorage.getClientWalletAddress(clientId);
+        address clientAddress = clientManager.getClientWalletAddress(clientId);
         if (burnedLevel == CUSTOMER_GOLD) {
             emit CustomerGoldBurned(clientId, clientAddress);
         } else if (burnedLevel == CUSTOMER_PREMIUM) {
