@@ -6,7 +6,6 @@ export class ClientManagerConnector extends ClientManagerBlockchainConnector {
 	async registerClient(params: ClientData) {
 		try {
 			const { name, age, WalletAddress, paymentStatus, addressLocal } = params;
-
 			const tx = await this.contract.registerClient(
 				{
 					name,
@@ -23,7 +22,10 @@ export class ClientManagerConnector extends ClientManagerBlockchainConnector {
 
 			await tx.wait();
 		} catch (e) {
-			throw new Error(`An error ocurred in write contract registerClient function on blockchain evm `);
+			console.error('Erro ao registrar cliente na blockchain:', e);
+
+			const errorMessage = e instanceof Error ? e.message : 'Unknown error';
+			throw new Error(`Erro ao escrever na função registerClient do contrato na EVM: ${errorMessage}`);
 		}
 	}
 
