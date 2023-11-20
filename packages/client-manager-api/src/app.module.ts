@@ -3,13 +3,15 @@ import { ClientBlockchainAdapter } from './modules/Blockchain/Client/Adapter/Out
 import { ClientWebAdapter } from './modules/Blockchain/Client/Adapter/input/ClientWebAdapter';
 import { ClientBlockchainService } from './modules/Blockchain/Client/Domain/ClientBlockchainService';
 
+import { PointsBlockchainService } from './modules/Blockchain/Points/Domain/Dto/PointsBlockchainService';
+import { PointsBlockchainAdapter } from './modules/Blockchain/Points/Adapter/Output/PointsBlockChainAdapter';
+import { PointsBlockchainWebAdapter } from './modules/Blockchain/Points/Adapter/input/PointsBlockchainWebAdapter';
+
 import { DependencyInjectionTokens } from './helper/AppConstants';
 
 @Module({
 	imports: [],
-	controllers: [
-		ClientWebAdapter,
-	],
+	controllers: [ClientWebAdapter, PointsBlockchainWebAdapter],
 	providers: [
 		{
 			useClass: ClientBlockchainService,
@@ -18,6 +20,14 @@ import { DependencyInjectionTokens } from './helper/AppConstants';
 		{
 			useClass: ClientBlockchainAdapter,
 			provide: DependencyInjectionTokens.CLIENTBLOCKCHAIN_TOKEN_OUTPUT_PORT,
+		},
+		{
+			useClass: PointsBlockchainService,
+			provide: DependencyInjectionTokens.POINTS_BLOCKCHAIN_TOKEN_USE_CASE,
+		},
+		{
+			useClass: PointsBlockchainAdapter,
+			provide: DependencyInjectionTokens.POINTS_BLOCKCHAIN_TOKEN_OUTPUT_PORT,
 		},
 	],
 })

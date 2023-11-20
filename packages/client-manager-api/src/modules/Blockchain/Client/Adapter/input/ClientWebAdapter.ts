@@ -20,7 +20,7 @@ import {
 @Controller({
 	path: BaseUrls.CLIENT_BLOCKCHAIN,
 })
-@ApiTags('Blockchain')
+@ApiTags('Blockchain -| Client |-')
 export class ClientWebAdapter {
 	private readonly logger = new Logger('ClientWebAdapter');
 	constructor(
