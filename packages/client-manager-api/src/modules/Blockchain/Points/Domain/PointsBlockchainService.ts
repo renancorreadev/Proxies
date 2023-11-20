@@ -1,9 +1,9 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 
 import { DependencyInjectionTokens } from 'client-manager-api/src/helper/AppConstants';
-import { PointsBlockchainTokenUseCase } from '../../Port/Input/PointsBlockchainTokenUseCase';
-import { PointsBlockchainTokenOutputPort } from '../../Port/Output/PointsBlockchainTokenOutputPort';
-import { AddPointsRequestDto } from '../Dto/HTTPRequest/AddPointsRequestDto';
+import { PointsBlockchainTokenUseCase } from '../Port/Input/PointsBlockchainTokenUseCase';
+import { PointsBlockchainTokenOutputPort } from '../Port/Output/PointsBlockchainTokenOutputPort';
+import { AddPointsRequestDto } from './Dto/HTTPRequest/AddPointsRequestDto';
 
 @Injectable()
 export class PointsBlockchainService implements PointsBlockchainTokenUseCase {
