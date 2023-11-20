@@ -1,6 +1,6 @@
 # Client Manager on Blockchain Technology 
 
-## Desenvolvimento: 
+## Ciclo de nova Feature: 
 
 > O Planejamento para desenvolvimento de uma nova feature para esse projeto com um longo escopo está definida para seguir 
 > esse padrão abaixo: 
@@ -66,3 +66,43 @@ monoRepo/
 | `clean`      | Executa o comando de limpeza em todos os pacotes do monorepo.                                           |
 | `build`      | Executa o comando de build em todos os pacotes do monorepo de forma recursiva.                          |
 | `test`       | Executa testes em todos os pacotes do monorepo de forma recursiva.                                      |
+
+
+# Desenvolvimento
+
+## 📌 Pendências
+- [ ] Definir lógica para remoção automática de 20% dos pontos após 30 dias.
+- [ ] Implementar função para atualizar metadata do NFT conforme níveis de pontuação.
+- [ ] Verificar e Validar possibilidade de usos para o micro servico golang 
+- [ ] Integrar banco de dados PostGree no Micro Serviço Go
+- [ ] Integrar banco de dados PostGree no backEnd
+- [ ] Implementar API de Metadatas dos tokens ERC1155 das insignas 
+
+
+## 🚀 Em Progresso
+- [ ] Implementar Rotas no Back-end API
+
+## ✅ Concluídas
+- [x] Configurar ambiente de desenvolvimento inicial.
+- [x] Subir ambiente blockchain com Hyperledger Besu e Firefly
+- [x] Configurar monoRepo e scripts com o lerna
+- [x] Revisar e validar estruturas existentes no contrato `ClientManager.sol`.
+- [x] Estabelecer sistema de cadastro e gerenciamento de pontos dos clientes.
+- [x] Desenvolver integração de pontuação com ERC1155.
+- [x] Criar tokens NFT para insígnias (PremiumCustomer, GoldCustomer, TitaniumCustomer).
+- [x] Tornar a porcentagem de remoção de pontos ajustável pelo administrador do contrato.
+- [x] Implementar testes automatizados para novas funcionalidades.
+- [x] Desenvolvimento de todos testes unitarios 
+
+## 🧠 Ideias para Explorar
+- [ ] Investigar integrações com sistemas CRM para uso de metadata.
+- [ ] Explorar possibilidades de gamificação no sistema de pontos.
+- [ ] Avaliar interoperabilidade com outros contratos inteligentes.
+
+## 🛠️ Melhorias Futuras
+- [ ] Otimizar funções para maior eficiência de gás.
+
+
+## 📚 Documentação
+- [ ] Atualizar documentação com detalhes das novas funcionalidades.
+- [ ] Criar guia de uso para a interface de administração de pontos.
