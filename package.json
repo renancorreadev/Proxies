@@ -15,6 +15,7 @@
     "api": "lerna run --scope client-manager-api --stream dev",
     "ui": "lerna run --scope client-manager-ui --stream dev",
     "sc-test": "lerna run --scope smart-contracts test",
+    "sc-deploy-points": "lerna run --scope smart-contracts deploy-points",
     "clean": "lerna run clean",
     "build": "pnpm recursive run build",
     "test": "pnpm recursive run test"

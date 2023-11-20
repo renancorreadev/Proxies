@@ -1,9 +1,10 @@
 {
   "name": "smart-contracts",
   "scripts": {
-    "verify": "npx hardhat verify --network mumbai 0x74dC770ab1e2Ac3a001ee220765fc1af37758a27",
-    "deploy": "npx hardhat run ./scripts/deploy.ts --network firefly",
-    "upgrade": "npx hardhat run ./scripts/upgradeProxy.ts --network firefly",
+    "verify": "pnpm hardhat verify --network mumbai 0x74dC770ab1e2Ac3a001ee220765fc1af37758a27",
+    "deploy": "pnpm hardhat run ./scripts/deploy.ts --network firefly",
+    "deploy-points": "pnpm hardhat run ./scripts/deployPointsCore.ts --network firefly",
+    "upgrade": "pnpm hardhat run ./scripts/upgradeProxy.ts --network firefly",
     "compile": "pnpm hardhat compile",
     "test": "pnpm hardhat test",
     "clean": "rm -rf node_modules"

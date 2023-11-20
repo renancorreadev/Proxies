@@ -34,14 +34,6 @@ contract PointCore is
         _;
     }
 
-    modifier clientExists(uint256 clientId) {
-        require(
-            clientStorage.isClientExists(clientId),
-            "InvalidClientID on PointCore"
-        );
-        _;
-    }
-
     function initialize(
         address _clientStorage,
         string memory uri
@@ -53,6 +45,7 @@ contract PointCore is
         setPointThresholds(200, 500, 1000);
     }
 
+    // ---------- SETTERS ----------
     /// @dev set points for each level
     function setPointThresholds(
         uint256 premium,
@@ -87,6 +80,7 @@ contract PointCore is
         emit PointsRemoved(clientId, points);
     }
 
+    /// ---------- GETTERS ----------
     /**
      * @dev Returns the total points of a given client.
      * @param clientId The ID of the client.
@@ -104,6 +98,11 @@ contract PointCore is
         return clientLevel[clientId];
     }
 
+    function getVersion() public pure returns (string memory) {
+        return "1.0.0";
+    }
+
+    /// ---------- INTERNAL ----------
     function updateClientLevel(uint256 clientId) internal {
         uint256 currentPoints = clientPoints[clientId];
         uint256 currentLevel = clientLevel[clientId];
