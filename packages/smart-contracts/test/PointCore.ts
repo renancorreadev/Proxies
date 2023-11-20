@@ -67,8 +67,6 @@ describe("PointCore", function () {
 
     const points = await pointCoreInstance.getClientPoints(1);
 
-    console.log(points);
-
     expect(points).to.equal(100);
   });
 

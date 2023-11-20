@@ -62,7 +62,10 @@ abstract contract ClientStorage is IClientStorage {
     function getNextId() private returns (uint256) {
         return ++currentId;
     }
-    function isClientExists(uint256 clientId) public view override returns (bool) {
+
+    function isClientExists(
+        uint256 clientId
+    ) public view override returns (bool) {
         return bytes(clientMappingStorage[clientId].name).length > 0;
     }
 }

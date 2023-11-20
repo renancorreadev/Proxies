@@ -27,7 +27,10 @@ contract PointCore is
     uint256 public pointsForTitanium;
 
     modifier validClient(uint256 clientId) {
-        require(clientStorage.isClientExists(clientId), "InvalidClientID");
+        require(
+            clientStorage.isClientExists(clientId),
+            "InvalidClientID on PointCore"
+        );
         _;
     }
 
@@ -62,7 +65,10 @@ contract PointCore is
     }
 
     /// @dev add points
-    function addPoints(uint256 clientId, uint points) public onlyOwner {
+    function addPoints(
+        uint256 clientId,
+        uint points
+    ) public onlyOwner validClient(clientId) {
         clientPoints[clientId] += points;
         updateClientLevel(clientId);
 
@@ -92,9 +98,13 @@ contract PointCore is
         return clientPoints[clientId];
     }
 
-    function updateClientLevel(
+    function getClientLevel(
         uint256 clientId
-    ) internal clientExists(clientId) {
+    ) public view validClient(clientId) returns (uint) {
+        return clientLevel[clientId];
+    }
+
+    function updateClientLevel(uint256 clientId) internal {
         uint256 currentPoints = clientPoints[clientId];
         uint256 currentLevel = clientLevel[clientId];
         uint256 newLevel = 0;
@@ -110,15 +120,7 @@ contract PointCore is
         address clientAddress = clientStorage.getClientWalletAddress(clientId);
 
         if (newLevel != currentLevel) {
-            // Queime o NFT do nível anterior, se existir
-            if (
-                currentLevel != 0 && balanceOf(clientAddress, currentLevel) > 0
-            ) {
-                _burn(clientAddress, currentLevel, 1);
-                emitBurnEvent(clientId, currentLevel);
-            }
-
-            // Minta um novo NFT do novo nível
+            burnPreviousLevelToken(clientId, clientAddress, currentLevel);
             _mint(clientAddress, newLevel, 1, "");
             emitMintEvent(clientId, newLevel);
 
@@ -126,10 +128,20 @@ contract PointCore is
             emit ClientPointsChanged(clientId, clientPoints[clientId]);
 
             if (newLevel == CUSTOMER_TITANIUM) {
-                // Zere os pontos do cliente apenas se ele atingir o nível CUSTOMER_TITANIUM
                 clientPoints[clientId] = 0;
                 emit ClientPointsReset(clientId);
             }
+        }
+    }
+
+    function burnPreviousLevelToken(
+        uint256 clientId,
+        address clientAddress,
+        uint256 currentLevel
+    ) internal {
+        if (currentLevel != 0 && balanceOf(clientAddress, currentLevel) > 0) {
+            _burn(clientAddress, currentLevel, 1);
+            emitBurnEvent(clientId, currentLevel);
         }
     }
 
@@ -144,32 +156,12 @@ contract PointCore is
         }
     }
 
-    function emitBurnEvent(uint256 clientId, uint256 newLevel) internal {
+    function emitBurnEvent(uint256 clientId, uint256 burnedLevel) internal {
         address clientAddress = clientStorage.getClientWalletAddress(clientId);
-        uint256 levelToBurn = 0;
-
-        if (
-            newLevel == CUSTOMER_TITANIUM &&
-            balanceOf(clientAddress, CUSTOMER_GOLD) > 0
-        ) {
-            levelToBurn = CUSTOMER_GOLD;
-        } else if (
-            newLevel == CUSTOMER_GOLD &&
-            balanceOf(clientAddress, CUSTOMER_PREMIUM) > 0
-        ) {
-            levelToBurn = CUSTOMER_PREMIUM;
-        }
-
-        // burn latest level token
-        if (levelToBurn != 0) {
-            _burn(clientAddress, levelToBurn, 1);
-
-            // emit burn event
-            if (levelToBurn == CUSTOMER_GOLD) {
-                emit CustomerGoldBurned(clientId, clientAddress);
-            } else if (levelToBurn == CUSTOMER_PREMIUM) {
-                emit CustomerPremiumBurned(clientId, clientAddress);
-            }
+        if (burnedLevel == CUSTOMER_GOLD) {
+            emit CustomerGoldBurned(clientId, clientAddress);
+        } else if (burnedLevel == CUSTOMER_PREMIUM) {
+            emit CustomerPremiumBurned(clientId, clientAddress);
         }
     }
 }

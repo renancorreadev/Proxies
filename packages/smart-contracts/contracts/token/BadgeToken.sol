@@ -30,6 +30,17 @@ contract BadgeToken is
         _mint(account, id, amount, "");
     }
 
+    function burnToken(
+        address account,
+        uint256 id,
+        uint256 amount
+    ) public onlyOwner {
+        uint256 currentBalance = balanceOf(account, id);
+        require(currentBalance >= amount, "Insufficient balance to burn");
+
+        _burn(account, id, amount);
+    }
+
     function _authorizeUpgrade(
         address newImplementation
     ) internal override onlyOwner {}
