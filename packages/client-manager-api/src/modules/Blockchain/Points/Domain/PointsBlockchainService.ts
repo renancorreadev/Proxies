@@ -23,13 +23,4 @@ export class PointsBlockchainService implements PointsBlockchainTokenUseCase {
 			throw new Error('An error ocurred while adding the points');
 		}
 	}
-
-	// async getClientData(clientId: number): Promise<ClientData> {
-	// 	try {
-	// 		return await this.clientBlockchainTokenAdapter.getClientData(clientId);
-	// 	} catch (e) {
-	// 		this.logger.error(`Error in Client Blockchain Service: ${JSON.stringify(e)}`);
-	// 		throw new Error('An error ocurred while get the client');
-	// 	}
-	// }
 }

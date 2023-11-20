@@ -1,7 +1,7 @@
 import { ethers, upgrades } from "hardhat";
-import { getImplementationAddress } from '@openzeppelin/upgrades-core';
-import {JsonRpcProvider} from "@ethersproject/providers";
-import fs from 'fs';
+import { getImplementationAddress } from "@openzeppelin/upgrades-core";
+import { JsonRpcProvider } from "@ethersproject/providers";
+import fs from "fs";
 
 const provider = new JsonRpcProvider("http://192.168.15.200:5100");
 
@@ -10,23 +10,27 @@ async function main() {
 
   const contractFactory = await ethers.getContractFactory("ClientManager");
 
-  const deployContract = await upgrades.deployProxy(contractFactory, [], { initializer: 'initialize' });
+  const deployContract = await upgrades.deployProxy(contractFactory, [], {
+    initializer: "initialize",
+  });
   await deployContract.waitForDeployment();
 
   const proxyAddress = await deployContract.getAddress();
-  const newImplementationAddress = await getImplementationAddress(provider, proxyAddress);
+  const newImplementationAddress = await getImplementationAddress(
+    provider,
+    proxyAddress
+  );
 
   const data = {
     proxyAddress: proxyAddress,
-    implementationAddress: newImplementationAddress
+    implementationAddress: newImplementationAddress,
   };
 
   console.log("Proxy address :", proxyAddress);
   console.log("Implementation address :", newImplementationAddress);
 
-  fs.writeFileSync('deployedContracts.json', JSON.stringify(data, null, 2));
+  fs.writeFileSync("deployedContracts.json", JSON.stringify(data, null, 2));
 }
-
 
 main().catch((error) => {
   console.error(error);

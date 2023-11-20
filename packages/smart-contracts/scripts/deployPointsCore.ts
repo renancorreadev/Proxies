@@ -12,8 +12,8 @@ async function main() {
   const deployContract = await upgrades.deployProxy(
     contractFactory,
     [
-      "0xEB9e9E2DbC00fC320AC66413F169adD6abe7c222",
-      "http://localhost:3000/api/metadata",
+      "0xc6F13BD19d565376bff44998aA33765907131527",
+      "http://localhost:3001/api/metadata",
     ],
     {
       initializer: "initialize",
