@@ -12,3 +12,13 @@ export interface ClientData {
 	paymentStatus: number;
 	addressLocal: AddressLocal;
 }
+
+export type BalanceOfParam = {
+	account: string;
+	id: number;
+};
+
+export type BalanceOfBatchParam = {
+	accounts: string[];
+	ids: number[];
+};

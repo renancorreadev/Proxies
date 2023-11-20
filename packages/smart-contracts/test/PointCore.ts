@@ -8,6 +8,10 @@ describe("PointCore", function () {
   let owner: any;
   let clientData: any;
 
+  let CUSTOMER_TITANIUM_NFT_ID = 3;
+  let CUSTOMER_GOLD_NFT_ID = 2;
+  let CUSTOMER_PREMIUM_NFT_ID = 1;
+
   async function deployPointContractProxy() {
     // @ts-ignore
     const [owner] = await ethers.getSigners();
@@ -149,5 +153,133 @@ describe("PointCore", function () {
     // Verificar se o NFT do nível máximo foi queimado
     const nftBalance = await pointCoreInstance.balanceOf(owner.address, 3);
     expect(Number(nftBalance.toString())).to.equal(0);
+  });
+
+  it("Should return the balances of NFT", async function () {
+    // Add 1000 points to the client to reach the max level
+    await pointCoreInstance.addPoints(1, 1000);
+
+    // Verificar se o NFT do nível mínimo foi emitido
+    const nftBalance = await pointCoreInstance.balanceOf(owner.address, 3);
+    expect(Number(nftBalance.toString())).to.equal(1);
+  });
+
+  it("Should return the balances of Batch NFTs from 4 clients", async function () {
+    const clientOneToRegister = {
+      ...clientData,
+      name: "Joana Doe",
+      age: 11,
+      WalletAddress: "0x1234567890123456789012345678901234567890",
+    };
+    const clientTwoToRegister = {
+      ...clientData,
+      name: "Kalice Doe",
+      age: 12,
+      WalletAddress: "0x1234567890123456789012345678901234567891",
+    };
+    const clientThreeToRegister = {
+      ...clientData,
+      name: "Luisa Doe",
+      age: 13,
+      WalletAddress: "0x1234567890123456789012345678901234567892",
+    };
+    const clientFourToRegister = {
+      ...clientData,
+      name: "Maria Doe",
+      age: 14,
+      WalletAddress: "0x1234567890123456789012345678901234567893",
+    };
+
+    /// @dev register 4 clients with different age
+    await clientManager.registerClient(clientOneToRegister);
+    await clientManager.registerClient(clientTwoToRegister);
+    await clientManager.registerClient(clientThreeToRegister);
+    await clientManager.registerClient(clientFourToRegister);
+
+    const userIDOne = 2;
+    const userIDTwo = 3;
+    const userIDThree = 4;
+    const userIDFour = 5;
+
+    const retrieveClientDataOne = await clientManager.getClientData(userIDOne);
+    const retrieveClientDataTwo = await clientManager.getClientData(userIDTwo);
+    const retrieveClientDataThree = await clientManager.getClientData(
+      userIDThree
+    );
+    const retrieveClientDataFour = await clientManager.getClientData(
+      userIDFour
+    );
+
+    expect(retrieveClientDataOne.name).to.equal(clientOneToRegister.name);
+    expect(retrieveClientDataTwo.name).to.equal(clientTwoToRegister.name);
+    expect(retrieveClientDataThree.name).to.equal(clientThreeToRegister.name);
+    expect(retrieveClientDataFour.name).to.equal(clientFourToRegister.name);
+
+    // // Add 1000 points to the client to reach the max level
+    /**
+     * @dev adiciona os pontos para os clientes
+     * @param userIDOne ID do cliente
+     * @param userIDTwo ID do cliente
+     * @param userIDThree ID do cliente
+     * @param userIDFour ID do cliente
+     * @param points quantidade de pontos
+     */
+    await pointCoreInstance.addPoints(userIDOne, 250);
+    await pointCoreInstance.addPoints(userIDTwo, 600);
+    await pointCoreInstance.addPoints(userIDThree, 800);
+    await pointCoreInstance.addPoints(userIDFour, 1250);
+
+    const customerPremiumNftBalances = await pointCoreInstance.balanceOfBatch(
+      [
+        clientOneToRegister.WalletAddress,
+        clientTwoToRegister.WalletAddress,
+        clientThreeToRegister.WalletAddress,
+        clientFourToRegister.WalletAddress,
+      ],
+      [
+        CUSTOMER_PREMIUM_NFT_ID,
+        CUSTOMER_PREMIUM_NFT_ID,
+        CUSTOMER_PREMIUM_NFT_ID,
+        CUSTOMER_PREMIUM_NFT_ID,
+      ]
+    );
+    const customerGoldNftBalances = await pointCoreInstance.balanceOfBatch(
+      [
+        clientOneToRegister.WalletAddress,
+        clientTwoToRegister.WalletAddress,
+        clientThreeToRegister.WalletAddress,
+        clientFourToRegister.WalletAddress,
+      ],
+      [
+        CUSTOMER_GOLD_NFT_ID,
+        CUSTOMER_GOLD_NFT_ID,
+        CUSTOMER_GOLD_NFT_ID,
+        CUSTOMER_GOLD_NFT_ID,
+      ]
+    );
+    const customerTitaniumNftBalances = await pointCoreInstance.balanceOfBatch(
+      [
+        clientOneToRegister.WalletAddress,
+        clientTwoToRegister.WalletAddress,
+        clientThreeToRegister.WalletAddress,
+        clientFourToRegister.WalletAddress,
+      ],
+      [
+        CUSTOMER_TITANIUM_NFT_ID,
+        CUSTOMER_TITANIUM_NFT_ID,
+        CUSTOMER_TITANIUM_NFT_ID,
+        CUSTOMER_TITANIUM_NFT_ID,
+      ]
+    );
+
+    /// @dev espera que apenas o cliente 1 possua o NFT da insignia CUSTOMER_PREMIUM
+    expect(customerPremiumNftBalances[0]).to.equal(1);
+
+    /// @dev espera que apenas o cliente 2 e 3 possua o NFT da insignia CUSTOMER_GOLD
+    expect(customerGoldNftBalances[1]).to.equal(1);
+    expect(customerGoldNftBalances[2]).to.equal(1);
+
+    /// @dev espera que apenas o cliente 4 possua o NFT da insignia CUSTOMER_TITANIUM
+    expect(customerTitaniumNftBalances[3]).to.equal(1);
   });
 });

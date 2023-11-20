@@ -54,28 +54,6 @@ describe("ClientManager", function () {
     );
   });
 
-  it("Should retrieve client name", async function () {
-    const retrievedName = await clientManager.getClientName(1);
-    expect(retrievedName).to.equal("John Doe");
-  });
-
-  it("Should retrieve client age", async function () {
-    const retrievedAge = await clientManager.getClientAge(1);
-    expect(retrievedAge).to.equal(30);
-  });
-
-  it("Should retrieve client payment status", async function () {
-    const retrievedPaymentStatus = await clientManager.getClientPaymentStatus(
-      1
-    );
-    expect(retrievedPaymentStatus).to.equal(0);
-  });
-
-  it("Should retrieve client address Local", async function () {
-    const retrievedPaymentStatus = await clientManager.getClientAddressLocal(1);
-    expect(retrievedPaymentStatus.HouseNumber).to.equal(67);
-  });
-
   it("should retrieve client complete data with id", async function () {
     const retrievedData = await clientManager.getClientData(1);
 
@@ -181,5 +159,29 @@ describe("ClientManager", function () {
         'EmptyParameter("It cannot be empty HouseNumber")';
       expect(error.message).to.include(expectedErrorMessage);
     }
+  });
+
+  it("Should retrieve client Id by name", async function () {
+    const name = "John Doe";
+    const retrievedData = await clientManager.getClientsByName(name);
+
+    expect(retrievedData.name).to.equal(name);
+  });
+
+  it("Should retrieve client Id by age", async function () {
+    const age = 30;
+    const retrievedData = await clientManager.getClientsByAge(age);
+
+    expect(retrievedData.age).to.equal(age);
+  });
+
+  it("Should retrieve client Id by age", async function () {
+    // @ts-ignore
+    const [owner] = await ethers.getSigners();
+    const retrievedData = await clientManager.getClientsByAddress(
+      owner.address
+    );
+
+    expect(retrievedData.WalletAddress).to.equal(owner.address);
   });
 });

@@ -1,7 +1,11 @@
 import { PointCoreBlockchainConnector } from '../PointsCoreBlockchainConnector';
+import { BalanceOfBatchParam, BalanceOfParam } from '../types/contracts/client-manager-types';
 import { AddPointsParamInput } from '../types/contracts/points-core-types';
 
-export class PointsManagerConnector extends PointCoreBlockchainConnector {
+/// @interfaces
+import { IPointManagerConnector } from './interfaces/IPointManagerConnector';
+
+export class PointsManagerConnector extends PointCoreBlockchainConnector implements IPointManagerConnector {
 	// Setters blockchain States
 	async addPoints(params: AddPointsParamInput) {
 		try {
@@ -40,5 +44,28 @@ export class PointsManagerConnector extends PointCoreBlockchainConnector {
 			const errorMessage = e instanceof Error ? e.message : 'Unknown error';
 			throw new Error(`Erro na function getClientPoints do contrato na EVM: ${errorMessage}`);
 		}
+	}
+
+	async getBalanceOf(params: BalanceOfParam): Promise<number> {
+		const { account, id } = params;
+
+		const balance = await this.contract.balanceOf(account, id);
+
+		return Number(balance);
+	}
+
+	async getBalanceOfAllClients(params: BalanceOfBatchParam): Promise<number[]> {
+		const { accounts, ids } = params;
+		const balance = await this.contract.balanceOfBatch(accounts, ids);
+
+		if (balance.length === 0) {
+			return [];
+		}
+
+		if (balance.length !== accounts.length) {
+			throw new Error('The length of balance and accounts must be the same');
+		}
+
+		return balance.map((bigIntValue) => Number(bigIntValue));
 	}
 }
