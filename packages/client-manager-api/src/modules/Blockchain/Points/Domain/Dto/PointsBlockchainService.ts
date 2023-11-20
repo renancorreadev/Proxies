@@ -10,13 +10,13 @@ export class PointsBlockchainService implements PointsBlockchainTokenUseCase {
 	private readonly logger = new Logger('ClientBlockchainService');
 
 	constructor(
-		@Inject(DependencyInjectionTokens.CLIENTBLOCKCHAIN_TOKEN_OUTPUT_PORT)
+		@Inject(DependencyInjectionTokens.POINTS_BLOCKCHAIN_TOKEN_OUTPUT_PORT)
 		private readonly clientBlockchainTokenAdapter: PointsBlockchainTokenOutputPort,
 	) {}
 
 	async addPoints(addPointsRequestDTO: AddPointsRequestDto): Promise<any> {
 		try {
-			// await this.clientBlockchainTokenAdapter.registerClient(RegisterClientRequestDto);
+			await this.clientBlockchainTokenAdapter.addPoints(addPointsRequestDTO);
 			return 'Foi adicionado os pontos ao cliente com sucesso!';
 		} catch (e) {
 			this.logger.error(`Error in Points Blockchain Service: ${JSON.stringify(e)}`);

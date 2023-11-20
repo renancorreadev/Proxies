@@ -8,45 +8,24 @@
 			"@smart-contracts": [
 				"./smart-contracts/typechain"
 			],
-			"@helper/": [
-				"./api/src/helper/*"
+			"@helper/*": [
+				"./client-manager-api/src/helper/*"
+			],
+			"@config/*": [
+				"./client-manager-api/src/config/*"
 			],
 			"@/*": [
-				"./api/*"
+				"./client-manager-api/*"
 			],
 			"@src/*": [
-				"./api/src/*"
+				"./client-manager-api/src/*"
 			],
-			"@portAuthorization/*": [
-				"./api/src/Authorization/Port/*"
+			"@client-manager-contract-types/*": [
+				"./client-manager-api/src/helper/blockchain/types/contracts/client-manager-types.ts"
 			],
-			"@portSettlement/*": [
-				"./api/src/Settlement/Port/*"
+			"@client-manager-connector/*": [
+				"./client-manager-api/src/helper/blockchain/types/contracts/client-manager-types.ts"
 			],
-			"@portManagement/*": [
-				"./api/src/Management/Port/*"
-			],
-			"@portRegister/*": [
-				"./api/src/Management/Register/Port/*"
-			],
-			"@portValuesTransfer/*": [
-				"./api/src/ValuesTransfer/Port/*"
-			],
-			"@dtoAuthorization/*": [
-				"./api/src/Authorization/Domain/Dto/*"
-			],
-			"@dtoSettlement/*": [
-				"./api/src/Settlement/Domain/Dto/*"
-			],
-			"@dtoManagement/*": [
-				"./api/src/Management/Domain/Dto/*"
-			],
-			"@dtoRegister/*": [
-				"./api/src/Management/Register/Domain/Dto/*"
-			],
-			"@dtoValuesTransfer/*": [
-				"./api/src/ValuesTransfer/Domain/Dto/*"
-			]
 		}
 	}
 }

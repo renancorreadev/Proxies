@@ -18,7 +18,7 @@ import { AddPointsRequestDto } from '../../Domain/Dto/HTTPRequest/AddPointsReque
 @Controller({
 	path: BaseUrls.POINTS_BLOCKCHAIN,
 })
-@ApiTags('Blockchain -| Points |- ')
+@ApiTags('Blockchain Points')
 export class PointsBlockchainWebAdapter {
 	private readonly logger = new Logger('PointsBlockchainWebAdapter');
 	constructor(
@@ -44,8 +44,8 @@ export class PointsBlockchainWebAdapter {
 	@ApiForbiddenResponse({ description: 'Forbidden' })
 	@ApiNotFoundResponse({ description: 'Segment not found' })
 	@ApiInternalServerErrorResponse({ description: 'Unexpected error' })
-	@Post('/new')
-	async registerNewClient(@Body() clientBlockchainRequestDTO: AddPointsRequestDto): Promise<string> {
+	@Post('/add')
+	async addPoints(@Body() clientBlockchainRequestDTO: AddPointsRequestDto): Promise<string> {
 		this.logger.log('----------PROCESS BEGIN ----------');
 		this.logger.log(`Running Client Blockchain Web adapter`);
 		this.logger.log(`Data: ${JSON.stringify(clientBlockchainRequestDTO)}`);

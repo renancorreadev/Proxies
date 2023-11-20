@@ -8,6 +8,7 @@ import { PointsBlockchainAdapter } from './modules/Blockchain/Points/Adapter/Out
 import { PointsBlockchainWebAdapter } from './modules/Blockchain/Points/Adapter/input/PointsBlockchainWebAdapter';
 
 import { DependencyInjectionTokens } from './helper/AppConstants';
+import { BlockchainConnectionProvider } from '@config/Blockchain/connection';
 
 @Module({
 	imports: [],
@@ -29,6 +30,7 @@ import { DependencyInjectionTokens } from './helper/AppConstants';
 			useClass: PointsBlockchainAdapter,
 			provide: DependencyInjectionTokens.POINTS_BLOCKCHAIN_TOKEN_OUTPUT_PORT,
 		},
+		BlockchainConnectionProvider,
 	],
 })
 export class AppModule {}

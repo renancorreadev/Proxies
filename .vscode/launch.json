@@ -6,7 +6,7 @@
 			"request": "launch",
 			"name": "Debug Nest Framework",
 			"args": [
-				"${workspaceFolder}/api/src/main.ts"
+				"${workspaceFolder}/packages/client-manager-api/src/main.ts"
 			],
 			"runtimeArgs": [
 				"--nolazy",
@@ -16,8 +16,8 @@
 				"tsconfig-paths/register"
 			],
 			"sourceMaps": true,
-			"envFile": "${workspaceFolder}/api/.env",
-			"cwd": "${workspaceRoot}/api",
+			"envFile": "${workspaceFolder}/packages/client-manager-api/.env",
+			"cwd": "${workspaceRoot}/packages/client-manager-api",
 			"console": "integratedTerminal",
 			"protocol": "inspector"
 		},
@@ -25,7 +25,7 @@
 			"name": "Launch Blockchain Monitor",
 			"type": "go",
 			"request": "launch",
-			"program": "${workspaceFolder}service/cmd/myapp/main.go",
+			"program": "${workspaceFolder}/packages/blockchain-service/cmd/app/main.go",
 			"env": {},
 			"args": []
 		}

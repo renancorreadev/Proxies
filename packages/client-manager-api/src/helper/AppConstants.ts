@@ -11,6 +11,11 @@ export const enum DependencyInjectionTokens {
 	POINTS_BLOCKCHAIN_TOKEN_OUTPUT_PORT = 'PointsBlockchainTokenOutputPort',
 }
 
+export const enum DependencyInjectionBlockchainConnector {
+	CLIENT_MANAGER_CONNECTOR = 'ClientManagerConnector',
+	POINTS_MANAGER_CONNECTOR = 'PointsManagerConnector',
+}
+
 export const enum Hosts {
 	RPC_PROVIDER_URL = 'http://127.0.0.1:5100',
 }

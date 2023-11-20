@@ -1,21 +1,7 @@
-import { BlockchainConnector } from 'client-manager-api/src/helper/blockchain/BlockchainConnector';
+import { ClientManagerBlockchainConnector } from '@helper/blockchain/ClientManagerBlockchainConnector';
+import { ClientData } from '@client-manager-contract-types/';
 
-export type AddressLocal = {
-	City: string;
-	Street: string;
-	PostalCode: number;
-	HouseNumber: number;
-};
-
-export interface ClientData {
-	name: string;
-	age: number;
-	WalletAddress: string;
-	paymentStatus: number;
-	addressLocal: AddressLocal;
-}
-
-export class ClientBlockchainConnectorAdapter extends BlockchainConnector {
+export class ClientManagerConnector extends ClientManagerBlockchainConnector {
 	// Setters blockchain States
 	async registerClient(params: ClientData) {
 		try {

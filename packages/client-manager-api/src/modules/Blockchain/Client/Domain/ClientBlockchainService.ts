@@ -7,16 +7,12 @@ import { DependencyInjectionTokens } from 'client-manager-api/src/helper/AppCons
 import { ClientBlockchainTokenUseCase } from '../Port/Input/ClientBlockchainTokenUseCase';
 import { ClientBlockchainTokenOutputPort } from '../Port/Output/ClientBlockchainTokenOutputPort';
 import { RegisterClientRequestDto } from './Dto/HTTPRequest/ClientBlockchainRequestDto';
-import { ClientData } from '../Adapter/Output/ClientBlockchainConnectorAdapter';
+import { ClientData } from '@helper/blockchain/types/contracts/client-manager-types';
 
 @Injectable()
 export class ClientBlockchainService implements ClientBlockchainTokenUseCase {
 	private readonly logger = new Logger('ClientBlockchainService');
 
-	/**
-	 * Creates an instance of ClientBlockchainService.
-	 * @param {ClientBlockchainTokenOutputPort} clientBlockchainTokenAdapter - The adapter for interacting with the blockchain.
-	 */
 	constructor(
 		@Inject(DependencyInjectionTokens.CLIENTBLOCKCHAIN_TOKEN_OUTPUT_PORT)
 		private readonly clientBlockchainTokenAdapter: ClientBlockchainTokenOutputPort,

@@ -23,6 +23,8 @@ export class PointsBlockchainAdapter implements PointsBlockchainTokenOutputPort 
 	async addPoints(registerClientBlockchainDto: AddPointsRequestDto): Promise<any> {
 		try {
 			const { clientID, points } = registerClientBlockchainDto;
+			console.log('Sucesso');
+			console.log(clientID, points);
 		} catch (e) {
 			const errorMessage = e.response ? e.response.data : e.message;
 			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);

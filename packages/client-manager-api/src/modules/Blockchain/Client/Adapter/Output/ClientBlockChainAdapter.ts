@@ -1,25 +1,22 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { config } from 'dotenv';
-import { ClientBlockchainTokenOutputPort } from 'client-manager-api/src/modules/Blockchain/Client/Port/Output/ClientBlockchainTokenOutputPort';
 
-// DTO
+import { ClientBlockchainTokenOutputPort } from 'client-manager-api/src/modules/Blockchain/Client/Port/Output/ClientBlockchainTokenOutputPort';
 import { RegisterClientRequestDto } from 'client-manager-api/src/modules/Blockchain/Client/Domain/Dto/HTTPRequest/ClientBlockchainRequestDto';
-import { AddressLocal, ClientBlockchainConnectorAdapter, ClientData } from './ClientBlockchainConnectorAdapter';
+import { DependencyInjectionBlockchainConnector } from '@helper/AppConstants';
+import { ClientManagerConnector } from '@helper/blockchain/connector';
+import { AddressLocal, ClientData } from '@helper/blockchain/types/contracts/client-manager-types';
 
 config();
 
 @Injectable()
 export class ClientBlockchainAdapter implements ClientBlockchainTokenOutputPort {
 	private readonly logger = new Logger('ClientBlockchainAdapter');
-	private contractInstance: ClientBlockchainConnectorAdapter;
 
-	constructor() {
-		this.contractInstance = new ClientBlockchainConnectorAdapter(
-			process.env.CONTRACT_ADDRESS,
-			process.env.PROVIDER,
-			process.env.PRIVATE_KEY,
-		);
-	}
+	constructor(
+		@Inject(DependencyInjectionBlockchainConnector.CLIENT_MANAGER_CONNECTOR)
+		private contractInstance: ClientManagerConnector,
+	) {}
 
 	async registerClient(registerClientBlockchainDto: RegisterClientRequestDto): Promise<any> {
 		try {
