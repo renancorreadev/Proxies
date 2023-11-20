@@ -30,4 +30,24 @@ export class PointsBlockchainAdapter implements PointsBlockchainTokenOutputPort 
 			throw new Error(`An error ocurred in write contract addPoints function on blockchain `);
 		}
 	}
+
+	async getClientPoints(clientId: number): Promise<number> {
+		try {
+			return await this.contractInstance.getClientPoints(clientId);
+		} catch (e) {
+			const errorMessage = e.response ? e.response.data : e.message;
+			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
+			throw new Error(`An error ocurred in read contract getClientPoints function on blockchain `);
+		}
+	}
+
+	async getClientLevel(clientId: number): Promise<number> {
+		try {
+			return await this.contractInstance.getClientLevel(clientId);
+		} catch (e) {
+			const errorMessage = e.response ? e.response.data : e.message;
+			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
+			throw new Error(`An error ocurred in read contract getClientLevel function on blockchain `);
+		}
+	}
 }

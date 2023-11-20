@@ -1,0 +1,47 @@
+import { ethers, upgrades } from "hardhat";
+import { JsonRpcProvider } from "@ethersproject/providers";
+
+import { getImplementationAddress } from "@openzeppelin/upgrades-core";
+import fs from "fs";
+
+const proxyAddress = "0x0c809269C3b4A65dd95D8ED8F35B59F5480fEC50";
+const provider = new JsonRpcProvider("http://192.168.15.200:5100");
+
+async function main() {
+  const newContractVersion = await ethers.getContractFactory("PointCore");
+
+  const upgradeContract = await upgrades.upgradeProxy(
+    proxyAddress,
+    newContractVersion
+  );
+
+  await upgradeContract.waitForDeployment();
+
+  const newImplementationAddress = await getImplementationAddress(
+    provider,
+    proxyAddress
+  );
+
+  upgradeContract.getAddress();
+
+  console.log(
+    "Contract PointCore updated deployed to:",
+    await upgradeContract.getAddress()
+  );
+  console.log(
+    "New PointCore implementation address:",
+    newImplementationAddress
+  );
+
+  const data = {
+    proxyAddress: proxyAddress,
+    implementationAddress: newImplementationAddress,
+  };
+
+  fs.writeFileSync(
+    "PointCoreContractAddresses.json",
+    JSON.stringify(data, null, 2)
+  );
+}
+
+main();

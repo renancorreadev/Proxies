@@ -13,7 +13,10 @@ import {
 import { BaseUrls, DependencyInjectionTokens } from 'client-manager-api/src/helper/AppConstants';
 
 import { PointsBlockchainTokenUseCase } from '../../Port/Input/PointsBlockchainTokenUseCase';
+
 import { AddPointsRequestDto } from '../../Domain/Dto/HTTPRequest/AddPointsRequestDto';
+import { GetClientPointsResponse } from '../../Domain/Dto/HTTPResponse/GetClientPointsResponse';
+import { GetClientLevelResponse } from '../../Domain/Dto/HTTPResponse/GetClientLevelResponse';
 
 @Controller({
 	path: BaseUrls.POINTS_BLOCKCHAIN,
@@ -51,5 +54,46 @@ export class PointsBlockchainWebAdapter {
 
 		this.logger.log('---------- PROCESS END ----------');
 		return response;
+	}
+
+	/// --------------------------------------------------------------------------------------
+	/// ------------------------      GET CLIENT POINTS           ---------------------
+	/// --------------------------------------------------------------------------------------
+	@ApiOperation({
+		summary: 'Get Client Points by ID',
+		description: 'Find Client Points Information by ID',
+	})
+	@ApiOkResponse({
+		description: 'Success operation',
+		type: GetClientPointsResponse,
+	})
+	@ApiBadRequestResponse({ description: 'Bad request' })
+	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
+	@ApiForbiddenResponse({ description: 'Forbidden' })
+	@ApiNotFoundResponse({ description: 'Segment not found' })
+	@Get('/:id')
+	async getClientPoints(@Param('id') id: number) {
+		return await this.pointsBlockchainService.getClientPoints(+id);
+	}
+
+	/// --------------------------------------------------------------------------------------
+	/// ------------------------      GET CLIENT LEVEL           ---------------------
+	/// --------------------------------------------------------------------------------------
+	@ApiOperation({
+		summary: 'Get Client Level by ID',
+		description:
+			'Retorna o nível que o cliente se encontra no momento diretamente da blockchain. Valor 1 = Premium, Valor 2 = Gold, Valor 3 = Titanium',
+	})
+	@ApiOkResponse({
+		description: 'Success operation',
+		type: GetClientLevelResponse,
+	})
+	@ApiBadRequestResponse({ description: 'Bad request' })
+	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
+	@ApiForbiddenResponse({ description: 'Forbidden' })
+	@ApiNotFoundResponse({ description: 'Segment not found' })
+	@Get('/level/:id')
+	async getClientLevel(@Param('id') id: number) {
+		return await this.pointsBlockchainService.getClientLevel(+id);
 	}
 }
