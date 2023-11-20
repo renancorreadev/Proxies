@@ -19,6 +19,8 @@
     "sc-deploy-points": "lerna run --scope smart-contracts deploy-points",
     "sc-deploy-client": "lerna run --scope smart-contracts deploy",
     "sc-clean": "lerna run --scope smart-contracts cache",
+    "sc-upgrade-client": "lerna run --scope smart-contracts upgrade",
+    "sc-upgrade-points": "lerna run --scope smart-contracts upgrade-points",
     "clean": "lerna run clean",
     "build": "pnpm recursive run build",
     "test": "pnpm recursive run test"

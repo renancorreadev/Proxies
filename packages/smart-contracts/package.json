@@ -5,6 +5,7 @@
     "deploy": "pnpm hardhat run ./scripts/deploy.ts --network firefly",
     "deploy-points": "pnpm hardhat run ./scripts/deployPointsCore.ts --network firefly",
     "upgrade": "pnpm hardhat run ./scripts/upgradeProxy.ts --network firefly",
+    "upgrade-points": "pnpm hardhat run ./scripts/upgreadePointsCore.ts --network firefly",
     "compile": "pnpm hardhat compile",
     "test": "pnpm hardhat test",
     "clean": "rm -rf node_modules",

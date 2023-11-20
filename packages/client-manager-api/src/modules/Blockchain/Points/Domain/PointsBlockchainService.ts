@@ -5,6 +5,8 @@ import { PointsBlockchainTokenUseCase } from '../Port/Input/PointsBlockchainToke
 import { PointsBlockchainTokenOutputPort } from '../Port/Output/PointsBlockchainTokenOutputPort';
 import { AddPointsRequestDto } from './Dto/HTTPRequest/AddPointsRequestDto';
 
+import { BalanceOfBatchParam } from '@helper/blockchain/types/contracts/points-core-types';
+
 @Injectable()
 export class PointsBlockchainService implements PointsBlockchainTokenUseCase {
 	private readonly logger = new Logger('ClientBlockchainService');
@@ -40,6 +42,15 @@ export class PointsBlockchainService implements PointsBlockchainTokenUseCase {
 		} catch (e) {
 			this.logger.error(`Error in Client Blockchain Service: ${JSON.stringify(e)}`);
 			throw new Error('An error ocurred while get the getClientLevel');
+		}
+	}
+
+	async getNFTsByCustomer(params: BalanceOfBatchParam) {
+		try {
+			return await this.clientBlockchainTokenAdapter.getNFTsByCustomer(params);
+		} catch (e) {
+			this.logger.error(`Error in Client Blockchain Service: ${JSON.stringify(e)}`);
+			throw new Error('An error ocurred while get the getNFTsByCustomer');
 		}
 	}
 }

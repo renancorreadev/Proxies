@@ -1,11 +1,16 @@
 import { PointCoreBlockchainConnector } from '../PointsCoreBlockchainConnector';
-import { BalanceOfBatchParam, BalanceOfParam } from '../types/contracts/client-manager-types';
+import { BalanceOfBatchParam, BalanceOfParam } from '../types/contracts/points-core-types';
 import { AddPointsParamInput } from '../types/contracts/points-core-types';
 
 /// @interfaces
 import { IPointManagerConnector } from './interfaces/IPointManagerConnector';
 
 export class PointsManagerConnector extends PointCoreBlockchainConnector implements IPointManagerConnector {
+	/// @dev NFT IDs
+	private CUSTOMER_TITANIUM_NFT_ID = 3;
+	private CUSTOMER_GOLD_NFT_ID = 2;
+	private CUSTOMER_PREMIUM_NFT_ID = 1;
+
 	// Setters blockchain States
 	async addPoints(params: AddPointsParamInput) {
 		try {
@@ -54,7 +59,7 @@ export class PointsManagerConnector extends PointCoreBlockchainConnector impleme
 		return Number(balance);
 	}
 
-	async getBalanceOfAllClients(params: BalanceOfBatchParam): Promise<number[]> {
+	async getBalanceOfBatch(params: BalanceOfBatchParam): Promise<number[]> {
 		const { accounts, ids } = params;
 		const balance = await this.contract.balanceOfBatch(accounts, ids);
 

@@ -1,4 +1,15 @@
-import { Body, Controller, Get, Inject, Logger, Param, Post } from '@nestjs/common';
+import {
+	BadRequestException,
+	Body,
+	Controller,
+	Get,
+	HttpException,
+	Inject,
+	Logger,
+	Param,
+	Post,
+	Query,
+} from '@nestjs/common';
 import {
 	ApiBadRequestResponse,
 	ApiBody,
@@ -7,6 +18,7 @@ import {
 	ApiNotFoundResponse,
 	ApiOkResponse,
 	ApiOperation,
+	ApiProperty,
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -17,6 +29,7 @@ import { PointsBlockchainTokenUseCase } from '../../Port/Input/PointsBlockchainT
 import { AddPointsRequestDto } from '../../Domain/Dto/HTTPRequest/AddPointsRequestDto';
 import { GetClientPointsResponse } from '../../Domain/Dto/HTTPResponse/GetClientPointsResponse';
 import { GetClientLevelResponse } from '../../Domain/Dto/HTTPResponse/GetClientLevelResponse';
+import { GetAllNFTsRequestDTO } from '../../Domain/Dto/HTTPRequest/GetAllNFTsRequestDTO';
 
 @Controller({
 	path: BaseUrls.POINTS_BLOCKCHAIN,
@@ -94,6 +107,53 @@ export class PointsBlockchainWebAdapter {
 	@ApiNotFoundResponse({ description: 'Segment not found' })
 	@Get('/level/:id')
 	async getClientLevel(@Param('id') id: number) {
-		return await this.pointsBlockchainService.getClientLevel(+id);
+		try {
+			this.logger.log('---------- PROCESS BEGIN ----------');
+			this.logger.log('Running PointBlockchain web adapter');
+			this.logger.log(`id: ${id}`);
+
+			return await this.pointsBlockchainService.getClientLevel(+id);
+		} catch (error) {
+			this.logger.error(`Error in Client Blockchain Service: ${JSON.stringify(error)}`);
+			throw new Error('An error ocurred while get the getClientLevel');
+		}
+	}
+
+	/// --------------------------------------------------------------------------------------
+	/// ------------------------ GET MULTIPLES NFTS ---------------------
+	/// --------------------------------------------------------------------------------------
+	@ApiOperation({
+		summary: 'Get Multiples NFT By Customer Wallets and NFT Ids',
+		description:
+			'Esse Endpoint retorna quantos Tokens um usuário recebeu, ou ele mostra qual NFT ele possui até o momento de sua execução.',
+	})
+	@ApiOkResponse({
+		description: 'Success operation',
+		type: String,
+	})
+	@ApiBadRequestResponse({ description: 'Bad request' })
+	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
+	@ApiForbiddenResponse({ description: 'Forbidden' })
+	@ApiNotFoundResponse({ description: 'Segment not found' })
+	@Get('/nfts/all')
+	async getNFTsByCustomer(@Query('accounts') accounts: string[], @Query('NFTIDs') ids: number[]): Promise<number[]> {
+		this.logger.log('---------- PROCESS BEGIN ----------');
+		this.logger.log('Running PointBlockchain web adapter');
+		this.logger.log(`accounts: ${accounts}`);
+		this.logger.log(`NFTIds: ${ids}`);
+
+		if (accounts.length < 2 || ids.length < 2) {
+			throw new BadRequestException('Os parâmetros accounts e ids devem conter pelo menos dois itens.');
+		}
+
+		try {
+			return await this.pointsBlockchainService.getNFTsByCustomer({ accounts, ids });
+		} catch (error) {
+			if (error) {
+				throw new HttpException(error.message, error.code);
+			}
+			throw new HttpException(error.message, 500);
+		}
+		this.logger.log('---------- PROCESS END ----------');
 	}
 }

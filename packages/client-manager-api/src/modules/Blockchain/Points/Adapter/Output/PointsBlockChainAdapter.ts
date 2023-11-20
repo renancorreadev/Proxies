@@ -4,6 +4,7 @@ import { PointsBlockchainTokenOutputPort } from '@/src/modules/blockchain/Points
 import { AddPointsRequestDto } from '../../Domain/Dto/HTTPRequest/AddPointsRequestDto';
 import { DependencyInjectionBlockchainConnector } from '@helper/AppConstants';
 import { PointsManagerConnector } from '@helper/blockchain/connector';
+import { BalanceOfBatchParam } from '@helper/blockchain/types/contracts/points-core-types';
 
 config();
 
@@ -48,6 +49,21 @@ export class PointsBlockchainAdapter implements PointsBlockchainTokenOutputPort 
 			const errorMessage = e.response ? e.response.data : e.message;
 			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
 			throw new Error(`An error ocurred in read contract getClientLevel function on blockchain `);
+		}
+	}
+
+	async getNFTsByCustomer(params: BalanceOfBatchParam) {
+		try {
+			const { accounts, ids } = params;
+
+			return await this.contractInstance.getBalanceOfBatch({
+				accounts,
+				ids,
+			});
+		} catch (e) {
+			const errorMessage = e.response ? e.response.data : e.message;
+			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
+			throw new Error(`An error ocurred in read contract getNFTsByusers function on blockchain `);
 		}
 	}
 }

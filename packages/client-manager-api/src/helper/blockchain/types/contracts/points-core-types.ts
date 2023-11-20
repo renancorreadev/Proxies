@@ -4,3 +4,13 @@ export type AddPointsParamInput = {
 	clientId: BigNumberish;
 	points: BigNumberish;
 };
+
+export type BalanceOfParam = {
+	account: string;
+	id: number;
+};
+
+export type BalanceOfBatchParam = {
+	accounts: string[];
+	ids: number[];
+};

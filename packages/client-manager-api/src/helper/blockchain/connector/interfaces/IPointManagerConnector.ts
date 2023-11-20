@@ -1,4 +1,4 @@
-import { BalanceOfBatchParam, BalanceOfParam } from '@helper/blockchain/types/contracts/client-manager-types';
+import { BalanceOfBatchParam, BalanceOfParam } from '@helper/blockchain/types/contracts/points-core-types';
 import { AddPointsParamInput } from '@helper/blockchain/types/contracts/points-core-types';
 
 export interface IPointManagerConnector {
@@ -8,5 +8,5 @@ export interface IPointManagerConnector {
 	getClientLevel(clientID: number): Promise<number>;
 	getClientPoints(clientID: number): Promise<number>;
 	getBalanceOf(params: BalanceOfParam): Promise<number>;
-	getBalanceOfAllClients(params: BalanceOfBatchParam): Promise<number[]>;
+	getBalanceOfBatch(params: BalanceOfBatchParam): Promise<number[]>;
 }
