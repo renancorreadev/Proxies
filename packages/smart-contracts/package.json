@@ -7,7 +7,8 @@
     "upgrade": "pnpm hardhat run ./scripts/upgradeProxy.ts --network firefly",
     "compile": "pnpm hardhat compile",
     "test": "pnpm hardhat test",
-    "clean": "rm -rf node_modules"
+    "clean": "rm -rf node_modules",
+    "cache": "pnpm hardhat clean"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^3.0.0",

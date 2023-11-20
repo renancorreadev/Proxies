@@ -48,4 +48,3 @@ interface IClientStorage {
 
     function isClientExists(uint256 clientId) external view returns (bool);
 }
-

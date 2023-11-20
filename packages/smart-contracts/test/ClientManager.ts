@@ -94,4 +94,92 @@ describe("ClientManager", function () {
 
     expect(formattedRetrievedData).to.deep.equal(clientData);
   });
+
+  it("Should revert with EmptyParameter error if any parameter is empty", async function () {
+    const invalidClientData = { ...clientData, name: "" };
+
+    try {
+      await clientManager.registerClient(invalidClientData);
+      expect.fail("Transaction should have failed");
+    } catch (error: any) {
+      // verify if error has omited
+      const expectedErrorMessage = 'EmptyParameter("It cannot be empty name")';
+      expect(error.message).to.include(expectedErrorMessage);
+    }
+  });
+
+  it("Should revert with EmptyParameter error if age is empty", async function () {
+    const invalidClientData = { ...clientData, age: 0 };
+
+    try {
+      await clientManager.registerClient(invalidClientData);
+      expect.fail("Transaction should have failed");
+    } catch (error: any) {
+      const expectedErrorMessage = 'EmptyParameter("It cannot be empty age")';
+      expect(error.message).to.include(expectedErrorMessage);
+    }
+  });
+
+  it("Should revert with EmptyParameter error if City is empty", async function () {
+    const invalidClientData = {
+      ...clientData,
+      addressLocal: { ...clientData.addressLocal, City: "" },
+    };
+
+    try {
+      await clientManager.registerClient(invalidClientData);
+      expect.fail("Transaction should have failed");
+    } catch (error: any) {
+      const expectedErrorMessage = 'EmptyParameter("It cannot be empty City")';
+      expect(error.message).to.include(expectedErrorMessage);
+    }
+  });
+
+  it("Should revert with EmptyParameter error if Street is empty", async function () {
+    const invalidClientData = {
+      ...clientData,
+      addressLocal: { ...clientData.addressLocal, Street: "" },
+    };
+
+    try {
+      await clientManager.registerClient(invalidClientData);
+      expect.fail("Transaction should have failed");
+    } catch (error: any) {
+      const expectedErrorMessage =
+        'EmptyParameter("It cannot be empty Street")';
+      expect(error.message).to.include(expectedErrorMessage);
+    }
+  });
+
+  it("Should revert with EmptyParameter error if PostalCode is empty", async function () {
+    const invalidClientData = {
+      ...clientData,
+      addressLocal: { ...clientData.addressLocal, PostalCode: 0 },
+    };
+
+    try {
+      await clientManager.registerClient(invalidClientData);
+      expect.fail("Transaction should have failed");
+    } catch (error: any) {
+      const expectedErrorMessage =
+        'EmptyParameter("It cannot be empty PostalCode")';
+      expect(error.message).to.include(expectedErrorMessage);
+    }
+  });
+
+  it("Should revert with EmptyParameter error if HouseNumber is empty", async function () {
+    const invalidClientData = {
+      ...clientData,
+      addressLocal: { ...clientData.addressLocal, HouseNumber: 0 },
+    };
+
+    try {
+      await clientManager.registerClient(invalidClientData);
+      expect.fail("Transaction should have failed");
+    } catch (error: any) {
+      const expectedErrorMessage =
+        'EmptyParameter("It cannot be empty HouseNumber")';
+      expect(error.message).to.include(expectedErrorMessage);
+    }
+  });
 });
