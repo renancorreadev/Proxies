@@ -18,7 +18,6 @@ import {
 	ApiNotFoundResponse,
 	ApiOkResponse,
 	ApiOperation,
-	ApiProperty,
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -29,7 +28,8 @@ import { PointsBlockchainTokenUseCase } from '../../Port/Input/PointsBlockchainT
 import { AddPointsRequestDto } from '../../Domain/Dto/HTTPRequest/AddPointsRequestDto';
 import { GetClientPointsResponse } from '../../Domain/Dto/HTTPResponse/GetClientPointsResponse';
 import { GetClientLevelResponse } from '../../Domain/Dto/HTTPResponse/GetClientLevelResponse';
-import { GetAllNFTsRequestDTO } from '../../Domain/Dto/HTTPRequest/GetAllNFTsRequestDTO';
+
+import { GetUniqueNFTResponse } from '../../Domain/Dto/HTTPResponse/GetUniqueNFTResponse';
 
 @Controller({
 	path: BaseUrls.POINTS_BLOCKCHAIN,
@@ -59,14 +59,19 @@ export class PointsBlockchainWebAdapter {
 	@ApiInternalServerErrorResponse({ description: 'Unexpected error' })
 	@Post('add')
 	async addPoints(@Body() clientBlockchainRequestDTO: AddPointsRequestDto): Promise<string> {
-		this.logger.log('----------PROCESS BEGIN ----------');
-		this.logger.log(`Running Client Blockchain Web adapter`);
-		this.logger.log(`Data: ${JSON.stringify(clientBlockchainRequestDTO)}`);
+		try {
+			this.logger.log('----------PROCESS BEGIN ----------');
+			this.logger.log(`Running Client Blockchain Web adapter`);
+			this.logger.log(`Data: ${JSON.stringify(clientBlockchainRequestDTO)}`);
 
-		const response = await this.pointsBlockchainService.addPoints(clientBlockchainRequestDTO);
+			const response = await this.pointsBlockchainService.addPoints(clientBlockchainRequestDTO);
 
-		this.logger.log('---------- PROCESS END ----------');
-		return response;
+			this.logger.log('---------- PROCESS END ----------');
+			return response;
+		} catch (error) {
+			this.logger.error(`Error in Points Blockchain Service: ${JSON.stringify(error)}`);
+			throw new HttpException('An error ocurred while adding the points', 500);
+		}
 	}
 
 	/// --------------------------------------------------------------------------------------
@@ -86,7 +91,16 @@ export class PointsBlockchainWebAdapter {
 	@ApiNotFoundResponse({ description: 'Segment not found' })
 	@Get('/:id')
 	async getClientPoints(@Param('id') id: number) {
-		return await this.pointsBlockchainService.getClientPoints(+id);
+		try {
+			this.logger.log('---------- PROCESS BEGIN ----------');
+			this.logger.log('Running PointBlockchain web adapter');
+			this.logger.log(`id: ${id}`);
+
+			return await this.pointsBlockchainService.getClientPoints(+id);
+		} catch (error) {
+			this.logger.error(`Error in Points Blockchain Service: ${JSON.stringify(error)}`);
+			throw new HttpException('An error ocurred while get the client points', 500);
+		}
 	}
 
 	/// --------------------------------------------------------------------------------------
@@ -129,14 +143,14 @@ export class PointsBlockchainWebAdapter {
 	})
 	@ApiOkResponse({
 		description: 'Success operation',
-		type: String,
+		type: GetUniqueNFTResponse,
 	})
 	@ApiBadRequestResponse({ description: 'Bad request' })
 	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
 	@ApiForbiddenResponse({ description: 'Forbidden' })
 	@ApiNotFoundResponse({ description: 'Segment not found' })
 	@Get('/nfts/all')
-	async getNFTsByCustomer(@Query('accounts') accounts: string[], @Query('NFTIDs') ids: number[]): Promise<number[]> {
+	async getMultiplesNFT(@Query('accounts') accounts: string[], @Query('NFTIDs') ids: number[]): Promise<number[]> {
 		this.logger.log('---------- PROCESS BEGIN ----------');
 		this.logger.log('Running PointBlockchain web adapter');
 		this.logger.log(`accounts: ${accounts}`);
@@ -147,7 +161,44 @@ export class PointsBlockchainWebAdapter {
 		}
 
 		try {
-			return await this.pointsBlockchainService.getNFTsByCustomer({ accounts, ids });
+			return await this.pointsBlockchainService.getMultiplesNFT({ accounts, ids });
+		} catch (error) {
+			if (error) {
+				throw new HttpException(error.message, error.code);
+			}
+			throw new HttpException(error.message, 500);
+		}
+		this.logger.log('---------- PROCESS END ----------');
+	}
+
+	/// --------------------------------------------------------------------------------------
+	/// ------------------------ GET UNIQUE NFT ---------------------
+	/// --------------------------------------------------------------------------------------
+	@ApiOperation({
+		summary: 'Get Unique NFT By Customer Wallet and NFT ID',
+		description:
+			'Esse Endpoint retorna quantidade de NFT um usuário recebeu. Para NFT ID 1 = NFT Premium, NFT ID 2 = NFT Gold, NFT ID 3 = NFT Titanium',
+	})
+	@ApiOkResponse({
+		description: 'Success operation',
+		type: GetUniqueNFTResponse,
+	})
+	@ApiBadRequestResponse({ description: 'Bad request' })
+	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
+	@ApiForbiddenResponse({ description: 'Forbidden' })
+	@ApiNotFoundResponse({ description: 'Segment not found' })
+	@Get('/nfts/simple')
+	async getUniqueNFT(@Query('accounts') accounts: string, @Query('NFTID') id: number): Promise<number> {
+		this.logger.log('---------- PROCESS BEGIN ----------');
+		this.logger.log('Running PointBlockchain web adapter');
+		this.logger.log(`account: ${accounts}`);
+		this.logger.log(`NFTId: ${id}`);
+
+		try {
+			return await this.pointsBlockchainService.getUniqueNFT({
+				account: accounts,
+				id,
+			});
 		} catch (error) {
 			if (error) {
 				throw new HttpException(error.message, error.code);

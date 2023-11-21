@@ -51,14 +51,6 @@ export class PointsManagerConnector extends PointCoreBlockchainConnector impleme
 		}
 	}
 
-	async getBalanceOf(params: BalanceOfParam): Promise<number> {
-		const { account, id } = params;
-
-		const balance = await this.contract.balanceOf(account, id);
-
-		return Number(balance);
-	}
-
 	async getBalanceOfBatch(params: BalanceOfBatchParam): Promise<number[]> {
 		const { accounts, ids } = params;
 		const balance = await this.contract.balanceOfBatch(accounts, ids);
@@ -72,5 +64,18 @@ export class PointsManagerConnector extends PointCoreBlockchainConnector impleme
 		}
 
 		return balance.map((bigIntValue) => Number(bigIntValue));
+	}
+
+	async getBalanceOf(account: string, id: number): Promise<number> {
+		try {
+			const balance = await this.contract.balanceOf(account, id);
+
+			return Number(balance);
+		} catch (e) {
+			console.error('Erro ao recuperar pontos do cliente:', e);
+
+			const errorMessage = e instanceof Error ? e.message : 'Unknown error';
+			throw new Error(`Erro na function balanceOf do contrato na EVM: ${errorMessage}`);
+		}
 	}
 }

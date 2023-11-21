@@ -7,6 +7,6 @@ export interface IPointManagerConnector {
 	// Getters blockchain States
 	getClientLevel(clientID: number): Promise<number>;
 	getClientPoints(clientID: number): Promise<number>;
-	getBalanceOf(params: BalanceOfParam): Promise<number>;
+	getBalanceOf(account: string, id: number): Promise<number>;
 	getBalanceOfBatch(params: BalanceOfBatchParam): Promise<number[]>;
 }

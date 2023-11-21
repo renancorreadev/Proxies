@@ -5,7 +5,7 @@ import { PointsBlockchainTokenUseCase } from '../Port/Input/PointsBlockchainToke
 import { PointsBlockchainTokenOutputPort } from '../Port/Output/PointsBlockchainTokenOutputPort';
 import { AddPointsRequestDto } from './Dto/HTTPRequest/AddPointsRequestDto';
 
-import { BalanceOfBatchParam } from '@helper/blockchain/types/contracts/points-core-types';
+import { BalanceOfBatchParam, BalanceOfParam } from '@helper/blockchain/types/contracts/points-core-types';
 
 @Injectable()
 export class PointsBlockchainService implements PointsBlockchainTokenUseCase {
@@ -45,12 +45,21 @@ export class PointsBlockchainService implements PointsBlockchainTokenUseCase {
 		}
 	}
 
-	async getNFTsByCustomer(params: BalanceOfBatchParam) {
+	async getMultiplesNFT(params: BalanceOfBatchParam) {
 		try {
-			return await this.clientBlockchainTokenAdapter.getNFTsByCustomer(params);
+			return await this.clientBlockchainTokenAdapter.getMultiplesNFT(params);
 		} catch (e) {
 			this.logger.error(`Error in Client Blockchain Service: ${JSON.stringify(e)}`);
-			throw new Error('An error ocurred while get the getNFTsByCustomer');
+			throw new Error('An error ocurred while get the getMultiplesNFT');
+		}
+	}
+
+	async getUniqueNFT(params: BalanceOfParam) {
+		try {
+			return await this.clientBlockchainTokenAdapter.getUniqueNFT(params);
+		} catch (e) {
+			this.logger.error(`Error in Client Blockchain Service: ${JSON.stringify(e)}`);
+			throw new Error('An error ocurred while get the getUniqueNFT');
 		}
 	}
 }

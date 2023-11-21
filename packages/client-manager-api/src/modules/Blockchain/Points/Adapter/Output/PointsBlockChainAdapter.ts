@@ -4,7 +4,7 @@ import { PointsBlockchainTokenOutputPort } from '@/src/modules/blockchain/Points
 import { AddPointsRequestDto } from '../../Domain/Dto/HTTPRequest/AddPointsRequestDto';
 import { DependencyInjectionBlockchainConnector } from '@helper/AppConstants';
 import { PointsManagerConnector } from '@helper/blockchain/connector';
-import { BalanceOfBatchParam } from '@helper/blockchain/types/contracts/points-core-types';
+import { BalanceOfBatchParam, BalanceOfParam } from '@helper/blockchain/types/contracts/points-core-types';
 
 config();
 
@@ -52,7 +52,7 @@ export class PointsBlockchainAdapter implements PointsBlockchainTokenOutputPort 
 		}
 	}
 
-	async getNFTsByCustomer(params: BalanceOfBatchParam) {
+	async getMultiplesNFT(params: BalanceOfBatchParam) {
 		try {
 			const { accounts, ids } = params;
 
@@ -65,5 +65,13 @@ export class PointsBlockchainAdapter implements PointsBlockchainTokenOutputPort 
 			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
 			throw new Error(`An error ocurred in read contract getNFTsByusers function on blockchain `);
 		}
+	}
+
+	async getUniqueNFT(params: BalanceOfParam): Promise<number> {
+		try {
+			const { account, id } = params;
+
+			return await this.contractInstance.getBalanceOf(account, id);
+		} catch (e) {}
 	}
 }
