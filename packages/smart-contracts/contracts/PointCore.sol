@@ -102,10 +102,6 @@ contract PointCore is
         return "1.0.0";
     }
 
-    function testReturnNewValue() public pure returns (uint) {
-        return 1;
-    }
-
     /// ---------- INTERNAL ----------
     function updateClientLevel(uint256 clientId) internal {
         uint256 currentPoints = clientPoints[clientId];
