@@ -4,8 +4,8 @@ import { JsonRpcProvider } from "@ethersproject/providers";
 import { getImplementationAddress } from "@openzeppelin/upgrades-core";
 import fs from "fs";
 
-const proxyAddress = "0x0c809269C3b4A65dd95D8ED8F35B59F5480fEC50";
-const provider = new JsonRpcProvider("http://192.168.15.200:5100");
+const proxyAddress = "0x19188CC908dDC7e1112267d8202adB8760707878";
+const provider = new JsonRpcProvider("http://127.0.0.1:5100");
 
 async function main() {
   const newContractVersion = await ethers.getContractFactory("PointCore");

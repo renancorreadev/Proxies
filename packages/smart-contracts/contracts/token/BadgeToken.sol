@@ -12,9 +12,12 @@ contract BadgeToken is
     UUPSUpgradeable,
     OwnableUpgradeable
 {
-    uint256 public constant CUSTOMER_PREMIUM = 1;
-    uint256 public constant CUSTOMER_GOLD = 2;
-    uint256 public constant CUSTOMER_TITANIUM = 3;
+    // ERC721 - CUSTOMER_PREMIUM
+    // ERC721 - CUSTOMER_GOLD
+    // ERC721 - CUSTOMER_TITANIUM
+    uint256 public constant CUSTOMER_PREMIUM = 1; // 200 PONTOS
+    uint256 public constant CUSTOMER_GOLD = 2; // 500 PONTOS
+    uint256 public constant CUSTOMER_TITANIUM = 3; // 1000 PONTOS
 
     function mint(
         address account,
