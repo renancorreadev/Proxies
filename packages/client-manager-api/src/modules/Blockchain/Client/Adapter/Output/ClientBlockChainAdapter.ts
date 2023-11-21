@@ -5,7 +5,7 @@ import { ClientBlockchainTokenOutputPort } from '@/src/modules/blockchain/Client
 import { RegisterClientRequestDto } from '@/src/modules/blockchain/Client/Domain/Dto/HTTPRequest/ClientBlockchainRequestDto';
 import { DependencyInjectionBlockchainConnector } from '@helper/AppConstants';
 import { ClientManagerConnector } from '@helper/blockchain/connector';
-import { AddressLocal, ClientData } from '@helper/blockchain/types/contracts/client-manager-types';
+import { AddressLocal, ClientData, ClientDataInput } from '@helper/blockchain/types/contracts/client-manager-types';
 
 config();
 
@@ -28,7 +28,7 @@ export class ClientBlockchainAdapter implements ClientBlockchainTokenOutputPort 
 				PostalCode: address.PostalCode,
 				HouseNumber: Number(address.HouseNumber),
 			};
-			const payload: ClientData = {
+			const payload: ClientDataInput = {
 				name,
 				age,
 				WalletAddress,
@@ -51,6 +51,36 @@ export class ClientBlockchainAdapter implements ClientBlockchainTokenOutputPort 
 			const errorMessage = e.response ? e.response.data : e.message;
 			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
 			throw new Error(`An error ocurred in read contract getClientData on blockchain `);
+		}
+	}
+
+	async getClientByName(name: string): Promise<ClientData> {
+		try {
+			return await this.contractInstance.getClientByName(name);
+		} catch (e) {
+			const errorMessage = e.response ? e.response.data : e.message;
+			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
+			throw new Error(`An error ocurred in read contract getClientByName on blockchain `);
+		}
+	}
+
+	async getClientByAge(age: number): Promise<ClientData> {
+		try {
+			return await this.contractInstance.getClientByAge(age);
+		} catch (e) {
+			const errorMessage = e.response ? e.response.data : e.message;
+			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
+			throw new Error(`An error ocurred in read contract getClientByAge on blockchain `);
+		}
+	}
+
+	async getClientByWallet(Wallet: string): Promise<ClientData> {
+		try {
+			return await this.contractInstance.getClientByWallet(Wallet);
+		} catch (e) {
+			const errorMessage = e.response ? e.response.data : e.message;
+			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
+			throw new Error(`An error ocurred in read contract getClientByWallet on blockchain `);
 		}
 	}
 }

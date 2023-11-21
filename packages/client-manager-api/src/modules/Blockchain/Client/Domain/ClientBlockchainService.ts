@@ -42,4 +42,31 @@ export class ClientBlockchainService implements ClientBlockchainTokenUseCase {
 			throw new Error('An error ocurred while get the client');
 		}
 	}
+
+	async getClientByName(name: string): Promise<ClientData> {
+		try {
+			return await this.clientBlockchainTokenAdapter.getClientByName(name);
+		} catch (e) {
+			this.logger.error(`Error in Client Blockchain Service: ${JSON.stringify(e)}`);
+			throw new Error('An error ocurred while get the client');
+		}
+	}
+
+	async getClientByAge(age: number): Promise<ClientData> {
+		try {
+			return await this.clientBlockchainTokenAdapter.getClientByAge(age);
+		} catch (e) {
+			this.logger.error(`Error in Client Blockchain Service: ${JSON.stringify(e)}`);
+			throw new Error('An error ocurred while get the client');
+		}
+	}
+
+	async getClientByWallet(Wallet: string): Promise<ClientData> {
+		try {
+			return await this.clientBlockchainTokenAdapter.getClientByWallet(Wallet);
+		} catch (e) {
+			this.logger.error(`Error in Client Blockchain Service: ${JSON.stringify(e)}`);
+			throw new Error('An error ocurred while get the client');
+		}
+	}
 }

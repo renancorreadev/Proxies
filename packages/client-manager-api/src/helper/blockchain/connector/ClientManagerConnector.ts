@@ -1,11 +1,11 @@
 import { ClientManagerBlockchainConnector } from '@helper/blockchain/ClientManagerBlockchainConnector';
-import { ClientData } from '@client-manager-contract-types/';
+import { ClientData, ClientDataInput } from '@client-manager-contract-types/';
 import { IClientManagerConnector } from './interfaces/IClientManagerConnector';
 import { ContractTransactionReceipt } from 'ethers';
 
 export class ClientManagerConnector extends ClientManagerBlockchainConnector implements IClientManagerConnector {
 	// Setters blockchain States
-	async registerClient(params: ClientData): Promise<ContractTransactionReceipt> {
+	async registerClient(params: ClientDataInput): Promise<ContractTransactionReceipt> {
 		try {
 			const { name, age, WalletAddress, paymentStatus, addressLocal } = params;
 			const tx = await this.contract.registerClient(
@@ -38,15 +38,16 @@ export class ClientManagerConnector extends ClientManagerBlockchainConnector imp
 
 			// Transforming the data to object readable
 			const formattedData: ClientData = {
-				name: rawData[0],
-				age: parseInt(rawData[1].toString()),
-				WalletAddress: rawData[2],
-				paymentStatus: parseInt(rawData[3].toString()),
+				clientID: parseInt(rawData[0].toString()),
+				name: rawData[1],
+				age: parseInt(rawData[2].toString()),
+				WalletAddress: rawData[3],
+				paymentStatus: parseInt(rawData[4].toString()),
 				addressLocal: {
-					City: rawData[4][0],
-					Street: rawData[4][1],
-					PostalCode: parseInt(rawData[4][2].toString()),
-					HouseNumber: parseInt(rawData[4][3].toString()),
+					City: rawData[5][0],
+					Street: rawData[5][1],
+					PostalCode: parseInt(rawData[5][2].toString()),
+					HouseNumber: parseInt(rawData[5][3].toString()),
 				},
 			};
 
@@ -62,15 +63,16 @@ export class ClientManagerConnector extends ClientManagerBlockchainConnector imp
 
 			// Transforming the data to object readable
 			const formattedData: ClientData = {
-				name: rawData[0],
-				age: parseInt(rawData[1].toString()),
-				WalletAddress: rawData[2],
-				paymentStatus: parseInt(rawData[3].toString()),
+				clientID: parseInt(rawData[0].toString()),
+				name: rawData[1],
+				age: parseInt(rawData[2].toString()),
+				WalletAddress: rawData[3],
+				paymentStatus: parseInt(rawData[4].toString()),
 				addressLocal: {
-					City: rawData[4][0],
-					Street: rawData[4][1],
-					PostalCode: parseInt(rawData[4][2].toString()),
-					HouseNumber: parseInt(rawData[4][3].toString()),
+					City: rawData[5][0],
+					Street: rawData[5][1],
+					PostalCode: parseInt(rawData[5][2].toString()),
+					HouseNumber: parseInt(rawData[5][3].toString()),
 				},
 			};
 
@@ -86,15 +88,16 @@ export class ClientManagerConnector extends ClientManagerBlockchainConnector imp
 
 			// Transforming the data to object readable
 			const formattedData: ClientData = {
-				name: rawData[0],
-				age: parseInt(rawData[1].toString()),
-				WalletAddress: rawData[2],
-				paymentStatus: parseInt(rawData[3].toString()),
+				clientID: parseInt(rawData[0].toString()),
+				name: rawData[1],
+				age: parseInt(rawData[2].toString()),
+				WalletAddress: rawData[3],
+				paymentStatus: parseInt(rawData[4].toString()),
 				addressLocal: {
-					City: rawData[4][0],
-					Street: rawData[4][1],
-					PostalCode: parseInt(rawData[4][2].toString()),
-					HouseNumber: parseInt(rawData[4][3].toString()),
+					City: rawData[5][0],
+					Street: rawData[5][1],
+					PostalCode: parseInt(rawData[5][2].toString()),
+					HouseNumber: parseInt(rawData[5][3].toString()),
 				},
 			};
 
@@ -112,15 +115,16 @@ export class ClientManagerConnector extends ClientManagerBlockchainConnector imp
 			// Transforming the data to object readable
 
 			const formattedData: ClientData = {
-				name: rawData[0],
-				age: parseInt(rawData[1].toString()),
-				WalletAddress: rawData[2],
-				paymentStatus: parseInt(rawData[3].toString()),
+				clientID: parseInt(rawData[0].toString()),
+				name: rawData[1],
+				age: parseInt(rawData[2].toString()),
+				WalletAddress: rawData[3],
+				paymentStatus: parseInt(rawData[4].toString()),
 				addressLocal: {
-					City: rawData[4][0],
-					Street: rawData[4][1],
-					PostalCode: parseInt(rawData[4][2].toString()),
-					HouseNumber: parseInt(rawData[4][3].toString()),
+					City: rawData[5][0],
+					Street: rawData[5][1],
+					PostalCode: parseInt(rawData[5][2].toString()),
+					HouseNumber: parseInt(rawData[5][3].toString()),
 				},
 			};
 
