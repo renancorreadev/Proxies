@@ -15,6 +15,15 @@ interface IClientStorage {
     }
 
     struct ClientData {
+        uint256 clientId;
+        string name;
+        uint age;
+        address WalletAddress;
+        PaymentStatus paymentStatus;
+        AddressLocal addressLocal;
+    }
+
+    struct ClientDataInput {
         string name;
         uint age;
         address WalletAddress;

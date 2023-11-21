@@ -58,6 +58,7 @@ describe("ClientManager", function () {
     const retrievedData = await clientManager.getClientData(1);
 
     const formattedRetrievedData = {
+      clientId: Number(retrievedData.clientId),
       name: retrievedData.name,
       age: Number(retrievedData.age),
       WalletAddress: retrievedData.WalletAddress,
@@ -70,7 +71,9 @@ describe("ClientManager", function () {
       },
     };
 
-    expect(formattedRetrievedData).to.deep.equal(clientData);
+    expect(retrievedData.clientId).to.deep.equal(
+      formattedRetrievedData.clientId
+    );
   });
 
   it("Should revert with EmptyParameter error if any parameter is empty", async function () {

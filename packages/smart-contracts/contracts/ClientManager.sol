@@ -32,18 +32,36 @@ contract ClientManager is
     ///@dev required by the OZ UUPS module
     function _authorizeUpgrade(address) internal override onlyOwner {}
 
-    function registerClient(ClientData calldata newClient) external {
+    function registerClient(ClientDataInput calldata newClient) external {
         _registerClient(newClient);
     }
 
     /// @dev setters storages to client data
-    function _registerClient(ClientData calldata newClient) internal {
+    function _registerClient(ClientDataInput calldata newClient) internal {
         checkValidPaymentStatus(newClient.paymentStatus);
         checkClientDataIsEmpty(newClient);
         checkClientExistsByWallet(newClient.WalletAddress);
 
         uint256 nextId = getNextId();
-        clientMappingStorage[nextId] = newClient;
+
+        AddressLocal memory newAddressLocal = AddressLocal({
+            City: newClient.addressLocal.City,
+            Street: newClient.addressLocal.Street,
+            PostalCode: newClient.addressLocal.PostalCode,
+            HouseNumber: newClient.addressLocal.HouseNumber
+        });
+
+        ClientData memory newClientData = ClientData({
+            clientId: nextId,
+            name: newClient.name,
+            age: newClient.age,
+            WalletAddress: newClient.WalletAddress,
+            paymentStatus: newClient.paymentStatus,
+            addressLocal: newAddressLocal
+        });
+
+        clientMappingStorage[nextId] = newClientData;
+
         walletAddressExists[newClient.WalletAddress] = true;
 
         clientsByName[newClient.name].push(nextId);
@@ -132,7 +150,7 @@ contract ClientManager is
     error EmptyParameter(string message);
 
     function checkClientDataIsEmpty(
-        ClientData calldata newClient
+        ClientDataInput calldata newClient
     ) private pure {
         if (bytes(newClient.name).length == 0) {
             revert EmptyParameter("It cannot be empty name");
