@@ -1,15 +1,12 @@
 import { PointCoreBlockchainConnector } from '../PointsCoreBlockchainConnector';
-import { BalanceOfBatchParam, BalanceOfParam } from '../types/contracts/points-core-types';
-import { AddPointsParamInput } from '../types/contracts/points-core-types';
-
-/// @interfaces
+import { AddPointsParamInput, BalanceOfBatchParam } from '../types/contracts/points-core-types';
 import { IPointManagerConnector } from './interfaces/IPointManagerConnector';
 
 export class PointsManagerConnector extends PointCoreBlockchainConnector implements IPointManagerConnector {
 	/// @dev NFT IDs
-	private CUSTOMER_TITANIUM_NFT_ID = 3;
-	private CUSTOMER_GOLD_NFT_ID = 2;
-	private CUSTOMER_PREMIUM_NFT_ID = 1;
+	// private CUSTOMER_TITANIUM_NFT_ID = 3;
+	// private CUSTOMER_GOLD_NFT_ID = 2;
+	// private CUSTOMER_PREMIUM_NFT_ID = 1;
 
 	// Setters blockchain States
 	async addPoints(params: AddPointsParamInput) {
