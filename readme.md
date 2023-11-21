@@ -75,15 +75,17 @@ monoRepo/
 
 ## 📌 Pendências
 - [ ] Definir lógica para remoção automática de 20% dos pontos após 30 dias.
-- [ ] Implementar função para atualizar metadata do NFT conforme níveis de pontuação.
+
 - [ ] Verificar e Validar possibilidade de usos para o micro servico golang 
 - [ ] Integrar banco de dados PostGree no Micro Serviço Go
 - [ ] Integrar banco de dados PostGree no backEnd
-- [ ] Implementar API de Metadatas dos tokens ERC1155 das insignas 
+
 
 
 ## 🚀 Em Progresso
-- [ ] Implementar Rotas no Back-end API
+- [ ] Implementar função para atualizar metadata do NFT conforme níveis de pontuação.
+- [ ] Implementar API de Metadatas dos tokens ERC1155 das insignas 
+
 
 ## ✅ Concluídas
 - [x] Configurar ambiente de desenvolvimento inicial.
@@ -96,6 +98,7 @@ monoRepo/
 - [x] Tornar a porcentagem de remoção de pontos ajustável pelo administrador do contrato.
 - [x] Implementar testes automatizados para novas funcionalidades.
 - [x] Desenvolvimento de todos testes unitarios 
+- [x] Implementar Rotas no Back-end API
 
 ## 🧠 Ideias para Explorar
 - [ ] Investigar integrações com sistemas CRM para uso de metadata.
