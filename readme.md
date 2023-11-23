@@ -60,17 +60,27 @@ O sistema também conta com uma API HTTP integrada para gerenciar os metadados d
 > Abaixo você pode ver uma breve ilustração: 
 ![Swagger](docs/images/swagger-v1.png)
 
-> O Planejamento para desenvolvimento de uma nova feature para esse projeto com um longo escopo está definida para seguir esse padrão abaixo: 
+## Tecnologias 
 
 <div style="text-align: center;">
   <img src="https://raw.githubusercontent.com/hyperledger/firefly/main/images/hyperledger_firefly_logo.png" alt="Hyperledger" style="width: 200px; height: 90px; margin: 1rem;">
-  <img src="https://github.com/remojansen/logo.ts/raw/master/ts.png" alt="TypeScript" style="width: 80px; height: 90px; margin: 1rem;">
-  <img src="https://github.com/rfyiamcool/golang_logo/raw/master/png/golang_58.png" alt="Go" style="width: 150px; height: 90px; margin: 1rem;">
+  <img src="https://github.com/remojansen/logo.ts/raw/master/ts.png" alt="TypeScript" style="width: 120px; height: 90px; margin: 1rem;">
+  <img src="https://github.com/rfyiamcool/golang_logo/raw/master/png/golang_58.png" alt="Go" style="width: 180px; height: 90px; margin: 1rem;">
   <img src="https://nestjs.com/img/logo-small.svg" alt="NestJS" style="width: 150px; height: 90px; margin: 1rem;">
 </div>
 
+- NestJs
+- Golang
+- React
+- Typescript
+- Solidity
+- PostgreeSQL
+- TypeOrm
+- EthereumGo
 
 ## Ciclo de nova Feature: 
+
+> O Planejamento para desenvolvimento de uma nova feature para esse projeto com um longo escopo está definida para seguir esse padrão abaixo: 
 
 ![Alt text](docs/images/plainning.png)
 
@@ -140,16 +150,9 @@ monoRepo/
 ## 📌 Pendências
 - [ ] Definir lógica para remoção automática de 20% dos pontos após 30 dias.
 
-- [ ] Verificar e Validar possibilidade de usos para o micro servico golang 
-- [ ] Integrar banco de dados PostGree no Micro Serviço Go
-- [ ] Integrar banco de dados PostGree no backEnd
-
-
-
 ## 🚀 Em Progresso
 - [ ] Implementar função para atualizar metadata do NFT conforme níveis de pontuação.
-- [ ] Implementar API de Metadatas dos tokens ERC1155 das insignas 
-
+- [ ] Integrar banco de dados PostGree no Micro Serviço Go
 
 ## ✅ Concluídas
 - [x] Configurar ambiente de desenvolvimento inicial.
@@ -163,6 +166,9 @@ monoRepo/
 - [x] Implementar testes automatizados para novas funcionalidades.
 - [x] Desenvolvimento de todos testes unitarios 
 - [x] Implementar Rotas no Back-end API
+- [x] Integrar banco de dados PostGree no backEnd
+- [x] Implementar API de Metadatas dos tokens ERC1155 das insignas 
+
 
 ## 🧠 Ideias para Explorar
 - [ ] Investigar integrações com sistemas CRM para uso de metadata.
