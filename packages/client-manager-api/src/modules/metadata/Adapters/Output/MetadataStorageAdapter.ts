@@ -22,7 +22,13 @@ export class MetadataStorageAdapter implements MetadataStorageOutputPort {
 
 	async saveMetadata(saveMetadata: SaveMetadataStorageDTORequest): Promise<string> {
 		try {
-			const newMetadata = new MetadataEntity(saveMetadata.title, saveMetadata.description);
+			const newMetadata = new MetadataEntity(
+				saveMetadata.customer,
+				saveMetadata.description,
+				saveMetadata.image,
+				saveMetadata.insight,
+				saveMetadata.attributes,
+			);
 
 			await this.metadataRepository.save(newMetadata);
 

@@ -17,10 +17,10 @@ export class MetadataAdapter implements MetadataTokenOutputPort {
 	async registerMetadata(registerMetadata: RegisterMetadataDTORequest): Promise<string> {
 		try {
 			await this.metadataStorage.saveMetadata(registerMetadata);
-			return 'Token succesfully swapped to FIAT';
+			return 'Metadata succesfully registered';
 		} catch (error) {
-			this.logger.error(`Error while trying to swap to FIAT: ${error}`);
-			throw new Error(`Error while trying to swap to FIAT: ${error}`);
+			this.logger.error(`Error while trying to registerMetadata: ${error}`);
+			throw new Error(`Error while trying to registerMetadata: ${error}`);
 		}
 	}
 }

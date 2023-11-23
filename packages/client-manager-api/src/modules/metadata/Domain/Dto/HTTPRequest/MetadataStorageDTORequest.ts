@@ -1,4 +1,7 @@
 export interface SaveMetadataStorageDTORequest {
-	title: string;
+	customer: string;
 	description: string;
+	image: string;
+	insight: string;
+	attributes: [any];
 }

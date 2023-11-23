@@ -10,9 +10,10 @@ import { PointsBlockchainWebAdapter } from './modules/blockchain/Points/Adapter/
 import { DependencyInjectionTokens } from './helper/AppConstants';
 import { BlockchainClientConnectionProvider, BlockchainPointsConnectionProvider } from '@config/Blockchain/connection';
 import { MetadataStorageAdapter } from './modules/metadata/Adapters/Output/MetadataStorageAdapter';
-import { MetadataAdapter } from './modules/metadata/Adapters/Output/MetadataAdapter';
+import { MetadataTokenUseCase } from './modules/metadata/Port/Input/MetadataTokenUseCase';
 import { DataSource } from 'typeorm';
 import { MetadataEntity } from './modules/metadata/Adapters/Output/Entity/MetadataEntity';
+import { MetadataWebAdapter } from './modules/metadata/Adapters/Input/MetadataWebAdapter';
 
 @Module({
 	imports: [],
@@ -39,8 +40,12 @@ import { MetadataEntity } from './modules/metadata/Adapters/Output/Entity/Metada
 			provide: DependencyInjectionTokens.METADATA_STORAGE_OUTPUT_PORT,
 		},
 		{
-			useClass: MetadataAdapter,
-			provide: DependencyInjectionTokens.METADATA_TOKEN_OUTPUT_PORT,
+			useClass: MetadataStorageAdapter,
+			provide: DependencyInjectionTokens.METADATA_STORAGE_OUTPUT_PORT,
+		},
+		{
+			useClass: MetadataWebAdapter,
+			provide: DependencyInjectionTokens.METADATA_TOKEN_USE_CASE,
 		},
 		BlockchainClientConnectionProvider,
 		BlockchainPointsConnectionProvider,

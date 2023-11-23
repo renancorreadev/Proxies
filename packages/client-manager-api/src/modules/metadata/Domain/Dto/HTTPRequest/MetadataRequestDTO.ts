@@ -1,4 +1,7 @@
 export interface RegisterMetadataDTORequest {
-	title: string;
+	customer: string;
 	description: string;
+	image: string;
+	insight: string;
+	attributes: [any];
 }

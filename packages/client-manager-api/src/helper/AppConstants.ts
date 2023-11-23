@@ -12,6 +12,7 @@ export const enum DependencyInjectionTokens {
 	POINTS_BLOCKCHAIN_TOKEN_OUTPUT_PORT = 'PointsBlockchainTokenOutputPort',
 	METADATA_STORAGE_OUTPUT_PORT = 'MetadataStorageOutputPort',
 	METADATA_TOKEN_OUTPUT_PORT = 'MetadataTokenOutputPort',
+	METADATA_TOKEN_USE_CASE = 'MetadataTokenUseCase',
 	DATA_SOURCE = 'DataSource',
 }
 

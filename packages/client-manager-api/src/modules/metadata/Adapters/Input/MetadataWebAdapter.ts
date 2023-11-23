@@ -19,7 +19,7 @@ import { MetadataTokenUseCase } from '../../Port/Input/MetadataTokenUseCase';
 })
 @ApiTags('Metadata')
 export class MetadataWebAdapter {
-	private readonly logger = new Logger('ClientWebAdapter');
+	private readonly logger = new Logger('MetadataWebAdapter');
 	constructor(
 		@Inject(DependencyInjectionTokens.CLIENT_BLOCKCHAIN_TOKEN_USE_CASE)
 		private metadataService: MetadataTokenUseCase,
@@ -43,16 +43,16 @@ export class MetadataWebAdapter {
 	@ApiNotFoundResponse({ description: 'Segment not found' })
 	@ApiInternalServerErrorResponse({ description: 'Unexpected error' })
 	@Post('/new')
-	// async registerNewClient(@Body() clientBlockchainRequestDTO: RegisterClientRequestDto): Promise<string> {
-	// 	this.logger.log('----------PROCESS BEGIN ----------');
-	// 	this.logger.log(`Running Client Blockchain Web adapter`);
-	// 	this.logger.log(`Data: ${JSON.stringify(clientBlockchainRequestDTO)}`);
+	async registerNewClient(@Body() clientBlockchainRequestDTO: any): Promise<string> {
+		this.logger.log('----------PROCESS BEGIN ----------');
+		this.logger.log(`Running Client Blockchain Web adapter`);
+		this.logger.log(`Data: ${JSON.stringify(clientBlockchainRequestDTO)}`);
 
-	// 	const response = await this.metadataService.registerClient(clientBlockchainRequestDTO);
+		const response = await this.metadataService.registerMetadata(clientBlockchainRequestDTO);
 
-	// 	this.logger.log('---------- PROCESS END ----------');
-	// 	return response;
-	// }
+		this.logger.log('---------- PROCESS END ----------');
+		return response;
+	}
 
 	/// --------------------------------------------------------------------------------------
 	/// ------------------------      GET METADATA  TOKEN URI JSON           ---------------------
