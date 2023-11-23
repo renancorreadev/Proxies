@@ -1,7 +1,7 @@
 # Client Manager on Blockchain Technology 
 
 ## Swagger 
-![Swagger](docs/images/swagger.png)
+![Swagger](docs/images/swagger-v1.png)
 
 ## Ciclo de nova Feature: 
 
