@@ -9,7 +9,20 @@ services:
       - "5432:5432"
     volumes:
       - ./data:/var/lib/postgresql/data
+      - ./certs:/certs # Volume para os certificados SSL
     restart: always
+
+    # Configuração do PostgreSQL com SSL
+    command:
+      [
+        "postgres",
+        "-c",
+        "ssl=on",
+        "-c",
+        "ssl_cert_file=/certs/server.crt",
+        "-c",
+        "ssl_key_file=/certs/server.key",
+      ]
 
 networks:
   default:
