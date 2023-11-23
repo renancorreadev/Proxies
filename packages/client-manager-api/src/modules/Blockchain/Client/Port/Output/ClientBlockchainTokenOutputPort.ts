@@ -1,4 +1,4 @@
-import { RegisterClientRequestDto } from '@/src/modules/Blockchain/Client/Domain/Dto/HTTPRequest/ClientBlockchainRequestDto';
+import { RegisterClientRequestDto } from '@/src/modules/blockchain/Client/Domain/Dto/HTTPRequest/ClientBlockchainRequestDto';
 import { ClientData } from '@client-manager-connector/';
 
 export interface ClientBlockchainTokenOutputPort {

@@ -1,0 +1,118 @@
+{
+  {
+    "customer": "Renan Cesar de Franca Correa",
+    "description": "Voce está no nivel I com a insignia Customer Premium",
+    "image": "https://meusite.com/imagens/nft/1.png",
+    "insight": "CUSTOMER_PREMIUM",
+    "attributes": [
+      {
+        "level_type": "Nível",
+        "value": 1
+      },
+      {
+        "nft_type": "NFT",
+        "value": "CUSTOMER_PREMIUM"
+      },
+      {
+        "benefit_type": "Benefits",
+        "value": [
+          {
+            "discount": "10%",
+            "description": "Desconto de 10%"
+          },
+          {
+            "FreeFrete": "Frete GRATIS",
+            "description": "Frete GRATIS para todo o Brasil"
+          },
+          {
+            "promotionLevel1": "Promoção nivel I",
+            "description": "Com esse benefício voce tem acesso ao nivel 1 do catalogo de promoção"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "customer": "Renan Cesar de Franca Correa",
+    "description": "Voce está no nivel II com a insignia Customer Gold",
+    "image": "https://meusite.com/imagens/nft/1.png",
+    "insight": "CUSTOMER_GOLD",
+    "attributes": [
+      {
+        "level_type": "Nível",
+        "value": 2
+      },
+      {
+        "nft_type": "NFT",
+        "value": "CUSTOMER_GOLD"
+      },
+      {
+        "benefit_type": "Benefits",
+        "value": [
+          {
+            "discount": "30%",
+            "description": "Desconto de 30%"
+          },
+          {
+            "FreeFrete": "Frete GRATIS",
+            "description": "Frete GRATIS para todo o Brasil"
+          },
+          {
+            "promotionLevel2": "Promoção nivel II",
+            "description": "Com esse benefício voce tem acesso ao nivel 2 do catalogo de promoção"
+          },
+          {
+            "doublePoints": "Pontuação em dobro",
+            "description": "Pontuação em dobro a cada vez que você compra na loja para chegar no próximo nivel mais rapido."
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "customer": "Renan Cesar de Franca Correa",
+    "description": "Voce está no nivel III com a insignia Customer Titanium",
+    "image": "https://meusite.com/imagens/nft/1.png",
+    "insight": "CUSTOMER_TITANIUM",
+    "attributes": [
+      {
+        "level_type": "Nível",
+        "value": 3
+      },
+      {
+        "nft_type": "NFT",
+        "value": "CUSTOMER_TITANIUM"
+      },
+      {
+        "benefit_type": "Benefits",
+        "value": [
+          {
+            "discount": "50%",
+            "description": "Desconto de 50%"
+          },
+          {
+            "FreeFrete": "Frete GRATIS",
+            "description": "Frete GRATIS para todo o Brasil"
+          },
+          {
+            "promotionLevel3": "Promoção nivel 3",
+            "description": "Com esse benefício voce tem acesso ao nivel 3 do catalogo de promoção"
+          },
+          {
+            "gifts": "Presente para o cliente",
+            "description": "Diversos produtos e serviços de brinde para o cliente que recebeu o NFT do nível 3"
+          },
+          {
+            "priority": "Prioridade para o cliente",
+            "description": "Prioridade para o cliente em atendimentos, recursos, trocas, pedidos e vendas"
+          },
+          {
+            "birthdays" : "Ofertas imperdiveis para Aniversariantes",
+            "description": "É seu aniversário? Com esse benefício voce tem acesso a ofertas imperdiveis para Aniversariantes"
+          }
+        ]
+      }
+    ]
+  }
+}

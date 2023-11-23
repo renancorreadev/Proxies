@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { config } from 'dotenv';
-import { PointsBlockchainTokenOutputPort } from '@/src/modules/Blockchain/Points/Port/Output/PointsBlockchainTokenOutputPort';
+import { PointsBlockchainTokenOutputPort } from '@/src/modules/blockchain/Points/Port/Output/PointsBlockchainTokenOutputPort';
 import { AddPointsRequestDto } from '../../Domain/Dto/HTTPRequest/AddPointsRequestDto';
 import { DependencyInjectionBlockchainConnector } from '@helper/AppConstants';
 import { PointsManagerConnector } from '@helper/blockchain/connector';
@@ -15,7 +15,7 @@ export class PointsBlockchainAdapter implements PointsBlockchainTokenOutputPort 
 	constructor(
 		@Inject(DependencyInjectionBlockchainConnector.POINTS_MANAGER_CONNECTOR)
 		private contractInstance: PointsManagerConnector,
-	) { }
+	) {}
 
 	async addPoints(registerClientBlockchainDto: AddPointsRequestDto): Promise<any> {
 		try {
@@ -72,6 +72,6 @@ export class PointsBlockchainAdapter implements PointsBlockchainTokenOutputPort 
 			const { account, id } = params;
 
 			return await this.contractInstance.getBalanceOf(account, id);
-		} catch (e) { }
+		} catch (e) {}
 	}
 }
