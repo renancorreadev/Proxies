@@ -1,8 +1,8 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { config } from 'dotenv';
 
-import { ClientBlockchainTokenOutputPort } from '@/src/modules/Blockchain/Client/Port/Output/ClientBlockchainTokenOutputPort';
-import { RegisterClientRequestDto } from '@/src/modules/Blockchain/Client/Domain/Dto/HTTPRequest/ClientBlockchainRequestDto';
+import { ClientBlockchainTokenOutputPort } from '@/src/modules/blockchain/Client/Port/Output/ClientBlockchainTokenOutputPort';
+import { RegisterClientRequestDto } from '@/src/modules/blockchain/Client/Domain/Dto/HTTPRequest/ClientBlockchainRequestDto';
 import { DependencyInjectionBlockchainConnector } from '@helper/AppConstants';
 import { ClientManagerConnector } from '@helper/blockchain/connector';
 import { AddressLocal, ClientData, ClientDataInput } from '@helper/blockchain/types/contracts/client-manager-types';
@@ -16,7 +16,7 @@ export class ClientBlockchainAdapter implements ClientBlockchainTokenOutputPort 
 	constructor(
 		@Inject(DependencyInjectionBlockchainConnector.CLIENT_MANAGER_CONNECTOR)
 		private contractInstance: ClientManagerConnector,
-	) { }
+	) {}
 
 	async registerClient(registerClientBlockchainDto: RegisterClientRequestDto): Promise<any> {
 		try {

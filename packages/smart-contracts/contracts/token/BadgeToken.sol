@@ -19,18 +19,29 @@ contract BadgeToken is
     uint256 public constant CUSTOMER_GOLD = 2; // 500 PONTOS
     uint256 public constant CUSTOMER_TITANIUM = 3; // 1000 PONTOS
 
+    uint256 private currentTokenID = 0;
+    mapping(address => uint256) private userTokenIDs;
+
     function mint(
         address account,
-        uint256 id,
+        uint256 nftId,
         uint256 amount
     ) public onlyOwner {
         require(
-            id == CUSTOMER_PREMIUM ||
-                id == CUSTOMER_GOLD ||
-                id == CUSTOMER_TITANIUM,
-            "Invalid badge id"
+            nftId == CUSTOMER_PREMIUM ||
+                nftId == CUSTOMER_GOLD ||
+                nftId == CUSTOMER_TITANIUM,
+            "Invalid badge nftId id"
         );
-        _mint(account, id, amount, "");
+
+        uint256 tokenId = userTokenIDs[account];
+        if (tokenId == 0) {
+            currentTokenID += 1;
+            tokenId = currentTokenID;
+            userTokenIDs[account] = tokenId;
+        }
+
+        _mint(account, nftId, amount, "");
     }
 
     function burnToken(
