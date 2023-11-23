@@ -1,19 +1,63 @@
 # Client Manager on Blockchain Technology 
 
-## Descrição
+## Visão Geral
+O projeto **Client Manager on Blockchain Technology** é uma solução desenvolvida para otimizar a gestão de clientes com pontuação e emitir tokens de benefícios no ecossistema de blockchain privada. Utilizando **Hyperledger Besu** para gerenciar rede privada com o protocolo QBFT em conjunto com uma aplicação back-end equipada com os recursos das capacidades avançadas do [NestJS](https://nestjs.com/), um framework para aplicações server-side em Node.js, este projeto possui todos pacotes (packages) incorporados na arquitetura hexagonal com inversão de dependências, garantindo um design modular e de fácil manutenção.
 
-O projeto "Client Manager on Blockchain Technology" é uma solução inovadora desenvolvida para otimizar a gestão de clientes e transações no ecossistema de blockchain. Utilizando as capacidades avançadas do NestJS, um framework para aplicações server-side em Node.js, este projeto incorpora uma arquitetura hexagonal com inversão de dependências, garantindo um design modular e de fácil manutenção.
+## Interação com a Blockchain
+A essência do projeto reside na sua capacidade de interagir com a blockchain, permitindo o monitoramento e reação a eventos específicos da rede. Isso é alcançado por meio de um micro-serviço dedicado, que escuta eventos na blockchain e executa ações correspondentes, como a atualização de registros de clientes, emissão de pontos para determinado cliente, emissão de tokens baseado em NFTs para representar uma `insignia` ou nível `level` em que um cliente se encontra dependendo do saldo de pontos que esse indivíduo possui.
 
-A essência do projeto reside na sua capacidade de interagir com a blockchain, permitindo o monitoramento e reação a eventos específicos da rede. Isso é alcançado por meio de um micro-serviço dedicado, que escuta eventos na blockchain e executa ações correspondentes, como a atualização de registros de clientes ou o gerenciamento de transações de tokens NFT (Non-Fungible Tokens).
+## Gerenciamento de Metadados de NFTs
+Uma característica central do sistema é o gerenciamento de metadados de NFTs, essencial para o registro, adição de pontos e atualização dos níveis dos clientes (`1` | `2` | `3`). Os NFTs são usados para representar diferentes níveis de clientes, como (`CUSTOMER_PREMIUM` | `CUSTOMER_GOLD` | `CUSTOMER_TITANIUM`), cada um com benefícios exclusivos. Os clientes acumulam pontos através de interações e compras, e esses pontos determinam o nível do NFT que lhes é atribuído. A mudança de níveis é refletida automaticamente pelo micro-serviço desenvolvido em go nos metadados do NFT correspondente, assegurando uma representação precisa do status do cliente.
 
-Uma característica central do sistema é o gerenciamento de metadados de NFTs, essencial para o registro e atualização de clientes. Os NFTs são usados para representar diferentes níveis de clientes, como "Customer Premium", "Customer Gold" e "Customer Titanium", cada um com benefícios exclusivos. Os clientes acumulam pontos através de interações e compras, e esses pontos determinam o nível do NFT que lhes é atribuído. A mudança de níveis é refletida automaticamente nos metadados do NFT correspondente, assegurando uma representação precisa do status do cliente.
+> Aqui tem um exemplo de como é definidido as Metadata pelo tokenID de um usuario: 
 
+```json
+{
+  "tokenID": 2,
+  "customer": "John Doe dos Santos",
+  "description": "Você está no nível I com a insígnia Customer Premium",
+  "image": "https://meusite.com/imagens/nft/1.png",
+  "insight": "CUSTOMER_PREMIUM",
+  "attributes": {
+    "points": 240,
+    "level": 1,
+    "benefits": [
+      {
+        "level_type": "Nível",
+        "value": 1
+      },
+      {
+        "nft_type": "NFT",
+        "value": "CUSTOMER_TITANIUM"
+      },
+      {
+        "benefit_type": "Benefits",
+        "value": [
+          {
+            "discount": "20%",
+            "description": "Desconto de 20% em todos os produtos."
+          },
+          {
+            "FreeFrete": "Frete GRATIS",
+            "description": "Frete GRATIS no seu estado."
+          },
+          {
+            "description": "Com esse benefício voce tem acesso ao nivel 1 do catalogo de promoção",
+            "promotionLevel3": "Promoção nivel 1"
+          }
+        ]
+      }
+    ]
+  },
+  "databaseId": 8,
+  "createdAt": "2023-11-23T16:43:47.683Z",
+  "updatedAt": "2023-11-23T16:43:47.683Z"
+}
+```
+## API HTTP e Swagger
 O sistema também conta com uma API HTTP integrada para gerenciar os metadados dos NFTs. Isso inclui endpoints para consulta e atualização dos metadados baseados nos tokenIDs. A integração com o Swagger oferece uma documentação clara e interativa da API, facilitando o uso e a integração por parte dos desenvolvedores.
 
-Combinando as modernas técnicas de desenvolvimento de software com a tecnologia blockchain, este projeto não apenas simplifica a gestão de clientes em um ambiente digital, mas também abre portas para uma série de aplicações inovadoras em áreas como fidelidade do cliente, marketing e recompensas baseadas em blockchain.
-
-
-## Swagger 
+> Abaixo você pode ver uma breve ilustração: 
 ![Swagger](docs/images/swagger-v1.png)
 
 > O Planejamento para desenvolvimento de uma nova feature para esse projeto com um longo escopo está definida para seguir esse padrão abaixo: 
