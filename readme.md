@@ -1,20 +1,40 @@
 # Client Manager on Blockchain Technology 
 
+## Descrição
+
+O projeto "Client Manager on Blockchain Technology" é uma solução inovadora desenvolvida para otimizar a gestão de clientes e transações no ecossistema de blockchain. Utilizando as capacidades avançadas do NestJS, um framework para aplicações server-side em Node.js, este projeto incorpora uma arquitetura hexagonal com inversão de dependências, garantindo um design modular e de fácil manutenção.
+
+A essência do projeto reside na sua capacidade de interagir com a blockchain, permitindo o monitoramento e reação a eventos específicos da rede. Isso é alcançado por meio de um micro-serviço dedicado, que escuta eventos na blockchain e executa ações correspondentes, como a atualização de registros de clientes ou o gerenciamento de transações de tokens NFT (Non-Fungible Tokens).
+
+Uma característica central do sistema é o gerenciamento de metadados de NFTs, essencial para o registro e atualização de clientes. Os NFTs são usados para representar diferentes níveis de clientes, como "Customer Premium", "Customer Gold" e "Customer Titanium", cada um com benefícios exclusivos. Os clientes acumulam pontos através de interações e compras, e esses pontos determinam o nível do NFT que lhes é atribuído. A mudança de níveis é refletida automaticamente nos metadados do NFT correspondente, assegurando uma representação precisa do status do cliente.
+
+O sistema também conta com uma API HTTP integrada para gerenciar os metadados dos NFTs. Isso inclui endpoints para consulta e atualização dos metadados baseados nos tokenIDs. A integração com o Swagger oferece uma documentação clara e interativa da API, facilitando o uso e a integração por parte dos desenvolvedores.
+
+Combinando as modernas técnicas de desenvolvimento de software com a tecnologia blockchain, este projeto não apenas simplifica a gestão de clientes em um ambiente digital, mas também abre portas para uma série de aplicações inovadoras em áreas como fidelidade do cliente, marketing e recompensas baseadas em blockchain.
+
+
 ## Swagger 
 ![Swagger](docs/images/swagger-v1.png)
 
-## Ciclo de nova Feature: 
+> O Planejamento para desenvolvimento de uma nova feature para esse projeto com um longo escopo está definida para seguir esse padrão abaixo: 
 
-> O Planejamento para desenvolvimento de uma nova feature para esse projeto com um longo escopo está definida para seguir 
-> esse padrão abaixo: 
+<div style="text-align: center;">
+  <img src="https://raw.githubusercontent.com/hyperledger/firefly/main/images/hyperledger_firefly_logo.png" alt="Hyperledger" style="width: 200px; height: 90px; margin: 1rem;">
+  <img src="https://github.com/remojansen/logo.ts/raw/master/ts.png" alt="TypeScript" style="width: 80px; height: 90px; margin: 1rem;">
+  <img src="https://github.com/rfyiamcool/golang_logo/raw/master/png/golang_58.png" alt="Go" style="width: 150px; height: 90px; margin: 1rem;">
+  <img src="https://nestjs.com/img/logo-small.svg" alt="NestJS" style="width: 150px; height: 90px; margin: 1rem;">
+</div>
+
+
+## Ciclo de nova Feature: 
 
 ![Alt text](docs/images/plainning.png)
 
 1. Inicia se o desenvolvimento da feature na blockckchain com os contratos inteligentes que são atualizaveis com o  
 ERC1967Proxy.
-2. Parte para o desenvolvimento da solução da feature na escuta dos eventos com o micro serviço desenvolvido em Go para gerenciamento de eventos e acionamentos de cronJobs. 
-3. Parte se para o desenvolvimento da solução da feature para o back-end, desenvolvendo-se os casos de uso, rotas, entidades e dominios para se atender. 
-4. Parte se para o desenvolvimento da solução no front end no React. 
+1. Parte para o desenvolvimento da solução da feature na escuta dos eventos com o micro serviço desenvolvido em Go para gerenciamento de eventos e acionamentos de cronJobs. 
+2. Parte se para o desenvolvimento da solução da feature para o back-end, desenvolvendo-se os casos de uso, rotas, entidades e dominios para se atender. 
+3. Parte se para o desenvolvimento da solução no front end no React. 
 
 
 ## Estrutura de pastas
