@@ -22,7 +22,21 @@ export class MetadataStorageAdapter implements MetadataStorageOutputPort {
 
 	async saveMetadata(saveMetadata: SaveMetadataStorageDTORequest): Promise<string> {
 		try {
+			const existingMetadata = await this.metadataRepository.findOne({
+				where: { tokenID: saveMetadata.tokenID },
+			});
+
+			if (existingMetadata) {
+				throw new Error(`Metadata already exists for tokenID: ${saveMetadata.tokenID}`);
+			}
+
+			// Valide os campos obrigatórios aqui, por exemplo:
+			if (!saveMetadata.customer || !saveMetadata.description || !saveMetadata.image || !saveMetadata.insight) {
+				throw new Error('Missing required fields');
+			}
+
 			const newMetadata = new MetadataEntity(
+				saveMetadata.tokenID,
 				saveMetadata.customer,
 				saveMetadata.description,
 				saveMetadata.image,
@@ -36,6 +50,22 @@ export class MetadataStorageAdapter implements MetadataStorageOutputPort {
 		} catch (error) {
 			this.logger.error(`Error in Metadata Storage Token  ${JSON.stringify(error)}`);
 			throw new Error(`An error ocurred while saving FIAT currency: ${JSON.stringify(error)}`);
+		}
+	}
+	async getTokenIDMetadata(tokenID: number): Promise<MetadataEntity> {
+		try {
+			const metadata = await this.metadataRepository.findOne({
+				where: { tokenID },
+			});
+
+			if (!metadata) {
+				throw new Error(`Metadata not found for tokenID: ${tokenID}`);
+			}
+
+			return metadata;
+		} catch (error) {
+			this.logger.error(`Error while retrieving metadata: ${JSON.stringify(error)}`);
+			throw error;
 		}
 	}
 }

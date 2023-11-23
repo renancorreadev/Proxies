@@ -1,10 +1,43 @@
 import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+export interface AttributeLevel {
+	value: number;
+	level_type: string;
+}
+
+export interface AttributeNFT {
+	value: string;
+	nft_type: string;
+}
+
+export interface Benefit {
+	discount?: string;
+	FreeFrete?: string;
+	promotionLevel1?: string;
+	description: string;
+}
+
+export interface AttributeBenefits {
+	value: Benefit[];
+	benefit_type: string;
+}
+
+export type MetadataAttribute = AttributeLevel | AttributeNFT | AttributeBenefits;
+
 @Entity({
 	name: 'metadata',
 })
 export class MetadataEntity {
-	constructor(customer: string, description: string, image: string, insight: string, attributes: [any]) {
-		(this.customer = customer),
+	constructor(
+		tokenID: number,
+		customer: string,
+		description: string,
+		image: string,
+		insight: string,
+		attributes: MetadataAttribute[],
+	) {
+		(this.tokenID = tokenID),
+			(this.customer = customer),
 			(this.description = description),
 			(this.image = image),
 			(this.insight = insight),
@@ -12,6 +45,9 @@ export class MetadataEntity {
 	}
 	@PrimaryGeneratedColumn()
 	id: number;
+
+	@Column({ type: 'int4', nullable: false })
+	tokenID: number;
 
 	@Column({ type: 'varchar', nullable: false })
 	customer: string;
@@ -26,7 +62,6 @@ export class MetadataEntity {
 	insight: string;
 
 	@Column({ type: 'jsonb', nullable: false })
-	// Um array de objetos para armazenar os atributos
 	attributes: any;
 
 	@Column({ nullable: false })
