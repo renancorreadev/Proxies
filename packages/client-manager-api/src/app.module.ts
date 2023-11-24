@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ClientBlockchainAdapter } from './modules/blockchain/Client/Adapter/Output/ClientBlockChainAdapter';
-import { ClientWebAdapter } from './modules/blockchain/Client/Adapter/input/ClientWebAdapter';
+import { ClientBlockchainAdapter } from './modules/blockchain/Client/Adapters/Output/ClientBlockChainAdapter';
+import { ClientWebAdapter } from './modules/blockchain/Client/Adapters/input/ClientWebAdapter';
 import { ClientBlockchainService } from './modules/blockchain/Client/Domain/ClientBlockchainService';
 
 import { PointsBlockchainService } from './modules/blockchain/Points/Domain/PointsBlockchainService';
-import { PointsBlockchainAdapter } from './modules/blockchain/Points/Adapter/Output/PointsBlockChainAdapter';
-import { PointsBlockchainWebAdapter } from './modules/blockchain/Points/Adapter/input/PointsBlockchainWebAdapter';
+import { PointsBlockchainAdapter } from './modules/blockchain/Points/Adapters/Output/PointsBlockChainAdapter';
+import { PointsBlockchainWebAdapter } from './modules/blockchain/Points/Adapters/input/PointsBlockchainWebAdapter';
 
 import { DependencyInjectionTokens } from './helper/AppConstants';
 import { BlockchainClientConnectionProvider, BlockchainPointsConnectionProvider } from '@config/Blockchain/connection';

@@ -24,10 +24,11 @@ import {
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { BaseUrls, DependencyInjectionTokens } from 'client-manager-api/src/helper/AppConstants';
-import { MetadataTokenUseCase } from '../../Port/Input/MetadataTokenUseCase';
-import { DeleteMetadataRequestDTO, RegisterMetadataRequestDTO } from '../../Domain/Dto/HTTPRequest';
-import { UpdateMetadataRequestBody } from '../../Domain/Dto/HTTPRequest/UpdateMetadataRequestDTO';
-import { RegisterMetadataBodySwaggerAPI, UpdateMetadataSwaggerBodyAPI } from '../../Domain/Dto/Swagger';
+
+import { MetadataTokenUseCase } from '@metadata/Port/Input/MetadataTokenUseCase';
+import { RegisterMetadataRequestDTO } from '@metadata/Domain/Dto/HTTPRequest';
+import { UpdateMetadataRequestBody } from '@metadata/Domain/Dto/HTTPRequest/UpdateMetadataRequestDTO';
+import { RegisterMetadataBodySwaggerAPI, UpdateMetadataSwaggerBodyAPI } from '@metadata/Domain/Dto/Swagger';
 
 @Controller({
 	path: BaseUrls.META_DATA,
