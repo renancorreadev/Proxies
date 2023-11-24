@@ -1,4 +1,4 @@
-# Customer Rewards Application on Private Blockchain Technology 
+# Customer Rewards Application on Private Blockchain  
 
 ## Visão Geral
 O projeto **Customer Rewards Application** é uma solução desenvolvida para otimizar a gestão de clientes com pontuação e emitir tokens de benefícios no ecossistema de blockchain privada. Utilizando **Hyperledger Besu** para gerenciar rede privada com o protocolo QBFT em conjunto com uma aplicação back-end equipada com os recursos das capacidades avançadas do [NestJS](https://nestjs.com/), um framework para aplicações server-side em Node.js, este projeto possui todos pacotes (packages) incorporados na arquitetura hexagonal com inversão de dependências, garantindo um design modular e de fácil manutenção.
