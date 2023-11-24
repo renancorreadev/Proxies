@@ -1,0 +1,1041 @@
+Eu tenho um módulo em meu projeto NestJS adadptado para inversao de dependencias e arquitetura hexagonal: chamado metadata para servir e registrar novas metadata do tokenID de um usuario.. 
+
+segue abaixo todos códigos: 
+
+o projeto segue esse padrão de pastas da arquitetura hexagonal: 
+modules
+│   │    │    ├── metadata
+│   │    │    │    ├── Adapter
+│   │    │    │    │    ├── Input
+│   │    │    │    │     |     ├── MetadataWebAdapter.ts  
+│   │    │    │    │    ├── Output
+│   │    │    │    │     |     ├── Entity  
+│   │    │    │    │     |      |      ├── MetadataEntity.ts  
+│   │    │    │    │     |      |      ├── MetadataStorageAdapter.ts
+│   │    │    │    │     |     ├── MetadataAdapter.ts  
+│   │    │    │    ├── Domain 
+│   │    │    │    │    ├── DTO
+│   │    │    │    │     |    ├── DTOHTTPRequest
+│   │    │    │    │     |     |       ├── MetadataAtributes.ts
+│   │    │    │    │     |     |       ├── MetadataRequestDTO.ts
+│   │    │    │    │     |     |       ├── MetadataStorageDTORequest.ts
+│   │    │    │    │     |    ├── HTTPResponse
+│   │    │    │    │     |    ├──MetadataResponse.ts
+│   │    │    │    │    ├── MetadataService.ts
+│   │    │    │    ├── Port  
+│   │    │    │    │    ├── Input
+│   │    │    │    │     |     ├──  MetadataStorageTokenUseCase.ts
+│   │    │    │    │     |     ├──  MetadataTokenUseCase.ts
+│   │    │    │    │    ├── Output
+│   │    │    │    │     |     ├── MetadataStorageOutputPort.ts
+│   │    │    │    │     |     ├── MetadataTokenOutputPort.ts
+
+
+Segue abaixo todos códigos typescript do projeto: 
+
+1) metadata/Adapters/Input/MetadataWebAdapter.ts
+```
+import { Body, Controller, Get, Inject, Logger, Param, Post, Query } from '@nestjs/common';
+import {
+	ApiBadRequestResponse,
+	ApiBody,
+	ApiForbiddenResponse,
+	ApiInternalServerErrorResponse,
+	ApiNotFoundResponse,
+	ApiOkResponse,
+	ApiOperation,
+	ApiTags,
+	ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
+import { BaseUrls, DependencyInjectionTokens } from 'client-manager-api/src/helper/AppConstants';
+import { MetadataTokenUseCase } from '../../Port/Input/MetadataTokenUseCase';
+import { RegisterMetadataBody, RegisterMetadataDTORequest } from '../../Domain/Dto/HTTPRequest/MetadataRequestDTO';
+
+@Controller({
+	path: BaseUrls.META_DATA,
+})
+@ApiTags('Metadata')
+export class MetadataWebAdapter {
+	private readonly logger = new Logger('MetadataWebAdapter');
+	constructor(
+		@Inject(DependencyInjectionTokens.METADATA_TOKEN_USE_CASE)
+		private metadataService: MetadataTokenUseCase,
+	) {}
+
+	/// --------------------------------------------------------------------------------------
+	/// ------------------------      REGISTER NEW METADATA TOKEN URI JSON POST           ---------------------
+	/// --------------------------------------------------------------------------------------
+	@ApiBody({ required: true, type: RegisterMetadataBody })
+	@ApiOperation({
+		summary: 'Register a new metadata on api',
+		description: 'This route is used to register a new Client on blockchain',
+	})
+	@ApiOkResponse({
+		description: 'Success operation',
+		type: String,
+	})
+	@ApiBadRequestResponse({ description: 'Bad request' })
+	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
+	@ApiForbiddenResponse({ description: 'Forbidden' })
+	@ApiNotFoundResponse({ description: 'Segment not found' })
+	@ApiInternalServerErrorResponse({ description: 'Unexpected error' })
+	@Post('/new')
+	async registerMetadata(@Body() registerMetadata: RegisterMetadataDTORequest): Promise<string> {
+		this.logger.log('----------PROCESS BEGIN ----------');
+		this.logger.log(`Running Client Blockchain Web adapter`);
+		this.logger.log(`Data: ${JSON.stringify(registerMetadata)}`);
+
+		const response = await this.metadataService.registerMetadata(registerMetadata);
+
+		this.logger.log('---------- PROCESS END ----------');
+		return response;
+	}
+
+	/// --------------------------------------------------------------------------------------
+	/// ------------------------      GET METADATA  TOKEN URI JSON           ---------------------
+	/// --------------------------------------------------------------------------------------
+	@ApiOperation({
+		summary: 'Get Metadata by Token URI JSON on blockchain',
+		description: 'Find Client Information by name provider',
+	})
+	@ApiOkResponse({
+		description: 'Success operation',
+		type: String,
+	})
+	@ApiBadRequestResponse({ description: 'Bad request' })
+	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
+	@ApiForbiddenResponse({ description: 'Forbidden' })
+	@ApiNotFoundResponse({ description: 'Segment not found' })
+	@Get('/:tokenID')
+	async getTokenID(@Param('tokenID') tokenID: number) {
+		try {
+			this.logger.log('---------- PROCESS BEGIN ----------');
+			this.logger.log('Running PointBlockchain web adapter');
+			this.logger.log(`tokenID: ${tokenID}`);
+
+			return await this.metadataService.getTokenID(tokenID);
+		} catch (e) {
+			const errorMessage = e.response ? e.response.data : e.message;
+			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
+			throw new Error(`An error ocurred in read contract getClientByName on blockchain `);
+		}
+	}
+}
+```
+
+metadata/Adapters/Output/Entity/MetadataEntity.ts
+```ts
+import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+export interface AttributeLevel {
+	value: number;
+	level_type: string;
+}
+
+export interface AttributeNFT {
+	value: string;
+	nft_type: string;
+}
+
+export interface Benefit {
+	discount?: string;
+	FreeFrete?: string;
+	promotionLevel1?: string;
+	description: string;
+}
+
+export interface AttributeBenefits {
+	value: Benefit[];
+	benefit_type: string;
+}
+
+export type MetadataAttribute = AttributeLevel | AttributeNFT | AttributeBenefits;
+
+@Entity({
+	name: 'metadata',
+})
+export class MetadataEntity {
+	constructor(
+		tokenID: number,
+		customer: string,
+		description: string,
+		image: string,
+		insight: string,
+		attributes: MetadataAttribute[],
+	) {
+		(this.tokenID = tokenID),
+			(this.customer = customer),
+			(this.description = description),
+			(this.image = image),
+			(this.insight = insight),
+			(this.attributes = attributes);
+	}
+	@PrimaryGeneratedColumn()
+	id: number;
+
+	@Column({ type: 'int4', nullable: false })
+	tokenID: number;
+
+	@Column({ type: 'varchar', nullable: false })
+	customer: string;
+
+	@Column({ type: 'varchar', nullable: false })
+	description: string;
+
+	@Column({ type: 'varchar', nullable: false })
+	image: string;
+
+	@Column({ type: 'varchar', nullable: false })
+	insight: string;
+
+	@Column({ type: 'jsonb', nullable: false })
+	attributes: any;
+
+	@Column({ nullable: false })
+	createdAt: Date;
+
+	@Column({ nullable: false })
+	updatedAt: Date;
+
+	@BeforeInsert()
+	setCreatedAt() {
+		this.createdAt = new Date();
+	}
+	@BeforeInsert()
+	setUpdatedAt() {
+		this.updatedAt = new Date();
+	}
+}
+```
+
+
+metadata/Adapters/Output/MetadataAdapter.ts
+
+```ts
+import { Inject, Injectable, Logger } from '@nestjs/common';
+
+import { DependencyInjectionTokens } from '@src/helper/AppConstants';
+import { MetadataTokenOutputPort } from '../../Port/Output/MetadataTokenOutputPort';
+import { MetadataStorageOutputPort } from '../../Port/Output/MetadataStorageOutputPort';
+import { RegisterMetadataDTORequest } from '../../Domain/Dto/HTTPRequest/MetadataRequestDTO';
+
+import { MetadataEntity } from './Entity/MetadataEntity';
+
+@Injectable()
+export class MetadataAdapter implements MetadataTokenOutputPort {
+	private readonly logger = new Logger(MetadataAdapter.name);
+
+	constructor(
+		@Inject(DependencyInjectionTokens.METADATA_STORAGE_OUTPUT_PORT)
+		private metadataStorage: MetadataStorageOutputPort,
+	) {}
+
+	async registerMetadata(registerMetadata: RegisterMetadataDTORequest): Promise<string> {
+		try {
+			await this.metadataStorage.saveMetadata(registerMetadata);
+			return 'Metadata succesfully registered';
+		} catch (error) {
+			this.logger.error(`Error while trying to registerMetadata: ${error}`);
+			throw new Error(`Error while trying to registerMetadata: ${error}`);
+		}
+	}
+
+	async getTokenID(tokenID: number): Promise<MetadataEntity> {
+		try {
+			return await this.metadataStorage.getTokenIDMetadata(tokenID);
+		} catch (error) {
+			this.logger.error(`Error while trying to registerMetadata: ${error}`);
+			throw new Error(`Error while trying to registerMetadata: ${error}`);
+		}
+	}
+}
+```
+
+- armazenamento no banco de dados com typeorm: 
+metadata/Adapters/Output/MetadataStorageAdapter.ts
+
+```ts
+import { Inject, Injectable, Logger } from '@nestjs/common';
+
+import { DependencyInjectionTokens } from '@src/helper/AppConstants';
+import { DataSource, Repository } from 'typeorm';
+
+import { MetadataEntity } from './Entity/MetadataEntity';
+
+import { MetadataStorageOutputPort } from '../../Port/Output/MetadataStorageOutputPort';
+import { SaveMetadataStorageDTORequest } from '../../Domain/Dto/HTTPRequest/MetadataStorageDTORequest';
+
+@Injectable()
+export class MetadataStorageAdapter implements MetadataStorageOutputPort {
+	private readonly logger = new Logger('PaymentTokenToFiatAdapter');
+	private readonly metadataRepository: Repository<MetadataEntity>;
+
+	constructor(
+		@Inject(DependencyInjectionTokens.DATA_SOURCE)
+		private readonly dataSource: DataSource,
+	) {
+		this.metadataRepository = dataSource.getRepository(MetadataEntity);
+	}
+
+	async saveMetadata(saveMetadata: SaveMetadataStorageDTORequest): Promise<string> {
+		try {
+			const existingMetadata = await this.metadataRepository.findOne({
+				where: { tokenID: saveMetadata.tokenID },
+			});
+
+			if (existingMetadata) {
+				throw new Error(`Metadata already exists for tokenID: ${saveMetadata.tokenID}`);
+			}
+
+			// Valide os campos obrigatórios aqui, por exemplo:
+			if (!saveMetadata.customer || !saveMetadata.description || !saveMetadata.image || !saveMetadata.insight) {
+				throw new Error('Missing required fields');
+			}
+
+			const newMetadata = new MetadataEntity(
+				saveMetadata.tokenID,
+				saveMetadata.customer,
+				saveMetadata.description,
+				saveMetadata.image,
+				saveMetadata.insight,
+				saveMetadata.attributes,
+			);
+
+			await this.metadataRepository.save(newMetadata);
+
+			return 'Metadata saved successfully';
+		} catch (error) {
+			this.logger.error(`Error in Metadata Storage Token  ${JSON.stringify(error)}`);
+			throw new Error(`An error ocurred while saving metadata: ${JSON.stringify(error)}`);
+		}
+	}
+	async getTokenIDMetadata(tokenID: number): Promise<MetadataEntity> {
+		try {
+			const metadata = await this.metadataRepository.findOne({
+				where: { tokenID },
+			});
+
+			if (!metadata) {
+				throw new Error(`Metadata not found for tokenID: ${tokenID}`);
+			}
+
+			return metadata;
+		} catch (error) {
+			this.logger.error(`Error while retrieving metadata: ${JSON.stringify(error)}`);
+			throw error;
+		}
+	}
+}
+```
+
+metadata/Domain/Dto/HTTPRequest/MetadataAtributes.ts
+
+```ts
+import { ApiProperty } from '@nestjs/swagger';
+
+export class MetadataAttribute {
+	@ApiProperty({ example: 1, description: 'O nível do cliente', required: false })
+	value?: number;
+
+	@ApiProperty({ example: 'Nível', description: 'Tipo do atributo', required: false })
+	level_type?: string;
+
+	@ApiProperty({ example: 'CUSTOMER_PREMIUM', description: 'Tipo de NFT', required: false })
+	nft_type?: string;
+
+	@ApiProperty({ example: 'Benefits', description: 'Tipo do atributo', required: false })
+	benefit_type?: string;
+
+	@ApiProperty({ type: 'array', items: { type: 'object' }, description: 'Lista de benefícios', required: false })
+	benefits?: Benefit[];
+}
+
+export class Benefit {
+	@ApiProperty({ example: '10%', description: 'Desconto oferecido' })
+	discount: string;
+
+	@ApiProperty({ example: 'Frete GRATIS', description: 'Frete grátis' })
+	FreeFrete: string;
+
+	@ApiProperty({ example: 'Promoção nivel I', description: 'Promoção de nível I' })
+	promotionLevel1: string;
+}
+```
+
+
+metadata/Domain/Dto/HTTPRequest/MetadataRequestDTO.ts
+import { ApiProperty } from '@nestjs/swagger';
+import { MetadataAttribute } from '../../../Adapters/Output/Entity/MetadataEntity';
+
+export class AttributeLevel {
+	@ApiProperty({ example: 1, description: 'O nível do cliente' })
+	value: number;
+
+	@ApiProperty({ example: 'Nível', description: 'Tipo do atributo' })
+	level_type: string;
+}
+
+export class AttributeNFT {
+	@ApiProperty({ example: 'CUSTOMER_PREMIUM', description: 'Tipo de NFT' })
+	value: string;
+
+	@ApiProperty({ example: 'Nível', description: 'Tipo do atributo' })
+	nft_type: string;
+}
+
+export class Benefit {
+	@ApiProperty({ example: '10%', description: 'Desconto oferecido' })
+	discount?: string;
+
+	@ApiProperty({ example: 'Frete GRATIS', description: 'Frete grátis' })
+	FreeFrete?: string;
+
+	@ApiProperty({ example: 'Promoção nivel I', description: 'Promoção de nível I' })
+	promotionLevel1?: string;
+
+	@ApiProperty({ example: 'Descrição do benefício', description: 'Descrição do benefício' })
+	description: string;
+}
+
+export class AttributeBenefits {
+	@ApiProperty({
+		type: [Benefit],
+		description: 'Lista de benefícios',
+	})
+	value: Benefit[];
+
+	@ApiProperty({ example: 'CUSTOMER_PREMIUM', description: 'Tipo de atributo' })
+	benefit_type: string;
+}
+
+export class RegisterMetadataBody {
+	@ApiProperty({ example: 1, description: 'O ID único do token' })
+	tokenID: number;
+
+	@ApiProperty({ example: 'Renan Cesar de Franca Correa', description: 'Nome do cliente' })
+	customer: string;
+
+	@ApiProperty({
+		example: 'Você está no nível I com a insígnia Customer Premium',
+		description: 'Descrição do nível do cliente',
+	})
+	description: string;
+
+	@ApiProperty({ example: 'https://meusite.com/imagens/nft/1.png', description: 'URL da imagem do NFT' })
+	image: string;
+
+	@ApiProperty({ example: 'CUSTOMER_PREMIUM', description: 'Insígnia do cliente' })
+	insight: string;
+
+	@ApiProperty({
+		type: [AttributeLevel, AttributeNFT, AttributeBenefits],
+		description: 'Atributos adicionais do NFT',
+	})
+	attributes: {
+		level_type?: string;
+		value?: number;
+		nft_type?: string;
+		benefit_type?: string;
+		benefits?: Benefit[];
+	}[];
+}
+
+export interface RegisterMetadataDTORequest {
+	tokenID: number;
+	customer: string;
+	description: string;
+	image: string;
+	insight: string;
+	attributes: MetadataAttribute[];
+}
+```
+
+metadata/Domain/Dto/HTTPRequest/MetadataStorageDTORequest.ts
+
+```ts
+import { MetadataAttribute } from '../../../Adapters/Output/Entity/MetadataEntity';
+
+export interface SaveMetadataStorageDTORequest {
+	tokenID: number;
+	customer: string;
+	description: string;
+	image: string;
+	insight: string;
+	attributes: MetadataAttribute[];
+}
+```
+
+ChatGPT
+Parece que você compartilhou uma estrutura de projeto em NestJS que lida com metadados de tokens. Você também forneceu vários códigos-fonte que fazem parte desse projeto. Vou dar uma breve visão geral dos principais componentes e suas funções:
+
+MetadataWebAdapter.ts: Este é um controlador NestJS responsável por lidar com as solicitações HTTP relacionadas a metadados. Ele tem duas rotas principais: /new, que é usada para registrar novos metadados, e /:tokenID, que é usada para buscar metadados por tokenID.
+
+MetadataEntity.ts: Esta classe define a entidade MetadataEntity, que representa a estrutura
+
+User
+Eu tenho um módulo em meu projeto NestJS adadptado para inversao de dependencias e arquitetura hexagonal: chamado metadata para servir e registrar novas metadata do tokenID de um usuario.. 
+
+segue abaixo todos códigos: 
+
+o projeto segue esse padrão de pastas da arquitetura hexagonal: 
+modules
+│   │    │    ├── metadata
+│   │    │    │    ├── Adapter
+│   │    │    │    │    ├── Input
+│   │    │    │    │     |     ├── MetadataWebAdapter.ts  
+│   │    │    │    │    ├── Output
+│   │    │    │    │     |     ├── Entity  
+│   │    │    │    │     |      |      ├── MetadataEntity.ts  
+│   │    │    │    │     |      |      ├── MetadataStorageAdapter.ts
+│   │    │    │    │     |     ├── MetadataAdapter.ts  
+│   │    │    │    ├── Domain 
+│   │    │    │    │    ├── DTO
+│   │    │    │    │     |    ├── DTOHTTPRequest
+│   │    │    │    │     |     |       ├── MetadataAtributes.ts
+│   │    │    │    │     |     |       ├── MetadataRequestDTO.ts
+│   │    │    │    │     |     |       ├── MetadataStorageDTORequest.ts
+│   │    │    │    │     |    ├── HTTPResponse
+│   │    │    │    │     |    ├──MetadataResponse.ts
+│   │    │    │    │    ├── MetadataService.ts
+│   │    │    │    ├── Port  
+│   │    │    │    │    ├── Input
+│   │    │    │    │     |     ├──  MetadataStorageTokenUseCase.ts
+│   │    │    │    │     |     ├──  MetadataTokenUseCase.ts
+│   │    │    │    │    ├── Output
+│   │    │    │    │     |     ├── MetadataStorageOutputPort.ts
+│   │    │    │    │     |     ├── MetadataTokenOutputPort.ts
+
+
+Segue abaixo todos códigos typescript do projeto: 
+
+1) metadata/Adapters/Input/MetadataWebAdapter.ts
+```
+import { Body, Controller, Get, Inject, Logger, Param, Post, Query } from '@nestjs/common';
+import {
+	ApiBadRequestResponse,
+	ApiBody,
+	ApiForbiddenResponse,
+	ApiInternalServerErrorResponse,
+	ApiNotFoundResponse,
+	ApiOkResponse,
+	ApiOperation,
+	ApiTags,
+	ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
+import { BaseUrls, DependencyInjectionTokens } from 'client-manager-api/src/helper/AppConstants';
+import { MetadataTokenUseCase } from '../../Port/Input/MetadataTokenUseCase';
+import { RegisterMetadataBody, RegisterMetadataDTORequest } from '../../Domain/Dto/HTTPRequest/MetadataRequestDTO';
+
+@Controller({
+	path: BaseUrls.META_DATA,
+})
+@ApiTags('Metadata')
+export class MetadataWebAdapter {
+	private readonly logger = new Logger('MetadataWebAdapter');
+	constructor(
+		@Inject(DependencyInjectionTokens.METADATA_TOKEN_USE_CASE)
+		private metadataService: MetadataTokenUseCase,
+	) {}
+
+	/// --------------------------------------------------------------------------------------
+	/// ------------------------      REGISTER NEW METADATA TOKEN URI JSON POST           ---------------------
+	/// --------------------------------------------------------------------------------------
+	@ApiBody({ required: true, type: RegisterMetadataBody })
+	@ApiOperation({
+		summary: 'Register a new metadata on api',
+		description: 'This route is used to register a new Client on blockchain',
+	})
+	@ApiOkResponse({
+		description: 'Success operation',
+		type: String,
+	})
+	@ApiBadRequestResponse({ description: 'Bad request' })
+	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
+	@ApiForbiddenResponse({ description: 'Forbidden' })
+	@ApiNotFoundResponse({ description: 'Segment not found' })
+	@ApiInternalServerErrorResponse({ description: 'Unexpected error' })
+	@Post('/new')
+	async registerMetadata(@Body() registerMetadata: RegisterMetadataDTORequest): Promise<string> {
+		this.logger.log('----------PROCESS BEGIN ----------');
+		this.logger.log(`Running Client Blockchain Web adapter`);
+		this.logger.log(`Data: ${JSON.stringify(registerMetadata)}`);
+
+		const response = await this.metadataService.registerMetadata(registerMetadata);
+
+		this.logger.log('---------- PROCESS END ----------');
+		return response;
+	}
+
+	/// --------------------------------------------------------------------------------------
+	/// ------------------------      GET METADATA  TOKEN URI JSON           ---------------------
+	/// --------------------------------------------------------------------------------------
+	@ApiOperation({
+		summary: 'Get Metadata by Token URI JSON on blockchain',
+		description: 'Find Client Information by name provider',
+	})
+	@ApiOkResponse({
+		description: 'Success operation',
+		type: String,
+	})
+	@ApiBadRequestResponse({ description: 'Bad request' })
+	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
+	@ApiForbiddenResponse({ description: 'Forbidden' })
+	@ApiNotFoundResponse({ description: 'Segment not found' })
+	@Get('/:tokenID')
+	async getTokenID(@Param('tokenID') tokenID: number) {
+		try {
+			this.logger.log('---------- PROCESS BEGIN ----------');
+			this.logger.log('Running PointBlockchain web adapter');
+			this.logger.log(`tokenID: ${tokenID}`);
+
+			return await this.metadataService.getTokenID(tokenID);
+		} catch (e) {
+			const errorMessage = e.response ? e.response.data : e.message;
+			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
+			throw new Error(`An error ocurred in read contract getClientByName on blockchain `);
+		}
+	}
+}
+```
+
+metadata/Adapters/Output/Entity/MetadataEntity.ts
+```ts
+import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+export interface AttributeLevel {
+	value: number;
+	level_type: string;
+}
+
+export interface AttributeNFT {
+	value: string;
+	nft_type: string;
+}
+
+export interface Benefit {
+	discount?: string;
+	FreeFrete?: string;
+	promotionLevel1?: string;
+	description: string;
+}
+
+export interface AttributeBenefits {
+	value: Benefit[];
+	benefit_type: string;
+}
+
+export type MetadataAttribute = AttributeLevel | AttributeNFT | AttributeBenefits;
+
+@Entity({
+	name: 'metadata',
+})
+export class MetadataEntity {
+	constructor(
+		tokenID: number,
+		customer: string,
+		description: string,
+		image: string,
+		insight: string,
+		attributes: MetadataAttribute[],
+	) {
+		(this.tokenID = tokenID),
+			(this.customer = customer),
+			(this.description = description),
+			(this.image = image),
+			(this.insight = insight),
+			(this.attributes = attributes);
+	}
+	@PrimaryGeneratedColumn()
+	id: number;
+
+	@Column({ type: 'int4', nullable: false })
+	tokenID: number;
+
+	@Column({ type: 'varchar', nullable: false })
+	customer: string;
+
+	@Column({ type: 'varchar', nullable: false })
+	description: string;
+
+	@Column({ type: 'varchar', nullable: false })
+	image: string;
+
+	@Column({ type: 'varchar', nullable: false })
+	insight: string;
+
+	@Column({ type: 'jsonb', nullable: false })
+	attributes: any;
+
+	@Column({ nullable: false })
+	createdAt: Date;
+
+	@Column({ nullable: false })
+	updatedAt: Date;
+
+	@BeforeInsert()
+	setCreatedAt() {
+		this.createdAt = new Date();
+	}
+	@BeforeInsert()
+	setUpdatedAt() {
+		this.updatedAt = new Date();
+	}
+}
+```
+
+
+metadata/Adapters/Output/MetadataAdapter.ts
+
+```ts
+import { Inject, Injectable, Logger } from '@nestjs/common';
+
+import { DependencyInjectionTokens } from '@src/helper/AppConstants';
+import { MetadataTokenOutputPort } from '../../Port/Output/MetadataTokenOutputPort';
+import { MetadataStorageOutputPort } from '../../Port/Output/MetadataStorageOutputPort';
+import { RegisterMetadataDTORequest } from '../../Domain/Dto/HTTPRequest/MetadataRequestDTO';
+
+import { MetadataEntity } from './Entity/MetadataEntity';
+
+@Injectable()
+export class MetadataAdapter implements MetadataTokenOutputPort {
+	private readonly logger = new Logger(MetadataAdapter.name);
+
+	constructor(
+		@Inject(DependencyInjectionTokens.METADATA_STORAGE_OUTPUT_PORT)
+		private metadataStorage: MetadataStorageOutputPort,
+	) {}
+
+	async registerMetadata(registerMetadata: RegisterMetadataDTORequest): Promise<string> {
+		try {
+			await this.metadataStorage.saveMetadata(registerMetadata);
+			return 'Metadata succesfully registered';
+		} catch (error) {
+			this.logger.error(`Error while trying to registerMetadata: ${error}`);
+			throw new Error(`Error while trying to registerMetadata: ${error}`);
+		}
+	}
+
+	async getTokenID(tokenID: number): Promise<MetadataEntity> {
+		try {
+			return await this.metadataStorage.getTokenIDMetadata(tokenID);
+		} catch (error) {
+			this.logger.error(`Error while trying to registerMetadata: ${error}`);
+			throw new Error(`Error while trying to registerMetadata: ${error}`);
+		}
+	}
+}
+```
+
+- armazenamento no banco de dados com typeorm: 
+metadata/Adapters/Output/MetadataStorageAdapter.ts
+
+```ts
+import { Inject, Injectable, Logger } from '@nestjs/common';
+
+import { DependencyInjectionTokens } from '@src/helper/AppConstants';
+import { DataSource, Repository } from 'typeorm';
+
+import { MetadataEntity } from './Entity/MetadataEntity';
+
+import { MetadataStorageOutputPort } from '../../Port/Output/MetadataStorageOutputPort';
+import { SaveMetadataStorageDTORequest } from '../../Domain/Dto/HTTPRequest/MetadataStorageDTORequest';
+
+@Injectable()
+export class MetadataStorageAdapter implements MetadataStorageOutputPort {
+	private readonly logger = new Logger('PaymentTokenToFiatAdapter');
+	private readonly metadataRepository: Repository<MetadataEntity>;
+
+	constructor(
+		@Inject(DependencyInjectionTokens.DATA_SOURCE)
+		private readonly dataSource: DataSource,
+	) {
+		this.metadataRepository = dataSource.getRepository(MetadataEntity);
+	}
+
+	async saveMetadata(saveMetadata: SaveMetadataStorageDTORequest): Promise<string> {
+		try {
+			const existingMetadata = await this.metadataRepository.findOne({
+				where: { tokenID: saveMetadata.tokenID },
+			});
+
+			if (existingMetadata) {
+				throw new Error(`Metadata already exists for tokenID: ${saveMetadata.tokenID}`);
+			}
+
+			// Valide os campos obrigatórios aqui, por exemplo:
+			if (!saveMetadata.customer || !saveMetadata.description || !saveMetadata.image || !saveMetadata.insight) {
+				throw new Error('Missing required fields');
+			}
+
+			const newMetadata = new MetadataEntity(
+				saveMetadata.tokenID,
+				saveMetadata.customer,
+				saveMetadata.description,
+				saveMetadata.image,
+				saveMetadata.insight,
+				saveMetadata.attributes,
+			);
+
+			await this.metadataRepository.save(newMetadata);
+
+			return 'Metadata saved successfully';
+		} catch (error) {
+			this.logger.error(`Error in Metadata Storage Token  ${JSON.stringify(error)}`);
+			throw new Error(`An error ocurred while saving metadata: ${JSON.stringify(error)}`);
+		}
+	}
+	async getTokenIDMetadata(tokenID: number): Promise<MetadataEntity> {
+		try {
+			const metadata = await this.metadataRepository.findOne({
+				where: { tokenID },
+			});
+
+			if (!metadata) {
+				throw new Error(`Metadata not found for tokenID: ${tokenID}`);
+			}
+
+			return metadata;
+		} catch (error) {
+			this.logger.error(`Error while retrieving metadata: ${JSON.stringify(error)}`);
+			throw error;
+		}
+	}
+}
+```
+
+metadata/Domain/Dto/HTTPRequest/MetadataAtributes.ts
+
+```ts
+import { ApiProperty } from '@nestjs/swagger';
+
+export class MetadataAttribute {
+	@ApiProperty({ example: 1, description: 'O nível do cliente', required: false })
+	value?: number;
+
+	@ApiProperty({ example: 'Nível', description: 'Tipo do atributo', required: false })
+	level_type?: string;
+
+	@ApiProperty({ example: 'CUSTOMER_PREMIUM', description: 'Tipo de NFT', required: false })
+	nft_type?: string;
+
+	@ApiProperty({ example: 'Benefits', description: 'Tipo do atributo', required: false })
+	benefit_type?: string;
+
+	@ApiProperty({ type: 'array', items: { type: 'object' }, description: 'Lista de benefícios', required: false })
+	benefits?: Benefit[];
+}
+
+export class Benefit {
+	@ApiProperty({ example: '10%', description: 'Desconto oferecido' })
+	discount: string;
+
+	@ApiProperty({ example: 'Frete GRATIS', description: 'Frete grátis' })
+	FreeFrete: string;
+
+	@ApiProperty({ example: 'Promoção nivel I', description: 'Promoção de nível I' })
+	promotionLevel1: string;
+}
+```
+
+
+metadata/Domain/Dto/HTTPRequest/MetadataRequestDTO.ts
+import { ApiProperty } from '@nestjs/swagger';
+import { MetadataAttribute } from '../../../Adapters/Output/Entity/MetadataEntity';
+
+export class AttributeLevel {
+	@ApiProperty({ example: 1, description: 'O nível do cliente' })
+	value: number;
+
+	@ApiProperty({ example: 'Nível', description: 'Tipo do atributo' })
+	level_type: string;
+}
+
+export class AttributeNFT {
+	@ApiProperty({ example: 'CUSTOMER_PREMIUM', description: 'Tipo de NFT' })
+	value: string;
+
+	@ApiProperty({ example: 'Nível', description: 'Tipo do atributo' })
+	nft_type: string;
+}
+
+export class Benefit {
+	@ApiProperty({ example: '10%', description: 'Desconto oferecido' })
+	discount?: string;
+
+	@ApiProperty({ example: 'Frete GRATIS', description: 'Frete grátis' })
+	FreeFrete?: string;
+
+	@ApiProperty({ example: 'Promoção nivel I', description: 'Promoção de nível I' })
+	promotionLevel1?: string;
+
+	@ApiProperty({ example: 'Descrição do benefício', description: 'Descrição do benefício' })
+	description: string;
+}
+
+export class AttributeBenefits {
+	@ApiProperty({
+		type: [Benefit],
+		description: 'Lista de benefícios',
+	})
+	value: Benefit[];
+
+	@ApiProperty({ example: 'CUSTOMER_PREMIUM', description: 'Tipo de atributo' })
+	benefit_type: string;
+}
+
+export class RegisterMetadataBody {
+	@ApiProperty({ example: 1, description: 'O ID único do token' })
+	tokenID: number;
+
+	@ApiProperty({ example: 'Renan Cesar de Franca Correa', description: 'Nome do cliente' })
+	customer: string;
+
+	@ApiProperty({
+		example: 'Você está no nível I com a insígnia Customer Premium',
+		description: 'Descrição do nível do cliente',
+	})
+	description: string;
+
+	@ApiProperty({ example: 'https://meusite.com/imagens/nft/1.png', description: 'URL da imagem do NFT' })
+	image: string;
+
+	@ApiProperty({ example: 'CUSTOMER_PREMIUM', description: 'Insígnia do cliente' })
+	insight: string;
+
+	@ApiProperty({
+		type: [AttributeLevel, AttributeNFT, AttributeBenefits],
+		description: 'Atributos adicionais do NFT',
+	})
+	attributes: {
+		level_type?: string;
+		value?: number;
+		nft_type?: string;
+		benefit_type?: string;
+		benefits?: Benefit[];
+	}[];
+}
+
+export interface RegisterMetadataDTORequest {
+	tokenID: number;
+	customer: string;
+	description: string;
+	image: string;
+	insight: string;
+	attributes: MetadataAttribute[];
+}
+```
+
+metadata/Domain/Dto/HTTPRequest/MetadataStorageDTORequest.ts
+
+```ts
+import { MetadataAttribute } from '../../../Adapters/Output/Entity/MetadataEntity';
+
+export interface SaveMetadataStorageDTORequest {
+	tokenID: number;
+	customer: string;
+	description: string;
+	image: string;
+	insight: string;
+	attributes: MetadataAttribute[];
+}
+```
+
+metadata/Domain/Dto/HTTPResponse/MetadataResponse.ts
+```ts
+export interface MetadataResponse {
+	tokenID: number;
+	customer: string;
+	description: string;
+	image: string;
+	insight: string;
+	attributes: [any];
+}
+```
+
+metadata/Domain/MetadataService.ts
+```ts
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { DependencyInjectionTokens } from '@src/helper/AppConstants';
+
+import { MetadataTokenOutputPort } from '../Port/Output/MetadataTokenOutputPort';
+import { MetadataTokenUseCase } from '../Port/Input/MetadataTokenUseCase';
+import { RegisterMetadataDTORequest } from './Dto/HTTPRequest/MetadataRequestDTO';
+
+import { MetadataEntity } from '../Adapters/Output/Entity/MetadataEntity';
+
+@Injectable()
+export class MetadataService implements MetadataTokenUseCase {
+	private readonly logger = new Logger('MetadataService');
+
+	constructor(
+		@Inject(DependencyInjectionTokens.METADATA_TOKEN_OUTPUT_PORT)
+		private metadataAdapter: MetadataTokenOutputPort,
+	) {}
+
+	async registerMetadata(registerMetadata: RegisterMetadataDTORequest): Promise<string> {
+		try {
+			return await this.metadataAdapter.registerMetadata(registerMetadata);
+		} catch (error) {
+			this.logger.error(`Error in Values MetadataService Service: ${error}`);
+			throw new Error(`Error in Values MetadataService Service: ${error}`);
+		}
+	}
+
+	async getTokenID(tokenID: number): Promise<MetadataEntity> {
+		try {
+			return await this.metadataAdapter.getTokenID(tokenID);
+		} catch (error) {
+			this.logger.error(`Error in Values MetadataService Service: ${error}`);
+			throw new Error(`Error in Values MetadataService Service: ${error}`);
+		}
+	}
+}
+```
+
+metadata/Port/Input/MetadataStorageTokenUseCase.ts
+
+```ts
+import { MetadataEntity } from '../../Adapters/Output/Entity/MetadataEntity';
+import { SaveMetadataStorageDTORequest } from '../../Domain/Dto/HTTPRequest/MetadataStorageDTORequest';
+
+export interface MetadataStorageOutputPort {
+	saveMetadata(saveMetadata: SaveMetadataStorageDTORequest): Promise<string>;
+	getTokenID(tokenID: number): Promise<MetadataEntity>;
+}
+```
+
+metadata/Port/Input/MetadataTokenUseCase.ts
+```ts
+import { MetadataEntity } from '../../Adapters/Output/Entity/MetadataEntity';
+import { RegisterMetadataDTORequest } from '../../Domain/Dto/HTTPRequest/MetadataRequestDTO';
+
+export interface MetadataTokenUseCase {
+	registerMetadata(registerMetadata: RegisterMetadataDTORequest): Promise<string>;
+	getTokenID(tokenID: number): Promise<MetadataEntity>;
+}
+```
+
+metadata/Port/Output/MetadataStorageOutputPort.ts
+
+```ts
+import { MetadataEntity } from '../../Adapters/Output/Entity/MetadataEntity';
+import { SaveMetadataStorageDTORequest } from '../../Domain/Dto/HTTPRequest/MetadataStorageDTORequest';
+
+export interface MetadataStorageOutputPort {
+	saveMetadata(registerMetadata: SaveMetadataStorageDTORequest): Promise<string>;
+	getTokenIDMetadata(tokenID: number): Promise<MetadataEntity>;
+}
+```
+
+metadata/Port/Output/MetadataTokenOutputPort.ts
+```ts
+import { MetadataEntity } from '../../Adapters/Output/Entity/MetadataEntity';
+import { RegisterMetadataDTORequest } from '../../Domain/Dto/HTTPRequest/MetadataRequestDTO';
+
+export interface MetadataTokenOutputPort {
+	registerMetadata(registerMetadata: RegisterMetadataDTORequest): Promise<string>;
+	getTokenID(tokenID: number): Promise<MetadataEntity>;
+}
+```
+
+Você entendeu todos os codigos e contexto? isso tudo esta funcioanndo perfeitamente mas eu quero modificar uma coisa mas antes quero garantir que esta tudo certo pra o seu entendimento
