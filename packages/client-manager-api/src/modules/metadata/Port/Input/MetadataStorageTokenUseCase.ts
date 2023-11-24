@@ -1,5 +1,5 @@
-import { UpdateMetadataRequestDTO, SaveMetadataStorageDTORequest } from '@metadata/Domain/Dto/HTTPRequest';
-import { MetadataResponse } from '@metadata/Domain/Dto/HTTPResponse/MetadataResponse';
+import { UpdateMetadataRequestDTO, SaveMetadataStorageDTORequest } from '@/src/modules/Metadata/Domain/Dto/HTTPRequest';
+import { MetadataResponse } from '@/src/modules/Metadata/Domain/Dto/HTTPResponse/MetadataResponse';
 
 export interface MetadataStorageOutputPort {
 	saveMetadata(saveMetadata: SaveMetadataStorageDTORequest): Promise<string>;

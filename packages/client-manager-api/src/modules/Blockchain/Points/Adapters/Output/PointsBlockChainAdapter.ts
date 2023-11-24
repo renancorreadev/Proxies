@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { config } from 'dotenv';
-import { PointsBlockchainTokenOutputPort } from '@/src/modules/blockchain/Points/Port/Output/PointsBlockchainTokenOutputPort';
+import { PointsBlockchainTokenOutputPort } from '@/src/modules/Blockchain/Points/Port/Output/PointsBlockchainTokenOutputPort';
 import { AddPointsRequestDto } from '../../Domain/Dto/HTTPRequest/AddPointsRequestDto';
 import { DependencyInjectionBlockchainConnector } from '@helper/AppConstants';
 import { PointsManagerConnector } from '@helper/blockchain/connector';

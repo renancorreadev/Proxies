@@ -25,10 +25,13 @@ import {
 } from '@nestjs/swagger';
 import { BaseUrls, DependencyInjectionTokens } from 'client-manager-api/src/helper/AppConstants';
 
-import { MetadataTokenUseCase } from '@metadata/Port/Input/MetadataTokenUseCase';
-import { RegisterMetadataRequestDTO } from '@metadata/Domain/Dto/HTTPRequest';
-import { UpdateMetadataRequestBody } from '@metadata/Domain/Dto/HTTPRequest/UpdateMetadataRequestDTO';
-import { RegisterMetadataBodySwaggerAPI, UpdateMetadataSwaggerBodyAPI } from '@metadata/Domain/Dto/Swagger';
+import { MetadataTokenUseCase } from '@/src/modules/Metadata/Port/Input/MetadataTokenUseCase';
+import { RegisterMetadataRequestDTO } from '@/src/modules/Metadata/Domain/Dto/HTTPRequest';
+import { UpdateMetadataRequestBody } from '@/src/modules/Metadata/Domain/Dto/HTTPRequest/UpdateMetadataRequestDTO';
+import {
+	RegisterMetadataBodySwaggerAPI,
+	UpdateMetadataSwaggerBodyAPI,
+} from '@/src/modules/Metadata/Domain/Dto/Swagger';
 
 @Controller({
 	path: BaseUrls.META_DATA,

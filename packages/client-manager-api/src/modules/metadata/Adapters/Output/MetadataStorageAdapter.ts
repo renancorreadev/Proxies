@@ -1,9 +1,9 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 
-import { MetadataStorageOutputPort } from '@metadata/Port/Output/MetadataStorageOutputPort';
-import { MetadataResponse } from '@metadata/Domain/Dto/HTTPResponse/MetadataResponse';
-import { RegisterMetadataRequestDTO, UpdateMetadataRequestDTO } from '@metadata/Domain/Dto/HTTPRequest';
+import { MetadataStorageOutputPort } from '@/src/modules/Metadata/Port/Output/MetadataStorageOutputPort';
+import { MetadataResponse } from '@/src/modules/Metadata/Domain/Dto/HTTPResponse/MetadataResponse';
+import { RegisterMetadataRequestDTO, UpdateMetadataRequestDTO } from '@/src/modules/Metadata/Domain/Dto/HTTPRequest';
 
 import { DependencyInjectionTokens } from '@src/helper/AppConstants';
 import { MetadataEntity } from './Entity/MetadataEntity';

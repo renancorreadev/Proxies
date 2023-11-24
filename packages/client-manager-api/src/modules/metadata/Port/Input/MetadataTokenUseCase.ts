@@ -1,5 +1,5 @@
-import { UpdateMetadataRequestDTO, RegisterMetadataRequestDTO } from '@metadata/Domain/Dto/HTTPRequest';
-import { MetadataResponse } from '@metadata/Domain/Dto/HTTPResponse/MetadataResponse';
+import { UpdateMetadataRequestDTO, RegisterMetadataRequestDTO } from '@/src/modules/Metadata/Domain/Dto/HTTPRequest';
+import { MetadataResponse } from '@/src/modules/Metadata/Domain/Dto/HTTPResponse/MetadataResponse';
 
 export interface MetadataTokenUseCase {
 	registerMetadata(registerMetadata: RegisterMetadataRequestDTO): Promise<string>;

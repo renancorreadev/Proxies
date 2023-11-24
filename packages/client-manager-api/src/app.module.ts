@@ -1,21 +1,21 @@
 import { Module } from '@nestjs/common';
-import { ClientBlockchainAdapter } from './modules/blockchain/Client/Adapters/Output/ClientBlockChainAdapter';
-import { ClientWebAdapter } from './modules/blockchain/Client/Adapters/input/ClientWebAdapter';
-import { ClientBlockchainService } from './modules/blockchain/Client/Domain/ClientBlockchainService';
+import { ClientBlockchainAdapter } from './modules/Blockchain/Client/Adapters/Output/ClientBlockChainAdapter';
+import { ClientWebAdapter } from './modules/Blockchain/Client/Adapters/input/ClientWebAdapter';
+import { ClientBlockchainService } from './modules/Blockchain/Client/Domain/ClientBlockchainService';
 
-import { PointsBlockchainService } from './modules/blockchain/Points/Domain/PointsBlockchainService';
-import { PointsBlockchainAdapter } from './modules/blockchain/Points/Adapters/Output/PointsBlockChainAdapter';
-import { PointsBlockchainWebAdapter } from './modules/blockchain/Points/Adapters/input/PointsBlockchainWebAdapter';
+import { PointsBlockchainService } from './modules/Blockchain/Points/Domain/PointsBlockchainService';
+import { PointsBlockchainAdapter } from './modules/Blockchain/Points/Adapters/Output/PointsBlockChainAdapter';
+import { PointsBlockchainWebAdapter } from './modules/Blockchain/Points/Adapters/input/PointsBlockchainWebAdapter';
 
 import { DependencyInjectionTokens } from './helper/AppConstants';
 import { BlockchainClientConnectionProvider, BlockchainPointsConnectionProvider } from '@config/Blockchain/connection';
-import { MetadataStorageAdapter } from './modules/metadata/Adapters/Output/MetadataStorageAdapter';
+import { MetadataStorageAdapter } from './modules/Metadata/Adapters/Output/MetadataStorageAdapter';
 
 import { DataSource } from 'typeorm';
-import { MetadataEntity } from './modules/metadata/Adapters/Output/Entity/MetadataEntity';
-import { MetadataWebAdapter } from './modules/metadata/Adapters/Input/MetadataWebAdapter';
-import { MetadataService } from './modules/metadata/Domain/MetadataService';
-import { MetadataAdapter } from './modules/metadata/Adapters/Output/MetadataAdapter';
+import { MetadataEntity } from './modules/Metadata/Adapters/Output/Entity/MetadataEntity';
+import { MetadataWebAdapter } from './modules/Metadata/Adapters/Input/MetadataWebAdapter';
+import { MetadataService } from './modules/Metadata/Domain/MetadataService';
+import { MetadataAdapter } from './modules/Metadata/Adapters/Output/MetadataAdapter';
 
 @Module({
 	imports: [],
