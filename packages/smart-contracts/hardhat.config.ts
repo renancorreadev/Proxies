@@ -12,7 +12,7 @@ const config: HardhatUserConfig = {
       accounts: [process.env.FFPRIVATEKEY as string],
     },
     mumbai: {
-      url: 'https://polygon-mumbai.infura.io/v3/60786ed4ffd74c75b4b0bb369cde55f7',
+      url: process.env.POLYGON_RPC_URL,
       accounts: [process.env.PRIVATE_KEY as string],
     },
   },
