@@ -10,35 +10,6 @@ import axios from 'axios';
 
 config();
 
-interface CustomerData {
-	tokenID: number;
-	customer: string;
-	description: string;
-	image: string;
-	insight: string;
-	attributes: CustomerAttributes;
-}
-
-interface CustomerAttributes {
-	level: number;
-	points: number;
-	benefits: Benefit[];
-}
-
-interface Benefit {
-	level_type?: string;
-	value?: string | number | BenefitValue[];
-	nft_type?: string;
-	benefit_type?: string;
-}
-
-interface BenefitValue {
-	discount?: string;
-	description: string;
-	freeFrete?: string;
-	promotionLevel?: string;
-}
-
 @Injectable()
 export class ClientBlockchainAdapter implements ClientBlockchainTokenOutputPort {
 	private readonly logger = new Logger('ClientBlockchainAdapter');
@@ -156,7 +127,7 @@ export class ClientBlockchainAdapter implements ClientBlockchainTokenOutputPort 
 			let config = {
 				method: 'post',
 				maxBodyLength: Infinity,
-				url: `${process.env.BASE_URL}//api/v1/metadata/new`,
+				url: `${process.env.BASE_URL}/api/v1/metadata/new`,
 				headers: {
 					accept: 'application/json',
 					'Content-Type': 'application/json',

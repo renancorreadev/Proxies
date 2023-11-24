@@ -170,7 +170,7 @@ export class MetadataWebAdapter {
 			this.logger.log(`tokenID: ${tokenID}`);
 
 			this.logger.log('---------- PROCESS END ----------');
-			// @ts-ignore
+
 			return await this.metadataService.deleteMetadata(Number(tokenID));
 		} catch (e) {
 			this.logger.error(`Error in deleteMetadata: ${e.message}`);
