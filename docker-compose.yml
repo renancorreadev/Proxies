@@ -12,7 +12,6 @@ services:
       - ./certs:/certs # Volume para os certificados SSL
     restart: always
 
-    # Configuração do PostgreSQL com SSL
     command:
       [
         "postgres",
