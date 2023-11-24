@@ -41,7 +41,7 @@ export class AttributeBenefits {
 	value: Benefit[];
 }
 
-export class RegisterMetadataBody {
+export class RegisterMetadataBodySwaggerAPI {
 	@ApiProperty({ example: 1, description: 'O ID único do token' })
 	tokenID: number;
 
@@ -101,22 +101,6 @@ export class RegisterMetadataBody {
 			},
 		},
 	})
-	attributes: {
-		points?: number;
-		level?: number;
-		benefits?: {
-			level_type?: string;
-			value?: number;
-		}[];
-	};
-}
-
-export interface RegisterMetadataDTORequest {
-	tokenID: number;
-	customer: string;
-	description: string;
-	image: string;
-	insight: string;
 	attributes: {
 		points?: number;
 		level?: number;

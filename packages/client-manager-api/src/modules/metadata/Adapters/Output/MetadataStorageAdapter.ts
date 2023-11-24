@@ -4,11 +4,14 @@ import { DependencyInjectionTokens } from '@src/helper/AppConstants';
 import { DataSource, Repository } from 'typeorm';
 
 import { MetadataEntity } from './Entity/MetadataEntity';
-import { MetadataStorageOutputPort } from '../../Port/Output/MetadataStorageOutputPort';
-import { MetadataResponse } from '../../Domain/Dto/HTTPResponse/MetadataResponse';
-import { RegisterMetadataDTORequest } from '../../Domain/Dto/HTTPRequest/MetadataRequestDTO';
+import { MetadataStorageOutputPort } from '@metadata/Port/Output/MetadataStorageOutputPort';
+import { MetadataResponse } from '@metadata/Domain/Dto/HTTPResponse/MetadataResponse';
+import { RegisterMetadataRequestDTO, UpdateMetadataRequestDTO } from '@metadata/Domain/Dto/HTTPRequest';
 
 @Injectable()
+/**
+ * Adapter for interacting with the metadata storage.
+ */
 export class MetadataStorageAdapter implements MetadataStorageOutputPort {
 	private readonly logger = new Logger('PaymentTokenToFiatAdapter');
 	private readonly metadataRepository: Repository<MetadataEntity>;
@@ -20,7 +23,14 @@ export class MetadataStorageAdapter implements MetadataStorageOutputPort {
 		this.metadataRepository = dataSource.getRepository(MetadataEntity);
 	}
 
-	async saveMetadata(saveMetadata: RegisterMetadataDTORequest): Promise<string> {
+	/**
+	 * Retrieves the metadata for a given ERC721 token ID.
+	 *
+	 * @param {number} tokenID - The ID of the token for which to retrieve the metadata.
+	 * @returns {Promise<MetadataResponse>} A promise that resolves to the metadata for the given token ID.
+	 * @throws {Error} If no metadata is found for the given token ID.
+	 */
+	async saveMetadata(saveMetadata: RegisterMetadataRequestDTO): Promise<string> {
 		try {
 			const existingMetadata = await this.metadataRepository.findOne({
 				where: { tokenID: saveMetadata.tokenID },
@@ -30,7 +40,6 @@ export class MetadataStorageAdapter implements MetadataStorageOutputPort {
 				throw new Error(`Metadata already exists for tokenID: ${saveMetadata.tokenID}`);
 			}
 
-			// Valide os campos obrigatórios aqui, por exemplo:
 			if (!saveMetadata.customer || !saveMetadata.description || !saveMetadata.image || !saveMetadata.insight) {
 				throw new Error('Missing required fields');
 			}
@@ -52,6 +61,14 @@ export class MetadataStorageAdapter implements MetadataStorageOutputPort {
 			throw new Error(`An error ocurred while saving FIAT currency: ${JSON.stringify(error)}`);
 		}
 	}
+
+	/**
+	 * Retrieves the metadata for a given token ID.
+	 *
+	 * @param {number} tokenID - The ID of the token for which to retrieve the metadata.
+	 * @returns {Promise<MetadataResponse>} A promise that resolves to the metadata for the given token ID.
+	 * @throws {Error} If no metadata is found for the given token ID.
+	 */
 	async getTokenIDMetadata(tokenID: number): Promise<MetadataResponse> {
 		try {
 			const metadata = await this.metadataRepository.findOne({
@@ -67,5 +84,49 @@ export class MetadataStorageAdapter implements MetadataStorageOutputPort {
 			this.logger.error(`Error while retrieving metadata: ${JSON.stringify(error)}`);
 			throw error;
 		}
+	}
+
+	/**
+	 * Updates the metadata for a given token ID.
+	 *
+	 * @param {UpdateMetadataRequestDTO} updateMetadataDto - The DTO containing the updated metadata.
+	 * @returns {Promise<string>} A promise that resolves to a success message when the metadata is updated.
+	 * @throws {Error} If no metadata is found for the given token ID.
+	 */
+	async updateMetadata(updateMetadataDto: UpdateMetadataRequestDTO): Promise<string> {
+		const { tokenID, ...updateData } = updateMetadataDto;
+
+		const metadata = await this.metadataRepository.findOne({ where: { tokenID } });
+		if (!metadata) {
+			throw new Error(`Metadata not found for tokenID: ${tokenID}`);
+		}
+
+		// updates
+		metadata.customer = updateData.metadataUpdate.customer;
+		metadata.description = updateData.metadataUpdate.description;
+		metadata.image = updateData.metadataUpdate.image;
+		metadata.insight = updateData.metadataUpdate.insight;
+		metadata.attributes = updateData.metadataUpdate.attributes;
+		metadata.updatedAt = new Date();
+
+		await this.metadataRepository.save(metadata);
+		return 'Metadata updated successfully';
+	}
+
+	/**
+	 * Deletes the metadata for a given token ID.
+	 *
+	 * @param {number} tokenID - The ID of the token for which to delete the metadata.
+	 * @returns {Promise<string>} A promise that resolves to a success message when the metadata is deleted.
+	 * @throws {Error} If no metadata is found for the given token ID.
+	 */
+	async deleteMetadata(tokenID: number): Promise<string> {
+		const metadata = await this.metadataRepository.findOne({ where: { tokenID } });
+		if (!metadata) {
+			throw new Error(`No metadata found for tokenID: ${tokenID}`);
+		}
+
+		await this.metadataRepository.delete(metadata.id);
+		return 'Metadata deleted successfully';
 	}
 }

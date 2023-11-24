@@ -26,6 +26,9 @@
 			"@client-manager-connector/*": [
 				"./client-manager-api/src/helper/blockchain/types/contracts/client-manager-types.ts"
 			],
+			"@metadata/*": [
+				"./client-manager-api/src/modules/metadata/*"
+			],
 		}
 	}
 }

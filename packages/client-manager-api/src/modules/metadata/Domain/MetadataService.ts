@@ -3,9 +3,10 @@ import { DependencyInjectionTokens } from '@src/helper/AppConstants';
 
 import { MetadataTokenOutputPort } from '../Port/Output/MetadataTokenOutputPort';
 import { MetadataTokenUseCase } from '../Port/Input/MetadataTokenUseCase';
-import { RegisterMetadataDTORequest } from './Dto/HTTPRequest/MetadataRequestDTO';
+import { RegisterMetadataRequestDTO } from './Dto/HTTPRequest/RegisterMetadataRequestDTO';
 
 import { MetadataResponse } from './Dto/HTTPResponse/MetadataResponse';
+import { DeleteMetadataRequestDTO, UpdateMetadataRequestDTO } from './Dto/HTTPRequest';
 
 @Injectable()
 export class MetadataService implements MetadataTokenUseCase {
@@ -16,7 +17,7 @@ export class MetadataService implements MetadataTokenUseCase {
 		private metadataAdapter: MetadataTokenOutputPort,
 	) {}
 
-	async registerMetadata(registerMetadata: RegisterMetadataDTORequest): Promise<string> {
+	async registerMetadata(registerMetadata: RegisterMetadataRequestDTO): Promise<string> {
 		try {
 			return await this.metadataAdapter.registerMetadata(registerMetadata);
 		} catch (error) {
@@ -50,6 +51,28 @@ export class MetadataService implements MetadataTokenUseCase {
 		} catch (error) {
 			this.logger.error(`Error in get Metadata MetadataService : ${error}`);
 			throw new Error(`Error in get Metadata MetadataService : ${error}`);
+		}
+	}
+
+	async updateMetadata(updateMetadataDto: UpdateMetadataRequestDTO): Promise<string> {
+		try {
+			const { tokenID, metadataUpdate } = updateMetadataDto;
+			return await this.metadataAdapter.updateMetadata({
+				tokenID,
+				metadataUpdate,
+			});
+		} catch (error) {
+			this.logger.error(`Error in updateMetadata service: ${error.message}`);
+			throw new Error(`Error in updateMetadata service: ${error.message}`);
+		}
+	}
+
+	async deleteMetadata(tokenID: number): Promise<string> {
+		try {
+			return await this.metadataAdapter.deleteMetadata(tokenID);
+		} catch (error) {
+			this.logger.error(`Error in deleteMetadata service: ${error.message}`);
+			throw new Error(`Error in deleteMetadata service: ${error.message}`);
 		}
 	}
 }

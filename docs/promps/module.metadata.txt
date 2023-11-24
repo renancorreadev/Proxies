@@ -17,7 +17,7 @@ modules
 │   │    │    │    │    ├── DTO
 │   │    │    │    │     |    ├── DTOHTTPRequest
 │   │    │    │    │     |     |       ├── MetadataAtributes.ts
-│   │    │    │    │     |     |       ├── MetadataRequestDTO.ts
+│   │    │    │    │     |     |       ├── MetadataSwaggerAPI.ts
 │   │    │    │    │     |     |       ├── MetadataStorageDTORequest.ts
 │   │    │    │    │     |    ├── HTTPResponse
 │   │    │    │    │     |    ├──MetadataResponse.ts
@@ -49,7 +49,7 @@ import {
 } from '@nestjs/swagger';
 import { BaseUrls, DependencyInjectionTokens } from 'client-manager-api/src/helper/AppConstants';
 import { MetadataTokenUseCase } from '../../Port/Input/MetadataTokenUseCase';
-import { RegisterMetadataBody, RegisterMetadataDTORequest } from '../../Domain/Dto/HTTPRequest/MetadataRequestDTO';
+import { RegisterMetadataBodySwaggerAPI, RegisterMetadataRequestDTO } from '../../Domain/Dto/HTTPRequest/MetadataSwaggerAPI';
 
 @Controller({
 	path: BaseUrls.META_DATA,
@@ -65,7 +65,7 @@ export class MetadataWebAdapter {
 	/// --------------------------------------------------------------------------------------
 	/// ------------------------      REGISTER NEW METADATA TOKEN URI JSON POST           ---------------------
 	/// --------------------------------------------------------------------------------------
-	@ApiBody({ required: true, type: RegisterMetadataBody })
+	@ApiBody({ required: true, type: RegisterMetadataBodySwaggerAPI })
 	@ApiOperation({
 		summary: 'Register a new metadata on api',
 		description: 'This route is used to register a new Client on blockchain',
@@ -80,7 +80,7 @@ export class MetadataWebAdapter {
 	@ApiNotFoundResponse({ description: 'Segment not found' })
 	@ApiInternalServerErrorResponse({ description: 'Unexpected error' })
 	@Post('/new')
-	async registerMetadata(@Body() registerMetadata: RegisterMetadataDTORequest): Promise<string> {
+	async registerMetadata(@Body() registerMetadata: RegisterMetadataRequestDTO): Promise<string> {
 		this.logger.log('----------PROCESS BEGIN ----------');
 		this.logger.log(`Running Client Blockchain Web adapter`);
 		this.logger.log(`Data: ${JSON.stringify(registerMetadata)}`);
@@ -217,7 +217,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DependencyInjectionTokens } from '@src/helper/AppConstants';
 import { MetadataTokenOutputPort } from '../../Port/Output/MetadataTokenOutputPort';
 import { MetadataStorageOutputPort } from '../../Port/Output/MetadataStorageOutputPort';
-import { RegisterMetadataDTORequest } from '../../Domain/Dto/HTTPRequest/MetadataRequestDTO';
+import { RegisterMetadataRequestDTO } from '../../Domain/Dto/HTTPRequest/MetadataSwaggerAPI';
 
 import { MetadataEntity } from './Entity/MetadataEntity';
 
@@ -230,7 +230,7 @@ export class MetadataAdapter implements MetadataTokenOutputPort {
 		private metadataStorage: MetadataStorageOutputPort,
 	) {}
 
-	async registerMetadata(registerMetadata: RegisterMetadataDTORequest): Promise<string> {
+	async registerMetadata(registerMetadata: RegisterMetadataRequestDTO): Promise<string> {
 		try {
 			await this.metadataStorage.saveMetadata(registerMetadata);
 			return 'Metadata succesfully registered';
@@ -363,7 +363,7 @@ export class Benefit {
 ```
 
 
-metadata/Domain/Dto/HTTPRequest/MetadataRequestDTO.ts
+metadata/Domain/Dto/HTTPRequest/MetadataSwaggerAPI.ts
 import { ApiProperty } from '@nestjs/swagger';
 import { MetadataAttribute } from '../../../Adapters/Output/Entity/MetadataEntity';
 
@@ -408,7 +408,7 @@ export class AttributeBenefits {
 	benefit_type: string;
 }
 
-export class RegisterMetadataBody {
+export class RegisterMetadataBodySwaggerAPI {
 	@ApiProperty({ example: 1, description: 'O ID único do token' })
 	tokenID: number;
 
@@ -440,7 +440,7 @@ export class RegisterMetadataBody {
 	}[];
 }
 
-export interface RegisterMetadataDTORequest {
+export interface RegisterMetadataRequestDTO {
 	tokenID: number;
 	customer: string;
 	description: string;
@@ -492,7 +492,7 @@ modules
 │   │    │    │    │    ├── DTO
 │   │    │    │    │     |    ├── DTOHTTPRequest
 │   │    │    │    │     |     |       ├── MetadataAtributes.ts
-│   │    │    │    │     |     |       ├── MetadataRequestDTO.ts
+│   │    │    │    │     |     |       ├── MetadataSwaggerAPI.ts
 │   │    │    │    │     |     |       ├── MetadataStorageDTORequest.ts
 │   │    │    │    │     |    ├── HTTPResponse
 │   │    │    │    │     |    ├──MetadataResponse.ts
@@ -524,7 +524,7 @@ import {
 } from '@nestjs/swagger';
 import { BaseUrls, DependencyInjectionTokens } from 'client-manager-api/src/helper/AppConstants';
 import { MetadataTokenUseCase } from '../../Port/Input/MetadataTokenUseCase';
-import { RegisterMetadataBody, RegisterMetadataDTORequest } from '../../Domain/Dto/HTTPRequest/MetadataRequestDTO';
+import { RegisterMetadataBodySwaggerAPI, RegisterMetadataRequestDTO } from '../../Domain/Dto/HTTPRequest/MetadataSwaggerAPI';
 
 @Controller({
 	path: BaseUrls.META_DATA,
@@ -540,7 +540,7 @@ export class MetadataWebAdapter {
 	/// --------------------------------------------------------------------------------------
 	/// ------------------------      REGISTER NEW METADATA TOKEN URI JSON POST           ---------------------
 	/// --------------------------------------------------------------------------------------
-	@ApiBody({ required: true, type: RegisterMetadataBody })
+	@ApiBody({ required: true, type: RegisterMetadataBodySwaggerAPI })
 	@ApiOperation({
 		summary: 'Register a new metadata on api',
 		description: 'This route is used to register a new Client on blockchain',
@@ -555,7 +555,7 @@ export class MetadataWebAdapter {
 	@ApiNotFoundResponse({ description: 'Segment not found' })
 	@ApiInternalServerErrorResponse({ description: 'Unexpected error' })
 	@Post('/new')
-	async registerMetadata(@Body() registerMetadata: RegisterMetadataDTORequest): Promise<string> {
+	async registerMetadata(@Body() registerMetadata: RegisterMetadataRequestDTO): Promise<string> {
 		this.logger.log('----------PROCESS BEGIN ----------');
 		this.logger.log(`Running Client Blockchain Web adapter`);
 		this.logger.log(`Data: ${JSON.stringify(registerMetadata)}`);
@@ -692,7 +692,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DependencyInjectionTokens } from '@src/helper/AppConstants';
 import { MetadataTokenOutputPort } from '../../Port/Output/MetadataTokenOutputPort';
 import { MetadataStorageOutputPort } from '../../Port/Output/MetadataStorageOutputPort';
-import { RegisterMetadataDTORequest } from '../../Domain/Dto/HTTPRequest/MetadataRequestDTO';
+import { RegisterMetadataRequestDTO } from '../../Domain/Dto/HTTPRequest/MetadataSwaggerAPI';
 
 import { MetadataEntity } from './Entity/MetadataEntity';
 
@@ -705,7 +705,7 @@ export class MetadataAdapter implements MetadataTokenOutputPort {
 		private metadataStorage: MetadataStorageOutputPort,
 	) {}
 
-	async registerMetadata(registerMetadata: RegisterMetadataDTORequest): Promise<string> {
+	async registerMetadata(registerMetadata: RegisterMetadataRequestDTO): Promise<string> {
 		try {
 			await this.metadataStorage.saveMetadata(registerMetadata);
 			return 'Metadata succesfully registered';
@@ -838,7 +838,7 @@ export class Benefit {
 ```
 
 
-metadata/Domain/Dto/HTTPRequest/MetadataRequestDTO.ts
+metadata/Domain/Dto/HTTPRequest/MetadataSwaggerAPI.ts
 import { ApiProperty } from '@nestjs/swagger';
 import { MetadataAttribute } from '../../../Adapters/Output/Entity/MetadataEntity';
 
@@ -883,7 +883,7 @@ export class AttributeBenefits {
 	benefit_type: string;
 }
 
-export class RegisterMetadataBody {
+export class RegisterMetadataBodySwaggerAPI {
 	@ApiProperty({ example: 1, description: 'O ID único do token' })
 	tokenID: number;
 
@@ -915,7 +915,7 @@ export class RegisterMetadataBody {
 	}[];
 }
 
-export interface RegisterMetadataDTORequest {
+export interface RegisterMetadataRequestDTO {
 	tokenID: number;
 	customer: string;
 	description: string;
@@ -959,7 +959,7 @@ import { DependencyInjectionTokens } from '@src/helper/AppConstants';
 
 import { MetadataTokenOutputPort } from '../Port/Output/MetadataTokenOutputPort';
 import { MetadataTokenUseCase } from '../Port/Input/MetadataTokenUseCase';
-import { RegisterMetadataDTORequest } from './Dto/HTTPRequest/MetadataRequestDTO';
+import { RegisterMetadataRequestDTO } from './Dto/HTTPRequest/MetadataSwaggerAPI';
 
 import { MetadataEntity } from '../Adapters/Output/Entity/MetadataEntity';
 
@@ -972,7 +972,7 @@ export class MetadataService implements MetadataTokenUseCase {
 		private metadataAdapter: MetadataTokenOutputPort,
 	) {}
 
-	async registerMetadata(registerMetadata: RegisterMetadataDTORequest): Promise<string> {
+	async registerMetadata(registerMetadata: RegisterMetadataRequestDTO): Promise<string> {
 		try {
 			return await this.metadataAdapter.registerMetadata(registerMetadata);
 		} catch (error) {
@@ -1007,10 +1007,10 @@ export interface MetadataStorageOutputPort {
 metadata/Port/Input/MetadataTokenUseCase.ts
 ```ts
 import { MetadataEntity } from '../../Adapters/Output/Entity/MetadataEntity';
-import { RegisterMetadataDTORequest } from '../../Domain/Dto/HTTPRequest/MetadataRequestDTO';
+import { RegisterMetadataRequestDTO } from '../../Domain/Dto/HTTPRequest/MetadataSwaggerAPI';
 
 export interface MetadataTokenUseCase {
-	registerMetadata(registerMetadata: RegisterMetadataDTORequest): Promise<string>;
+	registerMetadata(registerMetadata: RegisterMetadataRequestDTO): Promise<string>;
 	getTokenID(tokenID: number): Promise<MetadataEntity>;
 }
 ```
@@ -1030,10 +1030,10 @@ export interface MetadataStorageOutputPort {
 metadata/Port/Output/MetadataTokenOutputPort.ts
 ```ts
 import { MetadataEntity } from '../../Adapters/Output/Entity/MetadataEntity';
-import { RegisterMetadataDTORequest } from '../../Domain/Dto/HTTPRequest/MetadataRequestDTO';
+import { RegisterMetadataRequestDTO } from '../../Domain/Dto/HTTPRequest/MetadataSwaggerAPI';
 
 export interface MetadataTokenOutputPort {
-	registerMetadata(registerMetadata: RegisterMetadataDTORequest): Promise<string>;
+	registerMetadata(registerMetadata: RegisterMetadataRequestDTO): Promise<string>;
 	getTokenID(tokenID: number): Promise<MetadataEntity>;
 }
 ```
