@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import {IClientStorage} from "./IClientStorage.sol";
+import {ICustomerManagementStorage} from "./ICustomerManagementStorage.sol";
 
-interface IClientManager {
+interface ICustomerManagementCore {
     function isClientExists(uint256 clientId) external view returns (bool);
 
     function getClientData(
         uint256 clientId
-    ) external view returns (IClientStorage.ClientData memory);
+    ) external view returns (ICustomerManagementStorage.ClientData memory);
 }

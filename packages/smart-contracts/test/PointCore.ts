@@ -1,10 +1,10 @@
 import { expect } from "chai";
 import { ethers, upgrades } from "hardhat";
-import { ClientManager, PointCore } from "../typechain";
+import { CustomerManagementCore, PointCore } from "../typechain";
 
 describe("PointCore", function () {
   let pointCoreInstance: PointCore;
-  let clientManager: ClientManager;
+  let clientManager: CustomerManagementCore;
   let owner: any;
   let clientData: any;
 
@@ -16,13 +16,13 @@ describe("PointCore", function () {
     // @ts-ignore
     const [owner] = await ethers.getSigners();
 
-    // Deploy ClientManager
+    // Deploy CustomerManagementCore
     const ClientManagerContract = await ethers.getContractFactory(
-      "ClientManager"
+      "CustomerManagementCore"
     );
     clientManager = (await upgrades.deployProxy(ClientManagerContract, [], {
       initializer: "initialize",
-    })) as unknown as ClientManager;
+    })) as unknown as CustomerManagementCore;
 
     const proxyAddress = await clientManager.getAddress();
 

@@ -1,0 +1,37 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaVersion": 2020,
+      "sourceType": "module"
+    },
+    "extends": [
+      "standard",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:prettier/recommended"
+    ],
+    "plugins": [
+      "@typescript-eslint",
+      "import",
+      "node",
+      "promise"
+    ],
+    "env": {
+      "node": true,
+      "es6": true
+    },
+    "rules": {
+      // Personalize suas regras aqui
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": ["error"],
+      "space-before-function-paren": ["error", "never"],
+      "import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
+    },
+    "settings": {
+      "import/resolver": {
+        "node": {
+          "extensions": [".js", ".jsx", ".ts", ".tsx"]
+        }
+      }
+    }
+  }
+  

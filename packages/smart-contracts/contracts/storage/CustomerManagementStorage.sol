@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import {IClientStorage} from "../interfaces/IClientStorage.sol";
+import {ICustomerManagementStorage} from "../interfaces/ICustomerManagementStorage.sol";
 
-abstract contract ClientStorage is IClientStorage {
+abstract contract CustomerManagementStorage is ICustomerManagementStorage {
     /// @dev global variables for client Storage
     uint256 internal currentId;
 

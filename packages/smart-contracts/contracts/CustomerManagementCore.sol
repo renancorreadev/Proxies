@@ -6,15 +6,15 @@ import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Ini
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-import {ClientStorage} from "./storage/ClientStorage.sol";
-import {IClientManager} from "./interfaces/IClientManager.sol";
+import {CustomerManagementStorage} from "./storage/CustomerManagementStorage.sol";
+import {ICustomerManagementCore} from "./interfaces/ICustomerManagementCore.sol";
 
-contract ClientManager is
+contract CustomerManagementCore is
     Initializable,
     UUPSUpgradeable,
     OwnableUpgradeable,
-    ClientStorage,
-    IClientManager
+    CustomerManagementStorage,
+    ICustomerManagementCore
 {
     function initialize() external initializer {
         __ClientStorageInit();
@@ -190,6 +190,6 @@ contract ClientManager is
     }
 
     function getVersion() external pure returns (string memory) {
-        return "1.3";
+        return "1.4";
     }
 }

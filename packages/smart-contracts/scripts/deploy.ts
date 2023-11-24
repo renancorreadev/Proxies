@@ -1,17 +1,19 @@
-import { ethers, upgrades } from "hardhat";
-import { getImplementationAddress } from "@openzeppelin/upgrades-core";
-import { JsonRpcProvider } from "@ethersproject/providers";
-import fs from "fs";
+import { ethers, upgrades } from 'hardhat';
+import { getImplementationAddress } from '@openzeppelin/upgrades-core';
+import { JsonRpcProvider } from '@ethersproject/providers';
+import fs from 'fs';
+import env from 'dotenv';
 
-const provider = new JsonRpcProvider("http://192.168.15.200:5100");
+env.config();
+
+const provider = new JsonRpcProvider(process.env.JSON_RPC_URL);
 
 async function main() {
-  // Deploy the contract
-
-  const contractFactory = await ethers.getContractFactory("ClientManager");
-
+  const contractFactory = await ethers.getContractFactory(
+    process.env.CONTRACT_CLIENT_VERSION as string
+  );
   const deployContract = await upgrades.deployProxy(contractFactory, [], {
-    initializer: "initialize",
+    initializer: 'initialize',
   });
   await deployContract.waitForDeployment();
 
@@ -22,14 +24,17 @@ async function main() {
   );
 
   const data = {
-    proxyAddress: proxyAddress,
+    proxyAddress,
     implementationAddress: newImplementationAddress,
   };
 
-  console.log("Proxy address :", proxyAddress);
-  console.log("Implementation address :", newImplementationAddress);
+  console.log('Proxy address :', proxyAddress);
+  console.log('Implementation address :', newImplementationAddress);
 
-  fs.writeFileSync("deployedContracts.json", JSON.stringify(data, null, 2));
+  fs.writeFileSync(
+    '.deployed/deploys/CustomerManagementCore.json',
+    JSON.stringify(data, null, 2)
+  );
 }
 
 main().catch((error) => {

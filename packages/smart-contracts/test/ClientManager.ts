@@ -1,9 +1,9 @@
 import { expect } from "chai";
 import { ethers, upgrades } from "hardhat";
-import { ClientManager } from "../typechain";
+import { CustomerManagementCore } from "../typechain";
 
-describe("ClientManager", function () {
-  let clientManager: ClientManager;
+describe("CustomerManagementCore", function () {
+  let clientManager: CustomerManagementCore;
   let owner: any;
   let clientData: any;
 
@@ -12,12 +12,12 @@ describe("ClientManager", function () {
     const [owner] = await ethers.getSigners();
 
     const ClientManagerContract = await ethers.getContractFactory(
-      "ClientManager"
+      "CustomerManagementCore"
     );
 
     clientManager = (await upgrades.deployProxy(ClientManagerContract, [], {
       initializer: "initialize",
-    })) as unknown as ClientManager;
+    })) as unknown as CustomerManagementCore;
     return { clientManager, owner };
   }
 

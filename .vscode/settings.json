@@ -1,7 +1,10 @@
 {
   "solidity.compileUsingRemoteVersion": "v0.8.20+commit.a1b79de6",
-  "cSpell.words": [
-    "ethersproject",
-    "typechain"
-  ]
+  "cSpell.words": ["ethersproject", "typechain"],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "[typescript]": {
+    "editor.formatOnSave": true
+  },
+  "eslint.alwaysShowStatus": true
 }

@@ -14,7 +14,7 @@ blockhcain
 BLOCKCHAIN_NODE_RPC=http://192.168.15.200:5100
 CONTRACT_ADDRESS=0x0E0aa59293A715a8Bad3dB20462D1A3060E5e54a
 FILE_PATH=./output/clients.json
-ABI_PATH=../smart-contracts/artifacts/contracts/ClientManager.sol/ClientManager.json
+ABI_PATH=../smart-contracts/artifacts/contracts/CustomerManagementCore.sol/CustomerManagementCore.json
 
 
 sc 

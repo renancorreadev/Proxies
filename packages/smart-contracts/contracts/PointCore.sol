@@ -9,7 +9,7 @@ import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Ini
 import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
-import {ClientManager} from "./ClientManager.sol";
+import {CustomerManagementCore} from "./CustomerManagementCore.sol";
 import {IPointCore} from "./interfaces/IPointCore.sol";
 
 contract PointCore is
@@ -20,7 +20,7 @@ contract PointCore is
     PointStorage,
     BadgeToken
 {
-    ClientManager public clientManager;
+    CustomerManagementCore public clientManager;
 
     uint256 public pointsForPremium;
     uint256 public pointsForGold;
@@ -39,10 +39,11 @@ contract PointCore is
         string memory uri
     ) public initializer {
         __Ownable_init(msg.sender);
-        clientManager = ClientManager(_clientStorage);
+        clientManager = CustomerManagementCore(_clientStorage);
         __ERC1155_init(uri);
 
         setPointThresholds(200, 500, 1000);
+        currentTokenID = 0;
     }
 
     // ---------- SETTERS ----------

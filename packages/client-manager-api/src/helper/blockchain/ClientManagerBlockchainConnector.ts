@@ -1,8 +1,8 @@
 import { JsonRpcProvider, Wallet } from 'ethers';
-import { ClientManager, ClientManager__factory } from '@smart-contracts';
+import { CustomerManagementCore, ClientManager__factory } from '@smart-contracts';
 
 export class ClientManagerBlockchainConnector {
-	protected contract: ClientManager;
+	protected contract: CustomerManagementCore;
 	protected provider: JsonRpcProvider;
 	protected wallet: Wallet;
 

@@ -19,7 +19,7 @@ contract BadgeToken is
     uint256 public constant CUSTOMER_GOLD = 2; // 500 PONTOS
     uint256 public constant CUSTOMER_TITANIUM = 3; // 1000 PONTOS
 
-    uint256 private currentTokenID = 0;
+    uint256 public currentTokenID;
     mapping(address => uint256) private userTokenIDs;
 
     function mint(
