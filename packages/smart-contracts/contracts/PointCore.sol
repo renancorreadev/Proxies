@@ -1,16 +1,16 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import {PointStorage} from "./storage/PointStorage.sol";
-import {BadgeToken} from "./token/BadgeToken.sol";
+import {PointStorage} from './storage/PointStorage.sol';
+import {BadgeToken} from './token/BadgeToken.sol';
 
 // Open Zeppelin libraries for controlling upgradability and access.
-import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {Initializable} from '@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol';
+import {OwnableUpgradeable} from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
+import {UUPSUpgradeable} from '@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol';
 
-import {CustomerManagementCore} from "./CustomerManagementCore.sol";
-import {IPointCore} from "./interfaces/IPointCore.sol";
+import {CustomerManagementCore} from './CustomerManagementCore.sol';
+import {IPointCore} from './interfaces/IPointCore.sol';
 
 contract PointCore is
     Initializable,
@@ -20,7 +20,7 @@ contract PointCore is
     PointStorage,
     BadgeToken
 {
-    CustomerManagementCore public clientManager;
+    CustomerManagementCore public customerManagerInstance;
 
     uint256 public pointsForPremium;
     uint256 public pointsForGold;
@@ -28,18 +28,20 @@ contract PointCore is
 
     modifier validClient(uint256 clientId) {
         require(
-            clientManager.isClientExists(clientId),
-            "InvalidClientID on PointCore"
+            customerManagerInstance.isClientExists(clientId),
+            'InvalidClientID on PointCore'
         );
         _;
     }
 
     function initialize(
-        address _clientStorage,
+        address _customerManagerInstanceAddress,
         string memory uri
     ) public initializer {
         __Ownable_init(msg.sender);
-        clientManager = CustomerManagementCore(_clientStorage);
+        customerManagerInstance = CustomerManagementCore(
+            _customerManagerInstanceAddress
+        );
         __ERC1155_init(uri);
 
         setPointThresholds(200, 500, 1000);
@@ -100,7 +102,7 @@ contract PointCore is
     }
 
     function getVersion() public pure returns (string memory) {
-        return "1.0.0";
+        return '1.0.0';
     }
 
     /// ---------- INTERNAL ----------
@@ -117,11 +119,13 @@ contract PointCore is
             newLevel = CUSTOMER_PREMIUM;
         }
 
-        address clientAddress = clientManager.getClientWalletAddress(clientId);
+        address clientAddress = customerManagerInstance.getClientWalletAddress(
+            clientId
+        );
 
         if (newLevel != currentLevel) {
             burnPreviousLevelToken(clientId, clientAddress, currentLevel);
-            _mint(clientAddress, newLevel, 1, "");
+            _mint(clientAddress, newLevel, 1, '');
             emitMintEvent(clientId, newLevel);
 
             clientLevel[clientId] = newLevel;
@@ -146,7 +150,9 @@ contract PointCore is
     }
 
     function emitMintEvent(uint256 clientId, uint256 level) internal {
-        address clientAddress = clientManager.getClientWalletAddress(clientId);
+        address clientAddress = customerManagerInstance.getClientWalletAddress(
+            clientId
+        );
         if (level == CUSTOMER_TITANIUM) {
             emit CustomerTitaniumMinted(clientId, clientAddress);
         } else if (level == CUSTOMER_GOLD) {
@@ -157,7 +163,9 @@ contract PointCore is
     }
 
     function emitBurnEvent(uint256 clientId, uint256 burnedLevel) internal {
-        address clientAddress = clientManager.getClientWalletAddress(clientId);
+        address clientAddress = customerManagerInstance.getClientWalletAddress(
+            clientId
+        );
         if (burnedLevel == CUSTOMER_GOLD) {
             emit CustomerGoldBurned(clientId, clientAddress);
         } else if (burnedLevel == CUSTOMER_PREMIUM) {

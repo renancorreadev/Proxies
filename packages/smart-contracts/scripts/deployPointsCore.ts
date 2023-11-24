@@ -1,7 +1,7 @@
 import { ethers, upgrades } from 'hardhat';
 import { getImplementationAddress } from '@openzeppelin/upgrades-core';
 import { JsonRpcProvider } from '@ethersproject/providers';
-import { proxyAddress } from '../.deployed/deploys/CustomerManagementCore.json';
+import { proxyAddress as customerManagementAddress } from '../.deployed/deploys/CustomerManagementCore.json';
 import fs from 'fs';
 
 const provider = new JsonRpcProvider(process.env.JSON_RPC_URL);
@@ -12,7 +12,7 @@ async function main() {
   );
   const deployContract = await upgrades.deployProxy(
     contractFactory,
-    [proxyAddress, process.env.METADATA_PROVIDER_URL as string],
+    [customerManagementAddress, process.env.METADATA_PROVIDER_URL as string],
     {
       initializer: 'initialize',
     }
