@@ -22,6 +22,7 @@ type ClientEventProcessor struct {
 	contractAbi     abi.ABI
 	blockchainRepo  repository.BlockchainRepository
 	events          []domain.ClientData
+	lastBlock       uint64 // Adicione lastBlock como variável de membro
 }
 
 func NewClientEventProcessor(client *ethclient.Client, contractAddress common.Address, contractAbi abi.ABI, blockchainRepo repository.BlockchainRepository) *ClientEventProcessor {
@@ -30,60 +31,56 @@ func NewClientEventProcessor(client *ethclient.Client, contractAddress common.Ad
 		contractAddress: contractAddress,
 		contractAbi:     contractAbi,
 		blockchainRepo:  blockchainRepo,
+		lastBlock:       0, // Inicialize lastBlock como 0
 	}
 }
 
-/** cep = ClientEventProcessor */
 func (cep *ClientEventProcessor) PollClientRegistrationEvents(filePath string) {
-	lastBlock := uint64(0)
+	// Obtenha o bloco atual
+	lastBlock, err := cep.client.BlockNumber(context.Background())
+	if err != nil {
+		log.Printf("Error getting the latest block number: %s", err)
+		time.Sleep(10 * time.Second)
+		return
+	}
 
 	for {
-		blockNumber, err := cep.client.BlockNumber(context.Background())
-		if err != nil {
-			log.Printf("Error getting the latest block number: %s", err)
-			time.Sleep(10 * time.Second)
-			continue
-		}
-
-		if blockNumber > lastBlock {
-			cep.processNewBlocks(&lastBlock, blockNumber)
-		}
+		// Verifique os logs a partir do último bloco processado + 1
+		cep.processNewBlocks(&lastBlock)
 
 		cep.writeEventsToFile(filePath)
 		time.Sleep(10 * time.Second)
 	}
 }
 
-/** cep = ClientEventProcessor */
-func (cep *ClientEventProcessor) processNewBlocks(lastBlock *uint64, blockNumber uint64) {
-	query := ethereum.FilterQuery{
-		Addresses: []common.Address{cep.contractAddress},
+func (cep *ClientEventProcessor) processNewBlocks(lastBlock *uint64) {
+	// Consulte os logs a partir do último bloco processado + 1 até o bloco atual
+	fromBlock := *lastBlock + 1
+	toBlock, err := cep.client.BlockNumber(context.Background())
+	if err != nil {
+		log.Printf("Error getting the latest block number: %s", err)
+		return
 	}
 
-	blockRangeLimit := uint64(200)
-	for fromBlock := *lastBlock; fromBlock < blockNumber; fromBlock += blockRangeLimit {
-		toBlock := fromBlock + blockRangeLimit
-		if toBlock > blockNumber {
-			toBlock = blockNumber
-		}
+	query := ethereum.FilterQuery{
+		Addresses: []common.Address{cep.contractAddress},
+		FromBlock: new(big.Int).SetUint64(fromBlock),
+		ToBlock:   new(big.Int).SetUint64(toBlock),
+	}
 
-		query.FromBlock = new(big.Int).SetUint64(fromBlock)
-		query.ToBlock = new(big.Int).SetUint64(toBlock)
-
-		if logs, err := cep.client.FilterLogs(context.Background(), query); err == nil {
-			for _, vLog := range logs {
-				if event, err := cep.blockchainRepo.ParseEvent(vLog); err == nil {
-					cep.events = append(cep.events, event)
-					log.Printf("Evento recebido e processado: %+v", event)
-				}
+	if logs, err := cep.client.FilterLogs(context.Background(), query); err == nil {
+		for _, vLog := range logs {
+			if event, err := cep.blockchainRepo.ParseEvent(vLog); err == nil {
+				cep.events = append(cep.events, event)
+				log.Printf("Evento recebido e processado: %+v", event)
 			}
 		}
 	}
 
-	*lastBlock = blockNumber
+	*lastBlock = toBlock
 }
 
-/** cep = ClientEventProcessor */
+
 func (cep *ClientEventProcessor) writeEventsToFile(filePath string) {
 	if len(cep.events) > 0 {
 		file, err := os.Create(filePath)

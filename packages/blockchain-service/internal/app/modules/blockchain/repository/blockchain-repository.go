@@ -14,12 +14,12 @@ type BlockchainRepository interface {
 }
 
 type EthBlockchainRepository struct {
-	contractAbi abi.ABI
+	clientContractABI abi.ABI
 }
 
 func NewBlockchainRepository(contractAbi abi.ABI) *EthBlockchainRepository {
 	return &EthBlockchainRepository{
-		contractAbi: contractAbi,
+		clientContractABI: contractAbi,
 	}
 }
 
@@ -27,13 +27,13 @@ func (r *EthBlockchainRepository) ParseEvent(vLog types.Log) (domain.ClientData,
 	var event domain.ClientData
 
 	eventName := "ClientRegistered"
-	eventID := r.contractAbi.Events[eventName].ID
+	eventID := r.clientContractABI.Events[eventName].ID
 
 	if vLog.Topics[0] == eventID {
 		clientId := new(big.Int).SetBytes(vLog.Topics[1][:])
 		event.ClientId = clientId
 
-		err := r.contractAbi.UnpackIntoInterface(&event, eventName, vLog.Data)
+		err := r.clientContractABI.UnpackIntoInterface(&event, eventName, vLog.Data)
 		if err != nil {
 			return domain.ClientData{}, err
 		}
@@ -43,3 +43,7 @@ func (r *EthBlockchainRepository) ParseEvent(vLog types.Log) (domain.ClientData,
 
 	return domain.ClientData{}, errors.New("log event ID does not match")
 }
+
+
+
+
