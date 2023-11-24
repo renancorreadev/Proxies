@@ -267,7 +267,7 @@ import { SaveMetadataStorageDTORequest } from '../../Domain/Dto/HTTPRequest/Meta
 
 @Injectable()
 export class MetadataStorageAdapter implements MetadataStorageOutputPort {
-	private readonly logger = new Logger('PaymentTokenToFiatAdapter');
+	private readonly logger = new Logger('MetadataStorageAdapter');
 	private readonly metadataRepository: Repository<MetadataEntity>;
 
 	constructor(
