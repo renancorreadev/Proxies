@@ -1,7 +1,7 @@
-import { MetadataEntity } from '../../Adapters/Output/Entity/MetadataEntity';
-import { SaveMetadataStorageDTORequest } from '../../Domain/Dto/HTTPRequest/MetadataStorageDTORequest';
+import { RegisterMetadataDTORequest } from '../../Domain/Dto/HTTPRequest/MetadataRequestDTO';
+import { MetadataResponse } from '../../Domain/Dto/HTTPResponse/MetadataResponse';
 
 export interface MetadataStorageOutputPort {
-	saveMetadata(registerMetadata: SaveMetadataStorageDTORequest): Promise<string>;
-	getTokenIDMetadata(tokenID: number): Promise<MetadataEntity>;
+	saveMetadata(registerMetadata: RegisterMetadataDTORequest): Promise<string>;
+	getTokenIDMetadata(tokenID: number): Promise<MetadataResponse>;
 }

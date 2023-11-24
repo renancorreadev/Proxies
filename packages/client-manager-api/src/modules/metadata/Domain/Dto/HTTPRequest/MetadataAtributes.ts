@@ -22,8 +22,8 @@ export class Benefit {
 	discount: string;
 
 	@ApiProperty({ example: 'Frete GRATIS', description: 'Frete grátis' })
-	FreeFrete: string;
+	freeFrete: string;
 
 	@ApiProperty({ example: 'Promoção nivel I', description: 'Promoção de nível I' })
-	promotionLevel1: string;
+	promotionLevel: string;
 }

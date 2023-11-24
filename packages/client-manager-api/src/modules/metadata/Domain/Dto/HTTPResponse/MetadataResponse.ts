@@ -4,5 +4,13 @@ export interface MetadataResponse {
 	description: string;
 	image: string;
 	insight: string;
-	attributes: [any];
+	attributes: {
+		points?: number;
+		level?: number;
+		benefits?: {
+			level_type?: string;
+			nftType?: string;
+			value?: number;
+		}[];
+	};
 }

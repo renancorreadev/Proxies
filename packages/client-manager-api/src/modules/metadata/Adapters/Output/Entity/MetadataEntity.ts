@@ -22,8 +22,6 @@ export interface AttributeBenefits {
 	benefit_type: string;
 }
 
-export type MetadataAttribute = AttributeLevel | AttributeNFT | AttributeBenefits;
-
 @Entity({
 	name: 'metadata',
 })
@@ -34,7 +32,15 @@ export class MetadataEntity {
 		description: string,
 		image: string,
 		insight: string,
-		attributes: MetadataAttribute[],
+		attributes: {
+			points?: number;
+			level?: number;
+			benefits?: {
+				level_type?: string;
+				nftType?: string;
+				value?: number;
+			}[];
+		},
 	) {
 		(this.tokenID = tokenID),
 			(this.customer = customer),

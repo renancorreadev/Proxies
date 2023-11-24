@@ -4,8 +4,7 @@ import { DependencyInjectionTokens } from '@src/helper/AppConstants';
 import { MetadataTokenOutputPort } from '../../Port/Output/MetadataTokenOutputPort';
 import { MetadataStorageOutputPort } from '../../Port/Output/MetadataStorageOutputPort';
 import { RegisterMetadataDTORequest } from '../../Domain/Dto/HTTPRequest/MetadataRequestDTO';
-
-import { MetadataEntity } from './Entity/MetadataEntity';
+import { MetadataResponse } from '../../Domain/Dto/HTTPResponse/MetadataResponse';
 
 @Injectable()
 export class MetadataAdapter implements MetadataTokenOutputPort {
@@ -26,7 +25,7 @@ export class MetadataAdapter implements MetadataTokenOutputPort {
 		}
 	}
 
-	async getTokenID(tokenID: number): Promise<MetadataEntity> {
+	async getTokenID(tokenID: number): Promise<MetadataResponse> {
 		try {
 			return await this.metadataStorage.getTokenIDMetadata(tokenID);
 		} catch (error) {

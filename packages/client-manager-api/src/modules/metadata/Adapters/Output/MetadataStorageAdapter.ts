@@ -4,9 +4,9 @@ import { DependencyInjectionTokens } from '@src/helper/AppConstants';
 import { DataSource, Repository } from 'typeorm';
 
 import { MetadataEntity } from './Entity/MetadataEntity';
-
 import { MetadataStorageOutputPort } from '../../Port/Output/MetadataStorageOutputPort';
-import { SaveMetadataStorageDTORequest } from '../../Domain/Dto/HTTPRequest/MetadataStorageDTORequest';
+import { MetadataResponse } from '../../Domain/Dto/HTTPResponse/MetadataResponse';
+import { RegisterMetadataDTORequest } from '../../Domain/Dto/HTTPRequest/MetadataRequestDTO';
 
 @Injectable()
 export class MetadataStorageAdapter implements MetadataStorageOutputPort {
@@ -20,7 +20,7 @@ export class MetadataStorageAdapter implements MetadataStorageOutputPort {
 		this.metadataRepository = dataSource.getRepository(MetadataEntity);
 	}
 
-	async saveMetadata(saveMetadata: SaveMetadataStorageDTORequest): Promise<string> {
+	async saveMetadata(saveMetadata: RegisterMetadataDTORequest): Promise<string> {
 		try {
 			const existingMetadata = await this.metadataRepository.findOne({
 				where: { tokenID: saveMetadata.tokenID },
@@ -52,7 +52,7 @@ export class MetadataStorageAdapter implements MetadataStorageOutputPort {
 			throw new Error(`An error ocurred while saving FIAT currency: ${JSON.stringify(error)}`);
 		}
 	}
-	async getTokenIDMetadata(tokenID: number): Promise<MetadataEntity> {
+	async getTokenIDMetadata(tokenID: number): Promise<MetadataResponse> {
 		try {
 			const metadata = await this.metadataRepository.findOne({
 				where: { tokenID },
