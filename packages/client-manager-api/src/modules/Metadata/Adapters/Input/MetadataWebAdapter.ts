@@ -32,6 +32,7 @@ import {
 	RegisterMetadataBodySwaggerAPI,
 	UpdateMetadataSwaggerBodyAPI,
 } from '@/src/modules/Metadata/Domain/Dto/Swagger';
+import { ApplicationError, ContractError } from '@helper/APIErrors';
 
 @Controller({
 	path: BaseUrls.META_DATA,
@@ -64,7 +65,7 @@ export class MetadataWebAdapter {
 	@Post('/new')
 	async registerMetadata(@Body() registerMetadata: RegisterMetadataRequestDTO): Promise<string> {
 		this.logger.log('----------PROCESS BEGIN ----------');
-		this.logger.log(`Running Client Blockchain Web adapter`);
+		this.logger.log(`Running Metadata WebAdapter`);
 		this.logger.log(`Data: ${JSON.stringify(registerMetadata)}`);
 
 		const response = await this.metadataService.registerMetadata(registerMetadata);
@@ -89,17 +90,20 @@ export class MetadataWebAdapter {
 	@ApiForbiddenResponse({ description: 'Forbidden' })
 	@ApiNotFoundResponse({ description: 'Segment not found' })
 	@Get('/:tokenID')
-	async getTokenID(@Param('tokenID') tokenID: number) {
+	async getTokenID(@Param('tokenID') tokenIDParam: string, res: Response) {
 		try {
 			this.logger.log('---------- PROCESS BEGIN ----------');
-			this.logger.log('Running PointBlockchain web adapter');
+			this.logger.log('Running Metadata Web Adapter');
+
+			const tokenID = Number(tokenIDParam);
 			this.logger.log(`tokenID: ${tokenID}`);
 
 			return await this.metadataService.getTokenID(tokenID);
-		} catch (e) {
-			const errorMessage = e.response ? e.response.data : e.message;
-			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
-			throw new Error(`An error ocurred in read contract getClientByName on blockchain `);
+		} catch (error) {
+			if (error instanceof ApplicationError || error instanceof ContractError) {
+				throw new HttpException(error.message, error.code);
+			}
+			throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -127,7 +131,7 @@ export class MetadataWebAdapter {
 	): Promise<string> {
 		try {
 			this.logger.log('----------PROCESS BEGIN ----------');
-			this.logger.log(`Running Client Blockchain Web adapter`);
+			this.logger.log(`Running Metadata Web adapter`);
 			this.logger.log(`Data: ${JSON.stringify(updateDataDto)}`);
 
 			this.logger.log('---------- PROCESS END ----------');
@@ -162,7 +166,7 @@ export class MetadataWebAdapter {
 	async deleteMetadata(@Param('tokenID') tokenID: number): Promise<string> {
 		try {
 			this.logger.log('----------PROCESS BEGIN ----------');
-			this.logger.log(`Running Client Blockchain Web adapter`);
+			this.logger.log(`Running Metadata Web adapter`);
 			this.logger.log(`tokenID: ${tokenID}`);
 
 			this.logger.log('---------- PROCESS END ----------');

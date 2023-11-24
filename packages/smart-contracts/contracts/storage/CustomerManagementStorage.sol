@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import {ICustomerManagementStorage} from "../interfaces/ICustomerManagementStorage.sol";
+import {ICustomerManagementStorage} from '../interfaces/ICustomerManagementStorage.sol';
 
 abstract contract CustomerManagementStorage is ICustomerManagementStorage {
     /// @dev global variables for client Storage
@@ -13,6 +13,8 @@ abstract contract CustomerManagementStorage is ICustomerManagementStorage {
     mapping(uint256 => uint256[]) internal clientsByAge;
 
     mapping(address => bool) internal walletAddressExists;
+
+    mapping(address => uint256) public userTokenIDs;
 
     function __ClientStorageInit() internal {
         currentId = 0;

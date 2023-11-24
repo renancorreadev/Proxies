@@ -4,6 +4,7 @@ import { DependencyInjectionTokens } from '@src/helper/AppConstants';
 import { MetadataStorageOutputPort, MetadataTokenOutputPort } from '@/src/modules/Metadata/Port/Output';
 import { MetadataResponse } from '@/src/modules/Metadata/Domain/Dto/HTTPResponse/MetadataResponse';
 import { RegisterMetadataRequestDTO, UpdateMetadataRequestDTO } from '@/src/modules/Metadata/Domain/Dto/HTTPRequest';
+import { ContractError } from '@helper/APIErrors';
 
 @Injectable()
 export class MetadataAdapter implements MetadataTokenOutputPort {
@@ -42,8 +43,8 @@ export class MetadataAdapter implements MetadataTokenOutputPort {
 		try {
 			return await this.metadataStorage.getTokenIDMetadata(tokenID);
 		} catch (error) {
-			this.logger.error(`Error while trying to registerMetadata: ${error}`);
-			throw new Error(`Error while trying to registerMetadata: ${error}`);
+			this.logger.error(`Error in get tokenID Service: ${JSON.stringify(error)}`);
+			throw error;
 		}
 	}
 

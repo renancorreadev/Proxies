@@ -2,12 +2,12 @@
 pragma solidity ^0.8.20;
 
 // Open Zeppelin libraries for controlling upgradability and access.
-import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import {Initializable} from '@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol';
+import {UUPSUpgradeable} from '@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol';
+import {OwnableUpgradeable} from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 
-import {CustomerManagementStorage} from "./storage/CustomerManagementStorage.sol";
-import {ICustomerManagementCore} from "./interfaces/ICustomerManagementCore.sol";
+import {CustomerManagementStorage} from './storage/CustomerManagementStorage.sol';
+import {ICustomerManagementCore} from './interfaces/ICustomerManagementCore.sol';
 
 contract CustomerManagementCore is
     Initializable,
@@ -43,6 +43,9 @@ contract CustomerManagementCore is
         checkClientExistsByWallet(newClient.WalletAddress);
 
         uint256 nextId = getNextId();
+
+        /// @dev use clientID (nextID) to register tokenID
+        userTokenIDs[newClient.WalletAddress] = nextId;
 
         AddressLocal memory newAddressLocal = AddressLocal({
             City: newClient.addressLocal.City,
@@ -101,6 +104,10 @@ contract CustomerManagementCore is
         return clientData;
     }
 
+    function getUserTokenID(address userAddress) public view returns (uint256) {
+        return userTokenIDs[userAddress];
+    }
+
     function getClientsByAddress(
         address clientAddress
     ) public view returns (ClientData memory) {
@@ -153,13 +160,13 @@ contract CustomerManagementCore is
         ClientDataInput calldata newClient
     ) private pure {
         if (bytes(newClient.name).length == 0) {
-            revert EmptyParameter("It cannot be empty name");
+            revert EmptyParameter('It cannot be empty name');
         }
         if (newClient.age == 0) {
-            revert EmptyParameter("It cannot be empty age");
+            revert EmptyParameter('It cannot be empty age');
         }
         if (newClient.WalletAddress == address(0)) {
-            revert EmptyParameter("It cannot be empty WalletAddress");
+            revert EmptyParameter('It cannot be empty WalletAddress');
         }
         checkAddressLocal(newClient.addressLocal);
     }
@@ -168,16 +175,16 @@ contract CustomerManagementCore is
         AddressLocal calldata addressLocal
     ) private pure {
         if (bytes(addressLocal.City).length == 0) {
-            revert EmptyParameter("It cannot be empty City");
+            revert EmptyParameter('It cannot be empty City');
         }
         if (bytes(addressLocal.Street).length == 0) {
-            revert EmptyParameter("It cannot be empty Street");
+            revert EmptyParameter('It cannot be empty Street');
         }
         if (addressLocal.PostalCode == 0) {
-            revert EmptyParameter("It cannot be empty PostalCode");
+            revert EmptyParameter('It cannot be empty PostalCode');
         }
         if (addressLocal.HouseNumber == 0) {
-            revert EmptyParameter("It cannot be empty HouseNumber");
+            revert EmptyParameter('It cannot be empty HouseNumber');
         }
     }
 
@@ -190,6 +197,6 @@ contract CustomerManagementCore is
     }
 
     function getVersion() external pure returns (string memory) {
-        return "1.4";
+        return '1.4';
     }
 }

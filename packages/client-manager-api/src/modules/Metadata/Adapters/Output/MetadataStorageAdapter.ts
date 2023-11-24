@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 
 import { MetadataStorageOutputPort } from '@/src/modules/Metadata/Port/Output/MetadataStorageOutputPort';
@@ -7,13 +7,14 @@ import { RegisterMetadataRequestDTO, UpdateMetadataRequestDTO } from '@/src/modu
 
 import { DependencyInjectionTokens } from '@src/helper/AppConstants';
 import { MetadataEntity } from './Entity/MetadataEntity';
+import { ApplicationError, ContractError } from '@helper/APIErrors';
 
 @Injectable()
 /**
  * Adapter for interacting with the metadata storage.
  */
 export class MetadataStorageAdapter implements MetadataStorageOutputPort {
-	private readonly logger = new Logger('PaymentTokenToFiatAdapter');
+	private readonly logger = new Logger('MetadataStorageAdapter');
 	private readonly metadataRepository: Repository<MetadataEntity>;
 
 	constructor(
@@ -71,18 +72,24 @@ export class MetadataStorageAdapter implements MetadataStorageOutputPort {
 	 */
 	async getTokenIDMetadata(tokenID: number): Promise<MetadataResponse> {
 		try {
-			const metadata = await this.metadataRepository.findOne({
-				where: { tokenID },
-			});
+			const metadata = await this.metadataRepository.findOne({ where: { tokenID } });
 
 			if (!metadata) {
-				throw new Error(`Metadata not found for tokenID: ${tokenID}`);
+				throw new ApplicationError({
+					code: HttpStatus.NOT_FOUND,
+					message: `Metadata not found for tokenID: ${tokenID}`,
+				});
 			}
 
 			return metadata;
 		} catch (error) {
-			this.logger.error(`Error while retrieving metadata: ${JSON.stringify(error)}`);
-			throw error;
+			this.logger.error(`Error when getting the token metadata: ${JSON.stringify(error)}`);
+
+			if (error instanceof ApplicationError || error instanceof ContractError) {
+				throw error;
+			}
+			// Para outros tipos de erro, envolva em um ContractError
+			throw new ContractError(`An error occurred while getting the token metadata: ${error.message}`);
 		}
 	}
 

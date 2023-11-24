@@ -7,6 +7,7 @@ import { RegisterMetadataRequestDTO } from './Dto/HTTPRequest/RegisterMetadataRe
 
 import { MetadataResponse } from './Dto/HTTPResponse/MetadataResponse';
 import { DeleteMetadataRequestDTO, UpdateMetadataRequestDTO } from './Dto/HTTPRequest';
+import { ApplicationError, ContractError } from '@helper/APIErrors';
 
 @Injectable()
 export class MetadataService implements MetadataTokenUseCase {
@@ -21,14 +22,21 @@ export class MetadataService implements MetadataTokenUseCase {
 		try {
 			return await this.metadataAdapter.registerMetadata(registerMetadata);
 		} catch (error) {
-			this.logger.error(`Error in Values MetadataService Service: ${error}`);
-			throw new Error(`Error in Values MetadataService Service: ${error}`);
+			this.logger.error(`Error in Authorization Service: ${JSON.stringify(error)}`);
+			if (error instanceof ApplicationError || error instanceof ContractError) {
+				throw error;
+			}
+			throw new Error(`An error ocurred while creating authorization token: ${error.message}`);
 		}
 	}
 
 	async getTokenID(tokenID: number): Promise<MetadataResponse> {
 		try {
 			const metadata = await this.metadataAdapter.getTokenID(tokenID);
+
+			if (!metadata) {
+				throw new Error(`Metadata not found for tokenID: ${tokenID}`);
+			}
 
 			const mappedMetadata: MetadataResponse = {
 				tokenID: metadata.tokenID,
@@ -49,8 +57,11 @@ export class MetadataService implements MetadataTokenUseCase {
 
 			return mappedMetadata;
 		} catch (error) {
-			this.logger.error(`Error in get Metadata MetadataService : ${error}`);
-			throw new Error(`Error in get Metadata MetadataService : ${error}`);
+			this.logger.error(`Error in get tokenID Service: ${JSON.stringify(error)}`);
+			if (error instanceof ApplicationError || error instanceof ContractError) {
+				throw error;
+			}
+			throw new Error(`An error ocurred while getting metadata token in service: ${error.message}`);
 		}
 	}
 

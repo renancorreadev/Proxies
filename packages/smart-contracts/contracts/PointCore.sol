@@ -8,6 +8,7 @@ import {BadgeToken} from './token/BadgeToken.sol';
 import {Initializable} from '@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol';
 import {OwnableUpgradeable} from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 import {UUPSUpgradeable} from '@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol';
+import {Strings} from '@openzeppelin/contracts/utils/Strings.sol';
 
 import {CustomerManagementCore} from './CustomerManagementCore.sol';
 import {IPointCore} from './interfaces/IPointCore.sol';
@@ -25,6 +26,8 @@ contract PointCore is
     uint256 public pointsForPremium;
     uint256 public pointsForGold;
     uint256 public pointsForTitanium;
+
+    string public metadataURI;
 
     modifier validClient(uint256 clientId) {
         require(
@@ -45,7 +48,7 @@ contract PointCore is
         __ERC1155_init(uri);
 
         setPointThresholds(200, 500, 1000);
-        currentTokenID = 0;
+        metadataURI = uri;
     }
 
     // ---------- SETTERS ----------
@@ -103,6 +106,18 @@ contract PointCore is
 
     function getVersion() public pure returns (string memory) {
         return '1.0.0';
+    }
+
+    function tokenURI(uint256 tokenId) public view returns (string memory) {
+        require(!_exists(tokenId), 'Token ID does not exist');
+        return
+            string(
+                abi.encodePacked(metadataURI, '/', Strings.toString(tokenId))
+            );
+    }
+
+    function _exists(uint256 tokenId) internal view returns (bool) {
+        return customerManagerInstance.getUserTokenID(msg.sender) == tokenId;
     }
 
     /// ---------- INTERNAL ----------
