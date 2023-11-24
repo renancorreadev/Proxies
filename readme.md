@@ -1,7 +1,7 @@
-# Client Manager on Blockchain Technology 
+# Customer Rewards Application on Private Blockchain Technology 
 
 ## Visão Geral
-O projeto **Client Manager on Blockchain Technology** é uma solução desenvolvida para otimizar a gestão de clientes com pontuação e emitir tokens de benefícios no ecossistema de blockchain privada. Utilizando **Hyperledger Besu** para gerenciar rede privada com o protocolo QBFT em conjunto com uma aplicação back-end equipada com os recursos das capacidades avançadas do [NestJS](https://nestjs.com/), um framework para aplicações server-side em Node.js, este projeto possui todos pacotes (packages) incorporados na arquitetura hexagonal com inversão de dependências, garantindo um design modular e de fácil manutenção.
+O projeto **Customer Rewards Application** é uma solução desenvolvida para otimizar a gestão de clientes com pontuação e emitir tokens de benefícios no ecossistema de blockchain privada. Utilizando **Hyperledger Besu** para gerenciar rede privada com o protocolo QBFT em conjunto com uma aplicação back-end equipada com os recursos das capacidades avançadas do [NestJS](https://nestjs.com/), um framework para aplicações server-side em Node.js, este projeto possui todos pacotes (packages) incorporados na arquitetura hexagonal com inversão de dependências, garantindo um design modular e de fácil manutenção.
 
 ## Interação com a Blockchain
 A essência do projeto reside na sua capacidade de interagir com a blockchain, permitindo o monitoramento e reação a eventos específicos da rede. Isso é alcançado por meio de um micro-serviço dedicado, que escuta eventos na blockchain e executa ações correspondentes, como a atualização de registros de clientes, emissão de pontos para determinado cliente, emissão de tokens baseado em NFTs para representar uma `insignia` ou nível `level` em que um cliente se encontra dependendo do saldo de pontos que esse indivíduo possui.
@@ -58,15 +58,16 @@ Uma característica central do sistema é o gerenciamento de metadados de NFTs, 
 O sistema também conta com uma API HTTP integrada para gerenciar os metadados dos NFTs. Isso inclui endpoints para consulta e atualização dos metadados baseados nos tokenIDs. A integração com o Swagger oferece uma documentação clara e interativa da API, facilitando o uso e a integração por parte dos desenvolvedores.
 
 > Abaixo você pode ver uma breve ilustração: 
-![Swagger](docs/images/swagger-v1.png)
+![Swagger](docs/images/swagger.png)
 
 ## Tecnologias 
 
 <div style="text-align: center;">
-  <img src="https://raw.githubusercontent.com/hyperledger/firefly/main/images/hyperledger_firefly_logo.png" alt="Hyperledger" style="width: 200px; height: 90px; margin: 1rem;">
-  <img src="https://github.com/remojansen/logo.ts/raw/master/ts.png" alt="TypeScript" style="width: 120px; height: 90px; margin: 1rem;">
+  <img src="https://repository-images.githubusercontent.com/206414745/a9aaa900-127c-11ea-8095-5139ce4e7a09" alt="Hyperledger" style="width: 200px; height: 90px; margin: 1rem;">
+  <img src="https://github.com/remojansen/logo.ts/raw/master/ts.png" alt="TypeScript" style="width: 100px; height: 90px; margin: 1rem;">
   <img src="https://github.com/rfyiamcool/golang_logo/raw/master/png/golang_58.png" alt="Go" style="width: 180px; height: 90px; margin: 1rem;">
   <img src="https://nestjs.com/img/logo-small.svg" alt="NestJS" style="width: 150px; height: 90px; margin: 1rem;">
+  <img src="https://raw.githubusercontent.com/github/explore/ba9de12f88fd08825c51928e91f1678cb5c94b26/topics/solidity/solidity.png" alt="Solidity" style="width: 150px; height: 90px; margin: 1rem;">
 </div>
 
 - NestJs
