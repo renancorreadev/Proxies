@@ -1,8 +1,8 @@
-import { expect } from "chai";
-import { ethers, upgrades } from "hardhat";
-import { CustomerManagementCore, PointCore } from "../typechain";
+import { expect } from 'chai';
+import { ethers, upgrades } from 'hardhat';
+import { CustomerManagementCore, PointCore } from '../typechain';
 
-describe("PointCore Events Ommiteds", function () {
+describe('PointCore Events Ommiteds', function () {
   let pointCoreInstance: PointCore;
   let clientManager: CustomerManagementCore;
   let owner: any;
@@ -14,21 +14,21 @@ describe("PointCore Events Ommiteds", function () {
 
     // Deploy CustomerManagementCore
     const ClientManagerContract = await ethers.getContractFactory(
-      "CustomerManagementCore"
+      'CustomerManagementCore'
     );
     clientManager = (await upgrades.deployProxy(ClientManagerContract, [], {
-      initializer: "initialize",
+      initializer: 'initialize',
     })) as unknown as CustomerManagementCore;
 
     const proxyAddress = await clientManager.getAddress();
 
-    const pointContract = await ethers.getContractFactory("PointCore");
+    const pointContract = await ethers.getContractFactory('PointCore');
 
     pointCoreInstance = (await upgrades.deployProxy(
       pointContract,
-      [proxyAddress, "http://localhost:3000/api/metadata/"],
+      [proxyAddress, 'http://localhost:3000/api/metadata/'],
       {
-        initializer: "initialize",
+        initializer: 'initialize',
       }
     )) as unknown as PointCore;
 
@@ -47,13 +47,13 @@ describe("PointCore Events Ommiteds", function () {
     clientManager = newClientManager;
 
     clientData = {
-      name: "John Doe",
+      name: 'John Doe',
       age: 30,
       WalletAddress: owner.address,
       paymentStatus: 0,
       addressLocal: {
-        City: "Test City",
-        Street: "Test Street",
+        City: 'Test City',
+        Street: 'Test Street',
         PostalCode: 12345,
         HouseNumber: 67,
       },
@@ -62,7 +62,7 @@ describe("PointCore Events Ommiteds", function () {
     await clientManager.registerClient(clientData);
   });
 
-  it("Should emit event PointsAdded  on blockchain", async function () {
+  it('Should emit event PointsAdded  on blockchain', async function () {
     const clientId = 1;
     const points = 100;
 
@@ -85,7 +85,7 @@ describe("PointCore Events Ommiteds", function () {
     expect(pointsAddedLogs[0].args.points).to.equal(points);
   });
 
-  it("Should emit event CustomerTitaniumMinted  correctly (when 1000 points are added) ", async function () {
+  it('Should emit event CustomerTitaniumMinted  correctly (when 1000 points are added) ', async function () {
     const clientId = 1; // O clientId aqui é um number
 
     // Mint a Titanium NFT for the client
@@ -98,7 +98,7 @@ describe("PointCore Events Ommiteds", function () {
 
     // Verifique se algum evento foi encontrado
     if (titaniumMintedEvents.length === 0) {
-      throw new Error("No CustomerTitaniumMinted events found");
+      throw new Error('No CustomerTitaniumMinted events found');
     }
 
     // Encontre o evento específico para o clientId
@@ -112,12 +112,12 @@ describe("PointCore Events Ommiteds", function () {
       expect(event.args.clientAddress).to.equal(owner.address);
     } else {
       throw new Error(
-        "Expected CustomerTitaniumMinted event for clientId not found"
+        'Expected CustomerTitaniumMinted event for clientId not found'
       );
     }
   });
 
-  it("Should emit event CustomerGoldMinted correctly (when 500 points are added) ", async function () {
+  it('Should emit event CustomerGoldMinted correctly (when 500 points are added) ', async function () {
     const clientId = 1;
 
     // Mint a CUSTOMER_GOLD NFT for the client
@@ -129,7 +129,7 @@ describe("PointCore Events Ommiteds", function () {
     );
 
     if (customerMintedEvents.length === 0) {
-      throw new Error("No CustomerGoldMinted events found");
+      throw new Error('No CustomerGoldMinted events found');
     }
 
     // Find event with matching clientId
@@ -142,12 +142,12 @@ describe("PointCore Events Ommiteds", function () {
       expect(event.args.clientAddress).to.equal(owner.address);
     } else {
       throw new Error(
-        "Expected CustomerGoldMinted event for clientId not found"
+        'Expected CustomerGoldMinted event for clientId not found'
       );
     }
   });
 
-  it("Should emit event CustomerPremiumMinted correctly (when 200 points are added) ", async function () {
+  it('Should emit event CustomerPremiumMinted correctly (when 200 points are added) ', async function () {
     const clientId = 1;
 
     // Mint a CUSTOMER_GOLD NFT for the client
@@ -159,7 +159,7 @@ describe("PointCore Events Ommiteds", function () {
     );
 
     if (customerMintedEvents.length === 0) {
-      throw new Error("No CustomerPremiumMinted events found");
+      throw new Error('No CustomerPremiumMinted events found');
     }
 
     // Find event with matching clientId
@@ -172,12 +172,12 @@ describe("PointCore Events Ommiteds", function () {
       expect(event.args.clientAddress).to.equal(owner.address);
     } else {
       throw new Error(
-        "Expected CustomerPremiumMinted event for clientId not found"
+        'Expected CustomerPremiumMinted event for clientId not found'
       );
     }
   });
 
-  it("Should emit event ClientPointsChanged  on client level update", async function () {
+  it('Should emit event ClientPointsChanged  on client level update', async function () {
     const clientId = 1;
     const points = 300; // Points added
 
@@ -196,11 +196,11 @@ describe("PointCore Events Ommiteds", function () {
       // verify that the points changed
       expect(BigInt(event.args.newPoints)).to.equal(BigInt(points));
     } else {
-      throw new Error("Expected ClientPointsChanged event not found");
+      throw new Error('Expected ClientPointsChanged event not found');
     }
   });
 
-  it("Should emit CustomerGoldBurned event when a gold level client is upgraded", async function () {
+  it('Should emit CustomerGoldBurned event when a gold level client is upgraded', async function () {
     const clientId = 1;
 
     const pointsForGold = await pointCoreInstance.pointsForGold();
@@ -235,11 +235,11 @@ describe("PointCore Events Ommiteds", function () {
       expect(BigInt(event.args.clientId)).to.equal(BigInt(clientId));
       expect(event.args.clientAddress).to.equal(owner.address);
     } else {
-      throw new Error("Expected CustomerGoldBurned event not found");
+      throw new Error('Expected CustomerGoldBurned event not found');
     }
   });
 
-  it("Should emit CustomerPremiumBurned event when a premium level client is upgraded", async function () {
+  it('Should emit CustomerPremiumBurned event when a premium level client is upgraded', async function () {
     const clientId = 1;
 
     const pointsForPremium = await pointCoreInstance.pointsForPremium();
@@ -274,7 +274,7 @@ describe("PointCore Events Ommiteds", function () {
       expect(BigInt(event.args.clientId)).to.equal(BigInt(clientId));
       expect(event.args.clientAddress).to.equal(owner.address);
     } else {
-      throw new Error("Expected CustomerPremiumBurned event not found");
+      throw new Error('Expected CustomerPremiumBurned event not found');
     }
   });
 });

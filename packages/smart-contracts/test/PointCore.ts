@@ -1,16 +1,16 @@
-import { expect } from "chai";
-import { ethers, upgrades } from "hardhat";
-import { CustomerManagementCore, PointCore } from "../typechain";
+import { expect } from 'chai';
+import { ethers, upgrades } from 'hardhat';
+import { CustomerManagementCore, PointCore } from '../typechain';
 
-describe("PointCore", function () {
+describe('PointCore', function () {
   let pointCoreInstance: PointCore;
   let clientManager: CustomerManagementCore;
   let owner: any;
   let clientData: any;
 
-  let CUSTOMER_TITANIUM_NFT_ID = 3;
-  let CUSTOMER_GOLD_NFT_ID = 2;
-  let CUSTOMER_PREMIUM_NFT_ID = 1;
+  const CUSTOMER_TITANIUM_NFT_ID = 3;
+  const CUSTOMER_GOLD_NFT_ID = 2;
+  const CUSTOMER_PREMIUM_NFT_ID = 1;
 
   async function deployPointContractProxy() {
     // @ts-ignore
@@ -18,21 +18,21 @@ describe("PointCore", function () {
 
     // Deploy CustomerManagementCore
     const ClientManagerContract = await ethers.getContractFactory(
-      "CustomerManagementCore"
+      'CustomerManagementCore'
     );
     clientManager = (await upgrades.deployProxy(ClientManagerContract, [], {
-      initializer: "initialize",
+      initializer: 'initialize',
     })) as unknown as CustomerManagementCore;
 
     const proxyAddress = await clientManager.getAddress();
 
-    const pointContract = await ethers.getContractFactory("PointCore");
+    const pointContract = await ethers.getContractFactory('PointCore');
 
     pointCoreInstance = (await upgrades.deployProxy(
       pointContract,
-      [proxyAddress, "http://localhost:3000/api/metadata/"],
+      [proxyAddress, process.env.METADATA_PROVIDER_URL],
       {
-        initializer: "initialize",
+        initializer: 'initialize',
       }
     )) as unknown as PointCore;
 
@@ -51,13 +51,13 @@ describe("PointCore", function () {
     clientManager = newClientManager;
 
     clientData = {
-      name: "John Doe",
+      name: 'John Doe',
       age: 30,
       WalletAddress: owner.address,
       paymentStatus: 0,
       addressLocal: {
-        City: "Test City",
-        Street: "Test Street",
+        City: 'Test City',
+        Street: 'Test Street',
         PostalCode: 12345,
         HouseNumber: 67,
       },
@@ -66,7 +66,7 @@ describe("PointCore", function () {
     await clientManager.registerClient(clientData);
   });
 
-  it("Should register points to client by id", async function () {
+  it('Should register points to client by id', async function () {
     await pointCoreInstance.addPoints(1, 100);
 
     const points = await pointCoreInstance.getClientPoints(1);
@@ -74,17 +74,17 @@ describe("PointCore", function () {
     expect(points).to.equal(100);
   });
 
-  it("Should revert when trying to add points to a non-existent client", async function () {
+  it('Should revert when trying to add points to a non-existent client', async function () {
     // Suponha que o cliente com ID 999 não existe
     const nonExistentClientId = 999;
     const pointsToAdd = 100;
 
     await expect(
       pointCoreInstance.addPoints(nonExistentClientId, pointsToAdd)
-    ).to.be.revertedWith("InvalidClientID on PointCore");
+    ).to.be.revertedWith('InvalidClientID on PointCore');
   });
 
-  it("Should reset points when reaching the maximum level", async function () {
+  it('Should reset points when reaching the maximum level', async function () {
     // Add 1000 points to the client (max point)
     await pointCoreInstance.addPoints(1, 1000);
 
@@ -93,7 +93,7 @@ describe("PointCore", function () {
     expect(pointsAfterMaxLevel).to.equal(0);
   });
 
-  it("Should burn the previous level NFT when advancing to a new level", async function () {
+  it('Should burn the previous level NFT when advancing to a new level', async function () {
     // Primeiro, adicione pontos suficientes para alcançar o nível Premium
     await pointCoreInstance.addPoints(1, 200);
 
@@ -115,7 +115,7 @@ describe("PointCore", function () {
     expect(newLevelNftBalance).to.equal(1);
   });
 
-  it("Should mint a new NFT when reaching a new level", async function () {
+  it('Should mint a new NFT when reaching a new level', async function () {
     // Suponha que 200 pontos sejam suficientes para o nível Premium
     await pointCoreInstance.addPoints(1, 200);
 
@@ -124,7 +124,7 @@ describe("PointCore", function () {
     expect(nftBalance).to.equal(1);
   });
 
-  it("Should allow changing point and test NFT thresholds for each level", async function () {
+  it('Should allow changing point and test NFT thresholds for each level', async function () {
     // Alterar os limiares de pontos
     await pointCoreInstance.setPointThresholds(300, 600, 1200);
 
@@ -134,7 +134,7 @@ describe("PointCore", function () {
     expect(nftBalance).to.equal(1);
   });
 
-  it("Should correctly remove points from a client", async function () {
+  it('Should correctly remove points from a client', async function () {
     // Adicionar e depois remover pontos
     await pointCoreInstance.addPoints(1, 200);
     await pointCoreInstance.removePoints(1, 100);
@@ -144,7 +144,7 @@ describe("PointCore", function () {
     expect(currentPoints).to.equal(100);
   });
 
-  it("Should burn the max level NFT when points are reset", async function () {
+  it('Should burn the max level NFT when points are reset', async function () {
     // Add 1000 points to the client to reach the max level
     await pointCoreInstance.addPoints(1, 1000);
 
@@ -155,7 +155,7 @@ describe("PointCore", function () {
     expect(Number(nftBalance.toString())).to.equal(0);
   });
 
-  it("Should return the balances of NFT", async function () {
+  it('Should return the balances of NFT', async function () {
     // Add 1000 points to the client to reach the max level
     await pointCoreInstance.addPoints(1, 1000);
 
@@ -164,30 +164,30 @@ describe("PointCore", function () {
     expect(Number(nftBalance.toString())).to.equal(1);
   });
 
-  it("Should return the balances of Batch NFTs from 4 clients", async function () {
+  it('Should return the balances of Batch NFTs from 4 clients', async function () {
     const clientOneToRegister = {
       ...clientData,
-      name: "Joana Doe",
+      name: 'Joana Doe',
       age: 11,
-      WalletAddress: "0x1234567890123456789012345678901234567890",
+      WalletAddress: '0x1234567890123456789012345678901234567890',
     };
     const clientTwoToRegister = {
       ...clientData,
-      name: "Kalice Doe",
+      name: 'Kalice Doe',
       age: 12,
-      WalletAddress: "0x1234567890123456789012345678901234567891",
+      WalletAddress: '0x1234567890123456789012345678901234567891',
     };
     const clientThreeToRegister = {
       ...clientData,
-      name: "Luisa Doe",
+      name: 'Luisa Doe',
       age: 13,
-      WalletAddress: "0x1234567890123456789012345678901234567892",
+      WalletAddress: '0x1234567890123456789012345678901234567892',
     };
     const clientFourToRegister = {
       ...clientData,
-      name: "Maria Doe",
+      name: 'Maria Doe',
       age: 14,
-      WalletAddress: "0x1234567890123456789012345678901234567893",
+      WalletAddress: '0x1234567890123456789012345678901234567893',
     };
 
     /// @dev register 4 clients with different age

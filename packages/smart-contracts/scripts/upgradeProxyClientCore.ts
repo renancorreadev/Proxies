@@ -3,9 +3,6 @@ import { JsonRpcProvider } from '@ethersproject/providers';
 import { getImplementationAddress } from '@openzeppelin/upgrades-core';
 import { proxyAddress } from '../.deployed/deploys/CustomerManagementCore.json';
 import fs from 'fs';
-import env from 'dotenv';
-
-env.config();
 
 const provider = new JsonRpcProvider(process.env.JSON_RPC_URL as string);
 

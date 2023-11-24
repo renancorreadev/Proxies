@@ -2,9 +2,6 @@ import { ethers, upgrades } from 'hardhat';
 import { getImplementationAddress } from '@openzeppelin/upgrades-core';
 import { JsonRpcProvider } from '@ethersproject/providers';
 import fs from 'fs';
-import env from 'dotenv';
-
-env.config();
 
 const provider = new JsonRpcProvider(process.env.JSON_RPC_URL);
 

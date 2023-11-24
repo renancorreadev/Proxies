@@ -3,9 +3,6 @@ import { JsonRpcProvider } from '@ethersproject/providers';
 import { proxyAddress } from '../.deployed/deploys/PointCore.json';
 import { getImplementationAddress } from '@openzeppelin/upgrades-core';
 import fs from 'fs';
-import env from 'dotenv';
-
-env.config();
 
 const provider = new JsonRpcProvider(process.env.JSON_RPC_URL as string);
 
