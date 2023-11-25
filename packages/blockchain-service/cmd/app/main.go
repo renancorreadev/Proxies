@@ -9,8 +9,9 @@ import (
 func main() {
     log.Println("Starting block monitor...")
 
-    // Inicializar o processador de eventos de registro de cliente
-    _, err := config.InitializeClientEventProcessor()
+    // Inicializar o processador de eventos
+    
+    _, err := config.InitializeClientPointsChangedProcessor()
     if err != nil {
         log.Fatalf("Erro ao inicializar o processador de eventos Client: %v", err)
     }

@@ -126,6 +126,8 @@ contract PointCore is
         uint256 currentLevel = clientLevel[clientId];
         uint256 newLevel = 0;
 
+        clientLevel[clientId] = newLevel;
+
         if (currentPoints >= pointsForTitanium) {
             newLevel = CUSTOMER_TITANIUM;
         } else if (currentPoints >= pointsForGold) {
@@ -143,14 +145,13 @@ contract PointCore is
             _mint(clientAddress, newLevel, 1, '');
             emitMintEvent(clientId, newLevel);
 
-            clientLevel[clientId] = newLevel;
-            emit ClientPointsChanged(clientId, clientPoints[clientId]);
-
             if (newLevel == CUSTOMER_TITANIUM) {
                 clientPoints[clientId] = 0;
                 emit ClientPointsReset(clientId);
             }
         }
+
+        emit ClientPointsChanged(clientId, clientPoints[clientId]);
     }
 
     function burnPreviousLevelToken(

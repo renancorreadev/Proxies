@@ -3,6 +3,6 @@ package domain
 import "math/big"
 
 type ClientPointsChangedEvent struct {
-	ClientID   *big.Int
-	NewPoints  *big.Int
+	ClientId  *big.Int
+	NewPoints *big.Int
 }

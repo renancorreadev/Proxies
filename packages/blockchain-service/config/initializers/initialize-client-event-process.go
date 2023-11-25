@@ -15,7 +15,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-type ContractABI struct {
+type ClientManagementContractABI struct {
     ABI json.RawMessage `json:"abi"`
 }
 
@@ -36,7 +36,7 @@ func InitializeClientEventProcessor() (*usecase.ClientEventProcessor, error) {
         return nil, err
     }
 
-    var contractABI ContractABI
+    var contractABI ClientManagementContractABI
     if err := json.Unmarshal(abiFile, &contractABI); err != nil {
         return nil, err
     }
@@ -54,7 +54,6 @@ func InitializeClientEventProcessor() (*usecase.ClientEventProcessor, error) {
         return nil, err
     }
 
-    // Configurar o repositório e o caso de uso para ClientEventProcessor
     blockchainRepo := repository.NewCRBlockchainRepository(parsedABI)
     eventProcessor := usecase.NewClientEventProcessor(client, contractAddress, parsedABI, blockchainRepo)
 

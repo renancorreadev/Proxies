@@ -101,6 +101,6 @@ func (cep *ClientEventProcessor) writeEventsToFile(filePath string) {
 			log.Printf("Error writing events to file: %s", err)
 		}
 
-		cep.events = []domain.ClientData{} // Clear events list
+		cep.events = []domain.ClientData{} 
 	}
 }
