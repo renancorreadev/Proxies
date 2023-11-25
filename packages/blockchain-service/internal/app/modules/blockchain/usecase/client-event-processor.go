@@ -20,18 +20,22 @@ type ClientEventProcessor struct {
 	client          *ethclient.Client
 	contractAddress common.Address
 	contractAbi     abi.ABI
-	blockchainRepo  repository.BlockchainRepository
+	blockchainRepo  repository.ClientRegisteredBlockchainRepository
 	events          []domain.ClientData
-	lastBlock       uint64 // Adicione lastBlock como variável de membro
+	lastBlock       uint64 
 }
 
-func NewClientEventProcessor(client *ethclient.Client, contractAddress common.Address, contractAbi abi.ABI, blockchainRepo repository.BlockchainRepository) *ClientEventProcessor {
+func NewClientEventProcessor(
+	client *ethclient.Client, 
+	contractAddress common.Address, 
+	contractAbi abi.ABI, 
+	blockchainRepo repository.ClientRegisteredBlockchainRepository) *ClientEventProcessor {
 	return &ClientEventProcessor{
 		client:          client,
 		contractAddress: contractAddress,
 		contractAbi:     contractAbi,
 		blockchainRepo:  blockchainRepo,
-		lastBlock:       0, // Inicialize lastBlock como 0
+		lastBlock:       0, 
 	}
 }
 
@@ -70,13 +74,15 @@ func (cep *ClientEventProcessor) processNewBlocks(lastBlock *uint64) {
 
 	if logs, err := cep.client.FilterLogs(context.Background(), query); err == nil {
 		for _, vLog := range logs {
-			if event, err := cep.blockchainRepo.ParseEvent(vLog); err == nil {
+				event, err := cep.blockchainRepo.ClientRegisteredEventListener(vLog)
+				if err != nil {
+						log.Printf("Erro ao processar evento: %v", err)
+						continue
+				}
 				cep.events = append(cep.events, event)
 				log.Printf("Evento recebido e processado: %+v", event)
-			}
 		}
 	}
-
 	*lastBlock = toBlock
 }
 

@@ -55,7 +55,7 @@ func InitializeClientEventProcessor() (*usecase.ClientEventProcessor, error) {
     }
 
     // Configurar o repositório e o caso de uso para ClientEventProcessor
-    blockchainRepo := repository.NewBlockchainRepository(parsedABI)
+    blockchainRepo := repository.NewCRBlockchainRepository(parsedABI)
     eventProcessor := usecase.NewClientEventProcessor(client, contractAddress, parsedABI, blockchainRepo)
 
     go eventProcessor.PollClientRegistrationEvents(filePath)
