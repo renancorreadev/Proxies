@@ -81,10 +81,13 @@ curl -X 'PATCH' \
 
 Eu quero que você atualize esse endpoint de acordo com algumas verificacoes relacionado ao newPoints recuperado pelo evento e comparando com os pointsForPremium, pointsForGold  e pointsForTitanium veja abaixo como deve ser cada verificacao para atualizar o body:
 
+OBS: Perceba que todas possibilidades da montagem do json possuem "tokenID": {esse valor vai manter} e
+"customer": {esse valor vai manter} esses campos você não deve alterar, deve manter o mesmo que ja existe.
+
  1) se newPoints for menor que pointsForPremium
 ```json
 {
-    "tokenID": 1,
+    "tokenID": {esse valor vai manter},
     "customer": {esse valor vai manter},
     "description": "Voce ainda não alcançou nenhuma insignia e nenhum nivel",
     "image": "https://meusite.com/imagens/nft/1.png",
@@ -108,12 +111,12 @@ Eu quero que você atualize esse endpoint de acordo com algumas verificacoes rel
   }
 ```
 
- 2 - Se newPoints for maior que pointsForPremium e menor que pointsForGold
+ 2 - Se newPoints for maior ou igual que pointsForPremium e menor que pointsForGold
 
 ```json
 {
-    "tokenID": 1,
-    "customer": "Renan Cesar de Franca Correa",
+    "tokenID": {esse valor vai manter},
+    "customer": {esse valor vai manter},
     "description": "Voce está no nivel I com a insignia Customer Premium",
     "image": "https://meusite.com/imagens/nft/1.png",
     "insight": "CUSTOMER_PREMIUM",
@@ -138,7 +141,7 @@ Eu quero que você atualize esse endpoint de acordo com algumas verificacoes rel
             "description": "Frete GRATIS para todo o Brasil"
           },
           {
-            "promotionLevel1": "Promoção nivel I",
+            "promotionLevel": "Promoção nivel I",
             "description": "Com esse benefício voce tem acesso ao nivel 1 do catalogo de promoção"
           }
         ]
@@ -146,4 +149,104 @@ Eu quero que você atualize esse endpoint de acordo com algumas verificacoes rel
     ]
   }
  ```
+3 - Se newPoints for maior que pointsForGold e menor que pointsForTitanium
+
+```json
+{
+    "tokenID": {esse valor vai manter},
+    "customer": {esse valor vai manter},
+    "description": "Voce está no nivel I com a insignia Customer Premium",
+    "image": "https://meusite.com/imagens/nft/1.png",
+    "insight": "CUSTOMER_PREMIUM",
+    "attributes": [
+      {
+        "level_type": "Nível",
+        "value": 2
+      },
+      {
+        "nft_type": "NFT",
+        "value": "CUSTOMER_GOLD"
+      },
+      {
+        "benefit_type": "Benefits",
+        "value": [
+          {
+            "discount": "35%",
+            "description": "Desconto de 35%"
+          },
+          {
+            "FreeFrete": "Frete GRATIS",
+            "description": "Frete GRATIS para todo o Brasil"
+          },
+          {
+            "promotionLevel": "Promoção nivel II",
+            "description": "Com esse benefício voce tem acesso ao nivel 2 do catalogo de promoção"
+          },
+          {
+            "doublePoints": "Pontuação em dobro",
+            "description": "Pontuação em dobro a cada vez que você compra na loja para chegar no próximo nivel mais rapido."
+          }
+        ]
+      }
+    ]
+  }
+```
+
+
+4 - Se newPoints for maior que pointsForTitanium
+
+```json
+{
+    "tokenID": {esse valor vai manter},
+    "customer": {esse valor vai manter},
+    "description": "Voce está no nivel III com a insignia Customer Titanium",
+    "image": "https://meusite.com/imagens/nft/1.png",
+    "insight": "CUSTOMER_TITANIUM",
+    "attributes": [
+      {
+        "level_type": "Nível",
+        "value": 3
+      },
+      {
+        "nft_type": "NFT",
+        "value": "CUSTOMER_TITANIUM"
+      },
+      {
+        "benefit_type": "Benefits",
+        "value": [
+          {
+            "discount": "50%",
+            "description": "Desconto de 50%"
+          },
+          {
+            "FreeFrete": "Frete GRATIS",
+            "description": "Frete GRATIS para todo o Brasil"
+          },
+          {
+            "promotionLevel": "Promoção nivel III",
+            "description": "Com esse benefício voce tem acesso ao nivel 3 do catalogo de promoção"
+          },
+          {
+            "doublePoints": "Pontuação em Triplo",
+            "description": "Pontuação em dobro a cada vez que você compra na loja para chegar no próximo nivel mais rapido."
+          },
+          {
+            "gifts": "Presente para o cliente",
+            "description": "Diversos produtos e serviços de brinde para o cliente que recebeu o NFT do nível 3"
+          },
+          {
+            "priority": "Prioridade para o cliente",
+            "description": "Prioridade para o cliente em atendimentos, recursos, trocas, pedidos e vendas"
+          },
+          {
+            "birthdays" : "Ofertas imperdiveis para Aniversariantes",
+            "description": "É seu aniversário? Com esse benefício voce tem acesso a ofertas imperdiveis para Aniversariantes"
+          }
+        ]
+      }
+    ]
+  }
+
+```
+
 ````
