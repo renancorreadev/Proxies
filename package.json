@@ -8,7 +8,7 @@
     "packages/*"
   ],
   "scripts": {
-    "start:dev": "lerna run --parallel --stream dev --scope client-manager-api --scope client-manager-ui --scope blockchain-service",
+    "start:dev": "lerna run --parallel --stream dev --scope client-manager-api --scope blockchain-service",
     "dev": "lerna run --parallel --stream dev --scope client-manager-api --scope client-manager-ui",
     "sc": "lerna run --scope smart-contracts compile",
     "bs": "lerna run --scope blockchain-service --stream dev",
