@@ -38,24 +38,24 @@ export class MetadataService implements MetadataTokenUseCase {
 				throw new Error(`Metadata not found for tokenID: ${tokenID}`);
 			}
 
-			const mappedMetadata: MetadataResponse = {
-				tokenID: metadata.tokenID,
-				customer: metadata.customer,
-				description: metadata.description,
-				image: metadata.image,
-				insight: metadata.insight,
-				attributes: {
-					level: metadata.attributes.level,
-					points: metadata.attributes.points,
-					benefits: metadata.attributes.benefits.map((benefit) => ({
-						level_type: benefit.level_type,
-						nftType: benefit.nftType,
-						value: benefit.value,
-					})),
-				},
-			};
+			// const mappedMetadata: MetadataResponse = {
+			// 	tokenID: metadata.tokenID,
+			// 	customer: metadata.customer,
+			// 	description: metadata.description,
+			// 	image: metadata.image,
+			// 	insight: metadata.insight,
+			// 	attributes: {
+			// 		level: metadata.attributes.level,
+			// 		points: metadata.attributes.points,
+			// 		benefits: metadata.attributes.benefits.map((benefit) => ({
+			// 			level_type: benefit.level_type,
+			// 			nftType: benefit.nftType,
+			// 			value: benefit.value,
+			// 		})),
+			// 	},
+			// };
 
-			return mappedMetadata;
+			return metadata;
 		} catch (error) {
 			this.logger.error(`Error in get tokenID Service: ${JSON.stringify(error)}`);
 			if (error instanceof ApplicationError || error instanceof ContractError) {

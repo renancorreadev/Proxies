@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 	"math/big"
-	"service/internal/app/modules/blockchain/domain"
+	domain "service/internal/app/modules/blockchain/domain"
 
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi"
@@ -27,7 +27,7 @@ func NewCPCBlockchainRepository(client *ethclient.Client, contractAbi abi.ABI, c
     }
 }
 
-func (r *EthBlockchainRepository) SubscribeToClientPointsChangedEvent(ctx context.Context) {
+func (r *EthBlockchainRepository) SubscribeToClientPointsChangedEvent(ctx context.Context, updater domain.MetadataUpdaterURI) {
     query := ethereum.FilterQuery{
         Addresses: []common.Address{r.pointCoreContractAddress},
     }
@@ -43,12 +43,20 @@ func (r *EthBlockchainRepository) SubscribeToClientPointsChangedEvent(ctx contex
             select {
             case err := <-sub.Err():
                 log.Fatalf("Subscription error: %v", err)
+
             case vLog := <-logs:
                 event, err := r.processLog(vLog)
                 if err != nil || event == nil {
                     continue // Ignora logs irrelevantes ou erros
                 }
                 log.Printf("Event received - ClientID: %s, NewPoints: %s", event.ClientId.String(), event.NewPoints.String())
+
+                // Atualiza os metadados do NFT com base nos pontos do cliente e nos limiares
+                err = updater.UpdateMetadata(ctx, event.ClientId.String(), event.NewPoints)
+                if err != nil {
+                    log.Printf("Erro ao atualizar metadata: %v", err)
+                    continue
+                }
             }
         }
     }()

@@ -1,15 +1,6 @@
-Ok, você agora tem a informação que precisamos. Esse projeto é um micro-servico de event-listener na blockchain, até esse momento ele escuta os eventos do evento ClientRegistered do contrato inteligente e escreve em um json.
+Ok, você agora tem a informação que precisamos. Esse projeto é um micro-servico de event-listener na blockchain, até esse momento ele escuta os eventos disparados com nome de ClientPointsChanged, esse evento é emitido toda vez que o usuario adiciona pontos para um clientID no contrato inteligente.
 
 Eu preciso implementar um novo case:
-
-- Criar mais um eventListener mantendo a mesma lógica porem para outro evento do contrato inteligente chamado 'ClientPointsChanged'
-  segue abaixo o event:
-
-```solidity
-  event ClientPointsChanged(uint256 indexed clientId, uint256 newPoints);
-```
-
-Ele precisa escutar os eventos da mesma forma que ja escuta no evento ja implementado ClientRegistered.
 
 Eu tenho um servidor api que gerencia a metadados dos NFTs gerados.
 
@@ -27,6 +18,57 @@ no contrato inteligente, temos 3 funcoes publicas
 ```
 
 Primeiramente você precisara executar um get invocando um readContract nessa funcao desse contrato inteligente e recuperar o valor de pointsForPremium, pointsForGold e pointsForTitanium. Esses 3 items são a definicao de quantos pontos o usuario (cliente) tem que possuir para ganhar um NFT de cada tipo CUSTOMER_PREMIUM, CUSTOMER_GOLD E CUSTOMER_TITANIUM.
+
+- esse recurso ja esta implementado e pode ter obter o limiar de cada NFT:
+
+```go
+package config
+
+import (
+	"fmt"
+	"log"
+	"os"
+	smartContract "service/internal/app/modules/blockchain/usecase"
+)
+
+// InitializeSmartContract inicializa o contrato Ethereum e retorna uma instância dele.
+func InitializeSmartContract() (*smartContract.PointCoreEthereumSC, error) {
+	rpcEndpoint := os.Getenv("BLOCKCHAIN_NODE_RPC")
+	contractAddress := os.Getenv("POINT_CORE_CONTRACT_ADDRESS")
+
+	pointCoreScInstance, err := smartContract.NewPointCoreEthereumSC(rpcEndpoint, contractAddress)
+	if err != nil {
+		return nil, fmt.Errorf("falha ao criar instância do contrato Ethereum: %v", err)
+	}
+
+
+	/// @dev Getters
+	customerGoldThreshold, err := pointCoreScInstance.GetCustomerGoldThreshold()
+	if err != nil {
+		return nil, fmt.Errorf("falha ao obter o valor do Limiar de Ouro do Cliente: %v", err)
+	}
+
+	pointsForPremiumThreshold, err := pointCoreScInstance.GetPointsForPremiumThreshold()
+	if err != nil {
+		return nil, fmt.Errorf("falha ao obter o valor do Limiar de Pró-Preço: %v", err)
+	}
+
+	pointsForTitaniumThreshold, err := pointCoreScInstance.GetPointsForTitaniumThreshold()
+	if err != nil {
+		return nil, fmt.Errorf("falha ao obter o valor do Limiar de Titânio: %v", err)
+	}
+
+	log.Printf("Limiar de Ouro do Cliente: %v", customerGoldThreshold)
+	log.Printf("Limiar de Pró-Preço: %v", pointsForPremiumThreshold)
+	log.Printf("Limiar de Titânio: %v", pointsForTitaniumThreshold)
+
+	return pointCoreScInstance, nil
+}
+
+```
+
+- Como pode ver customerGoldThreshold, pointsForPremiumThreshold e pointsForTitaniumThreshold retorna a quantidade de pontos que o usuario precisa ter para ganhar um NFT (essa funcionalidade ja esta implementada no contrato inteligente, o nft e mintado sozinho), porem a metadata estamos servindo offchain na nossa api abaixo:
+- http://127.0.0.1:3001/api/v1/metadata/{tokenID}
 
 tendo os valores dos 3 items pointsForPremium, pointsForGold e pointsForTitanium. voce ira atualizar o endpoint abaixo que é um patch para atualizar a metadata do tokenID desse usuario pelo ID. o curl de modelo para solicitacao é esse: lembrando que o /update/1 {numero} é o tokenID que é o clientId recuperado do evento
 
@@ -79,7 +121,7 @@ curl -X 'PATCH' \
 }'
 ```
 
-Eu quero que você atualize esse endpoint de acordo com algumas verificacoes relacionado ao newPoints recuperado pelo evento e comparando com os pointsForPremium, pointsForGold  e pointsForTitanium veja abaixo como deve ser cada verificacao para atualizar o body:
+Eu quero que você implemente mais um novo módulo pensando na arquitetura hexagonal ja implementada que atualize esse endpoint de acordo com algumas verificacoes relacionado ao newPoints recuperado pelo evento e comparando com os pointsForPremium, pointsForGold  e pointsForTitanium veja abaixo como deve ser cada verificacao para atualizar o body:
 
 OBS: Perceba que todas possibilidades da montagem do json possuem "tokenID": {esse valor vai manter} e
 "customer": {esse valor vai manter} esses campos você não deve alterar, deve manter o mesmo que ja existe.
@@ -247,6 +289,39 @@ OBS: Perceba que todas possibilidades da montagem do json possuem "tokenID": {es
     ]
   }
 
+````
+
+- Observe que:
+
+voce precisa realizar essa ação nesse arquivo:
+
+```go
+func (r *EthBlockchainRepository) SubscribeToClientPointsChangedEvent(ctx context.Context) {
+    query := ethereum.FilterQuery{
+        Addresses: []common.Address{r.pointCoreContractAddress},
+    }
+
+    logs := make(chan types.Log)
+    sub, err := r.ethereumClient.SubscribeFilterLogs(ctx, query, logs)
+    if err != nil {
+        log.Fatalf("Failed to subscribe to logs: %v", err)
+    }
+
+    go func() {
+        for {
+            select {
+            case err := <-sub.Err():
+                log.Fatalf("Subscription error: %v", err)
+            case vLog := <-logs:
+                event, err := r.processLog(vLog)
+                if err != nil || event == nil {
+                    continue // Ignora logs irrelevantes ou erros
+                }
+                log.Printf("Event received - ClientID: %s, NewPoints: %s", event.ClientId.String(), event.NewPoints.String())
+            }
+        }
+    }()
+}
 ```
 
-````
+se haver event.ClientId e event.NewPoints realize essa mudanca Patch

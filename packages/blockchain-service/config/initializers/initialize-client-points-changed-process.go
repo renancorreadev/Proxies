@@ -6,19 +6,22 @@ import (
 	"encoding/json"
 	"log"
 	"os"
-	"service/internal/app/modules/blockchain/repository"
-	"service/internal/app/modules/blockchain/usecase"
+	blockchainRepository "service/internal/app/modules/blockchain/repository"
+	blockchainUseCase "service/internal/app/modules/blockchain/usecase"
+	metadataRepository "service/internal/app/modules/metadata/repository"
+	metadataUseCase "service/internal/app/modules/metadata/usecase"
 
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/joho/godotenv"
 )
 
-func InitializeClientPointsChangedProcessor() (*usecase.ClientPointsChangedEventProcessor, error) {
-		if err := godotenv.Load(); err != nil {
-			log.Println("No .env file found")
-		}
-    ctx := context.Background()
+
+func InitializeClientPointsChangedProcessor() (*blockchainUseCase.ClientPointsChangedEventProcessor, error) {
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found")
+	}
+	ctx := context.Background()
 
     // Carregar configurações das variáveis de ambiente
     rpcEndpoint := os.Getenv("BLOCKCHAIN_NODE_WS")
@@ -45,12 +48,21 @@ func InitializeClientPointsChangedProcessor() (*usecase.ClientPointsChangedEvent
         log.Fatalf("Failed to parse contract ABI: %v", err)
         return nil, err
     }
+    blockchainRepo := blockchainRepository.NewCPCBlockchainRepository(client, contractABI, contractAddressHex)
 
-    // Configurar o repositório e o caso de uso
-    blockchainRepo := repository.NewCPCBlockchainRepository(client, contractABI, contractAddressHex)
-    eventProcessor := usecase.NewClientPointsChangedEventProcessor(blockchainRepo)
+    // Criar instância do repositório de metadados
+    pointCoreSC, err := blockchainUseCase.NewPointCoreEthereumSC(rpcEndpoint, contractAddressHex)
+    if err != nil {
+        log.Fatalf("Failed to create Point Core Smart Contract instance: %v", err)
+        return nil, err
+    }
+    metadataRepo := metadataRepository.NewPointCoreSmartContractRepository(pointCoreSC)
 
-    // Iniciar a escuta de eventos
+    // Criar o atualizador de metadados
+    metadataUpdater := metadataUseCase.NewMetadataUpdaterURI(metadataRepo)
+
+    // Criar e iniciar o processador de eventos
+    eventProcessor := blockchainUseCase.NewClientPointsChangedEventProcessor(blockchainRepo, metadataUpdater)
     go eventProcessor.StartEventListening(ctx)
 
     return eventProcessor, nil
