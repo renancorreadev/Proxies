@@ -2,10 +2,8 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	config "service/config/initializers"
-	smartContract "service/internal/app/modules/blockchain/usecase"
 )
 
 func main() {
@@ -16,11 +14,25 @@ func main() {
     if err != nil {
         log.Fatalf("Erro ao inicializar o processador de eventos Client: %v", err)
     }
-    pointsToGoldThreshold, err :=smartContract.GetCustomerGoldThreshold()
-    if err != nil {
-        log.Fatalf("Erro ao recuperar o valor CUSTOMERGOLD: %v", err)
-    }
-    fmt.Println(pointsToGoldThreshold.String())
+
+
+    pointCoreScInstance, errContract := config.InitializeSmartContract()
+	if errContract != nil {
+		log.Fatalf("Erro ao inicializar o contrato Ethereum: %v", errContract)
+	}
+
+	// Chamar as funções e verificar os erros individualmente
+	if _, err := pointCoreScInstance.GetCustomerGoldThreshold(); err != nil {
+		log.Fatalf("Erro na GetCustomerGoldThreshold: %v", err)
+	}
+
+	if _, err := pointCoreScInstance.GetPointsForPremiumThreshold(); err != nil {
+		log.Fatalf("Erro na GetPointsForPremiumThreshold: %v", err)
+	}
+
+	if _, err := pointCoreScInstance.GetPointsForTitaniumThreshold(); err != nil {
+		log.Fatalf("Erro na GetPointsForTitaniumThreshold: %v", err)
+	}
 
     <-context.Background().Done()
 }
