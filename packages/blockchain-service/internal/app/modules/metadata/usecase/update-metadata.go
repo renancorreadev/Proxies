@@ -2,7 +2,9 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 	"math/big"
+	initialize "service/config/utils"
 	"service/internal/app/modules/metadata/domain"
 	"service/internal/app/modules/metadata/repository"
 )
@@ -21,14 +23,27 @@ func (updater *MetadataUpdaterURI) UpdateMetadata(ctx context.Context, clientID 
 			return err
 	}
 
-	metadata := determineMetadata(clientID, newPoints.Int64(), thresholds) // Converta *big.Int para int64, se necessário
+	metadata, err := determineMetadata(clientID, newPoints.Int64(), thresholds) 
+	if err != nil {
+			return err 
+	}
+
 	return updater.Repo.UpdateMetadata(ctx, clientID, metadata)
 }
 
-func determineMetadata(clientID string, newPoints int64, thresholds domain.Thresholds) domain.Metadata {
+
+func determineMetadata(clientID string, newPoints int64, thresholds domain.Thresholds) (domain.Metadata, error) {
+	clientIDBigInt := new(big.Int)
+	clientIDBigInt.SetString(clientID, 10) // Converte clientID de string para *big.Int
+
+  clientName, err := initialize.InitializeCustomerSC(clientIDBigInt)
+    if err != nil {
+        return domain.Metadata{}, fmt.Errorf("erro ao obter nome do cliente: %s", err)
+    }
+
 	metadata := domain.Metadata{
 			TokenID:  clientID,
-			Customer: "Nome do Cliente", // Este valor deve ser obtido de forma dinâmica
+			Customer: clientName,
 			Image:    "https://meusite.com/imagens/nft/1.png",
 	}
 
@@ -88,5 +103,5 @@ func determineMetadata(clientID string, newPoints int64, thresholds domain.Thres
 			}
 	}
 
-	return metadata
+	return metadata, nil
 }

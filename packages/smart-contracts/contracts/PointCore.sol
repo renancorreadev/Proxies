@@ -145,10 +145,10 @@ contract PointCore is
             _mint(clientAddress, newLevel, 1, '');
             emitMintEvent(clientId, newLevel);
 
-            if (newLevel == CUSTOMER_TITANIUM) {
-                clientPoints[clientId] = 0;
-                emit ClientPointsReset(clientId);
-            }
+            // if (newLevel == CUSTOMER_TITANIUM) {
+            //     clientPoints[clientId] = 0;
+            //     emit ClientPointsReset(clientId);
+            // }
         }
 
         emit ClientPointsChanged(clientId, clientPoints[clientId]);

@@ -34,7 +34,7 @@ import { GetUniqueNFTResponse } from '../../Domain/Dto/HTTPResponse/GetUniqueNFT
 @Controller({
 	path: BaseUrls.POINTS_BLOCKCHAIN,
 })
-@ApiTags('Blockchain Points')
+@ApiTags('Blockchain Points Management Endpoints')
 export class PointsBlockchainWebAdapter {
 	private readonly logger = new Logger('PointsBlockchainWebAdapter');
 	constructor(

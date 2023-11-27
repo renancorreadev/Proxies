@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+
 	blockchainRepository "service/internal/app/modules/blockchain/repository"
 	blockchainUseCase "service/internal/app/modules/blockchain/usecase"
 	metadataRepository "service/internal/app/modules/metadata/repository"
@@ -67,3 +68,5 @@ func InitializeClientPointsChangedProcessor() (*blockchainUseCase.ClientPointsCh
 
     return eventProcessor, nil
 }
+
+

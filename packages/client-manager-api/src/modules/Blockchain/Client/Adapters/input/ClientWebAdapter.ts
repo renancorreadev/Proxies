@@ -19,7 +19,7 @@ import { GetClientResponse } from '../../Domain/Dto/HTTPResponse/GetClientRespon
 @Controller({
 	path: BaseUrls.CLIENT_BLOCKCHAIN,
 })
-@ApiTags('Blockchain Client')
+@ApiTags('Blockchain Customer Endpoints')
 export class ClientWebAdapter {
 	private readonly logger = new Logger('ClientWebAdapter');
 	constructor(

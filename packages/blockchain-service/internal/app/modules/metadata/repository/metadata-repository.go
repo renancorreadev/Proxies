@@ -16,6 +16,10 @@ type BlockchainRepository interface {
     UpdateMetadata(ctx context.Context, clientID string, metadata domain.Metadata) error
 }
 
+type CustomerNameGetter interface {
+	GetCustomerName(ctx context.Context, clientID string) (string, error)
+}
+
 type PointCoreSmartContractRepository struct {
 	// Instância do contrato Ethereum PointCore
 	PointCoreScInstance *usecase.PointCoreEthereumSC 

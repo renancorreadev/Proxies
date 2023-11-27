@@ -24,9 +24,9 @@ async function bootstrap() {
 	app.setGlobalPrefix(BaseUrls.API_BASE_URL);
 
 	const config = new DocumentBuilder()
-		.setTitle('CustomerManagementCore Api')
+		.setTitle('Customer Rewards Api')
 		.setDescription(
-			'O ClientManagerAPI , é uma plataforma digital de serviços que facilita a sua gestão de clientes pela tecnologia de Blockchain, com a tecnologia de blockchain todos dados são imutaveis e transparentes. ',
+			'O Customer Rewards, é uma plataforma digital de serviços que facilita a sua gestão de clientes pela tecnologia de Blockchain, com a tecnologia de blockchain todos dados são imutaveis e transparentes. ',
 		)
 		.setVersion('1.0.0')
 		.build();

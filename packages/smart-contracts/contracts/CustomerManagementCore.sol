@@ -126,6 +126,12 @@ contract CustomerManagementCore is
         return clientData;
     }
 
+    function getClientName(
+        uint256 clientId
+    ) public view clientNotExists(clientId) returns (string memory) {
+        return clientMappingStorage[clientId].name;
+    }
+
     function getNextId() private returns (uint256) {
         return ++currentId;
     }
