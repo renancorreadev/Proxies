@@ -8,6 +8,7 @@
     "packages/*"
   ],
   "scripts": {
+    "init-infra": "./init.sh",
     "start:dev": "lerna run --parallel --stream dev --scope client-manager-api --scope blockchain-service",
     "dev": "lerna run --parallel --stream dev --scope client-manager-api --scope client-manager-ui",
     "sc": "lerna run --scope smart-contracts compile",
