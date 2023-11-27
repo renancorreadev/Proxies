@@ -37,6 +37,7 @@ services:
     ports:
       - 8545:8545
       - 30303:30303
+      - 6174:6174
     networks:
       besu-network:
         ipv4_address: 172.16.239.30
@@ -73,6 +74,7 @@ services:
     ports:
       - 8546:8546
       - 30304:30304
+      - 6175:6175
     depends_on:
       - node1
     networks:
@@ -111,6 +113,7 @@ services:
     ports:
       - 8547:8547
       - 30305:30305
+      - 6176:6176
     depends_on:
       - node1
     networks:
@@ -149,6 +152,7 @@ services:
     ports:
       - 8548:8548
       - 30306:30306
+      - 61747:61747
     depends_on:
       - node1
     networks:
