@@ -98,7 +98,7 @@ export class ClientBlockchainAdapter implements ClientBlockchainTokenOutputPort 
 		const { clientID } = await this.getClientByName(name);
 
 		try {
-			let data = JSON.stringify({
+			const data = JSON.stringify({
 				tokenID: clientID,
 				customer: name,
 				description: 'Voce ainda não alcançou nenhuma insignia e nenhum nivel',
@@ -124,7 +124,7 @@ export class ClientBlockchainAdapter implements ClientBlockchainTokenOutputPort 
 				},
 			});
 
-			let config = {
+			const config = {
 				method: 'post',
 				maxBodyLength: Infinity,
 				url: `${process.env.BASE_URL}/api/v1/metadata/new`,
