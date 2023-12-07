@@ -1,3 +1,10 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "@rocketseat/eslint-config/next"
+  ],
+  "settings": {
+    "next": {
+      "rootDir": "packages/client-manager-ui"
+    }
+  }
 }
