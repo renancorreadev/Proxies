@@ -156,10 +156,15 @@ monoRepo/
 ## 📌 Pendências
 
 - [ ] Definir lógica para remoção automática de 20% dos pontos após 30 dias.
+- [ ] Implementar autenticação via keycloack e database para usuarios
+- [ ] Implementar Elastick Search para monitoramento de eventos 
+- [ ] Implementar Grafana para visualização de logs em tempo real da infraestrutura
 
 ## 🚀 Em Progresso
 
 - [ ] Integrar banco de dados PostGree no Micro Serviço Go
+- [ ] Configurar ambiente de desenvolvimento com dev container e docker 
+
 
 ## ✅ Concluídas
 
