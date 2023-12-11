@@ -19,6 +19,7 @@
     "ui": "lerna run --scope client-manager-ui --stream dev",
     "api:test": "lerna run --scope client-manager-api test",
     "sc:test": "lerna run --scope smart-contracts test",
+    "sc:compile": "lerna run --scope smart-contracts compile",
     "sc:deploy:client:core": "lerna run --scope smart-contracts deploy-client-core",
     "sc:upgrade:client:core": "lerna run --scope smart-contracts upgrade-client-core",
     "sc:deploy:points:core": "lerna run --scope smart-contracts deploy-points-core",
