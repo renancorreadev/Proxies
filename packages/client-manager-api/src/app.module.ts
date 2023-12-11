@@ -63,10 +63,10 @@ import { MetadataAdapter } from './modules/Metadata/Adapters/Output/MetadataAdap
 					url: process.env.CONNECTION_STRING,
 					entities: [MetadataEntity],
 					synchronize: true,
-					ssl: {
-						requestCert: true,
-						rejectUnauthorized: false,
-					},
+					// ssl: {
+					// 	requestCert: true,
+					// 	rejectUnauthorized: false,
+					// },
 				});
 
 				return dataSource.initialize();
