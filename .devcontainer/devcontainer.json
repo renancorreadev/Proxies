@@ -9,13 +9,12 @@
 		"../docker-compose.yaml",
 		"docker-compose.yml"
 	],
-
-
 	"service": "app",
 	"workspaceFolder": "/home/node/app",
 	"customizations": {
 		"vscode": {
 			"extensions": [
+				"golang.go",
 				"ms-azuretools.vscode-docker",
 				"ms-vscode.vscode-typescript-next",
 				"ashinzekene.nestjs",
@@ -45,5 +44,12 @@
 				"codeium.codeium"
 			]
 		}
-	}
+	},
+	"runServices": [
+		"db",
+		"besu_node_1",
+		"besu_node_2",
+		"besu_node_3",
+		"besu_node_4"
+	]
 }

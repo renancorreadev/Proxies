@@ -8,5 +8,6 @@
     "editor.formatOnSave": true
   },
   "eslint.alwaysShowStatus": true,
-  "peacock.color": "#FF8243"
+  "peacock.color": "#FF8243",
+  "buildvcs": false
 }
