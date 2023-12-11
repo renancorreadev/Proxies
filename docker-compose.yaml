@@ -106,6 +106,8 @@ services:
 volumes:
   postgree_data:
     driver: local
+  pnpm-store:
+    driver: local
 
 networks:
   besu-network:

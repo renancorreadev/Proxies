@@ -4,9 +4,6 @@
   "description": "A Client Management in Blockchain",
   "main": "index.js",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
     "init:infra": "./infra/init.sh",
     "down:infra": "./infra/down.sh",
@@ -30,10 +27,20 @@
     "build": "pnpm recursive run build",
     "test": "pnpm recursive run test"
   },
+  
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "lerna": "^4.0.0"
+  },
+  "pnpm": {
+    "packageExtensions": {
+      "posix": {
+        "optionalDependencies": {
+          "node-gyp": "*"
+        }
+      }
+    }
   }
 }

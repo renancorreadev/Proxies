@@ -1,11 +1,9 @@
-FROM node:latest
+FROM node:20.10.0-buster-slim
 
 # Install Git, Zsh, and Wget
-RUN apt-get update && apt-get install -y git zsh wget curl
+RUN apt-get update && apt-get install -y git zsh wget curl build-essential python3
 
-
-# Install pnpm
-RUN npm install -g pnpm@latest
+RUN npm install bufferutil utf-8-validate
 
 # Download and Install Golang
 RUN curl -LO "https://go.dev/dl/go1.21.5.linux-arm64.tar.gz" \
@@ -48,18 +46,23 @@ RUN wget -O /home/node/.p10k.zsh https://raw.githubusercontent.com/romkatv/power
 RUN echo '[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh' >> /home/node/.zshrc
 
 # Set Zsh as the default shell for subsequent commands
-SHELL ["/bin/zsh", "-c"]
-
-# Switch back to root user to clean up and change ownership
-USER root
-RUN apt-get clean && chown -R node:node /home/node
 
 # Configure user and working directory
+USER root
+SHELL ["/bin/zsh", "-c"]
+ENV PNPM_HOME="/home/node/.pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN mkdir -p $PNPM_HOME && chown -R node:node $PNPM_HOME
+# Instalação do pnpm
+RUN npm install -g pnpm@latest
+RUN chmod -R a+w /usr/local/lib/node_modules
+# Configurando o diretório .pnpm-store no home do usuário
+RUN mkdir -p /home/node/.pnpm-store && chmod -R a+w /home/node/.pnpm-store
+
+
 USER node
 WORKDIR /home/node/app
 
-# Copy entire monorepo
-COPY --chown=node:node . .
 
 # Default command to keep the container running
 CMD ["tail", "-f", "/dev/null"]
