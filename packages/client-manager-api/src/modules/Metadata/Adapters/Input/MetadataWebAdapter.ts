@@ -90,7 +90,7 @@ export class MetadataWebAdapter {
 	@ApiForbiddenResponse({ description: 'Forbidden' })
 	@ApiNotFoundResponse({ description: 'Segment not found' })
 	@Get('/:tokenID')
-	async getTokenID(@Param('tokenID') tokenIDParam: string, res: Response) {
+	async getTokenID(@Param('tokenID') tokenIDParam: string) {
 		try {
 			this.logger.log('---------- PROCESS BEGIN ----------');
 			this.logger.log('Running Metadata Web Adapter');

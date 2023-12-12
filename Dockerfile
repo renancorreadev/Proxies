@@ -1,9 +1,21 @@
-FROM node:20.10.0-buster-slim
+FROM node:16
 
-# Install Git, Zsh, and Wget
-RUN apt-get update && apt-get install -y git zsh wget curl build-essential python3
+# Install Git, Zsh, Wget, and build tools
+RUN apt-get update && apt-get install -y \
+    git \
+    zsh \
+    wget \
+    curl \
+    build-essential \
+    python
 
-RUN npm install bufferutil utf-8-validate
+
+# Update node-gyp
+RUN npm install -g node-gyp
+
+# Set environment variables for Python
+ENV PYTHON=/usr/bin/python3
+ENV PYTHONPATH=/usr/lib/python3
 
 # Download and Install Golang
 RUN curl -LO "https://go.dev/dl/go1.21.5.linux-arm64.tar.gz" \
@@ -45,8 +57,6 @@ RUN wget -O /home/node/.p10k.zsh https://raw.githubusercontent.com/romkatv/power
 # Ensure the .p10k.zsh file is sourced in .zshrc
 RUN echo '[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh' >> /home/node/.zshrc
 
-# Set Zsh as the default shell for subsequent commands
-
 # Configure user and working directory
 USER root
 SHELL ["/bin/zsh", "-c"]
@@ -59,10 +69,8 @@ RUN chmod -R a+w /usr/local/lib/node_modules
 # Configurando o diretório .pnpm-store no home do usuário
 RUN mkdir -p /home/node/.pnpm-store && chmod -R a+w /home/node/.pnpm-store
 
-
 USER node
 WORKDIR /home/node/app
-
 
 # Default command to keep the container running
 CMD ["tail", "-f", "/dev/null"]
