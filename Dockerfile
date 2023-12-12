@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:18
 
 # Install Git, Zsh, Wget, and build tools
 RUN apt-get update && apt-get install -y \
@@ -6,16 +6,16 @@ RUN apt-get update && apt-get install -y \
     zsh \
     wget \
     curl \
-    build-essential \
-    python
+    build-essential 
+    # python
 
 
 # Update node-gyp
 RUN npm install -g node-gyp
 
 # Set environment variables for Python
-ENV PYTHON=/usr/bin/python3
-ENV PYTHONPATH=/usr/lib/python3
+# ENV PYTHON=/usr/bin/python3
+# ENV PYTHONPATH=/usr/lib/python3
 
 # Download and Install Golang
 RUN curl -LO "https://go.dev/dl/go1.21.5.linux-arm64.tar.gz" \
