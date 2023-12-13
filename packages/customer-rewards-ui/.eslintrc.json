@@ -4,7 +4,7 @@
   ],
   "settings": {
     "next": {
-      "rootDir": "packages/client-manager-ui"
+      "rootDir": "packages/customer-rewards-ui"
     }
   }
 }

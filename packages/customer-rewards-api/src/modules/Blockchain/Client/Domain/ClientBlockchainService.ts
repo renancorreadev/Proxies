@@ -3,7 +3,7 @@
  */
 import { Inject, Injectable, Logger } from '@nestjs/common';
 
-import { DependencyInjectionTokens } from 'client-manager-api/src/helper/AppConstants';
+import { DependencyInjectionTokens } from 'customer-rewards-api/src/helper/AppConstants';
 import { ClientBlockchainTokenUseCase } from '../Port/Input/ClientBlockchainTokenUseCase';
 import { ClientBlockchainTokenOutputPort } from '../Port/Output/ClientBlockchainTokenOutputPort';
 import { RegisterClientRequestDto } from './Dto/HTTPRequest/ClientBlockchainRequestDto';

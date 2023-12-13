@@ -9,25 +9,25 @@
 				"./smart-contracts/typechain"
 			],
 			"@helper/*": [
-				"./client-manager-api/src/helper/*"
+				"./customer-rewards-api/src/helper/*"
 			],
 			"@config/*": [
-				"./client-manager-api/src/config/*"
+				"./customer-rewards-api/src/config/*"
 			],
 			"@/*": [
-				"./client-manager-api/*"
+				"./customer-rewards-api/*"
 			],
 			"@src/*": [
-				"./client-manager-api/src/*"
+				"./customer-rewards-api/src/*"
 			],
 			"@client-manager-contract-types/*": [
-				"./client-manager-api/src/helper/blockchain/types/contracts/client-manager-types.ts"
+				"./customer-rewards-api/src/helper/blockchain/types/contracts/client-manager-types.ts"
 			],
 			"@client-manager-connector/*": [
-				"./client-manager-api/src/helper/blockchain/types/contracts/client-manager-types.ts"
+				"./customer-rewards-api/src/helper/blockchain/types/contracts/client-manager-types.ts"
 			],
 			"@metadata/*": [
-				"./client-manager-api/src/modules/Metadata/*"
+				"./customer-rewards-api/src/modules/Metadata/*"
 			],
 		}
 	}

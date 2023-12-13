@@ -6,7 +6,7 @@
 			"request": "launch",
 			"name": "Debug Nest Framework",
 			"args": [
-				"${workspaceFolder}/packages/client-manager-api/src/main.ts"
+				"${workspaceFolder}/packages/customer-rewards-api/src/main.ts"
 			],
 			"runtimeArgs": [
 				"--nolazy",
@@ -16,8 +16,8 @@
 				"tsconfig-paths/register"
 			],
 			"sourceMaps": true,
-			"envFile": "${workspaceFolder}/packages/client-manager-api/.env",
-			"cwd": "${workspaceRoot}/packages/client-manager-api",
+			"envFile": "${workspaceFolder}/packages/customer-rewards-api/.env",
+			"cwd": "${workspaceRoot}/packages/customer-rewards-api",
 			"console": "integratedTerminal",
 			"protocol": "inspector"
 		},

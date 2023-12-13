@@ -107,9 +107,9 @@ monoRepo/
 ├─ packages/
 │    ├── blockchain-service
 │    │   ├── package.json
-│    ├── client-manager-api
+│    ├── customer-rewards-api
 │    │   ├── package.json
-│    ├── client-manager-ui
+│    ├── customer-rewards-ui
 │    │   ├── package.json
 │    ├── smart-contracts
 │    │   ├── package.json
@@ -127,12 +127,12 @@ monoRepo/
 
 ```json
  "scripts": {
-    "start:dev": "lerna run --parallel --stream dev --scope client-manager-api --scope client-manager-ui --scope blockchain-service",
-    "dev": "lerna run --parallel --stream dev --scope client-manager-api --scope client-manager-ui",
+    "start:dev": "lerna run --parallel --stream dev --scope customer-rewards-api --scope customer-rewards-ui --scope blockchain-service",
+    "dev": "lerna run --parallel --stream dev --scope customer-rewards-api --scope customer-rewards-ui",
     "sc": "lerna run --scope smart-contracts compile",
     "bs": "lerna run --scope blockchain-service --stream dev",
-    "api": "lerna run --scope client-manager-api --stream dev",
-    "ui": "lerna run --scope client-manager-ui --stream dev",
+    "api": "lerna run --scope customer-rewards-api --stream dev",
+    "ui": "lerna run --scope customer-rewards-ui --stream dev",
     "clean": "lerna run clean",
     "build": "pnpm recursive run build",
     "test": "pnpm recursive run test"

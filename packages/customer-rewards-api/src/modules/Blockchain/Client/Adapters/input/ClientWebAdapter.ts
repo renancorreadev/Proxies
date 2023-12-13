@@ -11,7 +11,7 @@ import {
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { BaseUrls, DependencyInjectionTokens } from 'client-manager-api/src/helper/AppConstants';
+import { BaseUrls, DependencyInjectionTokens } from 'customer-rewards-api/src/helper/AppConstants';
 import { ClientBlockchainTokenUseCase } from '../../Port/Input/ClientBlockchainTokenUseCase';
 import { RegisterClientRequestDto } from '../../Domain/Dto/HTTPRequest/ClientBlockchainRequestDto';
 import { GetClientResponse } from '../../Domain/Dto/HTTPResponse/GetClientResponse';

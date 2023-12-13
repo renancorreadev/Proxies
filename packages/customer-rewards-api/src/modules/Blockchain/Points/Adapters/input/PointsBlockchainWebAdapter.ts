@@ -21,7 +21,7 @@ import {
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { BaseUrls, DependencyInjectionTokens } from 'client-manager-api/src/helper/AppConstants';
+import { BaseUrls, DependencyInjectionTokens } from 'customer-rewards-api/src/helper/AppConstants';
 
 import { PointsBlockchainTokenUseCase } from '../../Port/Input/PointsBlockchainTokenUseCase';
 
