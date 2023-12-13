@@ -14,6 +14,7 @@
     "bs": "lerna run --scope blockchain-service --stream dev",
     "api": "lerna run --scope customer-rewards-api --stream dev",
     "ui": "lerna run --scope customer-rewards-ui --stream dev",
+    "admin:ui": "lerna run --scope customer-manager-admin-ui --stream dev",
     "api:test": "lerna run --scope customer-rewards-api test",
     "sc:test": "lerna run --scope smart-contracts test",
     "sc:compile": "lerna run --scope smart-contracts compile",

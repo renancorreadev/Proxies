@@ -1,0 +1,11 @@
+{
+    "extends": [
+      "@rocketseat/eslint-config/next"
+    ],
+    "settings": {
+      "next": {
+        "rootDir": "packages/customer-manager-admin-ui"
+      }
+    }
+  }
+  
