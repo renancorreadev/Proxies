@@ -27,6 +27,9 @@ importers:
       jsvectormap:
         specifier: ^1.5.3
         version: 1.5.3
+      lucide-react:
+        specifier: ^0.294.0
+        version: 0.294.0(react@18.2.0)
       match-sorter:
         specifier: ^6.3.1
         version: 6.3.1
@@ -10184,6 +10187,14 @@ packages:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
       react: 18.0.0
+    dev: false
+
+  /lucide-react@0.294.0(react@18.2.0):
+    resolution: {integrity: sha512-V7o0/VECSGbLHn3/1O67FUgBwWB+hmzshrgDVRJQhMh8uj5D3HBuIvhuAmQTtlupILSplwIZg5FTc4tTKMA2SA==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /macos-release@2.5.1:
