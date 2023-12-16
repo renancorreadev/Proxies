@@ -2,11 +2,13 @@
 
 ## Visão Geral
 
-O projeto **Customer Rewards Application** é uma solução desenvolvida para otimizar a gestão de clientes com pontuação e emitir tokens de benefícios no ecossistema de blockchain privada. Utilizando **Hyperledger Besu** para gerenciar rede privada com o protocolo QBFT em conjunto com uma aplicação back-end equipada com os recursos das capacidades avançadas do [NestJS](https://nestjs.com/), um framework para aplicações server-side em Node.js, este projeto possui todos pacotes (packages) incorporados na arquitetura hexagonal com inversão de dependências, garantindo um design modular e de fácil manutenção.
+O projeto **Customer Rewards Application** é uma solução desenvolvida baseada em serviços  para otimizar a gestão de clientes com pontuação e emitir tokens de benefícios no ecossistema de blockchain privada. Utilizando **Hyperledger Besu** para gerenciar rede privada com o protocolo QBFT em conjunto com uma aplicação back-end equipada com os recursos das capacidades avançadas do [NestJS](https://nestjs.com/), um framework para aplicações server-side em Node.js, uma aplicação desenvolvida em golang separada apenas para interação com blockchain e escuta de eventos dos contratos inteligentes **(solidity)** diretamente no nó rpc do besu. Em desenvolvimento temos a dashboard ui do admin onde será feito a integração com apache Kafta, Grafana, Prometheus e Keycloak para authenticação. 
+
+> Este projeto possui todos pacotes (packages) incorporados na arquitetura hexagonal com inversão de dependências, garantindo um design modular e de fácil manutenção.
 
 ## Interação com a Blockchain
 
-A essência do projeto reside na sua capacidade de interagir com a blockchain, permitindo o monitoramento e reação a eventos específicos da rede. Isso é alcançado por meio de um micro-serviço dedicado, que escuta eventos na blockchain e executa ações correspondentes, como a atualização de registros de clientes, emissão de pontos para determinado cliente, emissão de tokens baseado em NFTs para representar uma `insignia` ou nível `level` em que um cliente se encontra dependendo do saldo de pontos que esse indivíduo possui.
+A essência do projeto reside na sua capacidade de interagir com a blockchain, permitindo o monitoramento e reação a eventos específicos da rede em tempo real. Isso é alcançado por meio de um micro-serviço dedicado, que escuta eventos na blockchain e executa ações correspondentes, como a atualização de registros de clientes, emissão de pontos para determinado cliente, emissão de tokens baseado em NFTs para representar uma `insignia` ou nível `level` em que um cliente se encontra dependendo do saldo de pontos que esse indivíduo possui.
 
 ## Gerenciamento de Metadados de NFTs
 
@@ -157,14 +159,31 @@ monoRepo/
 
 ## 📌 Pendências
 
-- [ ] Definir lógica para remoção automática de 20% dos pontos após 30 dias.
-- [ ] Implementar autenticação via keycloack e database para usuarios
-- [ ] Implementar Elastick Search para monitoramento de eventos 
-- [ ] Implementar Grafana para visualização de logs em tempo real da infraestrutura
+- blockchain-service
+  - [ ] Integrar banco de dados PostGree no Micro Serviço Go
+
+- customer-rewards-admin-ui 
+  - [ ] Implementar Elastick Search para monitoramento de eventos 
+  - [ ] Implementar Grafana para visualização de logs em tempo real da infraestrutura
+
+- customer-rewards-api
+  - [ ] Implementar novas rotas para interagir com os contratos inteligentes 
+  - [ ] Configurar e implementar WebSocket para eventos 
+  - [ ] Configurar e implementar Prometheus para Kafta
+  - [ ] Configurar e implementar Apache Kafta 
+  - [ ] Confiturar e implementar Grafana 
+
+ 
+- customer-rewards-ui
+
+
+- smart-contracts
+  - [ ] Definir lógica para remoção automática de 20% dos pontos após 30 dias.
+
+
+
 
 ## 🚀 Em Progresso
-
-- [ ] Integrar banco de dados PostGree no Micro Serviço Go
 - [ ] Configurar ambiente de desenvolvimento com dev container e docker 
 
 
@@ -185,11 +204,9 @@ monoRepo/
 - [x] Implementar API de Metadatas dos tokens ERC1155 das insignas
 - [x] Implementar função para atualizar metadata do NFT conforme níveis de pontuação.
 - [x] Implementar rotas para deletar e update metadata do NFT na api.
+- [x] Implementar autenticação via keycloack e database para usuarios 
 
 ## 🧠 Ideias para Explorar
-
-- [ ] Investigar integrações com sistemas CRM para uso de metadata.
-- [ ] Explorar possibilidades de gamificação no sistema de pontos.
 - [ ] Avaliar interoperabilidade com outros contratos inteligentes.
 
 ## 🛠️ Melhorias Futuras
