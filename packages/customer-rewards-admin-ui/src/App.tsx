@@ -1,11 +1,5 @@
 
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-// import { Toaster } from 'react-hot-toast';
-
-// import ECommerce from './pages/Dashboard/ECommerce';
-
-// import Loader from './common/Loader';
-
 
 import { AuthProvider } from './contexts/AuthProvider';
 import { Login } from './pages/Authentication/Login';
@@ -25,7 +19,6 @@ import Settings from './pages/Settings';
 import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
 import ECommerce from './pages/Dashboard/ECommerce';
-
 
 
 function App() {
@@ -59,7 +52,7 @@ function App() {
 
   return (
     <AuthProvider>
-      <RouterProvider router={router} />
+      <RouterProvider router={router} fallbackElement={<p>Initial Load...</p>} />
     </AuthProvider>
   );
 
