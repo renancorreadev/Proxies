@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import { PrivateRoute } from '../pages/Authentication/PrivateRouter';
 
 const Calendar = lazy(() => import('../pages/Calendar'));
 const Chart = lazy(() => import('../pages/Chart'));
@@ -9,6 +10,13 @@ const Settings = lazy(() => import('../pages/Settings'));
 const Tables = lazy(() => import('../pages/Tables'));
 const Alerts = lazy(() => import('../pages/UiElements/Alerts'));
 const Buttons = lazy(() => import('../pages/UiElements/Buttons'));
+
+const Login = lazy(() => import('../pages/Authentication/Login'));
+const Logout = lazy(() => import('../pages/Authentication/Logout'));
+const Callback = lazy(() => import('../pages/Authentication/Callback'));
+const PrivateRoute = lazy(() => import('../pages/Authentication/PrivateRouter'));
+
+
 
 const coreRoutes = [
   {
@@ -55,6 +63,26 @@ const coreRoutes = [
     path: '/ui/buttons',
     title: 'Buttons',
     component: Buttons,
+  },
+  {
+    path: '/login',
+    title: 'Login',
+    component: Login,
+  },
+  {
+    path: '/logout',
+    title: 'Logout',
+    component: Logout,
+  },
+  {
+    path: '/callback',
+    title: 'Callback',
+    component: Callback,
+  },
+  {
+    path: '/admin',
+    title: 'Admin',
+    component: PrivateRoute,
   },
 ];
 

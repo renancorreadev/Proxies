@@ -56,6 +56,8 @@
 		"besu_node_1",
 		"besu_node_2",
 		"besu_node_3",
-		"besu_node_4"
+		"besu_node_4",
+		"keycloak",
+		"db_keycloak"
 	]
 }

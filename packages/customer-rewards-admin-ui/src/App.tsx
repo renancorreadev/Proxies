@@ -1,54 +1,68 @@
-import { Suspense, lazy, useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
 
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+// import { Toaster } from 'react-hot-toast';
+
+// import ECommerce from './pages/Dashboard/ECommerce';
+
+// import Loader from './common/Loader';
+
+
+import { AuthProvider } from './contexts/AuthProvider';
+import { Login } from './pages/Authentication/Login';
+import { Logout } from './pages/Authentication/Logout';
+import { PrivateRoute } from './pages/Authentication/PrivateRouter';
+import { Callback } from './pages/Authentication/Callback';
+
+import DefaultLayout from './layout/DefaultLayout';
+import Calendar from './pages/Calendar';
+import Profile from './pages/Profile';
+import FormElements from './pages/Form/FormElements';
+import FormLayout from './pages/Form/FormLayout';
+import Tables from './pages/Tables';
+
+import Chart from './pages/Chart';
+import Settings from './pages/Settings';
+import Alerts from './pages/UiElements/Alerts';
+import Buttons from './pages/UiElements/Buttons';
 import ECommerce from './pages/Dashboard/ECommerce';
-import SignIn from './pages/Authentication/SignIn';
-import SignUp from './pages/Authentication/SignUp';
-import Loader from './common/Loader';
-import routes from './routes';
 
-const DefaultLayout = lazy(() => import('./layout/DefaultLayout'));
+
 
 function App() {
-  const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    setTimeout(() => setLoading(false), 1000);
-  }, []);
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: (
+        <PrivateRoute>
+          <DefaultLayout />
+        </PrivateRoute>
+      ),
+      children: [
+        { path: "/", element: <ECommerce /> },
+        { path: "calendar", element: <Calendar /> },
+        { path: "profile", element: <Profile /> },
+        { path: "forms/form-elements", element: <FormElements /> },
+        { path: "forms/form-layout", element: <FormLayout /> },
+        { path: "tables", element: <Tables /> },
+        { path: "settings", element: <Settings /> },
+        { path: "chart", element: <Chart /> },
+        { path: "ui/alerts", element: <Alerts /> },
+        { path: "ui/buttons", element: <Buttons /> },
+      ],
+    },
+    // Rotas de autenticação separadas
+    { path: "login", element: <Login /> },
+    { path: "logout", element: <Logout /> },
+    { path: "callback", element: <Callback /> },
+  ]);
 
-  return loading ? (
-    <Loader />
-  ) : (
-    <>
-      <Toaster
-        position="top-right"
-        reverseOrder={false}
-        containerClassName="overflow-auto"
-      />
-      <Routes>
-        <Route path="/auth/signin" element={<SignIn />} />
-        <Route path="/auth/signup" element={<SignUp />} />
-        <Route element={<DefaultLayout />}>
-          <Route index element={<ECommerce />} />
-          {routes.map((routes, index) => {
-            const { path, component: Component } = routes;
-            return (
-              <Route
-                key={index}
-                path={path}
-                element={
-                  <Suspense fallback={<Loader />}>
-                    <Component />
-                  </Suspense>
-                }
-              />
-            );
-          })}
-        </Route>
-      </Routes>
-    </>
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   );
+
 }
 
 export default App;
