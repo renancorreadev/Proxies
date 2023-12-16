@@ -6,3 +6,4 @@ certs
 .env
 .pnpm-store
 .docker
+.vscode/promps
