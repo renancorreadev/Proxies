@@ -1,10 +1,12 @@
 version: "3.4"
+
 services:
   app:
     build: .
     container_name: protocol
     volumes:
-      - .:/home/node/app
+      - ./.docker/app:/home/node/app
+      - pnpm-store:/home/node/.pnpm-store
     env_file:
       - ./.env
     ports:
@@ -13,34 +15,34 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:
-      besu-network:
+      protocol:
         ipv4_address: 172.16.239.9
 
   besu_node_1:
     container_name: besu_node_1
     image: hyperledger/besu:23.4.4
     user: "1000:1000"
-    entrypoint: ["/bin/bash", "-c", "sleep 10; /opt/besu/bin/besu --data-path=data --genesis-file=/opt/besu/genesis.json --rpc-http-enabled --rpc-ws-enabled --rpc-ws-port=6174 --rpc-ws-host=0.0.0.0 --rpc-http-api=ETH,NET,QBFT,TXPOOL --host-allowlist='*' --rpc-http-cors-origins='all' --rpc-http-port=8545 --rpc-http-host=0.0.0.0 --min-gas-price=0"]
+    entrypoint: ["/bin/bash", "-c", "sleep 10; /opt/besu/bin/besu --data-path=/opt/besu/data --genesis-file=/opt/besu/genesis.json --rpc-http-enabled --rpc-ws-enabled --rpc-ws-port=6174 --rpc-ws-host=0.0.0.0 --rpc-http-api=ETH,NET,QBFT,TXPOOL --host-allowlist='*' --rpc-http-cors-origins='all' --rpc-http-port=8545 --rpc-http-host=0.0.0.0 --min-gas-price=0"]
     volumes:
-      - ./besu/genesis.json:/opt/besu/genesis.json
-      - ./besu/node1/data:/opt/besu/data
+      - ./.docker/besu/genesis.json:/opt/besu/genesis.json
+      - ./.docker/besu/node1/data:/opt/besu/data
     ports:
       - "8545:8545"
       - "30303:30303"
       - "6174:6174"
     networks:
-      besu-network:
+      protocol:
         ipv4_address: 172.16.239.10
 
   besu_node_2:
     container_name: besu_node_2
     image: hyperledger/besu:23.4.4
     user: "1000:1000"
-    entrypoint: ["/bin/bash", "-c", "sleep 10; /opt/besu/bin/besu --data-path=data --genesis-file=/opt/besu/genesis.json --bootnodes='enode://c7b3c1871f30f6cf1ea2b64fd2799f884bedbc00a0a62e7550ae6f68de444cbdf539d1f8d79bb34208527cfa6482ccbb5072ffc1c13b5679b9d061edaa34cc2c@172.16.239.10:30303' --p2p-port=30304 --rpc-http-enabled --rpc-ws-enabled --rpc-ws-port=6175 --rpc-http-api=ETH,NET,IBFT,TXPOOL --host-allowlist='*' --rpc-http-cors-origins='all' --rpc-http-port=8546 --rpc-http-host=0.0.0.0 --min-gas-price=0"]
+    entrypoint: ["/bin/bash", "-c", "sleep 10; /opt/besu/bin/besu --data-path=/opt/besu/data --genesis-file=/opt/besu/genesis.json --bootnodes='enode://c7b3c1871f30f6cf1ea2b64fd2799f884bedbc00a0a62e7550ae6f68de444cbdf539d1f8d79bb34208527cfa6482ccbb5072ffc1c13b5679b9d061edaa34cc2c@172.16.239.10:30303' --p2p-port=30304 --rpc-http-enabled --rpc-ws-enabled --rpc-ws-port=6175 --rpc-http-api=ETH,NET,IBFT,TXPOOL --host-allowlist='*' --rpc-http-cors-origins='all' --rpc-http-port=8546 --rpc-http-host=0.0.0.0 --min-gas-price=0"]
     volumes:
-      - ./besu/genesis.json:/opt/besu/genesis.json
-      - ./besu/node2/data:/opt/besu/data
-      - ./besu/log-config.xml:/config/log-config.xml
+      - ./.docker/besu/genesis.json:/opt/besu/genesis.json
+      - ./.docker/besu/node2/data:/opt/besu/data
+      - ./.docker/besu/log-config.xml:/config/log-config.xml
     ports:
       - "8546:8546"
       - "30304:30304"
@@ -48,18 +50,18 @@ services:
     depends_on:
       - besu_node_1
     networks:
-      besu-network:
+      protocol:
         ipv4_address: 172.16.239.11
 
   besu_node_3:
     container_name: besu_node_3
     image: hyperledger/besu:23.4.4
     user: "1000:1000"
-    entrypoint: ["/bin/bash", "-c", "sleep 10; /opt/besu/bin/besu --data-path=data --genesis-file=/opt/besu/genesis.json --bootnodes='enode://c7b3c1871f30f6cf1ea2b64fd2799f884bedbc00a0a62e7550ae6f68de444cbdf539d1f8d79bb34208527cfa6482ccbb5072ffc1c13b5679b9d061edaa34cc2c@172.16.239.10:30303' --p2p-port=30305 --rpc-http-enabled --rpc-ws-enabled --rpc-ws-port=6176 --rpc-http-api=ETH,NET,QBFT,TXPOOL --host-allowlist='*' --rpc-http-cors-origins='all' --rpc-http-port=8547 --rpc-http-host=0.0.0.0 --min-gas-price=0"]
+    entrypoint: ["/bin/bash", "-c", "sleep 10; /opt/besu/bin/besu --data-path=/opt/besu/data --genesis-file=/opt/besu/genesis.json --bootnodes='enode://c7b3c1871f30f6cf1ea2b64fd2799f884bedbc00a0a62e7550ae6f68de444cbdf539d1f8d79bb34208527cfa6482ccbb5072ffc1c13b5679b9d061edaa34cc2c@172.16.239.10:30303' --p2p-port=30305 --rpc-http-enabled --rpc-ws-enabled --rpc-ws-port=6176 --rpc-http-api=ETH,NET,QBFT,TXPOOL --host-allowlist='*' --rpc-http-cors-origins='all' --rpc-http-port=8547 --rpc-http-host=0.0.0.0 --min-gas-price=0"]
     volumes:
-      - ./besu/genesis.json:/opt/besu/genesis.json
-      - ./besu/node3/data:/opt/besu/data
-      - ./besu/log-config.xml:/config/log-config.xml
+      - ./.docker/besu/genesis.json:/opt/besu/genesis.json
+      - ./.docker/besu/node3/data:/opt/besu/data
+      - ./.docker/besu/log-config.xml:/config/log-config.xml
     ports:
       - "8547:8547"
       - "30305:30305"
@@ -67,18 +69,18 @@ services:
     depends_on:
       - besu_node_1
     networks:
-      besu-network:
+      protocol:
         ipv4_address: 172.16.239.12
 
   besu_node_4:
     container_name: besu_node_4
     image: hyperledger/besu:23.4.4
     user: "1000:1000"
-    entrypoint: ["/bin/bash", "-c", "sleep 10; /opt/besu/bin/besu --data-path=data --genesis-file=/opt/besu/genesis.json --bootnodes='enode://c7b3c1871f30f6cf1ea2b64fd2799f884bedbc00a0a62e7550ae6f68de444cbdf539d1f8d79bb34208527cfa6482ccbb5072ffc1c13b5679b9d061edaa34cc2c@172.16.239.10:30303' --p2p-port=30306 --rpc-http-enabled --rpc-ws-enabled --rpc-ws-port=61747 --rpc-http-api=ETH,NET,QBFT,TXPOOL --host-allowlist='*' --rpc-http-cors-origins='all' --rpc-http-port=8548 --rpc-http-host=0.0.0.0 --min-gas-price=0"]
+    entrypoint: ["/bin/bash", "-c", "sleep 10; /opt/besu/bin/besu --data-path=/opt/besu/data --genesis-file=/opt/besu/genesis.json --bootnodes='enode://c7b3c1871f30f6cf1ea2b64fd2799f884bedbc00a0a62e7550ae6f68de444cbdf539d1f8d79bb34208527cfa6482ccbb5072ffc1c13b5679b9d061edaa34cc2c@172.16.239.10:30303' --p2p-port=30306 --rpc-http-enabled --rpc-ws-enabled --rpc-ws-port=61747 --rpc-http-api=ETH,NET,QBFT,TXPOOL --host-allowlist='*' --rpc-http-cors-origins='all' --rpc-http-port=8548 --rpc-http-host=0.0.0.0 --min-gas-price=0"]
     volumes:
-      - ./besu/genesis.json:/opt/besu/genesis.json
-      - ./besu/node4/data:/opt/besu/data
-      - ./besu/log-config.xml:/config/log-config.xml
+      - ./.docker/besu/genesis.json:/opt/besu/genesis.json
+      - ./.docker/besu/node4/data:/opt/besu/data
+      - ./.docker/besu/log-config.xml:/config/log-config.xml
     ports:
       - "8548:8548"
       - "30306:30306"
@@ -86,7 +88,7 @@ services:
     depends_on:
       - besu_node_1
     networks:
-      besu-network:
+      protocol:
         ipv4_address: 172.16.239.13
 
   db:
@@ -99,9 +101,47 @@ services:
     ports:
       - "5432:5432"
     networks:
-      besu-network:
+      protocol:
         ipv4_address: 172.16.239.14
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.1
+    container_name: keycloak
+    command: start-dev
+    ports:
+      - 8080:8080
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=mysql
+      - KC_DB_URL=jdbc:mysql://db_keycloak:3306/keycloak
+      - KC_DB_USERNAME=root
+      - KC_DB_PASSWORD=root
+    depends_on:
+      db_keycloak:
+        condition: service_healthy
+    networks: 
+      protocol:
+        ipv4_address: 172.16.239.15
+
+  db_keycloak:
+    image: mysql:8.2.0-oracle
+    container_name: db_keycloak
+    volumes:
+      - ./.docker/dbdata:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=keycloak
+    security_opt:
+      - seccomp:unconfined
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 3
+    networks:
+      protocol:
+        ipv4_address: 172.16.239.16
 
 volumes:
   postgree_data:
@@ -110,7 +150,7 @@ volumes:
     driver: local
 
 networks:
-  besu-network:
+  protocol:
     driver: bridge
     ipam:
       config:

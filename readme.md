@@ -109,6 +109,8 @@ monoRepo/
 │    │   ├── package.json
 │    ├── customer-rewards-api
 │    │   ├── package.json
+│    ├── customer-rewards-admin-ui
+│    │   ├── package.json
 │    ├── customer-rewards-ui
 │    │   ├── package.json
 │    ├── smart-contracts

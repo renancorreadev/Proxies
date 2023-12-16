@@ -5,3 +5,4 @@ data
 certs
 .env
 .pnpm-store
+.docker
