@@ -1,12 +1,11 @@
 name: 'Code Review GPT'
 
-# Comentários para descrição e autor
 # Descrição: Reviews the staged files with a GPT model from OpenAI
 # Autor: Skynance
 
 on:
   pull_request:
-    types: [opened, synchronize]
+    types: [opened, synchronize, reopened]
 
 jobs:
   code-review:
@@ -20,16 +19,21 @@ jobs:
         with:
           node-version: 18
 
-      - name: Navigate to code-review-gpt directory
-        run: cd infra/code-review-gpt
-
       - name: Install Code Review GPT
+        working-directory: ./infra/code-review-gpt
         run: npm install code-review-gpt
 
+      - name: List Modified Files (Debugging Step)
+        run: |
+          git fetch origin ${{ github.base_ref }}
+          git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}
+
       - name: Run Code Review GPT
-        run: npx code-review-gpt review --ci=github --model=$MODEL
+        working-directory: ./infra/code-review-gpt
+        run: npx code-review-gpt review --ci=github --model=$MODEL --base-sha=$BASE_SHA --head-sha=$HEAD_SHA
         env:
-          MODEL: 'gpt-3.5-turbo' # Substitua pelo modelo desejado
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }} # Assumindo que a chave da API OpenAI está armazenada em segredos
+          MODEL: gpt-3.5-turbo
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Assumindo que o token do GitHub está armazenado em segredos
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
