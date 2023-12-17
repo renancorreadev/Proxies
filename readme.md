@@ -1,10 +1,34 @@
 # Customer Rewards Blockchain
 
+- [Customer Rewards Blockchain](#customer-rewards-blockchain)
+  - [Visão Geral](#visão-geral)
+  - [Auto Code Review GPT](#auto-code-review-gpt)
+  - [Interação com a Blockchain](#interação-com-a-blockchain)
+  - [Gerenciamento de Metadados de NFTs](#gerenciamento-de-metadados-de-nfts)
+  - [API HTTP e Swagger](#api-http-e-swagger)
+  - [Tecnologias](#tecnologias)
+  - [Ciclo de nova Feature:](#ciclo-de-nova-feature)
+  - [Estrutura de pastas](#estrutura-de-pastas)
+- [Desenvolvimento](#desenvolvimento)
+  - [📌 Pendências](#-pendências)
+  - [🚀 Em Progresso](#-em-progresso)
+  - [✅ Concluídas](#-concluídas)
+  - [🧠 Ideias para Explorar](#-ideias-para-explorar)
+  - [🛠️ Melhorias Futuras](#️-melhorias-futuras)
+  - [📚 Documentação](#-documentação)
+
+
 ## Visão Geral
 
 O projeto **Customer Rewards Application** é uma solução desenvolvida baseada em serviços  para otimizar a gestão de clientes com pontuação e emitir tokens de benefícios no ecossistema de blockchain privada. Utilizando **Hyperledger Besu** para gerenciar rede privada com o protocolo QBFT em conjunto com uma aplicação back-end equipada com os recursos das capacidades avançadas do [NestJS](https://nestjs.com/), um framework para aplicações server-side em Node.js, uma aplicação desenvolvida em golang separada apenas para interação com blockchain e escuta de eventos dos contratos inteligentes **(solidity)** diretamente no nó rpc do besu. Em desenvolvimento temos a dashboard ui do admin onde será feito a integração com apache Kafta, Grafana, Prometheus e Keycloak para authenticação. 
 
 > Este projeto possui todos pacotes (packages) incorporados na arquitetura hexagonal com inversão de dependências, garantindo um design modular e de fácil manutenção.
+
+## Auto Code Review GPT
+<em> O projeto está equipado com uma infraestrutura para code review lançados pelo GPT-4 e GPT3 toda vez que um Pull Request é aberto, essa etapa foi desenvolvida para melhorar a qualidade do código e abertura de novas ideias durante o fechamento da PR, você pode ver mais em `infra/code-review-gpt` </em>
+
+![Auto Code Review](docs/images/auto_code_review.png)
+
 
 ## Interação com a Blockchain
 
