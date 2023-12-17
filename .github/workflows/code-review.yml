@@ -1,22 +1,13 @@
 name: 'Code Review GPT'
-description: 'Reviews the staged files with a GPT model from OpenAI'
-author: 'Orion Tools'
+
+# Comentários para descrição e autor
+# Descrição: Reviews the staged files with a GPT model from OpenAI
+# Autor: Skynance
+
 on:
   pull_request:
-    types:
-      - opened
-      - synchronize
-inputs:
-  MODEL:
-    description: 'The GPT model to use'
-    required: true
-    default: 'gpt-3.5-turbo'
-  OPENAI_API_KEY:
-    description: 'OpenAI API Key'
-    required: true
-  GITHUB_TOKEN:
-    description: 'Github token'
-    required: true
+    types: [opened, synchronize]
+
 jobs:
   code-review:
     runs-on: ubuntu-latest
@@ -38,11 +29,7 @@ jobs:
       - name: Run Code Review GPT
         run: npx code-review-gpt review --ci=github --model=$MODEL
         env:
-          MODEL: ${{ inputs.MODEL }}
-          OPENAI_API_KEY: ${{ inputs.OPENAI_API_KEY }}
+          MODEL: 'gpt-3.5-turbo' # Substitua pelo modelo desejado
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }} # Assumindo que a chave da API OpenAI está armazenada em segredos
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
-
-branding:
-  icon: 'code'
-  color: 'blue'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Assumindo que o token do GitHub está armazenado em segredos
