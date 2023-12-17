@@ -1,0 +1,6 @@
+*.js @renancorreadev
+.github/ @renancorreadev
+*.go @renancorreadev
+*.html @renancorreadev
+*.ts @renancorreadev
+*.solidity @renancorreadev
