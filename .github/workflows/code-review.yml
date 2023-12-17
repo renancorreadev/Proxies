@@ -1,5 +1,6 @@
 name: 'Code Review GPT'
 
+# Comentários para descrição e autor
 # Descrição: Reviews the staged files with a GPT model from OpenAI
 # Autor: Skynance
 
@@ -13,6 +14,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Isso assegura que todo o histórico do repositório é buscado
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
