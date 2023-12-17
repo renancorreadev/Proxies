@@ -1,5 +1,5 @@
 {
-  "name": "client-management-blockchain",
+  "name": "customer-rewards-blockchain",
   "version": "1.0.0",
   "description": "A Client Management in Blockchain",
   "main": "index.js",
@@ -23,12 +23,12 @@
     "sc:deploy:points:core": "lerna run --scope smart-contracts deploy-points-core",
     "sc:upgrade:points:core": "lerna run --scope smart-contracts upgrade-points-core",
     "sc:clean": "lerna run --scope smart-contracts cache",
+    "code-review": "cd infra/code-review-gpt && pnpm review",
     "clean": "lerna run clean",
     "clear": "rm -rf node_modules && rm -rf packages/customer-rewards-ui/node_modules && rm -rf packages/customer-rewards-api/node_modules && rm -rf packages/smart-contracts/node_modules", 
     "build": "pnpm recursive run build",
     "test": "pnpm recursive run test"
   },
-  
   "keywords": [],
   "author": "",
   "license": "ISC",
