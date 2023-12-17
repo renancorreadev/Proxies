@@ -20,6 +20,8 @@ import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
 import ECommerce from './pages/Dashboard/ECommerce';
 
+import { CustomerList } from './pages/Customer/CustomerList';
+
 
 function App() {
 
@@ -42,6 +44,7 @@ function App() {
         { path: "chart", element: <Chart /> },
         { path: "ui/alerts", element: <Alerts /> },
         { path: "ui/buttons", element: <Buttons /> },
+        { path: "customers/list", element: <CustomerList /> },
       ],
     },
     // Rotas de autenticação separadas
