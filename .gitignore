@@ -7,3 +7,30 @@ certs
 .pnpm-store
 .docker
 .vscode/promps
+
+node_modules
+.env
+dist
+**/.cache/*.ts
+!jest.config.js
+*.d.ts
+
+cdk.context.json
+
+# nextjs and sst
+.next
+.sst
+!.sst/types/index.ts
+!sst-env.d.ts
+.open-next
+.DS_Store
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out/
+cdk.context.json
+
+# PEM
+*.pem
+
+infra/code-review-gpt/node_modules
