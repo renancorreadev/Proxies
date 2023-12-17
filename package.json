@@ -23,6 +23,7 @@
     "sc:deploy:points:core": "lerna run --scope smart-contracts deploy-points-core",
     "sc:upgrade:points:core": "lerna run --scope smart-contracts upgrade-points-core",
     "sc:clean": "lerna run --scope smart-contracts cache",
+    "code-review": "lerna run --scope ",
     "clean": "lerna run clean",
     "clear": "rm -rf node_modules && rm -rf packages/customer-rewards-ui/node_modules && rm -rf packages/customer-rewards-api/node_modules && rm -rf packages/smart-contracts/node_modules", 
     "build": "pnpm recursive run build",
