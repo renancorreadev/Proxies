@@ -1,4 +1,4 @@
-# Customer Rewards Application on Private Blockchain
+# Customer Rewards Blockchain
 
 ## Visão Geral
 
