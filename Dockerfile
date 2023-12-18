@@ -1,21 +1,18 @@
-FROM node:18
+FROM node:20-alpine3.18
 
-# Install Git, Zsh, Wget, and build tools
-RUN apt-get update && apt-get install -y \
+# Install Git, Zsh, Wget, Curl, and build tools
+RUN apk update && apk add --no-cache \
     git \
     zsh \
     wget \
     curl \
-    build-essential 
-    # python
-
+    build-base \
+    python3 \
+    py3-pip \
+    bash
 
 # Update node-gyp
 RUN npm install -g node-gyp
-
-# Set environment variables for Python
-# ENV PYTHON=/usr/bin/python3
-# ENV PYTHONPATH=/usr/lib/python3
 
 # Download and Install Golang
 RUN curl -LO "https://go.dev/dl/go1.21.5.linux-arm64.tar.gz" \
@@ -25,8 +22,9 @@ RUN curl -LO "https://go.dev/dl/go1.21.5.linux-arm64.tar.gz" \
 # Set PATH so it includes Go binaries
 ENV PATH="/usr/local/go/bin:${PATH}"
 
-# Set Zsh as the default shell for the node user
-RUN chsh -s /bin/zsh node
+# Change the default shell for the node user
+USER root
+RUN sed -i 's;/home/node:/bin/ash;/home/node:/bin/zsh;' /etc/passwd
 
 # Change to the node user to install Oh My Zsh
 USER node
@@ -57,9 +55,8 @@ RUN wget -O /home/node/.p10k.zsh https://raw.githubusercontent.com/romkatv/power
 # Ensure the .p10k.zsh file is sourced in .zshrc
 RUN echo '[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh' >> /home/node/.zshrc
 
-# Configure user and working directory
+# Back to the root user to complete setup
 USER root
-SHELL ["/bin/zsh", "-c"]
 ENV PNPM_HOME="/home/node/.pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN mkdir -p $PNPM_HOME && chown -R node:node $PNPM_HOME
@@ -69,6 +66,7 @@ RUN chmod -R a+w /usr/local/lib/node_modules
 # Configurando o diretório .pnpm-store no home do usuário
 RUN mkdir -p /home/node/.pnpm-store && chmod -R a+w /home/node/.pnpm-store
 
+# Set the working directory and switch back to the node user
 USER node
 WORKDIR /home/node/app
 

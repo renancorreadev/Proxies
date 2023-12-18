@@ -1,6 +1,23 @@
 version: "3.4"
 
 services:
+  app:
+    build: .
+    container_name: protocol
+    volumes:
+      - ./.docker/app:/home/node/app
+      - pnpm-store:/home/node/.pnpm-store
+    env_file:
+      - ./.env
+    ports:
+      - "3001:3001"
+      - "3000:3000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      protocol:
+        ipv4_address: 172.16.239.9
+
   besu_node_1:
     container_name: besu_node_1
     image: hyperledger/besu:23.4.4
@@ -106,6 +123,7 @@ services:
     networks: 
       protocol:
         ipv4_address: 172.16.239.15
+
 
   db_keycloak:
     image: mysql:8.2.0-oracle
