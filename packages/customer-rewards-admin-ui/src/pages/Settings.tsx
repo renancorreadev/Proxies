@@ -1,15 +1,20 @@
+import { useEffect, useState } from 'react';
+
 import Breadcrumb from '../components/Breadcrumb';
-import userThree from '../images/user/user-03.png';
+import { Modal } from '../components/ModalSettings';
+import { Table } from '../components/TableSettings';
 import fireToast from '../hooks/fireToast';
-import { Table } from "../components/TableSettings";
-import { Modal } from "../components/ModalSettings";
-import { useState,useEffect } from "react";
+import userThree from '../images/user/user-03.png';
 const Settings = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [rows, setRows] = useState(localStorage.getItem("alertSettings")?JSON.parse(localStorage.getItem("alertSettings")):[]);
+  const [rows, setRows] = useState(
+    localStorage.getItem('alertSettings')
+      ? JSON.parse(localStorage.getItem('alertSettings'))
+      : [],
+  );
   useEffect(() => {
     // storing input name
-    localStorage.setItem("alertSettings", JSON.stringify(rows));
+    localStorage.setItem('alertSettings', JSON.stringify(rows));
   }, [rows]);
   const [rowToEdit, setRowToEdit] = useState(null);
 
@@ -31,14 +36,13 @@ const Settings = () => {
             if (idx !== rowToEdit) return currRow;
 
             return newRow;
-          })
+          }),
         );
   };
 
   return (
     <>
       <div className="mx-auto max-w-270">
-        
         <Breadcrumb pageName="Settings" />
 
         <div className="grid grid-cols-5 gap-8">
@@ -247,9 +251,7 @@ const Settings = () => {
           <div className="col-span-5 xl:col-span-2">
             <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
               <div className="border-b border-stroke py-4 px-7 dark:border-strokedark">
-                <h3 className="font-medium text-black dark:text-white">
-                  Your Photo
-                </h3>
+                <h3 className="font-medium text-black dark:text-white">Your Photo</h3>
               </div>
               <div className="p-7">
                 <form action="#">
@@ -262,12 +264,8 @@ const Settings = () => {
                         Edit your photo
                       </span>
                       <span className="flex gap-2.5">
-                        <button className="text-sm hover:text-primary">
-                          Delete
-                        </button>
-                        <button className="text-sm hover:text-primary">
-                          Update
-                        </button>
+                        <button className="text-sm hover:text-primary">Delete</button>
+                        <button className="text-sm hover:text-primary">Update</button>
                       </span>
                     </div>
                   </div>
@@ -311,8 +309,8 @@ const Settings = () => {
                         </svg>
                       </span>
                       <p>
-                        <span className="text-primary">Click to upload</span> or
-                        drag and drop
+                        <span className="text-primary">Click to upload</span> or drag and
+                        drop
                       </p>
                       <p className="mt-1.5">SVG, PNG, JPG or GIF</p>
                       <p>(max, 800 X 800px)</p>

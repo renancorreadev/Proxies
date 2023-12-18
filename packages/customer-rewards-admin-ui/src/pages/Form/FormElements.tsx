@@ -19,9 +19,7 @@ const FormElements = () => {
           {/* <!-- Input Fields --> */}
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-              <h3 className="font-medium text-black dark:text-white">
-                Input Fields
-              </h3>
+              <h3 className="font-medium text-black dark:text-white">Input Fields</h3>
             </div>
             <div className="flex flex-col gap-5.5 p-6.5">
               <div>
@@ -78,9 +76,7 @@ const FormElements = () => {
           {/* <!-- Time and date --> */}
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-              <h3 className="font-medium text-black dark:text-white">
-                Time and date
-              </h3>
+              <h3 className="font-medium text-black dark:text-white">Time and date</h3>
             </div>
             <div className="flex flex-col gap-5.5 p-6.5">
               <div>
@@ -112,9 +108,7 @@ const FormElements = () => {
           {/* <!-- File upload --> */}
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-              <h3 className="font-medium text-black dark:text-white">
-                File upload
-              </h3>
+              <h3 className="font-medium text-black dark:text-white">File upload</h3>
             </div>
             <div className="flex flex-col gap-5.5 p-6.5">
               <div>
@@ -144,9 +138,7 @@ const FormElements = () => {
           {/* <!-- Textarea Fields --> */}
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-              <h3 className="font-medium text-black dark:text-white">
-                Textarea Fields
-              </h3>
+              <h3 className="font-medium text-black dark:text-white">Textarea Fields</h3>
             </div>
             <div className="flex flex-col gap-5.5 p-6.5">
               <div>
@@ -204,9 +196,7 @@ const FormElements = () => {
           {/* <!-- Select input --> */}
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-              <h3 className="font-medium text-black dark:text-white">
-                Select input
-              </h3>
+              <h3 className="font-medium text-black dark:text-white">Select input</h3>
             </div>
             <div className="flex flex-col gap-5.5 p-6.5">
               <div>

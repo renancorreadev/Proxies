@@ -1,10 +1,3 @@
-
-
 export const CustomerList = () => {
-
-    return (
-        <div>
-            Customer List
-        </div>
-    )
-}
+  return <div>Customer List</div>;
+};

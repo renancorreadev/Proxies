@@ -20,6 +20,7 @@ import { MetadataAdapter } from './modules/Metadata/Adapters/Output/MetadataAdap
 @Module({
 	imports: [],
 	controllers: [ClientWebAdapter, PointsBlockchainWebAdapter, MetadataWebAdapter],
+
 	providers: [
 		{
 			useClass: ClientBlockchainService,

@@ -26,10 +26,7 @@ const Drag = (): void => {
     });
   });
 
-  const insertAboveTask = (
-    zone: HTMLElement,
-    mouseY: number
-  ): HTMLElement | null => {
+  const insertAboveTask = (zone: HTMLElement, mouseY: number): HTMLElement | null => {
     const els = zone.querySelectorAll<HTMLElement>('.task:not(.is-dragging)');
 
     let closestTask: HTMLElement | null = null;

@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+
 import { PrivateRoute } from '../pages/Authentication/PrivateRouter';
 
 const Calendar = lazy(() => import('../pages/Calendar'));
@@ -15,8 +16,6 @@ const Login = lazy(() => import('../pages/Authentication/Login'));
 const Logout = lazy(() => import('../pages/Authentication/Logout'));
 const Callback = lazy(() => import('../pages/Authentication/Callback'));
 const PrivateRoute = lazy(() => import('../pages/Authentication/PrivateRouter'));
-
-
 
 const coreRoutes = [
   {

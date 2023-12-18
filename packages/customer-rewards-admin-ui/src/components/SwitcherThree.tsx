@@ -5,10 +5,7 @@ const SwitcherThree = () => {
 
   return (
     <div>
-      <label
-        htmlFor="toggle3"
-        className="flex cursor-pointer select-none items-center"
-      >
+      <label htmlFor="toggle3" className="flex cursor-pointer select-none items-center">
         <div className="relative">
           <input
             type="checkbox"

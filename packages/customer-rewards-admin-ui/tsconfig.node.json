@@ -1,11 +1,8 @@
 {
   "compilerOptions": {
     "composite": true,
-    "skipLibCheck": true,
     "module": "ESNext",
-    "moduleResolution": "node",
-    "target": "ES2018",
-    "allowSyntheticDefaultImports": true
+    "moduleResolution": "Node"
   },
-  "include": ["./**/*.ts"]
+  "include": ["./vite.config.ts"]
 }

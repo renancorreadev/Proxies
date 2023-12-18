@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
-import LogoDark from '../../images/logo/logo-dark.svg';
+
 import Logo from '../../images/logo/logo.svg';
+import LogoDark from '../../images/logo/logo-dark.svg';
 
 const SignUp = () => {
   return (
@@ -14,8 +15,7 @@ const SignUp = () => {
                 <img className="dark:hidden" src={LogoDark} alt="Logo" />
               </Link>
               <p className="2xl:px-20">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit
-                suspendisse.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit suspendisse.
               </p>
 
               <span className="mt-15 inline-block">

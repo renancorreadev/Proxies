@@ -10,9 +10,7 @@ const FormLayout = () => {
           {/* <!-- Contact Form --> */}
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-              <h3 className="font-medium text-black dark:text-white">
-                Contact Form
-              </h3>
+              <h3 className="font-medium text-black dark:text-white">Contact Form</h3>
             </div>
             <form action="#">
               <div className="p-6.5">
@@ -118,16 +116,12 @@ const FormLayout = () => {
           {/* <!-- Sign In Form --> */}
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-              <h3 className="font-medium text-black dark:text-white">
-                Sign In Form
-              </h3>
+              <h3 className="font-medium text-black dark:text-white">Sign In Form</h3>
             </div>
             <form action="#">
               <div className="p-6.5">
                 <div className="mb-4.5">
-                  <label className="mb-2.5 block text-black dark:text-white">
-                    Email
-                  </label>
+                  <label className="mb-2.5 block text-black dark:text-white">Email</label>
                   <input
                     type="email"
                     placeholder="Enter your email address"
@@ -192,16 +186,12 @@ const FormLayout = () => {
           {/* <!-- Sign Up Form --> */}
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-              <h3 className="font-medium text-black dark:text-white">
-                Sign Up Form
-              </h3>
+              <h3 className="font-medium text-black dark:text-white">Sign Up Form</h3>
             </div>
             <form action="#">
               <div className="p-6.5">
                 <div className="mb-4.5">
-                  <label className="mb-2.5 block text-black dark:text-white">
-                    Name
-                  </label>
+                  <label className="mb-2.5 block text-black dark:text-white">Name</label>
                   <input
                     type="text"
                     placeholder="Enter your full name"
@@ -210,9 +200,7 @@ const FormLayout = () => {
                 </div>
 
                 <div className="mb-4.5">
-                  <label className="mb-2.5 block text-black dark:text-white">
-                    Email
-                  </label>
+                  <label className="mb-2.5 block text-black dark:text-white">Email</label>
                   <input
                     type="email"
                     placeholder="Enter your email address"

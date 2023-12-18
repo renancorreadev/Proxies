@@ -2,9 +2,11 @@
   "extends": [
     "@rocketseat/eslint-config/next"
   ],
+  
   "settings": {
     "next": {
       "rootDir": "packages/customer-rewards-ui"
     }
-  }
+  },
+  "root": true
 }

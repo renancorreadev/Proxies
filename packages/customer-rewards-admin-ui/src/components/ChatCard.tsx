@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+
 import UserOne from '../images/user/user-01.png';
 import UserTwo from '../images/user/user-02.png';
 import UserThree from '../images/user/user-03.png';
@@ -24,9 +25,7 @@ const ChatCard = () => {
 
           <div className="flex flex-1 items-center justify-between">
             <div>
-              <h5 className="font-medium text-black dark:text-white">
-                Devid Heilo
-              </h5>
+              <h5 className="font-medium text-black dark:text-white">Devid Heilo</h5>
               <p>
                 <span className="text-sm text-black dark:text-white">
                   Hello, how are you?
@@ -88,9 +87,7 @@ const ChatCard = () => {
 
           <div className="flex flex-1 items-center justify-between">
             <div>
-              <h5 className="font-medium text-black dark:text-white">
-                Henry Deco
-              </h5>
+              <h5 className="font-medium text-black dark:text-white">Henry Deco</h5>
               <p>
                 <span className="text-sm text-black dark:text-white">
                   Thank you so much!

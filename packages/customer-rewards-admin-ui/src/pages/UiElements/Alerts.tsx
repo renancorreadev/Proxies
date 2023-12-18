@@ -28,9 +28,9 @@ const Alerts = () => {
                 Attention needed
               </h5>
               <p className="leading-relaxed text-[#D0915C]">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                Lorem Ipsum has been the industry's standard dummy text ever since the
+                1500s, when
               </p>
             </div>
           </div>
@@ -56,8 +56,7 @@ const Alerts = () => {
                 Message Sent Successfully
               </h5>
               <p className="text-base leading-relaxed text-body">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry.
               </p>
             </div>
           </div>

@@ -1,8 +1,9 @@
+import { BarChart, Braces, Home, SquareStack, Trophy } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
+
 import Logo from '../images/logo/logo.svg';
 import SidebarLinkGroup from './SidebarLinkGroup';
-import { BarChart, Braces, Home, SquareStack, Trophy } from 'lucide-react';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -18,7 +19,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
   const storedSidebarExpanded = localStorage.getItem('sidebar-expanded');
   const [sidebarExpanded, setSidebarExpanded] = useState(
-    storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true'
+    storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true',
   );
 
   // close on click outside
@@ -98,16 +99,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <nav className="mt-5 py-4 px-4 lg:mt-9 lg:px-6">
           {/* <!-- Menu Group --> */}
           <div>
-            <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
-              MENU
-            </h3>
+            <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">MENU</h3>
 
             <ul className="mb-6 flex flex-col gap-1.5">
               {/* <!-- Menu Item Dashboard --> */}
               <SidebarLinkGroup
-                activeCondition={
-                  pathname === '/' || pathname.includes('dashboard')
-                }
+                activeCondition={pathname === '/' || pathname.includes('dashboard')}
               >
                 {(handleClick, open) => {
                   return (
@@ -115,15 +112,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <NavLink
                         to="#"
                         className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          (pathname === '/' ||
-                            pathname.includes('dashboard')) &&
+                          (pathname === '/' || pathname.includes('dashboard')) &&
                           'bg-graydark dark:bg-meta-4'
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
-                          sidebarExpanded
-                            ? handleClick()
-                            : setSidebarExpanded(true);
+                          sidebarExpanded ? handleClick() : setSidebarExpanded(true);
                         }}
                       >
                         <Home />
@@ -173,7 +167,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               </SidebarLinkGroup>
 
               {/* <!-- Menu Item Customer --> */}
-             <SidebarLinkGroup
+              <SidebarLinkGroup
                 activeCondition={
                   pathname === '/customers' || pathname.includes('customers')
                 }
@@ -184,19 +178,16 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <NavLink
                         to="#"
                         className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          (pathname === '/customers' ||
-                            pathname.includes('customers')) &&
+                          (pathname === '/customers' || pathname.includes('customers')) &&
                           'bg-graydark dark:bg-meta-4'
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
-                          sidebarExpanded
-                            ? handleClick()
-                            : setSidebarExpanded(true);
+                          sidebarExpanded ? handleClick() : setSidebarExpanded(true);
                         }}
                       >
-                       <SquareStack/>
-                          Customers
+                        <SquareStack />
+                        Customers
                         <svg
                           className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
                             open && 'rotate-180'
@@ -222,7 +213,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         }`}
                       >
                         <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
-                        <li>
+                          <li>
                             <NavLink
                               to="/customers/list"
                               className={({ isActive }) =>
@@ -254,7 +245,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             >
                               Deletar Cliente
                             </NavLink>
-                          </li>              
+                          </li>
                         </ul>
                       </div>
                       {/* <!-- Dropdown Menu End --> */}
@@ -275,18 +266,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <NavLink
                         to="#"
                         className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          (pathname === '/events' ||
-                            pathname.includes('events')) &&
+                          (pathname === '/events' || pathname.includes('events')) &&
                           'bg-graydark dark:bg-meta-4'
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
-                          sidebarExpanded
-                            ? handleClick()
-                            : setSidebarExpanded(true);
+                          sidebarExpanded ? handleClick() : setSidebarExpanded(true);
                         }}
                       >
-                       <BarChart/>
+                        <BarChart />
                         Events
                         <svg
                           className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
@@ -313,7 +301,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         }`}
                       >
                         <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
-                        <li>
+                          <li>
                             <NavLink
                               to="/events/customers"
                               className={({ isActive }) =>
@@ -332,7 +320,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 (isActive && '!text-white')
                               }
                             >
-                             Pontos
+                              Pontos
                             </NavLink>
                           </li>
                           <li>
@@ -345,7 +333,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             >
                               Metadata
                             </NavLink>
-                          </li>   
+                          </li>
                           <li>
                             <NavLink
                               to="/events/threshold"
@@ -356,7 +344,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             >
                               Threshold Insignia
                             </NavLink>
-                          </li>            
+                          </li>
                         </ul>
                       </div>
                       {/* <!-- Dropdown Menu End --> */}
@@ -365,11 +353,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 }}
               </SidebarLinkGroup>
 
-               {/* <!-- Menu Item Rewards --> */}
+              {/* <!-- Menu Item Rewards --> */}
               <SidebarLinkGroup
-                activeCondition={
-                  pathname === '/rewards' || pathname.includes('rewards')
-                }
+                activeCondition={pathname === '/rewards' || pathname.includes('rewards')}
               >
                 {(handleClick, open) => {
                   return (
@@ -377,18 +363,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <NavLink
                         to="#"
                         className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          (pathname === '/rewards' ||
-                            pathname.includes('rewards')) &&
+                          (pathname === '/rewards' || pathname.includes('rewards')) &&
                           'bg-graydark dark:bg-meta-4'
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
-                          sidebarExpanded
-                            ? handleClick()
-                            : setSidebarExpanded(true);
+                          sidebarExpanded ? handleClick() : setSidebarExpanded(true);
                         }}
                       >
-                       <Braces/>
+                        <Braces />
                         Rewards
                         <svg
                           className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
@@ -415,7 +398,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         }`}
                       >
                         <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
-                        <li>
+                          <li>
                             <NavLink
                               to="/rewards/view"
                               className={({ isActive }) =>
@@ -434,7 +417,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 (isActive && '!text-white')
                               }
                             >
-                             Token Id
+                              Token Id
                             </NavLink>
                           </li>
                           <li>
@@ -447,7 +430,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             >
                               Update Rewards Metadata
                             </NavLink>
-                          </li>   
+                          </li>
                           <li>
                             <NavLink
                               to="/rewards/update-threshold"
@@ -458,7 +441,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             >
                               Atualizar threshold
                             </NavLink>
-                          </li>    
+                          </li>
                           <li>
                             <NavLink
                               to="/rewards/benefits"
@@ -467,9 +450,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 (isActive && '!text-white')
                               }
                             >
-                              Benefícios 
+                              Benefícios
                             </NavLink>
-                          </li>     
+                          </li>
                           <li>
                             <NavLink
                               to="/rewards/levels"
@@ -478,9 +461,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 (isActive && '!text-white')
                               }
                             >
-                              Levels 
+                              Levels
                             </NavLink>
-                          </li>         
+                          </li>
                         </ul>
                       </div>
                       {/* <!-- Dropdown Menu End --> */}
@@ -491,9 +474,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
               {/* <!-- Menu Item Points --> */}
               <SidebarLinkGroup
-                activeCondition={
-                  pathname === '/points' || pathname.includes('points')
-                }
+                activeCondition={pathname === '/points' || pathname.includes('points')}
               >
                 {(handleClick, open) => {
                   return (
@@ -501,18 +482,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <NavLink
                         to="#"
                         className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                          (pathname === '/points' ||
-                            pathname.includes('points')) &&
+                          (pathname === '/points' || pathname.includes('points')) &&
                           'bg-graydark dark:bg-meta-4'
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
-                          sidebarExpanded
-                            ? handleClick()
-                            : setSidebarExpanded(true);
+                          sidebarExpanded ? handleClick() : setSidebarExpanded(true);
                         }}
                       >
-                       <Trophy/>
+                        <Trophy />
                         Pontos
                         <svg
                           className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
@@ -549,7 +527,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             >
                               Pontos
                             </NavLink>
-                          </li>   
+                          </li>
                           <li>
                             <NavLink
                               to="/points/add"
@@ -578,14 +556,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     </React.Fragment>
                   );
                 }}
-              </SidebarLinkGroup>      
+              </SidebarLinkGroup>
               {/* <!-- Menu Item Settings --> */}
               <li>
                 <NavLink
                   to="/settings"
                   className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('settings') &&
-                    'bg-graydark dark:bg-meta-4'
+                    pathname.includes('settings') && 'bg-graydark dark:bg-meta-4'
                   }`}
                 >
                   <svg
@@ -620,7 +597,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   Settings
                 </NavLink>
               </li>
- 
             </ul>
           </div>
         </nav>

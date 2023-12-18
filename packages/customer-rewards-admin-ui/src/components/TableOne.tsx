@@ -14,29 +14,19 @@ const TableOne = () => {
       <div className="flex flex-col">
         <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5">
           <div className="p-2.5 xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Source
-            </h5>
+            <h5 className="text-sm font-medium uppercase xsm:text-base">Source</h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Visitors
-            </h5>
+            <h5 className="text-sm font-medium uppercase xsm:text-base">Visitors</h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Revenues
-            </h5>
+            <h5 className="text-sm font-medium uppercase xsm:text-base">Revenues</h5>
           </div>
           <div className="hidden p-2.5 text-center sm:block xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Sales
-            </h5>
+            <h5 className="text-sm font-medium uppercase xsm:text-base">Sales</h5>
           </div>
           <div className="hidden p-2.5 text-center sm:block xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Conversion
-            </h5>
+            <h5 className="text-sm font-medium uppercase xsm:text-base">Conversion</h5>
           </div>
         </div>
 
@@ -70,9 +60,7 @@ const TableOne = () => {
             <div className="flex-shrink-0">
               <img src={BrandTwo} alt="Brand" />
             </div>
-            <p className="hidden text-black dark:text-white sm:block">
-              Twitter
-            </p>
+            <p className="hidden text-black dark:text-white sm:block">Twitter</p>
           </div>
 
           <div className="flex items-center justify-center p-2.5 xl:p-5">
@@ -147,9 +135,7 @@ const TableOne = () => {
             <div className="flex-shrink-0">
               <img src={BrandFive} alt="Brand" />
             </div>
-            <p className="hidden text-black dark:text-white sm:block">
-              Facebook
-            </p>
+            <p className="hidden text-black dark:text-white sm:block">Facebook</p>
           </div>
 
           <div className="flex items-center justify-center p-2.5 xl:p-5">
