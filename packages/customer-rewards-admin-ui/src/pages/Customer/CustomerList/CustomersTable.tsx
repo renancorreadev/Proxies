@@ -22,30 +22,18 @@ export const CustomerTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
+  const apiURL = import.meta.env.VITE_CUSTOMER_API;
+
+  console.log(apiURL);
+
   const fetchCustomers = async () => {
     try {
-      const response = await axios.get<ClientData[]>(
-        `http://localhost:3001/api/v1/customer/all`,
-      );
+      const response = await axios.get<ClientData[]>(`${apiURL}/customer/all`);
       setCustomers(response.data);
     } catch (error) {
       console.error('Error fetching customers:', error);
     }
   };
-
-  // const fakeCustomers = Array.from({ length: 1000 }, (_, index) => ({
-  //   clientID: index + 1,
-  //   name: `John Doe ${index + 1}`,
-  //   age: 30,
-  //   WalletAddress: `0x123456789${index}`,
-  //   paymentStatus: 1,
-  //   addressLocal: {
-  //     City: 'New York',
-  //     Street: '123 Main St',
-  //     PostalCode: 10001,
-  //     HouseNumber: 123,
-  //   },
-  // }));
 
   useEffect(() => {
     fetchCustomers();
@@ -53,7 +41,7 @@ export const CustomerTable = () => {
 
   const totalPages = Math.ceil(customers.length / itemsPerPage);
 
-  const handlePageChange = (newPage) => {
+  const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
 
