@@ -3,10 +3,12 @@ import { config } from 'dotenv';
 
 import { ClientBlockchainTokenOutputPort } from '@/src/modules/Blockchain/Client/Port/Output/ClientBlockchainTokenOutputPort';
 import { RegisterClientRequestDto } from '@/src/modules/Blockchain/Client/Domain/Dto/HTTPRequest/ClientBlockchainRequestDto';
-import { DependencyInjectionBlockchainConnector } from '@helper/AppConstants';
+import { DependencyInjectionBlockchainConnector, DependencyInjectionTokens } from '@helper/AppConstants';
 import { ClientManagerConnector } from '@helper/blockchain/connector';
 import { AddressLocal, ClientData, ClientDataInput } from '@helper/blockchain/types/contracts/client-manager-types';
 import axios from 'axios';
+import { CustomerDBStorageOutputPort } from '../../Port/Output/db/CustomerDBStorageOutputPort';
+import { CustomerDBService } from '../../Domain/CustomerDBService';
 
 config();
 
@@ -15,6 +17,9 @@ export class ClientBlockchainAdapter implements ClientBlockchainTokenOutputPort 
 	private readonly logger = new Logger('ClientBlockchainAdapter');
 
 	constructor(
+		@Inject(DependencyInjectionTokens.CUSTOMER_DB_TOKEN_USE_CASE)
+		private customerDBService: CustomerDBService,
+
 		@Inject(DependencyInjectionBlockchainConnector.CLIENT_MANAGER_CONNECTOR)
 		private contractInstance: ClientManagerConnector,
 	) {}
@@ -39,7 +44,8 @@ export class ClientBlockchainAdapter implements ClientBlockchainTokenOutputPort 
 			const tx = await this.contractInstance.registerClient(payload);
 
 			if (tx.hash) {
-				await this.initializeMetadata(registerClientBlockchainDto);
+				await this.customerDBService.saveCustomer(payload); // salva no banco
+				await this.initializeMetadata(registerClientBlockchainDto); // cria uma metadata
 			} else {
 				throw new Error('An error ocurred in write contract registerClient function on blockchain ');
 			}
@@ -49,6 +55,17 @@ export class ClientBlockchainAdapter implements ClientBlockchainTokenOutputPort 
 			const errorMessage = e.response ? e.response.data : e.message;
 			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
 			throw new Error(`An error ocurred in write contract registerClient function on blockchain `);
+		}
+	}
+
+	async getAllCustomers(): Promise<ClientData[]> {
+		try {
+			console.log('caiu aqui nessa merda de clientAdapter');
+			return await this.customerDBService.findAll();
+		} catch (e) {
+			const errorMessage = e.response ? e.response.data : e.message;
+			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
+			throw new Error(`An Error ocurred in read contract getAllCustomers on application `);
 		}
 	}
 

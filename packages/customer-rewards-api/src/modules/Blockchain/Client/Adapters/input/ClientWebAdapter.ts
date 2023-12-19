@@ -94,7 +94,7 @@ export class ClientWebAdapter {
 	async getClientByName(@Param('name') name: string) {
 		try {
 			this.logger.log('---------- PROCESS BEGIN ----------');
-			this.logger.log('Running PointBlockchain web adapter');
+			this.logger.log(`Running Client Blockchain Web adapter`);
 			this.logger.log(`name: ${name}`);
 
 			return await this.clientBlockchainService.getClientByName(name);
@@ -154,7 +154,7 @@ export class ClientWebAdapter {
 	async getClientByWallet(@Param('wallet') wallet: string) {
 		try {
 			this.logger.log('---------- PROCESS BEGIN ----------');
-			this.logger.log('Running PointBlockchain web adapter');
+			this.logger.log(`Running Client Blockchain Web adapter`);
 			this.logger.log(`wallet: ${wallet}`);
 
 			return await this.clientBlockchainService.getClientByWallet(wallet);

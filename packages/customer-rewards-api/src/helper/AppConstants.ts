@@ -3,6 +3,7 @@ export enum BaseUrls {
 	CLIENT_BLOCKCHAIN = 'client/',
 	POINTS_BLOCKCHAIN = 'points/',
 	META_DATA = 'metadata/',
+	CUSTOMER = 'customer/',
 }
 
 export const enum DependencyInjectionTokens {
@@ -14,6 +15,10 @@ export const enum DependencyInjectionTokens {
 	METADATA_TOKEN_OUTPUT_PORT = 'MetadataTokenOutputPort',
 	METADATA_TOKEN_USE_CASE = 'MetadataTokenUseCase',
 	DATA_SOURCE = 'DataSource',
+	CUSTOMER_SOURCE = 'CustomerSource',
+	CUSTOMER_DB_STORAGE_OUTPUT_PORT = 'CustomerDBStorageOutputPort',
+	CUSTOMER_DB_TOKEN_OUTPUT_PORT = 'CustomerDBTokenOutputPort',
+	CUSTOMER_DB_TOKEN_USE_CASE = 'CustomerDBTokenUseCase',
 }
 
 export const enum DependencyInjectionBlockchainConnector {

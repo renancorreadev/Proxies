@@ -4,7 +4,6 @@ import { DependencyInjectionTokens } from '@src/helper/AppConstants';
 import { MetadataStorageOutputPort, MetadataTokenOutputPort } from '@/src/modules/Metadata/Port/Output';
 import { MetadataResponse } from '@/src/modules/Metadata/Domain/Dto/HTTPResponse/MetadataResponse';
 import { RegisterMetadataRequestDTO, UpdateMetadataRequestDTO } from '@/src/modules/Metadata/Domain/Dto/HTTPRequest';
-import { ContractError } from '@helper/APIErrors';
 
 @Injectable()
 export class MetadataAdapter implements MetadataTokenOutputPort {
