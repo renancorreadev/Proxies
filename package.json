@@ -25,7 +25,7 @@
     "sc:clean": "lerna run --scope smart-contracts cache",
     "code-review": "cd infra/code-review-gpt && pnpm review",
     "clean": "lerna run clean",
-    "clear": "rm -rf node_modules && rm -rf packages/customer-rewards-api/node_modules && rm -rf packages/customer-rewards-ui/node_modules && packages/smart-contracts/node_modules && rm -rf packages/customer-rewards-admin-ui/node_modules", 
+    "clear": "rm -rf node_modules && rm -rf packages/customer-rewards-api/node_modules && rm -rf packages/customer-rewards-ui/node_modules && packages/smart-contracts/node_modules && rm -rf packages/customer-rewards-admin-ui/node_modules",
     "build": "pnpm recursive run build",
     "test": "pnpm recursive run test"
   },
@@ -43,5 +43,6 @@
         }
       }
     }
-  }
+  },
+  "dependencies": {}
 }

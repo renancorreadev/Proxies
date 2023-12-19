@@ -9,6 +9,18 @@ config();
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule, {
 		logger: ['error', 'log'],
+		cors: {
+			origin: (origin, callback) => {
+				if (!origin || /^https?:\/\/localhost(:\d+)?$/.test(origin)) {
+					callback(null, true);
+				} else {
+					callback(new Error('Not allowed by CORS'));
+				}
+			},
+			methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Métodos HTTP permitidos
+			allowedHeaders: 'Content-Type, Accept', // Cabeçalhos permitidos
+			credentials: true, // Configuração de credenciais, coloque false se não for necessário
+		},
 	});
 
 	app.useGlobalPipes(
