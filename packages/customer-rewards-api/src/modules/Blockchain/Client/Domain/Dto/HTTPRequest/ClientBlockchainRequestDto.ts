@@ -48,3 +48,18 @@ export class RegisterClientRequestDto {
 	@IsNotEmpty()
 	address: AddressLocalDto;
 }
+
+interface AddressLocalDto {
+	City: string;
+	Street: string;
+	PostalCode: number;
+	HouseNumber: string;
+}
+
+export interface RegisterClientRequestDto {
+	name: string;
+	age: number;
+	WalletAddress: string;
+	paymentStatus: number;
+	address: AddressLocalDto;
+}

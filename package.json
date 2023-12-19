@@ -7,8 +7,8 @@
   "scripts": {
     "init:infra": "./infra/init.sh",
     "down:infra": "./infra/down.sh",
-    "start:dev": "lerna run --parallel --stream dev --scope customer-rewards-api --scope blockchain-service",
-    "dev": "lerna run --parallel --stream dev --scope customer-rewards-api --scope customer-rewards-ui--scope blockchain-service",
+    "start:dev": "lerna run --parallel --stream dev --scope customer-rewards-api --scope blockchain-service --scope customer-rewards-admin-ui",
+    "dev": "lerna run --parallel --stream dev --scope customer-rewards-api --scope customer-rewards-ui --scope blockchain-service",
     "sc": "lerna run --scope smart-contracts compile",
     "bs:download": "lerna run --scope blockchain-service --stream download",
     "bs": "lerna run --scope blockchain-service --stream dev",
@@ -25,7 +25,7 @@
     "sc:clean": "lerna run --scope smart-contracts cache",
     "code-review": "cd infra/code-review-gpt && pnpm review",
     "clean": "lerna run clean",
-    "clear": "rm -rf node_modules && rm -rf packages/customer-rewards-ui/node_modules && rm -rf packages/customer-rewards-api/node_modules && rm -rf packages/smart-contracts/node_modules", 
+    "clear": "rm -rf node_modules && rm -rf packages/customer-rewards-api/node_modules && rm -rf packages/customer-rewards-ui/node_modules && packages/smart-contracts/node_modules && rm -rf packages/customer-rewards-admin-ui/node_modules",
     "build": "pnpm recursive run build",
     "test": "pnpm recursive run test"
   },
@@ -43,5 +43,6 @@
         }
       }
     }
-  }
+  },
+  "dependencies": {}
 }

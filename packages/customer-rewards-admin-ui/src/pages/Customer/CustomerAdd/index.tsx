@@ -1,3 +1,12 @@
+import Breadcrumb from '../../../components/Breadcrumb';
+import { ClientRegistrationForm } from './Form';
+
 export const CustomerAdd = () => {
-  return <div>Customer Add</div>;
+  return (
+    <div>
+      <Breadcrumb pageName="New Customer" />
+
+      <ClientRegistrationForm />
+    </div>
+  );
 };

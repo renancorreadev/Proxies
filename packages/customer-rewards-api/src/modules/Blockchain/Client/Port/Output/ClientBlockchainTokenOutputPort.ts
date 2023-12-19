@@ -7,4 +7,5 @@ export interface ClientBlockchainTokenOutputPort {
 	getClientByName(getClientByNameRequestDTO: string): Promise<ClientData>;
 	getClientByAge(getClientByAgeRequestDTO: number): Promise<ClientData>;
 	getClientByWallet(getClientByWalletRequestDTO: string): Promise<ClientData>;
+	getAllCustomers(): Promise<ClientData[]>;
 }

@@ -3,31 +3,12 @@
   "editor.fontSize": 13,
   "peacock.remoteColor": "#f46403",
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "[solidity]": {
     "editor.defaultFormatter": "NomicFoundation.hardhat-solidity"
   },
   "extensions.ignoreRecommendations": true,
-  "workbench.colorCustomizations": {
-    "activityBar.activeBackground": "#fc812e",
-    "activityBar.background": "#fc812e",
-    "activityBar.foreground": "#15202b",
-    "activityBar.inactiveForeground": "#15202b99",
-    "activityBarBadge.background": "#027e34",
-    "activityBarBadge.foreground": "#e7e7e7",
-    "commandCenter.border": "#15202b99",
-    "sash.hoverBorder": "#fc812e",
-    "statusBar.background": "#f46403",
-    "statusBar.foreground": "#15202b",
-    "statusBarItem.hoverBackground": "#c24f02",
-    "statusBarItem.remoteBackground": "#f46403",
-    "statusBarItem.remoteForeground": "#15202b",
-    "titleBar.activeBackground": "#f46403",
-    "titleBar.activeForeground": "#15202b",
-    "titleBar.inactiveBackground": "#f4640399",
-    "titleBar.inactiveForeground": "#15202b99"
-  },
   "editor.fontFamily": "Fira Code",
   "editor.fontLigatures": true,
   "terminal.integrated.env.osx": {},
@@ -61,5 +42,5 @@
     "markdown",
     "rust"
   ],
-  "window.zoomLevel": 1,
+  "window.zoomLevel": 0,
 }

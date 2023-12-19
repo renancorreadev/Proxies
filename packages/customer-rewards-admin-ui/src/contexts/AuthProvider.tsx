@@ -33,7 +33,6 @@ export const AuthContext = createContext(initContextData);
 export const AuthProvider = (props: PropsWithChildren) => {
   const makeLogin = useCallback(
     (accessToken: string, idToken: string, code: string, state: string) => {
-      //@ts-expect-error - for refresh token param
       const authData = utils.login(accessToken, idToken, null, state);
       setData((oldData) => ({
         auth: authData,
