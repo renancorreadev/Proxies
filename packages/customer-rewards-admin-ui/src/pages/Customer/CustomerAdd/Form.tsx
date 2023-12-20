@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 
-import { Loader } from '../../../components/Loader';
+import { Loader } from '../../../components/Loader/Loader';
 interface AddressLocalDto {
   City: string;
   Street: string;
@@ -75,6 +75,7 @@ export const ClientRegistrationForm: React.FC = () => {
         console.error('Erro inesperado:', error);
         alert('Erro inesperado ao enviar dados.');
       }
+      // @ts-expect-error rtes
       setSubmitStatus({ isLoading: false, error: 'Erro na requisição' });
     }
   };

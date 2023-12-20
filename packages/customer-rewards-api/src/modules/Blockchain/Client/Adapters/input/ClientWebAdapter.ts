@@ -90,7 +90,7 @@ export class ClientWebAdapter {
 	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
 	@ApiForbiddenResponse({ description: 'Forbidden' })
 	@ApiNotFoundResponse({ description: 'Segment not found' })
-	@Get('dataBy/:name')
+	@Get('/dataByName/:name')
 	async getClientByName(@Param('name') name: string) {
 		try {
 			this.logger.log('---------- PROCESS BEGIN ----------');
@@ -120,7 +120,7 @@ export class ClientWebAdapter {
 	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
 	@ApiForbiddenResponse({ description: 'Forbidden' })
 	@ApiNotFoundResponse({ description: 'Segment not found' })
-	@Get('/dataBy/:age')
+	@Get('/dataByAge/:age')
 	async getClientByAge(@Param('age') age: number) {
 		try {
 			this.logger.log('---------- PROCESS BEGIN ----------');
@@ -150,7 +150,7 @@ export class ClientWebAdapter {
 	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
 	@ApiForbiddenResponse({ description: 'Forbidden' })
 	@ApiNotFoundResponse({ description: 'Segment not found' })
-	@Get('/dataBy/:wallet')
+	@Get('/dataByWallet/:wallet')
 	async getClientByWallet(@Param('wallet') wallet: string) {
 		try {
 			this.logger.log('---------- PROCESS BEGIN ----------');

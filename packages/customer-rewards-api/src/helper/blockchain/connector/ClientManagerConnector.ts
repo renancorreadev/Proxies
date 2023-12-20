@@ -131,7 +131,7 @@ export class ClientManagerConnector extends ClientManagerBlockchainConnector imp
 			return formattedData;
 		} catch (error) {
 			console.error(error);
-			throw new Error(`An error ocurred in read contract getClient on blockchain evm: ${error.message}`);
+			throw new Error(`An error ocurred in read contract getClientByWallet on blockchain evm: ${error.message}`);
 		}
 	}
 }

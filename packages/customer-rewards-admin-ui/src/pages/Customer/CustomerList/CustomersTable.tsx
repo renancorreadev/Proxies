@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
+import { apiURL } from '@/utils/keys';
+
 export type AddressLocal = {
   City: string;
   Street: string;
@@ -21,8 +23,6 @@ export const CustomerTable = () => {
   const [customers, setCustomers] = useState<ClientData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-
-  const apiURL = import.meta.env.VITE_CUSTOMER_API;
 
   console.log(apiURL);
 
