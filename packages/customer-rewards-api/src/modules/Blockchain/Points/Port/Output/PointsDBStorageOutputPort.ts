@@ -1,7 +1,7 @@
 import { PointData } from '../../Adapters/Output/PointsDBStorageAdapter';
 
 export interface PointsDBStorageOutputPort {
-	savePointOnDb(pointsDTO: PointData): Promise<string>;
-	getPointOnDb(clientId: number): Promise<PointData>;
+	addPointsOnDb(clientId: number, pointsToAdd: number): Promise<string>;
 	deletePointsOnDb(clientId: number, pointsToDelete: number): Promise<string>;
+	getPointOnDb(clientId: number): Promise<PointData>;
 }

@@ -5,6 +5,11 @@ export type AddPointsParamInput = {
 	points: BigNumberish;
 };
 
+export type RemovePointsParamInput = {
+	clientId: BigNumberish;
+	points: BigNumberish;
+};
+
 export type BalanceOfParam = {
 	account: string;
 	id: number;

@@ -1,8 +1,9 @@
 import { BalanceOfBatchParam, BalanceOfParam } from '@helper/blockchain/types/contracts/points-core-types';
-import { AddPointsRequestDto } from '../../Domain/Dto/HTTPRequest/AddPointsRequestDto';
+import { AddPointsRequestDto, RemovePointsRequestDTO } from '../../Domain/Dto/HTTPRequest/AddPointsRequestDto';
 
 export interface PointsBlockchainTokenOutputPort {
 	addPoints(registerClientBlockchainDto: AddPointsRequestDto): Promise<string>;
+	removePoints(removePointsDTO: RemovePointsRequestDTO): Promise<string>;
 	getClientPoints(clientId: number): Promise<number>;
 	getClientLevel(clientId: number): Promise<number>;
 	getMultiplesNFT(params: BalanceOfBatchParam): Promise<number[]>;

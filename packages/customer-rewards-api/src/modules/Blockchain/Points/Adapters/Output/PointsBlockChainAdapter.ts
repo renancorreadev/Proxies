@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { config } from 'dotenv';
 import { PointsBlockchainTokenOutputPort } from '@/src/modules/Blockchain/Points/Port/Output/PointsBlockchainTokenOutputPort';
-import { AddPointsRequestDto } from '../../Domain/Dto/HTTPRequest/AddPointsRequestDto';
+import { AddPointsRequestDto, RemovePointsRequestDTO } from '../../Domain/Dto/HTTPRequest/AddPointsRequestDto';
 import { DependencyInjectionBlockchainConnector, DependencyInjectionTokens } from '@helper/AppConstants';
 import { PointsManagerConnector } from '@helper/blockchain/connector';
 import { BalanceOfBatchParam, BalanceOfParam } from '@helper/blockchain/types/contracts/points-core-types';
@@ -31,16 +31,41 @@ export class PointsBlockchainAdapter implements PointsBlockchainTokenOutputPort 
 			});
 
 			if (transaction.hash) {
-				await this.pointDBStorage.savePointOnDb({ clientId, points });
+				// Atualize o banco de dados apenas se a transação na blockchain for bem-sucedida
+				await this.pointDBStorage.addPointsOnDb(clientId, points);
 			} else {
-				throw new Error(`An error ocurred in write contract addPoints function on blockchain `);
+				throw new Error(`An error occurred in write contract addPoints function on blockchain`);
 			}
 
 			return 'Points added successfully on blockchain and saved in db';
 		} catch (e) {
 			const errorMessage = e.response ? e.response.data : e.message;
-			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
-			throw new Error(`An error ocurred in write contract addPoints function on blockchain `);
+			this.logger.error(`Error: ${JSON.stringify(errorMessage)}`);
+			throw new Error(`An error occurred in write contract addPoints function on blockchain`);
+		}
+	}
+
+	async removePoints(removePointsDTO: RemovePointsRequestDTO): Promise<string> {
+		try {
+			const { clientId, points } = removePointsDTO;
+
+			const transaction = await this.contractInstance.removePoints({
+				clientId,
+				points,
+			});
+
+			if (transaction.hash) {
+				// Atualize o banco de dados apenas se a transação na blockchain for bem-sucedida
+				await this.pointDBStorage.deletePointsOnDb(clientId, points);
+			} else {
+				throw new Error(`An error occurred in write contract removePoints function on blockchain`);
+			}
+
+			return 'Points removed successfully on blockchain and saved in db';
+		} catch (e) {
+			const errorMessage = e.response ? e.response.data : e.message;
+			this.logger.error(`Error: ${JSON.stringify(errorMessage)}`);
+			throw new Error(`An error occurred in write contract removePoints function on blockchain`);
 		}
 	}
 

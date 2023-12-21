@@ -15,7 +15,7 @@ import FormElements from './pages/Form/FormElements';
 import FormLayout from './pages/Form/FormLayout';
 import { AddPointPage } from './pages/Points/AddPointPage';
 import { PointsViewPage } from './pages/Points/PointsViewPage';
-import { RemovePointPage } from './pages/Points/RemovePointPage';
+import { RemovePointsPage } from './pages/Points/RemovePointPage';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import Tables from './pages/Tables';
@@ -47,7 +47,7 @@ function App() {
         { path: 'customers/add', element: <CustomerAdd /> },
         { path: 'points/view', element: <PointsViewPage /> },
         { path: 'points/add', element: <AddPointPage /> },
-        { path: 'points/remove', element: <RemovePointPage /> },
+        { path: 'points/remove', element: <RemovePointsPage /> },
       ],
     },
     // Rotas de autenticação separadas
