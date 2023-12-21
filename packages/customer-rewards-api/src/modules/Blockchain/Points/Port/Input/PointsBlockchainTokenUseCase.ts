@@ -3,6 +3,7 @@ import { AddPointsRequestDto } from '../../Domain/Dto/HTTPRequest/AddPointsReque
 
 export interface PointsBlockchainTokenUseCase {
 	addPoints(addPointsRequestDTO: AddPointsRequestDto): Promise<string>;
+	removePoints(removePointsDTO: AddPointsRequestDto): Promise<string>;
 	getClientPoints(clientId: number): Promise<number>;
 	getClientLevel(clientId: number): Promise<number>;
 	getMultiplesNFT(params: BalanceOfBatchParam): Promise<number[]>;

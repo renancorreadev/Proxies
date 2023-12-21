@@ -1,6 +1,7 @@
 import { PointCoreBlockchainConnector } from '../PointsCoreBlockchainConnector';
-import { AddPointsParamInput, BalanceOfBatchParam } from '../types/contracts/points-core-types';
+import { AddPointsParamInput, BalanceOfBatchParam, RemovePointsParamInput } from '../types/contracts/points-core-types';
 import { IPointManagerConnector } from './interfaces/IPointManagerConnector';
+import { ContractTransactionReceipt } from 'ethers';
 
 export class PointsManagerConnector extends PointCoreBlockchainConnector implements IPointManagerConnector {
 	/// @dev NFT IDs
@@ -9,7 +10,7 @@ export class PointsManagerConnector extends PointCoreBlockchainConnector impleme
 	// private CUSTOMER_PREMIUM_NFT_ID = 1;
 
 	// Setters blockchain States
-	async addPoints(params: AddPointsParamInput) {
+	async addPoints(params: AddPointsParamInput): Promise<ContractTransactionReceipt> {
 		try {
 			const { clientId, points } = params;
 			const tx = await this.contract.addPoints(clientId, points, {
@@ -17,9 +18,26 @@ export class PointsManagerConnector extends PointCoreBlockchainConnector impleme
 				gasPrice: 0,
 			});
 
-			await tx.wait();
+			return await tx.wait();
 		} catch (e) {
 			console.error('Erro ao enviar pontos para o cliente:', e);
+
+			const errorMessage = e instanceof Error ? e.message : 'Unknown error';
+			throw new Error(`Erro ao escrever na função addPoints do contrato na EVM: ${errorMessage}`);
+		}
+	}
+
+	async removePoints(params: RemovePointsParamInput): Promise<ContractTransactionReceipt> {
+		try {
+			const { clientId, points } = params;
+			const tx = await this.contract.removePoints(clientId, points, {
+				gasLimit: 500000,
+				gasPrice: 0,
+			});
+
+			return await tx.wait();
+		} catch (e) {
+			console.error('Erro ao remover pontos do cliente:', e);
 
 			const errorMessage = e instanceof Error ? e.message : 'Unknown error';
 			throw new Error(`Erro ao escrever na função addPoints do contrato na EVM: ${errorMessage}`);

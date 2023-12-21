@@ -2,6 +2,7 @@ import {
 	BadRequestException,
 	Body,
 	Controller,
+	Patch,
 	Get,
 	HttpException,
 	Inject,
@@ -25,7 +26,7 @@ import { BaseUrls, DependencyInjectionTokens } from 'customer-rewards-api/src/he
 
 import { PointsBlockchainTokenUseCase } from '../../Port/Input/PointsBlockchainTokenUseCase';
 
-import { AddPointsRequestDto } from '../../Domain/Dto/HTTPRequest/AddPointsRequestDto';
+import { AddPointsRequestDto, RemovePointsRequestDTO } from '../../Domain/Dto/HTTPRequest/AddPointsRequestDto';
 import { GetClientPointsResponse } from '../../Domain/Dto/HTTPResponse/GetClientPointsResponse';
 import { GetClientLevelResponse } from '../../Domain/Dto/HTTPResponse/GetClientLevelResponse';
 
@@ -42,6 +43,9 @@ export class PointsBlockchainWebAdapter {
 		private pointsBlockchainService: PointsBlockchainTokenUseCase,
 	) {}
 
+	/// --------------------------------------------------------------------------------------
+	/// ------------------------      ADD POINTS TO CUSTOMER          ---------------------
+	/// --------------------------------------------------------------------------------------
 	@ApiOperation({
 		summary: 'Add points to client on blockchain',
 		description:
@@ -62,9 +66,43 @@ export class PointsBlockchainWebAdapter {
 		try {
 			this.logger.log('----------PROCESS BEGIN ----------');
 			this.logger.log(`Running Client Blockchain Web adapter`);
-			this.logger.log(`Data: ${JSON.stringify(clientBlockchainRequestDTO)}`);
+			this.logger.log(`Execution: addPoints with params: ${JSON.stringify(clientBlockchainRequestDTO)}`);
 
 			const response = await this.pointsBlockchainService.addPoints(clientBlockchainRequestDTO);
+
+			this.logger.log('---------- PROCESS END ----------');
+			return response;
+		} catch (error) {
+			this.logger.error(`Error in Points Blockchain Service: ${JSON.stringify(error)}`);
+			throw new HttpException('An error ocurred while adding the points', 500);
+		}
+	}
+
+	/// --------------------------------------------------------------------------------------
+	/// ------------------------      REMOVE POINTS TO CUSTOMER          ---------------------
+	/// --------------------------------------------------------------------------------------
+	@ApiOperation({
+		summary: 'Remove points to client on blockchain',
+		description: 'Esse endpoint remove pontos para um determinado cliente pelo id na blockchain.',
+	})
+	@ApiBody({ required: true, type: AddPointsRequestDto })
+	@ApiOkResponse({
+		description: 'Success operation',
+		type: String,
+	})
+	@ApiBadRequestResponse({ description: 'Bad request' })
+	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
+	@ApiForbiddenResponse({ description: 'Forbidden' })
+	@ApiNotFoundResponse({ description: 'Segment not found' })
+	@ApiInternalServerErrorResponse({ description: 'Unexpected error' })
+	@Patch('/remove')
+	async removePoints(@Body() removePointsDTO: RemovePointsRequestDTO): Promise<string> {
+		try {
+			this.logger.log('----------PROCESS BEGIN ----------');
+			this.logger.log(`Running Client Blockchain Web adapter`);
+			this.logger.log(`Execution: removePoints with params: ${JSON.stringify(removePointsDTO)}`);
+
+			const response = await this.pointsBlockchainService.removePoints(removePointsDTO);
 
 			this.logger.log('---------- PROCESS END ----------');
 			return response;
@@ -94,7 +132,7 @@ export class PointsBlockchainWebAdapter {
 		try {
 			this.logger.log('---------- PROCESS BEGIN ----------');
 			this.logger.log('Running PointBlockchain web adapter');
-			this.logger.log(`id: ${id}`);
+			this.logger.log(`Execution: getClientPoints with params: id: ${id}`);
 
 			return await this.pointsBlockchainService.getClientPoints(+id);
 		} catch (error) {
@@ -124,7 +162,7 @@ export class PointsBlockchainWebAdapter {
 		try {
 			this.logger.log('---------- PROCESS BEGIN ----------');
 			this.logger.log('Running PointBlockchain web adapter');
-			this.logger.log(`id: ${id}`);
+			this.logger.log(`Execution: getClientLevel with params: id: ${id}`);
 
 			return await this.pointsBlockchainService.getClientLevel(+id);
 		} catch (error) {
@@ -153,8 +191,7 @@ export class PointsBlockchainWebAdapter {
 	async getMultiplesNFT(@Query('accounts') accounts: string[], @Query('NFTIDs') ids: number[]): Promise<number[]> {
 		this.logger.log('---------- PROCESS BEGIN ----------');
 		this.logger.log('Running PointBlockchain web adapter');
-		this.logger.log(`accounts: ${accounts}`);
-		this.logger.log(`NFTIds: ${ids}`);
+		this.logger.log(`Execution: getMultiplesNFT with params: accounts: ${accounts} | NFTIds: ${ids}`);
 
 		if (accounts.length < 2 || ids.length < 2) {
 			throw new BadRequestException('Os parâmetros accounts e ids devem conter pelo menos dois itens.');
@@ -191,8 +228,7 @@ export class PointsBlockchainWebAdapter {
 	async getUniqueNFT(@Query('accounts') accounts: string, @Query('NFTID') id: number): Promise<number> {
 		this.logger.log('---------- PROCESS BEGIN ----------');
 		this.logger.log('Running PointBlockchain web adapter');
-		this.logger.log(`account: ${accounts}`);
-		this.logger.log(`NFTId: ${id}`);
+		this.logger.log(`Execution: getUniqueNFT with params: accounts: ${accounts} | NFTID: ${id}`);
 
 		try {
 			return await this.pointsBlockchainService.getUniqueNFT({

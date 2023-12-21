@@ -13,6 +13,9 @@ import { CustomerList } from './pages/Customer/CustomerList';
 import ECommerce from './pages/Dashboard/ECommerce';
 import FormElements from './pages/Form/FormElements';
 import FormLayout from './pages/Form/FormLayout';
+import { AddPointPage } from './pages/Points/AddPointPage';
+import { PointsViewPage } from './pages/Points/PointsViewPage';
+import { RemovePointsPage } from './pages/Points/RemovePointPage';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import Tables from './pages/Tables';
@@ -42,6 +45,9 @@ function App() {
         { path: 'ui/buttons', element: <Buttons /> },
         { path: 'customers/list', element: <CustomerList /> },
         { path: 'customers/add', element: <CustomerAdd /> },
+        { path: 'points/view', element: <PointsViewPage /> },
+        { path: 'points/add', element: <AddPointPage /> },
+        { path: 'points/remove', element: <RemovePointsPage /> },
       ],
     },
     // Rotas de autenticação separadas

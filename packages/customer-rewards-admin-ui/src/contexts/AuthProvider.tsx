@@ -33,7 +33,7 @@ export const AuthContext = createContext(initContextData);
 export const AuthProvider = (props: PropsWithChildren) => {
   const makeLogin = useCallback(
     (accessToken: string, idToken: string, code: string, state: string) => {
-      const authData = utils.login(accessToken, idToken, null, state);
+      const authData = utils.login(accessToken, idToken, undefined, state);
       setData((oldData) => ({
         auth: authData,
         makeLoginUrl: oldData.makeLoginUrl,
