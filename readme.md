@@ -197,7 +197,6 @@ monoRepo/
   - [ ] Configurar e implementar Apache Kafta 
   - [ ] Confiturar e implementar Grafana 
 
- 
 - customer-rewards-ui
 
 
@@ -208,7 +207,6 @@ monoRepo/
 
 
 ## 🚀 Em Progresso
-- [ ] Configurar ambiente de desenvolvimento com dev container e docker 
 
 
 ## ✅ Concluídas
@@ -229,6 +227,13 @@ monoRepo/
 - [x] Implementar função para atualizar metadata do NFT conforme níveis de pontuação.
 - [x] Implementar rotas para deletar e update metadata do NFT na api.
 - [x] Implementar autenticação via keycloack e database para usuarios 
+- [x] Configurar ambiente de desenvolvimento com dev container e docker 
+- [x] Implementação das rotas de Points (add pontos e remover Pontos) na admin ui
+    - [x] Implementar rota api para trazer todos customers 
+    - [x] Implementar rota api para adicionar pontos 
+    - [x] Implementar rota api para remover pontos 
+    - [x] Implementar Página React para add pontos na Dashboard 
+    - [x] Implementar Página React para remover pontos na Dashboard 
 
 ## 🧠 Ideias para Explorar
 - [ ] Avaliar interoperabilidade com outros contratos inteligentes.

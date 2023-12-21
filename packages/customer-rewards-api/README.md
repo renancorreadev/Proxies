@@ -14,6 +14,10 @@
   - [Uso](#uso)
   - [Contribuição](#contribuição)
   - [Licença](#licença)
+  - [Desenvolvimento](#desenvolvimento)
+    - [📌 Pendências](#-pendências)
+    - [🚀 Em Progresso](#-em-progresso)
+    - [✅ Concluídas](#-concluídas)
 
 ## Visão Geral
 
@@ -93,3 +97,35 @@ Diretrizes para contribuir para o projeto.
 
 ## Licença
 Informações sobre a licença do projeto.
+
+  
+## Desenvolvimento
+
+### 📌 Pendências
+- [ ] Implementar Elastick Search para monitoramento de eventos 
+- [ ] Implementar Grafana para visualização de logs em tempo real da infraestrutura
+
+
+### 🚀 Em Progresso
+- 
+
+### ✅ Concluídas
+- [x] Implementar módulos de blockchain para customers 
+  - [x] Desenvolver rota POST para criar cliente 
+  - [x] Desenvolver rota PATCH para editar cliente
+  - [x] Desenvolver rota POST para remover cliente 
+  - [x] Desenvolver rota GET para customers 
+  - [x] Desenvolver rota GET para customer por id 
+  - [x] Desenvolver rota GET para customer por nome 
+  - [x] Desenvolver rota GET para customer por wallet 
+- [x] Implementar módulos de Metadata para NFTs 
+  - [x] Desenvolver rota POST para criar novo TokenID 
+  - [x] Desenvolver rota GET para trazer TokenID com sua metadata 
+  - [x] Desenvolver rota PATCH para editar metadata por tokenID
+  - [x] Desenvolver rota DELETE para remover tokenID 
+- [x] Configurar ambiente de desenvolvimento com dev container e docker 
+- [x] Implementação do keycloak e authenticação.
+- [x] Implementação das rotas de Points (add pontos e remover Pontos) na admin ui
+    - [x] Implementar rota api para trazer todos customers 
+    - [x] Implementar rota api para adicionar pontos 
+    - [x] Implementar rota api para remover pontos 

@@ -92,6 +92,11 @@ iniciar o serviço. Esse recurso é importante para não ocorrer erros e garanti
 - 
 
 ### ✅ Concluídas
+- [x] Implementar modelo de Dashboard UI com React e vite
+- [x] Implementar pagina de login 
+- [x] Implementar componentes reutilizaveis
 - [x] Configurar ambiente de desenvolvimento com dev container e docker 
 - [x] Implementação do keycloak e authenticação.
-
+- [x] Implementação das rotas de Points (add pontos e remover Pontos) na admin ui
+    - [x] Implementar Página React para add pontos na Dashboard 
+    - [x] Implementar Página React para remover pontos na Dashboard 
