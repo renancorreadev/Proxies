@@ -1,5 +1,5 @@
 import { AddressLocal } from '@helper/blockchain/types/contracts/client-manager-types';
-import { BeforeInsert, Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'customer' })
 export class CustomerEntity {
@@ -17,6 +17,9 @@ export class CustomerEntity {
 
 	@Column({ type: 'int' })
 	paymentStatus: number;
+
+	@Column({ type: 'int', nullable: true })
+	points: number;
 
 	@Column({ type: 'json' })
 	addressLocal: AddressLocal;

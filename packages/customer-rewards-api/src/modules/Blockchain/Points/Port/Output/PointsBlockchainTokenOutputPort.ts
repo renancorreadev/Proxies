@@ -2,7 +2,7 @@ import { BalanceOfBatchParam, BalanceOfParam } from '@helper/blockchain/types/co
 import { AddPointsRequestDto } from '../../Domain/Dto/HTTPRequest/AddPointsRequestDto';
 
 export interface PointsBlockchainTokenOutputPort {
-	addPoints(addPointsRequestDTO: AddPointsRequestDto): Promise<string>;
+	addPoints(registerClientBlockchainDto: AddPointsRequestDto): Promise<string>;
 	getClientPoints(clientId: number): Promise<number>;
 	getClientLevel(clientId: number): Promise<number>;
 	getMultiplesNFT(params: BalanceOfBatchParam): Promise<number[]>;

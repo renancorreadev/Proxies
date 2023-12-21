@@ -16,6 +16,7 @@ export interface ClientData {
   age: number;
   WalletAddress: string;
   paymentStatus: number;
+  points: number;
   addressLocal: AddressLocal;
 }
 
@@ -23,8 +24,6 @@ export const CustomerTable = () => {
   const [customers, setCustomers] = useState<ClientData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-
-  console.log(apiURL);
 
   const fetchCustomers = async () => {
     try {
@@ -45,6 +44,22 @@ export const CustomerTable = () => {
     setCurrentPage(newPage);
   };
 
+  const truncateStyle = {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  };
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        // Feedback opcional para o usuário
+        alert('Endereço da carteira copiado!');
+      })
+      .catch((err) => console.error('Erro ao copiar: ', err));
+  };
+
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
@@ -52,78 +67,55 @@ export const CustomerTable = () => {
       </h4>
 
       <div className="flex flex-col">
-        {/* Renderize os controles de página aqui, por exemplo, botões "Anterior" e "Próxima" */}
-        <div className="pagination mt-4 flex items-center justify-center space-x-4 p-4">
-          <button
-            className="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            Anterior
-          </button>
-          <span className="text-lg font-semibold text-black dark:text-white">
-            Página {currentPage} de {totalPages}
-          </span>
-          <button
-            className="px-3 py-1 rounded-md border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            Próxima
-          </button>
-        </div>
-
-        <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5">
-          <div className="p-2.5 xl:p-5">
+        <div className="grid grid-cols-6 rounded-sm bg-gray-2 dark:bg-meta-4">
+          <div className="col-span-1 p-2.5 xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">Nome</h5>
           </div>
-          <div className="p-2.5 text-center xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">Idade</h5>
-          </div>
-          <div className="p-2.5 text-center xl:p-5">
+          <div className="col-span-2 p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">Wallet</h5>
           </div>
-          <div className="hidden p-2.5 text-center sm:block xl:p-5">
-            <h5 className="text-sm font-medium uppercase xsm:text-base">Pagamento</h5>
+          <div className="col-span-1 p-2.5 text-center xl:p-5">
+            <h5 className="text-sm font-medium uppercase xsm:text-base">Idade</h5>
           </div>
-          <div className="hidden p-2.5 text-center sm:block xl:p-5">
+          <div className="col-span-1 p-2.5 text-center xl:p-5">
+            <h5 className="text-sm font-medium uppercase xsm:text-base">Points</h5>
+          </div>
+          <div className="col-span-1 p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">Endereço</h5>
           </div>
         </div>
 
         {customers.map((customer) => (
           <div
-            className="grid grid-cols-3 border-b border-stroke dark:border-strokedark sm:grid-cols-5"
             key={customer.clientID}
+            className="grid grid-cols-6 border-b border-stroke dark:border-strokedark"
           >
-            <div className="flex items-center gap-3 p-2.5 xl:p-5">
-              <div className="flex-shrink-0">
-                {/* <img src={BrandOne} alt="Brand" /> */}
-              </div>
-              <p className="hidden text-black dark:text-white sm:block">
+            <div className="col-span-1 flex items-center gap-3 p-2.5 xl:p-5">
+              <p className="text-black dark:text-white" style={truncateStyle}>
                 {customer.name}
               </p>
             </div>
 
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
+            <div
+              className="col-span-2 flex items-center justify-center p-2.5 xl:p-5 bg-bodydark1 bg-opacity-25"
+              onDoubleClick={() => copyToClipboard(customer.WalletAddress)}
+              style={{ cursor: 'pointer' }}
+            >
+              <p className="text-meta-3" style={truncateStyle}>
+                {customer.WalletAddress}
+              </p>
+            </div>
+
+            <div className="col-span-1 flex items-center justify-center p-2.5 xl:p-5">
               <p className="text-black dark:text-white">{customer.age}</p>
             </div>
 
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-meta-3">{customer.WalletAddress}</p>
+            <div className="col-span-1 flex items-center justify-center p-2.5 xl:p-5 bg-bodydark1 bg-opacity-25">
+              <p className="text-black dark:text-white">{customer.points}</p>
             </div>
 
-            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-              <p className="text-black dark:text-white">{customer.paymentStatus}</p>
-            </div>
-
-            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-              <div>
-                <p>
-                  {customer.addressLocal.City} , {customer.addressLocal.Street} ,{' '}
-                  {customer.addressLocal.PostalCode}, {customer.addressLocal.HouseNumber}
-                </p>
-              </div>
+            <div className="col-span-1 flex items-center justify-center p-2.5 xl:p-5">
+              <p className="text-black dark:text-white">{customer.addressLocal.City}</p>
             </div>
           </div>
         ))}

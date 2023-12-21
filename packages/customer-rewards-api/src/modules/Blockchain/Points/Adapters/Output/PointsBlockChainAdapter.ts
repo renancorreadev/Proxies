@@ -2,9 +2,10 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { config } from 'dotenv';
 import { PointsBlockchainTokenOutputPort } from '@/src/modules/Blockchain/Points/Port/Output/PointsBlockchainTokenOutputPort';
 import { AddPointsRequestDto } from '../../Domain/Dto/HTTPRequest/AddPointsRequestDto';
-import { DependencyInjectionBlockchainConnector } from '@helper/AppConstants';
+import { DependencyInjectionBlockchainConnector, DependencyInjectionTokens } from '@helper/AppConstants';
 import { PointsManagerConnector } from '@helper/blockchain/connector';
 import { BalanceOfBatchParam, BalanceOfParam } from '@helper/blockchain/types/contracts/points-core-types';
+import { PointsDBStorageAdapter } from './PointsDBStorageAdapter';
 
 config();
 
@@ -15,16 +16,27 @@ export class PointsBlockchainAdapter implements PointsBlockchainTokenOutputPort 
 	constructor(
 		@Inject(DependencyInjectionBlockchainConnector.POINTS_MANAGER_CONNECTOR)
 		private contractInstance: PointsManagerConnector,
+
+		@Inject(DependencyInjectionTokens.POINTS_DB_STORAGE_OUTPUT_PORT)
+		private readonly pointDBStorage: PointsDBStorageAdapter,
 	) {}
 
-	async addPoints(registerClientBlockchainDto: AddPointsRequestDto): Promise<any> {
+	async addPoints(registerClientBlockchainDto: AddPointsRequestDto): Promise<string> {
 		try {
 			const { clientId, points } = registerClientBlockchainDto;
 
-			return await this.contractInstance.addPoints({
+			const transaction = await this.contractInstance.addPoints({
 				clientId,
 				points,
 			});
+
+			if (transaction.hash) {
+				await this.pointDBStorage.savePointOnDb({ clientId, points });
+			} else {
+				throw new Error(`An error ocurred in write contract addPoints function on blockchain `);
+			}
+
+			return 'Points added successfully on blockchain and saved in db';
 		} catch (e) {
 			const errorMessage = e.response ? e.response.data : e.message;
 			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);

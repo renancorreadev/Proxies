@@ -1,6 +1,7 @@
 import { PointCoreBlockchainConnector } from '../PointsCoreBlockchainConnector';
 import { AddPointsParamInput, BalanceOfBatchParam } from '../types/contracts/points-core-types';
 import { IPointManagerConnector } from './interfaces/IPointManagerConnector';
+import { ContractTransaction, ContractTransactionReceipt } from 'ethers';
 
 export class PointsManagerConnector extends PointCoreBlockchainConnector implements IPointManagerConnector {
 	/// @dev NFT IDs
@@ -9,7 +10,7 @@ export class PointsManagerConnector extends PointCoreBlockchainConnector impleme
 	// private CUSTOMER_PREMIUM_NFT_ID = 1;
 
 	// Setters blockchain States
-	async addPoints(params: AddPointsParamInput) {
+	async addPoints(params: AddPointsParamInput): Promise<ContractTransactionReceipt> {
 		try {
 			const { clientId, points } = params;
 			const tx = await this.contract.addPoints(clientId, points, {
@@ -17,7 +18,7 @@ export class PointsManagerConnector extends PointCoreBlockchainConnector impleme
 				gasPrice: 0,
 			});
 
-			await tx.wait();
+			return await tx.wait();
 		} catch (e) {
 			console.error('Erro ao enviar pontos para o cliente:', e);
 

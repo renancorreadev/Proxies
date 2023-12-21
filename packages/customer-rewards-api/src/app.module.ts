@@ -26,6 +26,8 @@ import { CustomerDBService } from './modules/Blockchain/Client/Domain/CustomerDB
 import { CustomerEntity } from './modules/Blockchain/Client/Adapters/Output/db/entity/CustomerEntity';
 import { MetadataEntity } from './modules/Metadata/Adapters/Output/Entity/MetadataEntity';
 
+import { PointsDBStorageAdapter } from './modules/Blockchain/Points/Adapters/Output/PointsDBStorageAdapter';
+
 @Module({
 	imports: [],
 	controllers: [ClientWebAdapter, PointsBlockchainWebAdapter, MetadataWebAdapter, CustomerDBWebAdapter],
@@ -45,6 +47,10 @@ import { MetadataEntity } from './modules/Metadata/Adapters/Output/Entity/Metada
 		{
 			useClass: PointsBlockchainAdapter,
 			provide: DependencyInjectionTokens.POINTS_BLOCKCHAIN_TOKEN_OUTPUT_PORT,
+		},
+		{
+			useClass: PointsDBStorageAdapter,
+			provide: DependencyInjectionTokens.POINTS_DB_STORAGE_OUTPUT_PORT,
 		},
 		{
 			useClass: MetadataStorageAdapter,
