@@ -207,6 +207,8 @@ monoRepo/
 
 
 ## 🚀 Em Progresso
+  - [ ] Desenvolver modelo de NFT visual para as insígnias 
+  - [ ] Implementar Modelo Visual do NFT na Dashboard para leitura de metadados 
 
 
 ## ✅ Concluídas

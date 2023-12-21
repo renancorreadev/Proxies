@@ -89,7 +89,9 @@ iniciar o serviço. Esse recurso é importante para não ocorrer erros e garanti
 
 
 ### 🚀 Em Progresso
-- 
+- [ ] Desenvolver modelo de NFT visual para as insígnias 
+- [ ] Implementar Modelo Visual do NFT na Dashboard para leitura de metadados 
+
 
 ### ✅ Concluídas
 - [x] Implementar modelo de Dashboard UI com React e vite
