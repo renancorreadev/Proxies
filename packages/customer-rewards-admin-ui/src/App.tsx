@@ -17,6 +17,7 @@ import { AddPointPage } from './pages/Points/AddPointPage';
 import { PointsViewPage } from './pages/Points/PointsViewPage';
 import { RemovePointsPage } from './pages/Points/RemovePointPage';
 import Profile from './pages/Profile';
+import { RewardsPage } from './pages/RewardsPage';
 import Settings from './pages/Settings';
 import Tables from './pages/Tables';
 import Alerts from './pages/UiElements/Alerts';
@@ -48,6 +49,7 @@ function App() {
         { path: 'points/view', element: <PointsViewPage /> },
         { path: 'points/add', element: <AddPointPage /> },
         { path: 'points/remove', element: <RemovePointsPage /> },
+        { path: 'rewards', element: <RewardsPage /> },
       ],
     },
     // Rotas de autenticação separadas
