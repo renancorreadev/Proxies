@@ -5,7 +5,7 @@ data
 certs
 .env
 .pnpm-store
-.docker
+.docker/besu
 .vscode/promps
 
 node_modules
