@@ -14,7 +14,7 @@
   "terminal.integrated.env.osx": {},
   "console-ninja.featureSet": "Community",
   "vsicons.presets.foldersAllDefaultIcon": true,
-  "workbench.iconTheme": "vscode-great-icons",
+  "workbench.iconTheme": "eq-material-theme-icons-darker",
   "editor.minimap.enabled": false,
   "redhat.telemetry.enabled": true,
   "typescript.tsserver.log": "off",
@@ -42,5 +42,5 @@
     "markdown",
     "rust"
   ],
-  "window.zoomLevel": 0,
+  "window.zoomLevel": 1,
 }

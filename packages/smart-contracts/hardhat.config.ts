@@ -8,8 +8,10 @@ const config: HardhatUserConfig = {
   solidity: '0.8.20',
   networks: {
     firefly: {
-      url: process.env.JSON_RPC_URL,
-      accounts: [process.env.FFPRIVATEKEY as string],
+      url: 'http://172.16.239.10:8545',
+      accounts: [
+        '6139eb4c7a004f2c90a3233b493517b52718f7ad5fd4a82ef326351dfaced7b5',
+      ],
     },
     mumbai: {
       url: process.env.POLYGON_RPC_URL,
