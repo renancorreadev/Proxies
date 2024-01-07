@@ -1,13 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 
-interface RewardCardProps {
+interface Attribute {
+  type: string;
+  value: any;
+}
+
+export interface RewardCardProps {
   tokenID: number;
   customer: string;
   description: string;
   image: string;
   insight: string;
-  attributes: Array<{ type: string; value: any }>;
+  attributes: Attribute[];
   createdAt: string;
   updatedAt: string;
 }
@@ -22,9 +27,35 @@ export const RewardsCard: React.FC<RewardCardProps> = ({
   createdAt,
   updatedAt,
 }) => {
+  const renderAttributes = attributes.map((attribute, index) => {
+    if (attribute.type === 'benefit_type') {
+      return (
+        <div key={index}>
+          <h4 className="text-gray-900 text-md font-semibold mt-2">Benefits</h4>
+          <ul className="list-disc pl-5 text-sm text-gray-600">
+            {attribute.value.map((benefit: any, benefitIndex: number) => (
+              <li key={benefitIndex}>
+                {Object.entries(benefit).map(([key, value]) => (
+                  <div key={key}>{`${key}: ${value}`}</div>
+                ))}
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    } else {
+      return (
+        <div key={index}>
+          <h4 className="text-gray-900 text-md font-semibold mt-2">{attribute.type}</h4>
+          <p className="text-gray-600 text-sm">{JSON.stringify(attribute.value)}</p>
+        </div>
+      );
+    }
+  });
+
   return (
     <div
-      className="border text-card-foreground w-[350px] bg-white shadow-lg rounded-lg overflow-hidden"
+      className="border text-card-foreground max-w-[350px] bg-white shadow-lg rounded-lg overflow-hidden"
       data-v0-t="card"
     >
       <div className="relative">
@@ -40,14 +71,7 @@ export const RewardsCard: React.FC<RewardCardProps> = ({
           <p className="text-gray-600 text-sm">{description}</p>
           <h4 className="text-gray-900 text-md font-semibold">Insight</h4>
           <p className="text-gray-600 text-sm">{insight}</p>
-          <div className="pt-2">
-            <h4 className="text-gray-900 text-md font-semibold">Attributes</h4>
-            <ul className="list-disc pl-5 text-sm text-gray-600">
-              {attributes.map((attribute, index) => (
-                <li key={index}>{`${attribute.type}: ${attribute.value}`}</li>
-              ))}
-            </ul>
-          </div>
+          <div className="pt-2">{renderAttributes}</div>
         </div>
       </div>
       <div className="items-center flex justify-between p-4 bg-gray-50">

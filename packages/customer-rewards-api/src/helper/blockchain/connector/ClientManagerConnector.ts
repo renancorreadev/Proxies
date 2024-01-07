@@ -134,4 +134,15 @@ export class ClientManagerConnector extends ClientManagerBlockchainConnector imp
 			throw new Error(`An error ocurred in read contract getClientByWallet on blockchain evm: ${error.message}`);
 		}
 	}
+
+	async getCurrentId(): Promise<number> {
+		try {
+			const lastId = await this.contract.currentId();
+
+			return Number(lastId);
+		} catch (error) {
+			console.error(error);
+			throw new Error(`An error ocurred in read contract getLastClientID on blockchain evm: ${error.message}`);
+		}
+	}
 }

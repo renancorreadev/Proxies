@@ -109,6 +109,16 @@ export class ClientBlockchainAdapter implements ClientBlockchainTokenOutputPort 
 		}
 	}
 
+	async getCurrentId(): Promise<number> {
+		try {
+			return await this.contractInstance.getCurrentId();
+		} catch (e) {
+			const errorMessage = e.response ? e.response.data : e.message;
+			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
+			throw new Error(`An error ocurred in read contract getCurrentId on blockchain `);
+		}
+	}
+
 	private async initializeMetadata(registerClientBlockchainDto: RegisterClientRequestDto) {
 		const { name } = registerClientBlockchainDto;
 

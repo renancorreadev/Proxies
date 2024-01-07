@@ -29,7 +29,7 @@ export class ClientBlockchainService implements ClientBlockchainTokenUseCase {
 			await this.clientBlockchainTokenAdapter.registerClient(RegisterClientRequestDto);
 			return 'Cliente registrado com sucesso!';
 		} catch (e) {
-			this.logger.error(`Error in Client Blockchain Service: ${JSON.stringify(e)}`);
+			this.logger.error(`Error executing registerClient in Client Blockchain Service: ${JSON.stringify(e)}`);
 			throw new Error('An error ocurred while creating the client');
 		}
 	}
@@ -38,7 +38,7 @@ export class ClientBlockchainService implements ClientBlockchainTokenUseCase {
 		try {
 			return await this.clientBlockchainTokenAdapter.getClientData(clientId);
 		} catch (e) {
-			this.logger.error(`Error in Client Blockchain Service: ${JSON.stringify(e)}`);
+			this.logger.error(`Error executing getClientData in Client Blockchain Service: ${JSON.stringify(e)}`);
 			throw new Error('An error ocurred while get the client');
 		}
 	}
@@ -47,7 +47,7 @@ export class ClientBlockchainService implements ClientBlockchainTokenUseCase {
 		try {
 			return await this.clientBlockchainTokenAdapter.getClientByName(name);
 		} catch (e) {
-			this.logger.error(`Error in Client Blockchain Service: ${JSON.stringify(e)}`);
+			this.logger.error(`Error executing getClientByName in Client Blockchain Service: ${JSON.stringify(e)}`);
 			throw new Error('An error ocurred while get the client');
 		}
 	}
@@ -56,7 +56,7 @@ export class ClientBlockchainService implements ClientBlockchainTokenUseCase {
 		try {
 			return await this.clientBlockchainTokenAdapter.getClientByAge(age);
 		} catch (e) {
-			this.logger.error(`Error in Client Blockchain Service: ${JSON.stringify(e)}`);
+			this.logger.error(`Error executing getClientByAge in Client Blockchain Service: ${JSON.stringify(e)}`);
 			throw new Error('An error ocurred while get the client');
 		}
 	}
@@ -65,7 +65,16 @@ export class ClientBlockchainService implements ClientBlockchainTokenUseCase {
 		try {
 			return await this.clientBlockchainTokenAdapter.getClientByWallet(Wallet);
 		} catch (e) {
-			this.logger.error(`Error in Client Blockchain Service: ${JSON.stringify(e)}`);
+			this.logger.error(`Error executing getClientByWallet in Client Blockchain Service: ${JSON.stringify(e)}`);
+			throw new Error('An error ocurred while get the client');
+		}
+	}
+
+	async getCurrentId(): Promise<number> {
+		try {
+			return await this.clientBlockchainTokenAdapter.getCurrentId();
+		} catch (e) {
+			this.logger.error(`Error executing getCurrentId in Client Blockchain Service: ${JSON.stringify(e)}`);
 			throw new Error('An error ocurred while get the client');
 		}
 	}

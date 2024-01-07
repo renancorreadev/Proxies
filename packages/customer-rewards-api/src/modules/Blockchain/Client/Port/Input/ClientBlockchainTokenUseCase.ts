@@ -7,4 +7,5 @@ export interface ClientBlockchainTokenUseCase {
 	getClientByName(getClientByNameRequestDTO: string): Promise<ClientData>;
 	getClientByAge(getClientByAgeRequestDTO: number): Promise<ClientData>;
 	getClientByWallet(getClientByWalletRequestDTO: string): Promise<ClientData>;
+	getCurrentId(): Promise<number>;
 }

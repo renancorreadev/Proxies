@@ -1,125 +1,71 @@
-import React from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 import Breadcrumb from '@/components/Breadcrumb';
+import { apiURL } from '@/utils/keys';
 
-import { RewardsCard } from './Card';
-
-// Exemplo de dados que podem vir de uma API
-const rewardData = [
-  {
-    tokenID: 2,
-    customer: 'Renan',
-    description: 'Você ainda não alcançou nenhuma insígnia e nenhum nível',
-    image: 'https://i.ibb.co/prc9f7K/gold.png',
-    insight: 'sem insígnia',
-    attributes: [
-      {
-        type: 'level_type',
-        value: 0,
-      },
-      {
-        type: 'nft_type',
-        value: 'Sem NFT',
-      },
-      {
-        type: 'benefit_type',
-        value: 'None',
-      },
-    ],
-    createdAt: '2023-12-21T13:41:45.171Z',
-    updatedAt: '2023-12-21T13:43:27.154Z',
-  },
-  {
-    tokenID: 2,
-    customer: 'Renan',
-    description: 'Você ainda não alcançou nenhuma insígnia e nenhum nível',
-    image: 'https://i.ibb.co/prc9f7K/gold.png',
-    insight: 'sem insígnia',
-    attributes: [
-      {
-        type: 'level_type',
-        value: 0,
-      },
-      {
-        type: 'nft_type',
-        value: 'Sem NFT',
-      },
-      {
-        type: 'benefit_type',
-        value: 'None',
-      },
-    ],
-    createdAt: '2023-12-21T13:41:45.171Z',
-    updatedAt: '2023-12-21T13:43:27.154Z',
-  },
-  {
-    tokenID: 2,
-    customer: 'Renan',
-    description: 'Você ainda não alcançou nenhuma insígnia e nenhum nível',
-    image: 'https://i.ibb.co/prc9f7K/gold.png',
-    insight: 'sem insígnia',
-    attributes: [
-      {
-        type: 'level_type',
-        value: 0,
-      },
-      {
-        type: 'nft_type',
-        value: 'Sem NFT',
-      },
-      {
-        type: 'benefit_type',
-        value: 'None',
-      },
-    ],
-    createdAt: '2023-12-21T13:41:45.171Z',
-    updatedAt: '2023-12-21T13:43:27.154Z',
-  },
-  {
-    tokenID: 2,
-    customer: 'Renan',
-    description: 'Você ainda não alcançou nenhuma insígnia e nenhum nível',
-    image: 'https://i.ibb.co/prc9f7K/gold.png',
-    insight: 'sem insígnia',
-    attributes: [
-      {
-        type: 'level_type',
-        value: 0,
-      },
-      {
-        type: 'nft_type',
-        value: 'Sem NFT',
-      },
-      {
-        type: 'benefit_type',
-        value: 'None',
-      },
-    ],
-    createdAt: '2023-12-21T13:41:45.171Z',
-    updatedAt: '2023-12-21T13:43:27.154Z',
-  },
-];
+import { RewardCardProps, RewardsCard } from './Card';
 
 export const RewardsPage = () => {
+  const [rewardsData, setRewardsData] = useState<RewardCardProps[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchCurrentId = async () => {
+    try {
+      const response = await axios.get(`${apiURL}/client/currentId`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching currentId:', error);
+    }
+  };
+  const fetchRewards = async () => {
+    try {
+      const itemsData = [];
+      const currentId = await fetchCurrentId();
+
+      for (let i = 1; i <= currentId; i++) {
+        const response = await axios.get(`${apiURL}/metadata/${i}`);
+        itemsData.push(response.data);
+      }
+
+      setRewardsData(itemsData);
+    } catch (error) {
+      console.error('Error fetching rewards:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRewards();
+  }, []);
+
+  if (loading) {
+    return <p>Loading rewards...</p>;
+  }
+
+  console.log(rewardsData);
   return (
     <>
       <Breadcrumb pageName="Rewards" />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {rewardData.map((reward, index) => (
-          <div key={index}>
-            <RewardsCard
-              tokenID={reward.tokenID}
-              customer={reward.customer}
-              description={reward.description}
-              image={reward.image}
-              insight={reward.insight}
-              attributes={reward.attributes}
-              createdAt={reward.createdAt}
-              updatedAt={reward.updatedAt}
-            />
-          </div>
-        ))}
+      <div className="py-1">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mx-4 my-4">
+          {rewardsData.map((reward, index) => (
+            <div key={index} className="">
+              <RewardsCard
+                tokenID={reward.tokenID}
+                customer={reward.customer}
+                description={reward.description}
+                image={reward.image}
+                insight={reward.insight}
+                attributes={reward.attributes}
+                createdAt={reward.createdAt}
+                updatedAt={reward.updatedAt}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </>
   );

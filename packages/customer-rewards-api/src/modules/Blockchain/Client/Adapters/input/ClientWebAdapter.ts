@@ -70,7 +70,7 @@ export class ClientWebAdapter {
 	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
 	@ApiForbiddenResponse({ description: 'Forbidden' })
 	@ApiNotFoundResponse({ description: 'Segment not found' })
-	@Get('/:id')
+	@Get('/data/:id')
 	async getClientData(@Param('id') id: number) {
 		return await this.clientBlockchainService.getClientData(+id);
 	}
@@ -162,6 +162,36 @@ export class ClientWebAdapter {
 			const errorMessage = e.response ? e.response.data : e.message;
 			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
 			throw new Error(`An error occurred in read contract getClientByWallet on blockchain`);
+		}
+	}
+
+	/// --------------------------------------------------------------------------------------
+	/// ------------------------      GET CLIENT DATA BY AGE          ---------------------
+	/// --------------------------------------------------------------------------------------
+	@ApiOperation({
+		summary: 'Get Current Id ',
+		description: 'Return current id to mapping all clients',
+	})
+	@ApiOkResponse({
+		description: 'Success operation',
+		type: Number,
+	})
+	@ApiBadRequestResponse({ description: 'Bad request' })
+	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
+	@ApiForbiddenResponse({ description: 'Forbidden' })
+	@ApiNotFoundResponse({ description: 'Segment not found' })
+	@Get('/currentId')
+	async getCurrentId() {
+		try {
+			this.logger.log('---------- PROCESS BEGIN ----------');
+			this.logger.log('Running Client Blockchain Web Adapter');
+			this.logger.log('Reading Current ID...');
+
+			return await this.clientBlockchainService.getCurrentId();
+		} catch (e) {
+			const errorMessage = e.response ? e.response.data : e.message;
+			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
+			throw new Error(`An error ocurred in read contract getCurrentId on blockchain `);
 		}
 	}
 }

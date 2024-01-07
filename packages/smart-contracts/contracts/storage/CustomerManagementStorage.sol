@@ -5,7 +5,7 @@ import {ICustomerManagementStorage} from '../interfaces/ICustomerManagementStora
 
 abstract contract CustomerManagementStorage is ICustomerManagementStorage {
     /// @dev global variables for client Storage
-    uint256 internal currentId;
+    uint256 public currentId;
 
     mapping(uint256 => ClientData) internal clientMappingStorage;
     mapping(string => uint256[]) internal clientsByName;
