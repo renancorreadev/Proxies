@@ -410,10 +410,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 (isActive && '!text-white')
                               }
                             >
-                              Rewards
+                              All Rewards
                             </NavLink>
                           </li>
-                          <li>
+                          {/* <li>
                             <NavLink
                               to="/rewards/token-id"
                               className={({ isActive }) =>
@@ -467,7 +467,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             >
                               Levels
                             </NavLink>
-                          </li>
+                          </li> */}
                         </ul>
                       </div>
                       {/* <!-- Dropdown Menu End --> */}
