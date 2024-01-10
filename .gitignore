@@ -34,4 +34,5 @@ cdk.context.json
 *.pem
 
 infra/code-review-gpt/node_modules
-.docker
+.docker/*
+.docker/dbdata
