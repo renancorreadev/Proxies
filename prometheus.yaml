@@ -1,0 +1,7 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'besu'
+    static_configs:
+      - targets: ['besu_node_1:9545', 'besu_node_2:9546', 'besu_node_3:9547', 'besu_node_4:9548']
