@@ -100,18 +100,17 @@ services:
     networks:
       - protocol
 
-  db:
-    image: postgres:latest
-    container_name: db_postgrees
-    env_file:
-      - ./.env
-    volumes:
-      - postgree_data:/var/lib/postgresql/data
+  explorer:
+    container_name: explorer
+    image: alethio/ethereum-lite-explorer
     ports:
-      - "5432:5432"
+      - "80:80"
+    environment:
+      - APP_NODE_URL=http://localhost:8545
+    depends_on:
+      - besu_node_1
     networks:
-      protocol:
-        ipv4_address: 172.16.239.14
+      - protocol
 
   keycloak:
     image: quay.io/keycloak/keycloak:21.1
@@ -133,6 +132,19 @@ services:
       protocol:
         ipv4_address: 172.16.239.15
 
+  db:
+    image: postgres:latest
+    container_name: db_postgrees
+    env_file:
+      - ./.env
+    volumes:
+      - postgree_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      protocol:
+        ipv4_address: 172.16.239.14
+
   db_keycloak:
     image: mysql:8.2.0-oracle
     container_name: db_keycloak
@@ -152,6 +164,7 @@ services:
       protocol:
         ipv4_address: 172.16.239.16
 
+ 
 volumes:
   grafana_data:
     driver: local
@@ -161,6 +174,7 @@ volumes:
     driver: local
   prometheus_data:   
     driver: local
+
 
 networks:
   protocol:
