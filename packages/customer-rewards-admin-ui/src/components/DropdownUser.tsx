@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useContext, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -13,7 +14,7 @@ const DropdownUser = () => {
 
   const userName = auth && typeof auth.name === 'string' ? auth.name : 'Carregando...';
   const userProfileUrl =
-    auth && typeof auth.profile_url === 'string' ? auth.profile_url : UserOne;
+    auth && typeof auth.picture === 'string' ? auth.picture : UserOne;
 
   // close on click outside
   useEffect(() => {
@@ -41,6 +42,8 @@ const DropdownUser = () => {
     return () => document.removeEventListener('keydown', keyHandler);
   });
 
+  console.log(auth);
+
   return (
     <div className="relative">
       <Link
@@ -56,8 +59,8 @@ const DropdownUser = () => {
           {/* ... */}
         </span>
 
-        <span className="h-12 w-12 rounded-full">
-          <img src={userProfileUrl} alt="User" />
+        <span className="h-12 w-12 ">
+          <img src={userProfileUrl} alt="User" className="rounded-full" />
         </span>
 
         <svg

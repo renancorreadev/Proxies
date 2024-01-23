@@ -59,7 +59,7 @@ export class MetadataStorageAdapter implements MetadataStorageOutputPort {
 			return 'Metadata saved successfully';
 		} catch (error) {
 			this.logger.error(`Error in Metadata Storage Token  ${JSON.stringify(error)}`);
-			throw new Error(`An error ocurred while saving FIAT currency: ${JSON.stringify(error)}`);
+			throw new Error(`An error ocurred while saving the Metadata in Database: ${JSON.stringify(error)}`);
 		}
 	}
 

@@ -27,31 +27,35 @@ export const RewardsCard: React.FC<RewardCardProps> = ({
   createdAt,
   updatedAt,
 }) => {
-  const renderAttributes = attributes.map((attribute, index) => {
-    if (attribute.type === 'benefit_type') {
-      return (
-        <div key={index}>
-          <h4 className="text-gray-900 text-md font-semibold mt-2">Benefits</h4>
-          <ul className="list-disc pl-5 text-sm text-gray-600">
-            {attribute.value.map((benefit: any, benefitIndex: number) => (
-              <li key={benefitIndex}>
-                {Object.entries(benefit).map(([key, value]) => (
-                  <div key={key}>{`${key}: ${value}`}</div>
+  const renderAttributes = Array.isArray(attributes)
+    ? attributes.map((attribute, index) => {
+        if (attribute.type === 'benefit_type') {
+          return (
+            <div key={index}>
+              <h4 className="text-gray-900 text-md font-semibold mt-2">Benefits</h4>
+              <ul className="list-disc pl-5 text-sm text-gray-600">
+                {attribute.value.map((benefit: any, benefitIndex: number) => (
+                  <li key={benefitIndex}>
+                    {Object.entries(benefit).map(([key, value]) => (
+                      <div key={key}>{`${key}: ${value}`}</div>
+                    ))}
+                  </li>
                 ))}
-              </li>
-            ))}
-          </ul>
-        </div>
-      );
-    } else {
-      return (
-        <div key={index}>
-          <h4 className="text-gray-900 text-md font-semibold mt-2">{attribute.type}</h4>
-          <p className="text-gray-600 text-sm">{JSON.stringify(attribute.value)}</p>
-        </div>
-      );
-    }
-  });
+              </ul>
+            </div>
+          );
+        } else {
+          return (
+            <div key={index}>
+              <h4 className="text-gray-900 text-md font-semibold mt-2">
+                {attribute.type}
+              </h4>
+              <p className="text-gray-600 text-sm">{JSON.stringify(attribute.value)}</p>
+            </div>
+          );
+        }
+      })
+    : null;
 
   return (
     <div
