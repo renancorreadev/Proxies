@@ -5,6 +5,7 @@ export enum BaseUrls {
 	META_DATA = 'metadata/',
 	CUSTOMER = 'customer/',
 	AUTH = 'auth/',
+	USER = 'user/',
 }
 
 export const enum DependencyInjectionTokens {

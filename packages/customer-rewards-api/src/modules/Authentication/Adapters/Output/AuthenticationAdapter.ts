@@ -2,7 +2,7 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { UserEntity } from '../Output/db/UserEntity';
-import { AuthenticationTokenOutputPort, UserData } from '../../Port/Output/AuthenticationTokenOutputPort';
+import { AuthenticationTokenOutputPort, UserData, UserInfo } from '../../Port/Output/AuthenticationTokenOutputPort';
 import { LoginDTO } from '../../Domain/DTO/HTTPRequest/AuthenticationRequest';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -58,7 +58,7 @@ export class AuthenticationAdapter implements AuthenticationTokenOutputPort {
 		return { access_token };
 	}
 
-	async deleteUser(email: string): Promise<void> {
+	async deleteUser(email: string): Promise<string> {
 		const user = await this.userRepository.findOne({
 			where: { email },
 		});
@@ -66,7 +66,9 @@ export class AuthenticationAdapter implements AuthenticationTokenOutputPort {
 			throw new NotFoundException('User not found');
 		}
 
-		await this.userRepository.remove(user);
+		const result = await this.userRepository.delete({ id: user.id });
+
+		return result.affected === 1 ? 'User deleted successfully' : 'User not found';
 	}
 
 	async updateUser(email: string, updatedUserData: Partial<UserEntity>): Promise<UserEntity> {
@@ -87,5 +89,15 @@ export class AuthenticationAdapter implements AuthenticationTokenOutputPort {
 
 	async validateUser(payload: any): Promise<any> {
 		return await this.userRepository.findOneBy({ id: payload.sub });
+	}
+
+	// Ajuste na implementação do método getUser
+	async getUser(email: string): Promise<UserInfo | undefined> {
+		const user = await this.userRepository.findOne({
+			select: ['id', 'email', 'walletAddress', 'isAdmin', 'createdAt', 'updatedAt'],
+			where: { email },
+		});
+
+		return user ? user : undefined;
 	}
 }

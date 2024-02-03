@@ -37,6 +37,7 @@ import { AuthenticationService } from './modules/Authentication/Domain/Authentic
 import { AuthenticationAdapter } from './modules/Authentication/Adapters/Output/AuthenticationAdapter';
 import { JwtStrategy } from './modules/Authentication/Strategies/Jwt.Strategy';
 import { JwtAuthGuard } from './modules/Authentication/Guards/Auth.Guard';
+import { UserWebAdapter } from './modules/Authentication/Adapters/Input/UserWebAdapter';
 
 @Module({
 	imports: [
@@ -52,6 +53,7 @@ import { JwtAuthGuard } from './modules/Authentication/Guards/Auth.Guard';
 		MetadataWebAdapter,
 		CustomerDBWebAdapter,
 		AuthenticationWebAdapter,
+		UserWebAdapter,
 	],
 	providers: [
 		{

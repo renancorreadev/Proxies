@@ -1,10 +1,12 @@
 // src/modules/Authentication/Domain/AuthService.ts
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { storePrivateKeyInVault } from '@helper/vault';
+
 import { DependencyInjectionTokens } from 'customer-rewards-api/src/helper/AppConstants';
 import { AuthenticationTokenUseCase } from '../Port/Input/AuthenticationTokenUseCase';
-import { AuthenticationTokenOutputPort } from '../Port/Output/AuthenticationTokenOutputPort';
+import { AuthenticationTokenOutputPort, UserData, UserInfo } from '../Port/Output/AuthenticationTokenOutputPort';
 import { LoginDTO } from './DTO/HTTPRequest/AuthenticationRequest';
-import { storePrivateKeyInVault } from '@helper/vault';
+import { UserEntity } from '../Adapters/Output/db/UserEntity';
 
 @Injectable()
 export class AuthenticationService implements AuthenticationTokenUseCase {
@@ -56,6 +58,40 @@ export class AuthenticationService implements AuthenticationTokenUseCase {
 	async validateUser(payload: any): Promise<any> {
 		try {
 			return await this.authenticationTokenAdapter.validateUser(payload);
+		} catch (error) {
+			this.logger.error(error);
+			throw new Error(error);
+		}
+	}
+
+	async deleteUser(email: string): Promise<string> {
+		try {
+			const result = await this.authenticationTokenAdapter.deleteUser(email);
+
+			return result;
+		} catch (error) {
+			this.logger.error(error);
+			throw new Error(error);
+		}
+	}
+
+	async updateUser(email: string, updatedUserData: Partial<UserEntity>): Promise<UserEntity> {
+		try {
+			return await this.authenticationTokenAdapter.updateUser(email, updatedUserData);
+		} catch (error) {
+			this.logger.error(error);
+			throw new Error(error);
+		}
+	}
+
+	async getUser(email: string): Promise<UserInfo | undefined> {
+		try {
+			const user = await this.authenticationTokenAdapter.getUser(email);
+			if (!user) {
+				this.logger.error('User not found');
+				throw new Error('User not found');
+			}
+			return user;
 		} catch (error) {
 			this.logger.error(error);
 			throw new Error(error);
