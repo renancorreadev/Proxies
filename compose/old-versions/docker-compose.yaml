@@ -132,6 +132,26 @@ services:
     networks:
       - protocol
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.1
+    container_name: keycloak
+    command: start-dev
+    ports:
+      - 8080:8080
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=mysql
+      - KC_DB_URL=jdbc:mysql://db_keycloak:3306/keycloak
+      - KC_DB_USERNAME=root
+      - KC_DB_PASSWORD=root
+    depends_on:
+      db_keycloak:
+        condition: service_healthy
+    networks:
+      protocol:
+        ipv4_address: 172.16.239.15
+
   db:
     image: postgres:latest
     container_name: db_postgrees
@@ -145,20 +165,24 @@ services:
       protocol:
         ipv4_address: 172.16.239.14
 
-  vault:
-    image: hashicorp/vault:latest
-    container_name: vault
+  db_keycloak:
+    image: mysql:8.2.0-oracle
+    container_name: db_keycloak
+    volumes:
+      - ./.docker/dbdata:/var/lib/mysql
     environment:
-      - VAULT_DEV_ROOT_TOKEN_ID=myroot
-      - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
-    ports:
-      - "8200:8200"
-    cap_add:
-      - IPC_LOCK
-    entrypoint: vault server -dev
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=keycloak
+    security_opt:
+      - seccomp:unconfined
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 3
     networks:
       protocol:
-        ipv4_address: 172.16.239.15
+        ipv4_address: 172.16.239.16
 
 volumes:
   grafana_data:

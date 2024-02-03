@@ -1,4 +1,3 @@
-import { Wallet } from 'ethers';
 import { Body, Controller, Get, Inject, Logger, Param, Post, Query } from '@nestjs/common';
 import {
 	ApiBadRequestResponse,

@@ -28,9 +28,26 @@ import { MetadataEntity } from './modules/Metadata/Adapters/Output/Entity/Metada
 
 import { PointsDBStorageAdapter } from './modules/Blockchain/Points/Adapters/Output/PointsDBStorageAdapter';
 
+import { UserEntity } from './modules/Authentication/Adapters/Output/db/UserEntity';
+import { JwtModule } from '@nestjs/jwt';
+import { AuthenticationWebAdapter } from './modules/Authentication/Adapters/Input/AuthenticationWebAdapter';
+import { AuthenticationService } from './modules/Authentication/Domain/AuthenticationService';
+import { AuthenticationAdapter } from './modules/Authentication/Adapters/Output/AuthenticationAdapter';
+
 @Module({
-	imports: [],
-	controllers: [ClientWebAdapter, PointsBlockchainWebAdapter, MetadataWebAdapter, CustomerDBWebAdapter],
+	imports: [
+		JwtModule.register({
+			secret: process.env.JWT_SECRET || 'secretKey',
+			signOptions: { expiresIn: '60s' },
+		}),
+	],
+	controllers: [
+		ClientWebAdapter,
+		PointsBlockchainWebAdapter,
+		MetadataWebAdapter,
+		CustomerDBWebAdapter,
+		AuthenticationWebAdapter,
+	],
 	providers: [
 		{
 			useClass: ClientBlockchainService,
@@ -72,10 +89,17 @@ import { PointsDBStorageAdapter } from './modules/Blockchain/Points/Adapters/Out
 			useClass: CustomerDBStorageStorageAdapter,
 			provide: DependencyInjectionTokens.CUSTOMER_DB_STORAGE_OUTPUT_PORT,
 		},
-
 		{
 			useClass: CustomerDBAdapter,
 			provide: DependencyInjectionTokens.CUSTOMER_DB_TOKEN_OUTPUT_PORT,
+		},
+		{
+			useClass: AuthenticationService,
+			provide: DependencyInjectionTokens.AUTH_TOKEN_USE_CASE,
+		},
+		{
+			useClass: AuthenticationAdapter,
+			provide: DependencyInjectionTokens.AUTH_TOKEN_OUTPUT_PORT,
 		},
 		BlockchainClientConnectionProvider,
 		BlockchainPointsConnectionProvider,
@@ -85,7 +109,7 @@ import { PointsDBStorageAdapter } from './modules/Blockchain/Points/Adapters/Out
 				const dataSource = new DataSource({
 					type: 'postgres',
 					url: process.env.CONNECTION_STRING,
-					entities: [MetadataEntity, CustomerEntity],
+					entities: [MetadataEntity, CustomerEntity, UserEntity],
 					synchronize: true,
 					// ssl: {
 					// 	requestCert: true,

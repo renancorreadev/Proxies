@@ -14,7 +14,7 @@
   "terminal.integrated.env.osx": {},
   "console-ninja.featureSet": "Community",
   "vsicons.presets.foldersAllDefaultIcon": true,
-  "workbench.iconTheme": "eq-material-theme-icons-darker",
+  "workbench.iconTheme": "material-icon-theme",
   "editor.minimap.enabled": false,
   "redhat.telemetry.enabled": true,
   "typescript.tsserver.log": "off",
@@ -42,5 +42,14 @@
     "markdown",
     "rust"
   ],
-  "window.zoomLevel": 0,
+  "window.zoomLevel": 1,
+  "rest-client.environmentVariables": {
+    "dev": {
+        "keycloak_url": "localhost:8080",
+        "keycloak_client_id": "customer-ui-login",
+        "keycloak_realm": "Protocol",
+        "keycloak_username": "admin@skynance.net",
+        "keycloak_password": "1234"
+    }
+}
 }

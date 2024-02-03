@@ -4,6 +4,7 @@ export enum BaseUrls {
 	POINTS_BLOCKCHAIN = 'points/',
 	META_DATA = 'metadata/',
 	CUSTOMER = 'customer/',
+	AUTH = 'auth/',
 }
 
 export const enum DependencyInjectionTokens {
@@ -20,11 +21,15 @@ export const enum DependencyInjectionTokens {
 	CUSTOMER_DB_STORAGE_OUTPUT_PORT = 'CustomerDBStorageOutputPort',
 	CUSTOMER_DB_TOKEN_OUTPUT_PORT = 'CustomerDBTokenOutputPort',
 	CUSTOMER_DB_TOKEN_USE_CASE = 'CustomerDBTokenUseCase',
+	AUTH_TOKEN_USE_CASE = 'AuthenticationTokenUseCase',
+	AUTH_TOKEN_OUTPUT_PORT = 'AuthenticationTokenOutputPort',
+	VAULT_SERVICE = 'VaultServiceToken',
 }
 
 export const enum DependencyInjectionBlockchainConnector {
 	CLIENT_MANAGER_CONNECTOR = 'ClientManagerConnector',
 	POINTS_MANAGER_CONNECTOR = 'PointsManagerConnector',
+	WALLET_CONNECTOR = 'WalletConnector',
 }
 
 export const enum Hosts {

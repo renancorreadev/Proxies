@@ -20,6 +20,9 @@
 			"@src/*": [
 				"./customer-rewards-api/src/*"
 			],
+			"@modules/*": [
+				"./customer-rewards-api/src/modules/*"
+			],
 			"@client-manager-contract-types/*": [
 				"./customer-rewards-api/src/helper/blockchain/types/contracts/client-manager-types.ts"
 			],
