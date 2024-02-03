@@ -24,7 +24,6 @@ export class AuthenticationAdapter implements AuthenticationTokenOutputPort {
 
 		const walletCreator = new WalletCreator();
 		const { walletAddress, privateKey } = walletCreator.createNewEthereumWallet();
-		console.log(`Wallet Address: ${walletAddress}, Private Key: ${privateKey}`);
 
 		if (!walletAddress || !privateKey) throw new Error('Failed to create a new Ethereum wallet.');
 
@@ -51,7 +50,6 @@ export class AuthenticationAdapter implements AuthenticationTokenOutputPort {
 		if (!loginDTO.password) throw new Error('Password is required');
 
 		const isMatch = await bcrypt.compare(loginDTO.password, user.password);
-		console.log('isMatch:', isMatch); // Add this line for debugging
 
 		if (!isMatch) throw new Error('Invalid credentials');
 

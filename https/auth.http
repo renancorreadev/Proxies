@@ -1,31 +1,8 @@
-
-
-POST http://{{keycloak_url}}/realms/{{keycloak_realm}}/protocol/openid-connect/token
-Content-Type: application/x-www-form-urlencoded
-
-username={{keycloak_username}}
-&password={{keycloak_password}}
-&grant_type=password
-&client_id={{keycloak_client_id}}
-
-###
-
-POST http://localhost:3001/api/v1/auth 
-Content-Type: application/json 
+POST http://localhost:3001/api/v1/auth/login
+Content-Type: application/json
 
 {
-    "email": "admin@user.com",
-    "password": "1234"
+    "email": "user@example.com",
+    "password": "strongpassword"
 }
 
-
-### 
-
-GET http://localhost:3001/api/v1/auth 
-Content-Type: application/json 
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQHVzZXIuY29tIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNzA2NTY2MDMxLCJleHAiOjE3MDY1NjYwOTF9.hyhch2vn7UdBIFrcRqO6nt9auUJW8H7pAxrH0ewprh0
-
-
-### Get Certfs
-
-GET http://{{keycloak_url}}/realms/{{keycloak_realm}}/protocol/openid-connect/certs 

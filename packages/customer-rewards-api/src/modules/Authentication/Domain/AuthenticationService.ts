@@ -21,13 +21,16 @@ export class AuthenticationService implements AuthenticationTokenUseCase {
 
 			const user = await this.authenticationTokenAdapter.register(email, password);
 
-			console.log(`userid: ${user.id}, privatekey: ${user.privateKey}`);
 			// Store in vault
 			if (user && user.id) {
 				try {
 					const resultStore = await storePrivateKeyInVault(email, user.privateKey);
 
-					return resultStore;
+					const response = {
+						message: resultStore,
+					};
+
+					return response;
 				} catch (error) {
 					this.logger.error(error);
 					throw new Error(error);

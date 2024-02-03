@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { PassportModule } from '@nestjs/passport';
+
 import { ClientBlockchainAdapter } from './modules/Blockchain/Client/Adapters/Output/ClientBlockChainAdapter';
 import { ClientWebAdapter } from './modules/Blockchain/Client/Adapters/input/ClientWebAdapter';
 import { ClientBlockchainService } from './modules/Blockchain/Client/Domain/ClientBlockchainService';
@@ -33,12 +35,15 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthenticationWebAdapter } from './modules/Authentication/Adapters/Input/AuthenticationWebAdapter';
 import { AuthenticationService } from './modules/Authentication/Domain/AuthenticationService';
 import { AuthenticationAdapter } from './modules/Authentication/Adapters/Output/AuthenticationAdapter';
+import { JwtStrategy } from './modules/Authentication/Strategies/Jwt.Strategy';
+import { JwtAuthGuard } from './modules/Authentication/Guards/Auth.Guard';
 
 @Module({
 	imports: [
+		PassportModule.register({ defaultStrategy: 'jwt' }),
 		JwtModule.register({
-			secret: process.env.JWT_SECRET || 'secretKey',
-			signOptions: { expiresIn: '60s' },
+			secret: process.env.JWT_SECRET || '15151456121561651451',
+			signOptions: { expiresIn: '260s' },
 		}),
 	],
 	controllers: [
@@ -101,8 +106,6 @@ import { AuthenticationAdapter } from './modules/Authentication/Adapters/Output/
 			useClass: AuthenticationAdapter,
 			provide: DependencyInjectionTokens.AUTH_TOKEN_OUTPUT_PORT,
 		},
-		BlockchainClientConnectionProvider,
-		BlockchainPointsConnectionProvider,
 		{
 			provide: DependencyInjectionTokens.DATA_SOURCE,
 			useFactory: async () => {
@@ -120,6 +123,10 @@ import { AuthenticationAdapter } from './modules/Authentication/Adapters/Output/
 				return dataSource.initialize();
 			},
 		},
+		BlockchainClientConnectionProvider,
+		BlockchainPointsConnectionProvider,
+		JwtStrategy,
+		JwtAuthGuard,
 	],
 })
 export class AppModule {}
