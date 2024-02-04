@@ -8,10 +8,8 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="app-layout">
-        <Header />
-
-        <main>{children}</main>
-        
+      <Header />
+      <main>{children}</main>
     </div>
   );
 };

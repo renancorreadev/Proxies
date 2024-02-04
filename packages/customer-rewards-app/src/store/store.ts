@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import { jwtDecode } from "jwt-decode";
+import { create } from 'zustand';
+import { jwtDecode } from 'jwt-decode';
 
 interface TokenPayload {
   exp: number;
@@ -16,13 +16,13 @@ export const useUserStore = create<UserState>((set) => ({
   token: null,
   email: null,
   setUser: (email, token) => {
-    sessionStorage.setItem("token", token);
-    sessionStorage.setItem("email", email);
+    sessionStorage.setItem('token', token);
+    sessionStorage.setItem('email', email);
     set({ email, token });
   },
 
   isTokenValid: () => {
-    const token = sessionStorage.getItem("token");
+    const token = sessionStorage.getItem('token');
     if (!token) return false;
 
     try {
@@ -30,12 +30,12 @@ export const useUserStore = create<UserState>((set) => ({
 
       const currentTime = Date.now() / 1000;
       if (decoded.exp > currentTime) {
-        set({ token, email: sessionStorage.getItem("email") });
+        set({ token, email: sessionStorage.getItem('email') });
         return true;
       }
       return false;
     } catch (error) {
-      console.error("Error decoding token:", error);
+      console.error('Error decoding token:', error);
       return false;
     }
   },
