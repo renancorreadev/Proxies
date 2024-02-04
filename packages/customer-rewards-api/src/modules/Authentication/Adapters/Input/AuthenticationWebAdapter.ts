@@ -39,9 +39,16 @@ export class AuthenticationWebAdapter {
 		try {
 			this.logger.log('---------- PROCESS BEGIN ----------');
 			this.logger.log('Running Authentication Web Adapter');
+			this.logger.log('running login method...');
 
-			this.logger.log(`loginDTO: ${loginDTO}`);
-			return await this.authenticationService.login(loginDTO);
+			const { password, ...loginInfo } = loginDTO;
+			this.logger.log(`loginDTO: ${JSON.stringify(loginInfo)}`);
+
+			const query = await this.authenticationService.login(loginDTO);
+			this.logger.log(`query: ${JSON.stringify(query)}`);
+
+			this.logger.log('---------- PROCESS END ----------');
+			return query;
 		} catch (e) {
 			const errorMessage = e.response ? e.response.data : e.message;
 			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);

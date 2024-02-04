@@ -21,7 +21,7 @@ export interface UserInfo {
 	updatedAt: Date;
 }
 export interface AuthenticationTokenOutputPort {
-	register(email: string, password: string): Promise<UserData>;
+	register(email: string, password: string, isAdmin?: boolean): Promise<UserData>;
 	login(loginDTO: LoginDTO): Promise<{ access_token: string }>;
 	validateUser(payload: any): Promise<any>;
 	deleteUser(email: string): Promise<string>;

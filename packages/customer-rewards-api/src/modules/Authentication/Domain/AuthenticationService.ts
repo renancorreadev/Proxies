@@ -17,11 +17,11 @@ export class AuthenticationService implements AuthenticationTokenUseCase {
 		private readonly authenticationTokenAdapter: AuthenticationTokenOutputPort,
 	) {}
 
-	async register(email: string, password: string): Promise<any> {
+	async register(email: string, password: string, isAdmin?: boolean): Promise<any> {
 		try {
 			if (!password) throw new Error('Password is required');
 
-			const user = await this.authenticationTokenAdapter.register(email, password);
+			const user = await this.authenticationTokenAdapter.register(email, password, isAdmin);
 
 			// Store in vault
 			if (user && user.id) {

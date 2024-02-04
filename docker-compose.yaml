@@ -148,6 +148,9 @@ services:
   vault:
     image: hashicorp/vault:latest
     container_name: vault
+    volumes:
+      - vault_data:/.docker/vault/data
+      - ./vault-config.json:/.docker/vault/config.json
     environment:
       - VAULT_DEV_ROOT_TOKEN_ID=myroot
       - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
@@ -155,7 +158,7 @@ services:
       - "8200:8200"
     cap_add:
       - IPC_LOCK
-    entrypoint: vault server -dev
+    entrypoint: vault server -config=/.docker/vault/config.json
     networks:
       protocol:
         ipv4_address: 172.16.239.15
@@ -168,6 +171,8 @@ volumes:
   pnpm-store:
     driver: local
   prometheus_data:
+    driver: local
+  vault_data:
     driver: local
 
 networks:

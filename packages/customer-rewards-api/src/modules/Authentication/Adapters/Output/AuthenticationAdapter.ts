@@ -18,7 +18,7 @@ export class AuthenticationAdapter implements AuthenticationTokenOutputPort {
 
 	private userRepository: Repository<UserEntity> = this.dataSource.getRepository(UserEntity);
 
-	async register(email: string, password: string): Promise<UserData> {
+	async register(email: string, password: string, isAdmin?: boolean): Promise<UserData> {
 		if (!password) throw new Error('Password is required');
 		const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -31,6 +31,7 @@ export class AuthenticationAdapter implements AuthenticationTokenOutputPort {
 			email,
 			password: hashedPassword,
 			walletAddress: walletAddress,
+			isAdmin,
 		});
 
 		await this.userRepository.save(newUser);
@@ -79,7 +80,6 @@ export class AuthenticationAdapter implements AuthenticationTokenOutputPort {
 			throw new NotFoundException('User not found');
 		}
 
-		// Atualize as informações do usuário com os dados fornecidos
 		Object.assign(user, updatedUserData);
 
 		await this.userRepository.save(user);
@@ -91,7 +91,6 @@ export class AuthenticationAdapter implements AuthenticationTokenOutputPort {
 		return await this.userRepository.findOneBy({ id: payload.sub });
 	}
 
-	// Ajuste na implementação do método getUser
 	async getUser(email: string): Promise<UserInfo | undefined> {
 		const user = await this.userRepository.findOne({
 			select: ['id', 'email', 'walletAddress', 'isAdmin', 'createdAt', 'updatedAt'],

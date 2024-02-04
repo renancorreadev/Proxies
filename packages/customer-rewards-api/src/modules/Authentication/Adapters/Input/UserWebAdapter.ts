@@ -37,16 +37,19 @@ export class UserWebAdapter {
 	@ApiBody({ type: RegisterDtoSwagger })
 	@ApiOkResponse({ description: 'Registration successful', type: String })
 	@ApiBadRequestResponse({ description: 'Bad request' })
-	async register(@Body() registerDTO: { email: string; password: string }): Promise<any> {
-		console.log(registerDTO);
+	async register(@Body() registerDTO: { email: string; password: string; isAdmin?: boolean }): Promise<any> {
 		try {
 			if (registerDTO) {
 				this.logger.log('---------- PROCESS BEGIN ----------');
 				this.logger.log('Running Authentication Web Adapter');
 				this.logger.log('Executing register method...');
 
-				this.logger.log(`loginDTO: ${registerDTO}`);
-				return this.authenticationService.register(registerDTO.email, registerDTO.password);
+				this.logger.log(`email: ${registerDTO.email}`);
+				this.logger.log(`password: ${registerDTO.password}`);
+				registerDTO.isAdmin ? this.logger.log(`isAdmin: ${registerDTO.isAdmin}`) : this.logger.log(`isAdmin: false`);
+				this.logger.log('---------- PROCESS END ----------');
+
+				return this.authenticationService.register(registerDTO.email, registerDTO.password, registerDTO.isAdmin);
 			} else {
 				throw new Error('Bad request');
 			}
