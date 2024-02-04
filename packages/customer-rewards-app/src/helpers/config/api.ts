@@ -10,7 +10,7 @@ api.interceptors.request.use(
     const { token, isTokenValid } = useUserStore.getState();
     if (!isTokenValid()) {
       console.log('Token expired. Please log in again.');
-      // Redirecione para a tela de login ou renove o token aqui
+
       // Por exemplo: throw new axios.Cancel("Token expired");
     }
     if (token) {

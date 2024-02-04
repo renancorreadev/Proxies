@@ -1,4 +1,4 @@
-import { Login } from '@/components/app/Login';
+import { Login } from '@/components/app/Authentication/Login';
 import { NavigationMenuHeader } from './Navitation';
 import { useUserStore } from '@/store/store';
 import { UserProfile } from '@/components/app/User/UserProfile';
