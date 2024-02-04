@@ -45,11 +45,23 @@
   "window.zoomLevel": 1,
   "rest-client.environmentVariables": {
     "dev": {
-        "keycloak_url": "localhost:8080",
-        "keycloak_client_id": "customer-ui-login",
-        "keycloak_realm": "Protocol",
-        "keycloak_username": "admin@skynance.net",
-        "keycloak_password": "1234"
+      "keycloak_url": "localhost:8080",
+      "keycloak_client_id": "customer-ui-login",
+      "keycloak_realm": "Protocol",
+      "keycloak_username": "admin@skynance.net",
+      "keycloak_password": "1234"
     }
-}
-}
+  },
+  "material-icon-theme.folders.associations": {
+   "Blockchain": "GraphQL",
+   "docs": "Docs",
+   "Metadata": "Meta",
+   "Adapters": "Quasar",
+   "Port": "Other",
+   "Domain": "Server",
+   "packages": "Packages",
+  },
+  "material-icon-theme.files.associations": {
+    "app.module.ts": "Angular"
+  }
+} 
