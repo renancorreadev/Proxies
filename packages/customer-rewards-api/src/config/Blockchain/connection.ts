@@ -1,4 +1,3 @@
-// blockchain-connection.provider.ts
 import { Provider } from '@nestjs/common';
 import { DependencyInjectionBlockchainConnector } from '@helper/AppConstants';
 import { PointsManagerConnector, ClientManagerConnector } from '@helper/blockchain/connector';
