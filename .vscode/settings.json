@@ -1,48 +1,38 @@
 {
   "solidity.compileUsingRemoteVersion": "v0.8.20+commit.a1b79de6",
   "editor.fontSize": 13,
-  "peacock.remoteColor": "#f46403",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
   "[solidity]": {
     "editor.defaultFormatter": "NomicFoundation.hardhat-solidity"
   },
+  "editor.formatOnSave": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+  },
   "extensions.ignoreRecommendations": true,
   "editor.fontFamily": "Fira Code",
   "editor.fontLigatures": true,
   "terminal.integrated.env.osx": {},
-  "console-ninja.featureSet": "Community",
-  "vsicons.presets.foldersAllDefaultIcon": true,
   "workbench.iconTheme": "material-icon-theme",
   "editor.minimap.enabled": false,
-  "redhat.telemetry.enabled": true,
+  "redhat.telemetry.enabled": false,
   "typescript.tsserver.log": "off",
   "explorer.confirmDragAndDrop": false,
-  "workbench.colorTheme": "Activate UMBRA protocol",
-  "workbench.productIconTheme": "fluent-icons",
   "explorer.confirmDelete": false,
-  "tabnine.experimentalAutoImports": true,
   "remote.autoForwardPortsSource": "hybrid",
   "typescript.updateImportsOnFileMove.enabled": "always",
-  "cloudcode.duetAI.project": "stoked-monitor-406410",
-  "cloudcode.duetAI.languages": [
-    "javascript",
-    "typescript",
-    "go",
-    "dockercompose",
-    "javascriptreact",
-    "yaml",
-    "typescriptreact",
-    "sql",
-    "dockerfile",
-    "python",
-    "sass",
-    "html",
-    "markdown",
-    "rust"
-  ],
-  "window.zoomLevel": 1,
+  "window.zoomLevel": 1.3,
   "rest-client.environmentVariables": {
     "dev": {
       "keycloak_url": "localhost:8080",
