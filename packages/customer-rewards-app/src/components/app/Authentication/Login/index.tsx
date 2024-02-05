@@ -58,7 +58,13 @@ export function Login() {
     }
 
     try {
-      const response = await register(data.email, data.password);
+      const response = await register({
+        email: data.email,
+        username: data.username,
+        password: data.password,
+        profileImageUrl: data.profileImageUrl,
+        isAdmin: data.isAdmin,
+      });
       alert(response.data.message);
       setIsRegistering(false);
     } catch (error) {
@@ -94,13 +100,32 @@ export function Login() {
           >
             {/* Registration form fields */}
             <InputFields
-              label="Email Address"
+              label="Email"
               id="email"
               type="email"
               register={registerRegister}
               requiredMsg="Email is required"
               errors={errorsRegister.email}
             />
+
+            <InputFields
+              label="Username"
+              id="username"
+              type="text"
+              register={registerRegister}
+              requiredMsg="username is required"
+              errors={errorsRegister.username}
+            />
+
+            <InputFields
+              label="Profile Image"
+              id="profileImageUrl"
+              type="text"
+              register={registerRegister}
+              requiredMsg="profileImageUrl"
+              errors={errorsRegister.profileImageUrl}
+            />
+
             <InputFields
               validate={(value: string) =>
                 value === password || 'Passwords do not match'
@@ -156,8 +181,8 @@ export function Login() {
             <InputFields
               validate={(value: string) =>
                 !value ||
-                value.length >= 8 ||
-                'Password must be at least 8 characters'
+                value.length >= 4 ||
+                'Password must be at least 4 characters'
               }
               label="Password"
               id="password"

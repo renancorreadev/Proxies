@@ -1,4 +1,8 @@
 import axios from 'axios';
+import {
+  UserRegisterParamsType,
+  UserRegisterResponse,
+} from '../@types/api-types';
 
 const apiUrl = import.meta.env.VITE_CUSTOMER_API;
 
@@ -7,13 +11,17 @@ const api = axios.create({
 });
 
 export const login = async (email: string, password: string) => {
-  return api.post('auth/login', { email, password });
+  return await api.post('auth/login', { email, password });
 };
 
-export const register = async (
-  email: string,
-  password: string,
-  isAdmin: boolean = false
-) => {
-  return api.post('user/register', { email, password, isAdmin });
+export const register = async (registerParams: UserRegisterParamsType) => {
+  const { email, username, password, profileImageUrl, isAdmin } =
+    registerParams;
+  return await api.post<UserRegisterResponse>('user/register', {
+    email,
+    username,
+    password,
+    profileImageUrl,
+    isAdmin,
+  });
 };

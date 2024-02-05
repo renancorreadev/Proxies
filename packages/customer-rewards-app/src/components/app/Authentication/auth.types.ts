@@ -8,7 +8,10 @@ export interface LoginForm {
 
 export interface RegisterForm {
   email: string;
+  username: string;
   password: string;
+  profileImageUrl?: string;
+  isAdmin?: boolean;
   confirmPassword: string;
 }
 
