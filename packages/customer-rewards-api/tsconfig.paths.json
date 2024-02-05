@@ -32,6 +32,9 @@
 			"@metadata/*": [
 				"./customer-rewards-api/src/modules/Metadata/*"
 			],
+			"@user/*": [
+				"./customer-rewards-api/src/modules/User/*"
+			]
 		}
 	}
 }

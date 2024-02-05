@@ -1,4 +1,3 @@
-// src/modules/Authentication/Domain/User.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
@@ -14,6 +13,9 @@ export class UserEntity {
 
 	@Column({ nullable: true })
 	walletAddress: string;
+
+	@Column({ nullable: true })
+	profileImageUrl: string;
 
 	@Column({ default: false })
 	isAdmin: boolean;

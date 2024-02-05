@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsDateString, IsEmail, IsNumber, IsString } from 'class-validator';
-import { UserData } from './AuthenticationTokenOutputPort';
+import { UserData } from '../../@types/user';
 
 export class GetUserResponse {
 	@ApiProperty({ example: 2 })
@@ -30,7 +30,6 @@ export class GetUserResponse {
 	constructor(userData: UserData) {
 		this.id = userData.id;
 		this.email = userData.email;
-		// Não incluímos o campo 'password' na resposta por motivos de segurança.
 		this.walletAddress = userData.walletAddress;
 		this.isAdmin = userData.isAdmin;
 		this.createdAt = new Date(userData.createdAt);

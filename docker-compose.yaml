@@ -132,6 +132,23 @@ services:
     networks:
       - protocol
 
+  minio:
+    container_name: minio
+    image: quay.io/minio/minio
+    environment:
+      - MINIO_ROOT_USER=Admin
+      - MINIO_ROOT_PASSWORD=Astronalta@24
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ~/minio/data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - protocol
+    restart: always
+
+
   db:
     image: postgres:latest
     container_name: db_postgrees
@@ -173,6 +190,8 @@ volumes:
   prometheus_data:
     driver: local
   vault_data:
+    driver: local
+  minio-data:
     driver: local
 
 networks:

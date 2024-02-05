@@ -1,43 +1,45 @@
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
-
+import { JwtModule } from '@nestjs/jwt';
+import { DataSource } from 'typeorm';
+/**
+ * ALL CONFIG MODULES IMPORT
+ */
+import { DependencyInjectionTokens } from './helper/AppConstants';
+import { BlockchainClientConnectionProvider, BlockchainPointsConnectionProvider } from '@config/Blockchain/connection';
+/** ALL BLOCKCHAIN CLIENT MODULES IMPORT */
 import { ClientBlockchainAdapter } from './modules/Blockchain/Client/Adapters/Output/ClientBlockChainAdapter';
 import { ClientWebAdapter } from './modules/Blockchain/Client/Adapters/input/ClientWebAdapter';
 import { ClientBlockchainService } from './modules/Blockchain/Client/Domain/ClientBlockchainService';
-
+/** ALL BLOCKCHAIN CUSTOMER MODULES IMPORT */
+import { CustomerDBService } from './modules/Blockchain/Client/Domain/CustomerDBService';
+import { CustomerEntity } from './modules/Blockchain/Client/Adapters/Output/db/entity/CustomerEntity';
+import { CustomerDBAdapter } from './modules/Blockchain/Client/Adapters/Output/db/CustomerDBAdapter';
+import { CustomerDBWebAdapter } from './modules/Blockchain/Client/Adapters/input/CustomerDBWebAdapter';
+import { CustomerDBStorageStorageAdapter } from './modules/Blockchain/Client/Adapters/Output/db/CustomerDBStorageAdapter';
+/** ALL METADATA MODULES IMPORT */
+import { MetadataWebAdapter } from './modules/Metadata/Adapters/Input/MetadataWebAdapter';
+import { MetadataAdapter } from './modules/Metadata/Adapters/Output/MetadataAdapter';
+import { MetadataService } from './modules/Metadata/Domain/MetadataService';
+import { MetadataStorageAdapter } from './modules/Metadata/Adapters/Output/MetadataStorageAdapter';
+import { MetadataEntity } from './modules/Metadata/Adapters/Output/Entity/MetadataEntity';
+/** ALL BLOCKCHAIN POINTS MODULES IMPORT */
 import { PointsBlockchainService } from './modules/Blockchain/Points/Domain/PointsBlockchainService';
 import { PointsBlockchainAdapter } from './modules/Blockchain/Points/Adapters/Output/PointsBlockChainAdapter';
 import { PointsBlockchainWebAdapter } from './modules/Blockchain/Points/Adapters/input/PointsBlockchainWebAdapter';
-
-import { DependencyInjectionTokens } from './helper/AppConstants';
-import { BlockchainClientConnectionProvider, BlockchainPointsConnectionProvider } from '@config/Blockchain/connection';
-
-import { DataSource } from 'typeorm';
-
-import { MetadataWebAdapter } from './modules/Metadata/Adapters/Input/MetadataWebAdapter';
-
-import { MetadataAdapter } from './modules/Metadata/Adapters/Output/MetadataAdapter';
-import { CustomerDBStorageStorageAdapter } from './modules/Blockchain/Client/Adapters/Output/db/CustomerDBStorageAdapter';
-import { CustomerDBAdapter } from './modules/Blockchain/Client/Adapters/Output/db/CustomerDBAdapter';
-import { CustomerDBWebAdapter } from './modules/Blockchain/Client/Adapters/input/CustomerDBWebAdapter';
-import { MetadataStorageAdapter } from './modules/Metadata/Adapters/Output/MetadataStorageAdapter';
-
-import { MetadataService } from './modules/Metadata/Domain/MetadataService';
-import { CustomerDBService } from './modules/Blockchain/Client/Domain/CustomerDBService';
-
-import { CustomerEntity } from './modules/Blockchain/Client/Adapters/Output/db/entity/CustomerEntity';
-import { MetadataEntity } from './modules/Metadata/Adapters/Output/Entity/MetadataEntity';
-
 import { PointsDBStorageAdapter } from './modules/Blockchain/Points/Adapters/Output/PointsDBStorageAdapter';
-
-import { UserEntity } from './modules/Authentication/Adapters/Output/db/UserEntity';
-import { JwtModule } from '@nestjs/jwt';
+/** ALL AUTHENTICATION MODULES IMPORT */
 import { AuthenticationWebAdapter } from './modules/Authentication/Adapters/Input/AuthenticationWebAdapter';
 import { AuthenticationService } from './modules/Authentication/Domain/AuthenticationService';
 import { AuthenticationAdapter } from './modules/Authentication/Adapters/Output/AuthenticationAdapter';
+/** ALL JWT MODULES IMPORT */
 import { JwtStrategy } from './modules/Authentication/Strategies/Jwt.Strategy';
 import { JwtAuthGuard } from './modules/Authentication/Guards/Auth.Guard';
-import { UserWebAdapter } from './modules/Authentication/Adapters/Input/UserWebAdapter';
+/** ALL USER MODULES IMPORT */
+import { UserWebAdapter } from './modules/User/Adapters/Input/UserWebAdapter';
+import { UserService } from './modules/User/Domain/UserService';
+import { UserAdapter } from './modules/User/Adapters/Output/UserAdapter';
+import { UserEntity } from './modules/User/Adapters/Output/db/UserEntity';
 
 @Module({
 	imports: [
@@ -109,6 +111,14 @@ import { UserWebAdapter } from './modules/Authentication/Adapters/Input/UserWebA
 			provide: DependencyInjectionTokens.AUTH_TOKEN_OUTPUT_PORT,
 		},
 		{
+			useClass: UserService,
+			provide: DependencyInjectionTokens.USER_TOKEN_USE_CASE,
+		},
+		{
+			useClass: UserAdapter,
+			provide: DependencyInjectionTokens.USER_TOKEN_OUTPUT_PORT,
+		},
+		{
 			provide: DependencyInjectionTokens.DATA_SOURCE,
 			useFactory: async () => {
 				const dataSource = new DataSource({
@@ -125,6 +135,7 @@ import { UserWebAdapter } from './modules/Authentication/Adapters/Input/UserWebA
 				return dataSource.initialize();
 			},
 		},
+
 		BlockchainClientConnectionProvider,
 		BlockchainPointsConnectionProvider,
 		JwtStrategy,

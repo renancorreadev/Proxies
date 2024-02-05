@@ -1,5 +1,17 @@
-// src/modules/Authentication/Adapters/Input/AuthenticationWebAdapter.ts
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Inject, Logger, Param, Post } from '@nestjs/common';
+// src/modules/User/Adapters/Input/AuthenticationWebAdapter.ts
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	HttpException,
+	HttpStatus,
+	Inject,
+	Logger,
+	Param,
+	Patch,
+	Post,
+} from '@nestjs/common';
 import {
 	ApiBadRequestResponse,
 	ApiForbiddenResponse,
@@ -13,9 +25,11 @@ import {
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { BaseUrls, DependencyInjectionTokens } from 'customer-rewards-api/src/helper/AppConstants';
-import { AuthenticationService } from '../../Domain/AuthenticationService';
 import { RegisterDtoSwagger } from '../../Domain/DTO/Swagger/RegisterDtoSwagger';
-import { GetUserResponse } from '../../Port/Output/Response';
+import { UserService } from '../../Domain/UserService';
+import { GetUserResponse } from '../../Domain/DTO/HTTPResponse/UserResponse';
+import { UserInfo } from '../../Domain/@types/user';
+import { UserUpdateSwagger } from '../../Domain/DTO/Swagger/UserUpdateSwagger';
 
 @Controller(BaseUrls.USER)
 @ApiTags('User API Endpoints')
@@ -23,8 +37,8 @@ export class UserWebAdapter {
 	private readonly logger = new Logger('UserWebAdapter');
 
 	constructor(
-		@Inject(DependencyInjectionTokens.AUTH_TOKEN_USE_CASE)
-		private authenticationService: AuthenticationService,
+		@Inject(DependencyInjectionTokens.USER_TOKEN_USE_CASE)
+		private userService: UserService,
 	) {}
 
 	/**
@@ -41,7 +55,7 @@ export class UserWebAdapter {
 		try {
 			if (registerDTO) {
 				this.logger.log('---------- PROCESS BEGIN ----------');
-				this.logger.log('Running Authentication Web Adapter');
+				this.logger.log('Running User Web Adapter');
 				this.logger.log('Executing register method...');
 
 				this.logger.log(`email: ${registerDTO.email}`);
@@ -49,7 +63,7 @@ export class UserWebAdapter {
 				registerDTO.isAdmin ? this.logger.log(`isAdmin: ${registerDTO.isAdmin}`) : this.logger.log(`isAdmin: false`);
 				this.logger.log('---------- PROCESS END ----------');
 
-				return this.authenticationService.register(registerDTO.email, registerDTO.password, registerDTO.isAdmin);
+				return this.userService.register(registerDTO.email, registerDTO.password, registerDTO.isAdmin);
 			} else {
 				throw new Error('Bad request');
 			}
@@ -81,12 +95,12 @@ export class UserWebAdapter {
 	async deleteUser(@Param('email') email: string): Promise<string> {
 		try {
 			this.logger.log('----------PROCESS BEGIN ----------');
-			this.logger.log(`Running Authentication Web adapter`);
+			this.logger.log(`Running User Web adapter`);
 			this.logger.log(`email: ${email}`);
 
 			this.logger.log('---------- PROCESS END ----------');
 
-			const result = await this.authenticationService.deleteUser(email);
+			const result = await this.userService.deleteUser(email);
 			if (result) {
 				return 'User deleted successfully';
 			}
@@ -115,6 +129,38 @@ export class UserWebAdapter {
 	@ApiNotFoundResponse({ description: 'Segment not found' })
 	@Get('/get/:email')
 	async getClientData(@Param('email') email: string) {
-		return await this.authenticationService.getUser(email);
+		return await this.userService.getUser(email);
+	}
+
+	/// --------------------------------------------------------------------------------------
+	/// ------------------------      UPDATE  METADATA TOKEN URI JSON            ---------------------
+	/// --------------------------------------------------------------------------------------
+	@ApiBody({ required: true, type: UserUpdateSwagger })
+	@ApiOperation({
+		summary: 'Update a  user on api',
+		description: 'This route is used to update a metadata tokenID off Client on blockchain',
+	})
+	@ApiOkResponse({
+		description: 'Success operation',
+		type: String,
+	})
+	@ApiBadRequestResponse({ description: 'Bad request' })
+	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
+	@ApiForbiddenResponse({ description: 'Forbidden' })
+	@ApiNotFoundResponse({ description: 'Segment not found' })
+	@ApiInternalServerErrorResponse({ description: 'Unexpected error' })
+	@Patch('/update/:email')
+	async updateUser(@Param('email') email: string, @Body() updateUserDTO: UserInfo): Promise<UserInfo> {
+		try {
+			this.logger.log('----------PROCESS BEGIN ----------');
+			this.logger.log(`Running Metadata Web adapter`);
+			this.logger.log(`email: ${email}`);
+			this.logger.log(`updateUserDTO: ${JSON.stringify(updateUserDTO)}`);
+			this.logger.log('---------- PROCESS END ----------');
+			return await this.userService.updateUser(email, updateUserDTO);
+		} catch (e) {
+			this.logger.error(`Error in updateMetadata: ${e.message}`);
+			throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+		}
 	}
 }

@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
-import { FieldError, UseFormRegister, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { jwtDecode } from 'jwt-decode';
 
 import {
@@ -17,32 +16,12 @@ import {
 } from '@/components/ui';
 import { useUserStore } from '@/store/store';
 import { login, register } from '@/helpers/api/customer-api';
-
-interface LoginForm {
-  email: string;
-  password: string;
-}
-
-interface RegisterForm {
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-interface JwtPayload {
-  email: string;
-  exp: number;
-}
-
-interface InputFieldsProps {
-  label: string;
-  id: string;
-  type: string;
-  register: UseFormRegister<any>;
-  requiredMsg: string;
-  validate?: (value: string) => string | boolean;
-  errors?: FieldError | undefined;
-}
+import {
+  InputFieldsProps,
+  JwtPayload,
+  LoginForm,
+  RegisterForm,
+} from '../auth.types';
 
 export function Login() {
   const {

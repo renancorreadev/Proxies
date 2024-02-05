@@ -25,6 +25,8 @@ export const enum DependencyInjectionTokens {
 	AUTH_TOKEN_USE_CASE = 'AuthenticationTokenUseCase',
 	AUTH_TOKEN_OUTPUT_PORT = 'AuthenticationTokenOutputPort',
 	VAULT_SERVICE = 'VaultServiceToken',
+	USER_TOKEN_USE_CASE = 'UserTokenUseCase',
+	USER_TOKEN_OUTPUT_PORT = 'UserTokenOutputPort',
 }
 
 export const enum DependencyInjectionBlockchainConnector {
