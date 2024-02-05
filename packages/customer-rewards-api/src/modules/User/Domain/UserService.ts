@@ -1,12 +1,13 @@
-// src/modules/Authentication/Domain/AuthService.ts
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { storePrivateKeyInVault } from '@helper/vault';
 
 import { DependencyInjectionTokens } from 'customer-rewards-api/src/helper/AppConstants';
-
 import { UserTokenUseCase } from '../Port/Input/UserTokenUseCase';
 import { UserTokenOutputPort } from '../Port/Output/UserTokenOutputPort';
 import { UserInfo, UserUpdater } from './@types/user';
+import { InternalServerError, UserNotFoundError, BadRequestError } from './errors/user.errors';
+
+import { UserRegisterDTORequest } from './DTO/HTTPRequest/userHttpRequest';
+import { UserRegisterResponse } from './DTO/HTTPResponse/userHttpResponse';
 
 @Injectable()
 export class UserService implements UserTokenUseCase {
@@ -17,43 +18,62 @@ export class UserService implements UserTokenUseCase {
 		private readonly userTokenAdapter: UserTokenOutputPort,
 	) {}
 
-	async register(email: string, password: string, isAdmin?: boolean): Promise<any> {
+	async register(registerUserDTO: UserRegisterDTORequest): Promise<UserRegisterResponse> {
 		try {
-			if (!password) throw new Error('Password is required');
+			const { email, username, password, profileImageUrl, isAdmin } = registerUserDTO;
+			/** TODO: Validations for requires fields */
+			if (!password) throw new BadRequestError('Password is required');
+			if (!username) throw new BadRequestError('Username is required');
+			if (!email) throw new BadRequestError('Email is required');
 
-			const user = await this.userTokenAdapter.register(email, password, isAdmin);
-
-			// Store in vault
-			if (user && user.id) {
-				try {
-					const resultStore = await storePrivateKeyInVault(email, user.privateKey);
-
-					const response = {
-						message: resultStore,
-					};
-
-					return response;
-				} catch (error) {
-					this.logger.error(error);
-					throw new Error(error);
-				}
+			if (isAdmin !== undefined && typeof isAdmin !== 'boolean') {
+				throw new BadRequestError('isAdmin must be a boolean');
 			}
 
+			// Return user data from the adapter output port
+			const user = await this.userTokenAdapter.register({
+				email: email,
+				username: username,
+				password: password,
+				profileImageUrl: profileImageUrl,
+				isAdmin: isAdmin,
+			});
+
+			// Return user data registered
+			return {
+				message: 'Usuário registrado com sucesso',
+				user: {
+					email: user.email,
+					username: user.username,
+					walletAddress: user.walletAddress,
+					profileImageUrl: user.profileImageUrl,
+					isAdmin: user.isAdmin,
+					createdAt: user.createdAt,
+				},
+			};
+		} catch (error) {
+			this.logger.error(error);
+			throw new InternalServerError(error.message);
+		}
+	}
+
+	async getUser(email: string): Promise<UserInfo | undefined> {
+		try {
+			const user = await this.userTokenAdapter.getUser(email);
+			if (!user) throw new UserNotFoundError('User not found');
 			return user;
 		} catch (error) {
 			this.logger.error(error);
-			throw new Error(error);
+			throw new InternalServerError(error.message);
 		}
 	}
 
 	async deleteUser(email: string): Promise<string> {
 		try {
-			const result = await this.userTokenAdapter.deleteUser(email);
-
-			return result;
+			return await this.userTokenAdapter.deleteUser(email);
 		} catch (error) {
 			this.logger.error(error);
-			throw new Error(error);
+			throw new InternalServerError(error.message);
 		}
 	}
 
@@ -62,21 +82,7 @@ export class UserService implements UserTokenUseCase {
 			return await this.userTokenAdapter.updateUser(email, updatedUserData);
 		} catch (error) {
 			this.logger.error(error);
-			throw new Error(error);
-		}
-	}
-
-	async getUser(email: string): Promise<UserInfo | undefined> {
-		try {
-			const user = await this.userTokenAdapter.getUser(email);
-			if (!user) {
-				this.logger.error('User not found');
-				throw new Error('User not found');
-			}
-			return user;
-		} catch (error) {
-			this.logger.error(error);
-			throw new Error(error);
+			throw new InternalServerError(error.message);
 		}
 	}
 }

@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsDateString, IsEmail, IsNumber, IsString } from 'class-validator';
 import { UserData } from '../../@types/user';
 
-export class GetUserResponse {
+export class GetUserResponseSwagger {
 	@ApiProperty({ example: 2 })
 	@IsNumber()
 	id: number;

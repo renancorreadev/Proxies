@@ -1,4 +1,3 @@
-// src/modules/User/Adapters/Input/AuthenticationWebAdapter.ts
 import {
 	Body,
 	Controller,
@@ -25,11 +24,14 @@ import {
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { BaseUrls, DependencyInjectionTokens } from 'customer-rewards-api/src/helper/AppConstants';
-import { RegisterDtoSwagger } from '../../Domain/DTO/Swagger/RegisterDtoSwagger';
+
 import { UserService } from '../../Domain/UserService';
-import { GetUserResponse } from '../../Domain/DTO/HTTPResponse/UserResponse';
+
+import { UserRegisterResponse } from '../../Domain/DTO/HTTPResponse/userHttpResponse';
+import { UserRegisterDTORequest } from '../../Domain/DTO/HTTPRequest/userHttpRequest';
+import { GetUserResponseSwagger, UserUpdateSwagger } from '../../Domain/DTO/Swagger';
+
 import { UserInfo } from '../../Domain/@types/user';
-import { UserUpdateSwagger } from '../../Domain/DTO/Swagger/UserUpdateSwagger';
 
 @Controller(BaseUrls.USER)
 @ApiTags('User API Endpoints')
@@ -48,10 +50,10 @@ export class UserWebAdapter {
 	 */
 	@Post('/register')
 	@ApiOperation({ summary: 'Register user', description: 'Register new user to application' })
-	@ApiBody({ type: RegisterDtoSwagger })
-	@ApiOkResponse({ description: 'Registration successful', type: String })
+	@ApiBody({ type: UserRegisterDTORequest })
+	@ApiOkResponse({ description: 'Registration successful', type: UserRegisterResponse })
 	@ApiBadRequestResponse({ description: 'Bad request' })
-	async register(@Body() registerDTO: { email: string; password: string; isAdmin?: boolean }): Promise<any> {
+	async register(@Body() registerDTO: UserRegisterDTORequest): Promise<any> {
 		try {
 			if (registerDTO) {
 				this.logger.log('---------- PROCESS BEGIN ----------');
@@ -59,18 +61,24 @@ export class UserWebAdapter {
 				this.logger.log('Executing register method...');
 
 				this.logger.log(`email: ${registerDTO.email}`);
+				this.logger.log(`username: ${registerDTO.username}`);
 				this.logger.log(`password: ${registerDTO.password}`);
 				registerDTO.isAdmin ? this.logger.log(`isAdmin: ${registerDTO.isAdmin}`) : this.logger.log(`isAdmin: false`);
 				this.logger.log('---------- PROCESS END ----------');
 
-				return this.userService.register(registerDTO.email, registerDTO.password, registerDTO.isAdmin);
+				return this.userService.register({
+					email: registerDTO.email,
+					username: registerDTO.username,
+					password: registerDTO.password,
+					profileImageUrl: registerDTO.profileImageUrl,
+					isAdmin: registerDTO.isAdmin,
+				});
 			} else {
 				throw new Error('Bad request');
 			}
 		} catch (e) {
-			const errorMessage = e.response ? e.response.data : e.message;
-			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
-			throw new Error(`An error ocurred in executing register method on application `);
+			this.logger.error(`Error : ${JSON.stringify(e.message)}`);
+			throw new HttpException({ message: e.message, error: 'Bad Request' }, e.statusCode || HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -107,8 +115,8 @@ export class UserWebAdapter {
 
 			return result;
 		} catch (e) {
-			this.logger.error(`Error in deleteMetadata: ${e.message}`);
-			throw new HttpException(e.message, HttpStatus.NOT_FOUND);
+			this.logger.error(`Error in getClientData: ${e.message}`);
+			throw new HttpException(e.message, e.statusCode || HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -121,7 +129,7 @@ export class UserWebAdapter {
 	})
 	@ApiOkResponse({
 		description: 'Success operation',
-		type: GetUserResponse,
+		type: GetUserResponseSwagger,
 	})
 	@ApiBadRequestResponse({ description: 'Bad request' })
 	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
@@ -159,8 +167,8 @@ export class UserWebAdapter {
 			this.logger.log('---------- PROCESS END ----------');
 			return await this.userService.updateUser(email, updateUserDTO);
 		} catch (e) {
-			this.logger.error(`Error in updateMetadata: ${e.message}`);
-			throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+			this.logger.error(`Error in updateUser: ${e.message}`);
+			throw new HttpException(e.message, e.statusCode || HttpStatus.BAD_REQUEST);
 		}
 	}
 }

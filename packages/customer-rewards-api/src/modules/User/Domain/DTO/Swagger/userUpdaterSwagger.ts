@@ -11,7 +11,7 @@ export class UserUpdateSwagger {
 	@IsString()
 	walletAddress: string;
 
-	@ApiProperty({ example: false })
+	@ApiProperty({ example: 'false' })
 	@IsBoolean()
 	isAdmin: boolean;
 

@@ -16,6 +16,7 @@ export interface UserUpdater {
 export interface UserData {
 	id: number;
 	email: string;
+	username: string;
 	password: string;
 	walletAddress: string;
 	profileImageUrl?: string;

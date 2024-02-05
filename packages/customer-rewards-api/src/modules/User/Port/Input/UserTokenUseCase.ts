@@ -1,7 +1,9 @@
-import { UserData, UserInfo, UserUpdater } from '../../Domain/@types/user';
+import { UserInfo, UserUpdater } from '../../Domain/@types/user';
+import { UserRegisterDTORequest } from '../../Domain/DTO/HTTPRequest/userHttpRequest';
+import { UserRegisterResponse } from '../../Domain/DTO/HTTPResponse/userHttpResponse';
 
 export interface UserTokenUseCase {
-	register(email: string, password: string, isAdmin?: boolean): Promise<UserData>;
+	register(registerUserDTO: UserRegisterDTORequest): Promise<UserRegisterResponse>;
 	deleteUser(email: string): Promise<string>;
 	updateUser(email: string, updatedUserData: UserUpdater): Promise<UserInfo>;
 	getUser(email: string): Promise<UserInfo | undefined>;
