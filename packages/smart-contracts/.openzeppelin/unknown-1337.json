@@ -112,11 +112,6 @@
       "kind": "uups"
     },
     {
-      "address": "0x1E90f29fDe3304C4cbc321Be4b461B7dC5CbE898",
-      "txHash": "0x30cafce1c86351a0e229e090750b203871f5910ab59298890d8a0ce7ee8c9063",
-      "kind": "uups"
-    },
-    {
       "address": "0xfEc8a8B61dffD3B2575EcDa52864a7dD14f28153",
       "txHash": "0x3de1af178aad6f8a84bc63462a8519799a604aafc949b873b07d819ef72c0cbf",
       "kind": "uups"
@@ -199,6 +194,21 @@
     {
       "address": "0x38C87f13643016AA11287fB2fEF4D50e2939FF36",
       "txHash": "0x79dcfcf5d8d5a138a35b4ef542ad926658793397767876ff4e716a1c83280fc1",
+      "kind": "uups"
+    },
+    {
+      "address": "0x1E90f29fDe3304C4cbc321Be4b461B7dC5CbE898",
+      "txHash": "0x30cafce1c86351a0e229e090750b203871f5910ab59298890d8a0ce7ee8c9063",
+      "kind": "uups"
+    },
+    {
+      "address": "0x9b24D53241E941771f3239C5919027C046969515",
+      "txHash": "0x3ac818b7b8da774809523cb71e7b474c80e016ad095bdb87d088c7759c3fcea5",
+      "kind": "uups"
+    },
+    {
+      "address": "0xa793a327E4e0773690236461e7f1662ff0dB6Ebe",
+      "txHash": "0xb371a92cb4ebff9f6ed916288fd423ab9a15f93f89e17cd6a88af205dd2d9346",
       "kind": "uups"
     }
   ],
@@ -3177,268 +3187,9 @@
         }
       }
     },
-    "d0f6795b207c57eefd45472945499798c16578c0bad28aa1879bb962d19cb2c6": {
-      "address": "0x37EbBaF25F61FaA49d99d38616A36e1B45aDA776",
-      "txHash": "0xa771fac3e5635cc907fb681b29222849b2d9ab1c5ab44e41bb27e4d3186a4c3c",
-      "layout": {
-        "solcVersion": "0.8.20",
-        "storage": [
-          {
-            "label": "currentId",
-            "offset": 0,
-            "slot": "0",
-            "type": "t_uint256",
-            "contract": "CustomerManagementStorage",
-            "src": "contracts/storage/CustomerManagementStorage.sol:8"
-          },
-          {
-            "label": "clientMappingStorage",
-            "offset": 0,
-            "slot": "1",
-            "type": "t_mapping(t_uint256,t_struct(ClientData)5523_storage)",
-            "contract": "CustomerManagementStorage",
-            "src": "contracts/storage/CustomerManagementStorage.sol:10"
-          },
-          {
-            "label": "clientsByName",
-            "offset": 0,
-            "slot": "2",
-            "type": "t_mapping(t_string_memory_ptr,t_array(t_uint256)dyn_storage)",
-            "contract": "CustomerManagementStorage",
-            "src": "contracts/storage/CustomerManagementStorage.sol:11"
-          },
-          {
-            "label": "clientsByAddress",
-            "offset": 0,
-            "slot": "3",
-            "type": "t_mapping(t_address,t_array(t_uint256)dyn_storage)",
-            "contract": "CustomerManagementStorage",
-            "src": "contracts/storage/CustomerManagementStorage.sol:12"
-          },
-          {
-            "label": "clientsByAge",
-            "offset": 0,
-            "slot": "4",
-            "type": "t_mapping(t_uint256,t_array(t_uint256)dyn_storage)",
-            "contract": "CustomerManagementStorage",
-            "src": "contracts/storage/CustomerManagementStorage.sol:13"
-          },
-          {
-            "label": "walletAddressExists",
-            "offset": 0,
-            "slot": "5",
-            "type": "t_mapping(t_address,t_bool)",
-            "contract": "CustomerManagementStorage",
-            "src": "contracts/storage/CustomerManagementStorage.sol:15"
-          },
-          {
-            "label": "userTokenIDs",
-            "offset": 0,
-            "slot": "6",
-            "type": "t_mapping(t_address,t_uint256)",
-            "contract": "CustomerManagementStorage",
-            "src": "contracts/storage/CustomerManagementStorage.sol:17"
-          }
-        ],
-        "types": {
-          "t_address": {
-            "label": "address",
-            "numberOfBytes": "20"
-          },
-          "t_bool": {
-            "label": "bool",
-            "numberOfBytes": "1"
-          },
-          "t_struct(InitializableStorage)64_storage": {
-            "label": "struct Initializable.InitializableStorage",
-            "members": [
-              {
-                "label": "_initialized",
-                "type": "t_uint64",
-                "offset": 0,
-                "slot": "0"
-              },
-              {
-                "label": "_initializing",
-                "type": "t_bool",
-                "offset": 8,
-                "slot": "0"
-              }
-            ],
-            "numberOfBytes": "32"
-          },
-          "t_struct(OwnableStorage)14_storage": {
-            "label": "struct OwnableUpgradeable.OwnableStorage",
-            "members": [
-              {
-                "label": "_owner",
-                "type": "t_address",
-                "offset": 0,
-                "slot": "0"
-              }
-            ],
-            "numberOfBytes": "32"
-          },
-          "t_uint64": {
-            "label": "uint64",
-            "numberOfBytes": "8"
-          },
-          "t_array(t_uint256)dyn_storage": {
-            "label": "uint256[]",
-            "numberOfBytes": "32"
-          },
-          "t_enum(PaymentStatus)5499": {
-            "label": "enum ICustomerManagementStorage.PaymentStatus",
-            "members": [
-              "NOT_PAID",
-              "PAID"
-            ],
-            "numberOfBytes": "1"
-          },
-          "t_mapping(t_address,t_array(t_uint256)dyn_storage)": {
-            "label": "mapping(address => uint256[])",
-            "numberOfBytes": "32"
-          },
-          "t_mapping(t_address,t_bool)": {
-            "label": "mapping(address => bool)",
-            "numberOfBytes": "32"
-          },
-          "t_mapping(t_address,t_uint256)": {
-            "label": "mapping(address => uint256)",
-            "numberOfBytes": "32"
-          },
-          "t_mapping(t_string_memory_ptr,t_array(t_uint256)dyn_storage)": {
-            "label": "mapping(string => uint256[])",
-            "numberOfBytes": "32"
-          },
-          "t_mapping(t_uint256,t_array(t_uint256)dyn_storage)": {
-            "label": "mapping(uint256 => uint256[])",
-            "numberOfBytes": "32"
-          },
-          "t_mapping(t_uint256,t_struct(ClientData)5523_storage)": {
-            "label": "mapping(uint256 => struct ICustomerManagementStorage.ClientData)",
-            "numberOfBytes": "32"
-          },
-          "t_string_memory_ptr": {
-            "label": "string",
-            "numberOfBytes": "32"
-          },
-          "t_string_storage": {
-            "label": "string",
-            "numberOfBytes": "32"
-          },
-          "t_struct(AddressLocal)5508_storage": {
-            "label": "struct ICustomerManagementStorage.AddressLocal",
-            "members": [
-              {
-                "label": "City",
-                "type": "t_string_storage",
-                "offset": 0,
-                "slot": "0"
-              },
-              {
-                "label": "Street",
-                "type": "t_string_storage",
-                "offset": 0,
-                "slot": "1"
-              },
-              {
-                "label": "PostalCode",
-                "type": "t_uint256",
-                "offset": 0,
-                "slot": "2"
-              },
-              {
-                "label": "HouseNumber",
-                "type": "t_uint256",
-                "offset": 0,
-                "slot": "3"
-              }
-            ],
-            "numberOfBytes": "128"
-          },
-          "t_struct(ClientData)5523_storage": {
-            "label": "struct ICustomerManagementStorage.ClientData",
-            "members": [
-              {
-                "label": "clientId",
-                "type": "t_uint256",
-                "offset": 0,
-                "slot": "0"
-              },
-              {
-                "label": "name",
-                "type": "t_string_storage",
-                "offset": 0,
-                "slot": "1"
-              },
-              {
-                "label": "age",
-                "type": "t_uint256",
-                "offset": 0,
-                "slot": "2"
-              },
-              {
-                "label": "WalletAddress",
-                "type": "t_address",
-                "offset": 0,
-                "slot": "3"
-              },
-              {
-                "label": "paymentStatus",
-                "type": "t_enum(PaymentStatus)5499",
-                "offset": 20,
-                "slot": "3"
-              },
-              {
-                "label": "addressLocal",
-                "type": "t_struct(AddressLocal)5508_storage",
-                "offset": 0,
-                "slot": "4"
-              }
-            ],
-            "numberOfBytes": "256"
-          },
-          "t_uint256": {
-            "label": "uint256",
-            "numberOfBytes": "32"
-          }
-        },
-        "namespaces": {
-          "erc7201:openzeppelin.storage.Ownable": [
-            {
-              "contract": "OwnableUpgradeable",
-              "label": "_owner",
-              "type": "t_address",
-              "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:24",
-              "offset": 0,
-              "slot": "0"
-            }
-          ],
-          "erc7201:openzeppelin.storage.Initializable": [
-            {
-              "contract": "Initializable",
-              "label": "_initialized",
-              "type": "t_uint64",
-              "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:69",
-              "offset": 0,
-              "slot": "0"
-            },
-            {
-              "contract": "Initializable",
-              "label": "_initializing",
-              "type": "t_bool",
-              "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:73",
-              "offset": 8,
-              "slot": "0"
-            }
-          ]
-        }
-      }
-    },
     "0218afec051e7bd2e24b91aa141e0e8970fe0f7457a6080e28d1cdf7a45bb622": {
-      "address": "0xdd3d3B68c9bE7FAf9bE0e5a01E9726775741a742",
-      "txHash": "0x4044282d6e6ae097eff1ef0dc65b0348102e737268433b0212011a3d363b7706",
+      "address": "0xD0145a7E3fAFD5387c97B43db44Cf99168c9561b",
+      "txHash": "0xa4ed7c6e3621fffc0bc0df118242bd948fbdf8249fa89aadab3bbc18a84a0d8f",
       "layout": {
         "solcVersion": "0.8.20",
         "storage": [
@@ -3462,7 +3213,7 @@
             "label": "customerManagerInstance",
             "offset": 0,
             "slot": "2",
-            "type": "t_contract(CustomerManagementCore)5001",
+            "type": "t_contract(CustomerManagementCore)4993",
             "contract": "PointCore",
             "src": "contracts/PointCore.sol:24"
           },
@@ -3528,7 +3279,7 @@
             "label": "string",
             "numberOfBytes": "32"
           },
-          "t_struct(ERC1155Storage)210_storage": {
+          "t_struct(ERC1155Storage)131_storage": {
             "label": "struct ERC1155Upgradeable.ERC1155Storage",
             "members": [
               {
@@ -3552,7 +3303,7 @@
             ],
             "numberOfBytes": "96"
           },
-          "t_struct(InitializableStorage)64_storage": {
+          "t_struct(InitializableStorage)45_storage": {
             "label": "struct Initializable.InitializableStorage",
             "members": [
               {
@@ -3590,7 +3341,7 @@
             "label": "uint64",
             "numberOfBytes": "8"
           },
-          "t_contract(CustomerManagementCore)5001": {
+          "t_contract(CustomerManagementCore)4993": {
             "label": "contract CustomerManagementCore",
             "numberOfBytes": "20"
           },
@@ -3658,8 +3409,8 @@
       }
     },
     "fd971bbfd93352d369aff20eac7c481ab2bd5435db40d5d578d12bc15eb1bfc1": {
-      "address": "0x816EB3a2e508B43Aea4dAd2561493978405413A9",
-      "txHash": "0x4f3c4b13fac4aa50b13c86b0dbc898b57780af8453738f91d2090b34aa9e6ee3",
+      "address": "0x37EbBaF25F61FaA49d99d38616A36e1B45aDA776",
+      "txHash": "0xb06712190c0319232c586ddf345d9041866533c9ea50bb14882a3200819096a6",
       "layout": {
         "solcVersion": "0.8.20",
         "storage": [

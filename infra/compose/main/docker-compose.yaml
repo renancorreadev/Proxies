@@ -124,7 +124,6 @@ services:
       protocol:
         ipv4_address: 172.16.239.15
 
-
   db_keycloak:
     image: mysql:8.2.0-oracle
     container_name: db_keycloak
