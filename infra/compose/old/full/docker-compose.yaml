@@ -73,7 +73,33 @@ services:
     networks:
       protocol:
         ipv4_address: 172.16.239.13
- 
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - --config.file=/etc/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - protocol
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    ports:
+      - "3005:3000"
+    networks:
+      - protocol
+
   explorer:
     container_name: explorer
     image: alethio/ethereum-lite-explorer
@@ -86,8 +112,65 @@ services:
     networks:
       - protocol
 
+  minio:
+    container_name: minio
+    image: quay.io/minio/minio
+    environment:
+      - MINIO_ROOT_USER=Admin
+      - MINIO_ROOT_PASSWORD=Astronalta@24
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ./.docker/minio-data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - protocol
+    restart: always
+
+  db:
+    image: postgres:latest
+    container_name: db_postgrees
+    env_file:
+      - ./.env
+    volumes:
+      - postgree_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      protocol:
+        ipv4_address: 172.16.239.14
+
+  vault:
+    image: hashicorp/vault:latest
+    container_name: vault
+    volumes:
+      - vault_data:/.docker/vault/data
+      - ./vault-config.json:/.docker/vault/config.json
+    environment:
+      - VAULT_DEV_ROOT_TOKEN_ID=myroot
+      - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
+    ports:
+      - "8200:8200"
+    cap_add:
+      - IPC_LOCK
+    entrypoint: vault server -config=/.docker/vault/config.json
+    networks:
+      protocol:
+        ipv4_address: 172.16.239.15
+
 volumes:
+  grafana_data:
+    driver: local
+  postgree_data:
+    driver: local
   pnpm-store:
+    driver: local
+  prometheus_data:
+    driver: local
+  vault_data:
+    driver: local
+  minio-data:
     driver: local
 
 networks:
