@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: db_postgres
+    env_file:
+      - ./.env
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      protocol:
+        ipv4_address: 172.16.239.14
+
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  protocol:
+    external: true

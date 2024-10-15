@@ -1,0 +1,24 @@
+services:
+  minio:
+    container_name: minio
+    image: quay.io/minio/minio:latest
+    environment:
+      MINIO_ROOT_USER: Admin          # Set the root user
+      MINIO_ROOT_PASSWORD: Astronalta@24  # Set the root password
+    ports:
+      - "9000:9000"  # MinIO S3 API
+      - "9001:9001"  # MinIO console UI
+    volumes:
+      - ./minio-data:/data  # Persistent data storage
+    command: server /data --console-address ":9001"
+    networks:
+      - protocol
+    restart: always 
+
+volumes:
+  minio-data:
+    driver: local 
+
+networks:
+  protocol:
+    driver: bridge 

@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: "besu"
+    static_configs:
+      - targets:
+          [
+            "bootnode:9545",
+            "validator_1:9546",
+            "validator_2:9547",
+            "validator_3:9548",
+          ]
