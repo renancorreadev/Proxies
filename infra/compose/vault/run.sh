@@ -11,9 +11,9 @@ docker exec -it vault vault operator init
 
 
 # unseal vault desbloqear as chaves
-docker exec -it vault vault operator unseal AB4Up9OmnbtQgM2ABo5+eqvz9VyogQWEYhYx8POvuI4N
-docker exec -it vault vault operator unseal ACr/6CntpTMgLrJeSluOL/V5crKwJjs4PAjBZFzGUbGb
-docker exec -it vault vault operator unseal 9iD8dFuxTs+XAWu2p+Y//52A9RhCAV3u5I2+/23V/138
+docker exec -it vault vault operator unseal key1
+docker exec -it vault vault operator unseal key2
+docker exec -it vault vault operator unseal key3
 
-docker exec -it vault vault login hvs.6g5J8LnPidUEQDXlwFqwtfmG
+docker exec -it vault vault login tokenkey
 
