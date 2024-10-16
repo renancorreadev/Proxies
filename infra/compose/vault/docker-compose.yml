@@ -14,7 +14,10 @@ services:
     entrypoint: vault server -config=/vault/config/config.json
     networks:
       protocol:
-        ipv4_address: 172.16.239.15
 volumes:
   vault_data:
     driver: local
+
+networks:
+  protocol:
+    external: true  

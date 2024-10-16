@@ -175,6 +175,7 @@ volumes:
 
 networks:
   protocol:
+    name: protocol
     driver: bridge
     ipam:
       config:

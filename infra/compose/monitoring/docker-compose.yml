@@ -3,9 +3,9 @@ services:
     container_name: prometheus
     image: prom/prometheus
     command:
-      - --config.file=/etc/prometheus.yml
+      - --config.file=/etc/prometheus/prometheus.yml
     volumes:
-      - ./prometheus.yml:/etc/prometheus.yml
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus
     ports:
       - "9090:9090"
@@ -24,6 +24,8 @@ services:
       - "3000:3000"
     networks:
       - protocol
+    depends_on:
+      - prometheus  
 
 volumes:
   prometheus_data:
@@ -33,4 +35,4 @@ volumes:
 
 networks:
   protocol:
-    external: true
+    external: true  
