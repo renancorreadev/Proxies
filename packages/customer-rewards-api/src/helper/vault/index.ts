@@ -13,20 +13,18 @@ export async function storePrivateKeyInVault(email: string, privateKey: string):
 	};
 
 	try {
-		await axios.post(`${process.env.VAULT_ENDPOINT}/v1/${process.env.VAULT_URL}${email}`, data, { headers });
-		const successMessage = `Key successfully stored in Vault for user: ${email}`;
+		const vaultUrl = `${process.env.VAULT_ENDPOINT}/v1/secret/data/${email}`;
 
-		return successMessage;
-	} catch (error) {
-		let errorMessage = 'Error storing key in Vault';
-		if (error.response) {
-			errorMessage += `: ${error.response.data}`;
-		} else if (error.request) {
-			errorMessage += ': No response received from Vault';
+		const response = await axios.post(vaultUrl, data, { headers });
+
+		if (response.status === 200 || response.status === 204) {
+			return `Key successfully stored in Vault for user: ${email}`;
 		} else {
-			errorMessage += `: ${error.message}`;
+			throw new Error(`Unexpected response status: ${response.status}`);
 		}
-		console.error(errorMessage);
-		throw new Error(errorMessage);
+	} catch (error) {
+		const errorMessage = error.response?.data || error.message || 'Unknown error';
+		console.error(`Error storing key in Vault: ${errorMessage}`);
+		throw new Error(`Error storing key in Vault: ${errorMessage}`);
 	}
 }

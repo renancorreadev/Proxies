@@ -4,7 +4,11 @@ import {
   UserRegisterResponse,
 } from '../@types/api-types';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-ignore
 const apiUrl = import.meta.env.VITE_CUSTOMER_API;
+
+console.log('apiUrl:', apiUrl);
 
 const api = axios.create({
   baseURL: apiUrl,

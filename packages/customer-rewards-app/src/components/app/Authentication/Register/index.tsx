@@ -17,6 +17,9 @@ import {
 interface RegisterForm {
   email: string;
   password: string;
+  username: string;
+  profileImageUrl?: string;
+  isAdmin?: boolean;
   confirmPassword: string;
 }
 
@@ -39,7 +42,13 @@ export const Register: React.FC<RegisterProps> = ({ onLoginClick }) => {
     }
 
     try {
-      const response = await register(data.email, data.password);
+      const response = await register({
+        email: data.email,
+        username: data.username,
+        password: data.password,
+        profileImageUrl: data.profileImageUrl,
+        isAdmin: false,
+      });
 
       alert(response.data.message);
     } catch (error) {

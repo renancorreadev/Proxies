@@ -127,5 +127,3 @@ export function makeLogoutUrl() {
 
   return `http://localhost:8080/realms/protocol/protocol/openid-connect/logout?${logoutParams.toString()}`;
 }
-
-//http://localhost:3000/callback#error=unauthorized_client&error_description=Client+is+not+allowed+to+initiate+browser+login+with+given+response_type.+Implicit+flow+is+disabled+for+the+client.&state=0.qka67jgt2m
