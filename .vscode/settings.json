@@ -37,8 +37,8 @@
     "dev": {
       "keycloak_url": "localhost:8080",
       "keycloak_client_id": "customer-ui-login",
-      "keycloak_realm": "Protocol",
-      "keycloak_username": "admin@skynance.net",
+      "keycloak_realm": "protocol",
+      "keycloak_username": "renan",
       "keycloak_password": "1234"
     }
   },

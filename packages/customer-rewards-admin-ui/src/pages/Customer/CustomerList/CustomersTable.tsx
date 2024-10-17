@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { CSSProperties } from 'react';
 
 import { apiURL } from '@/utils/keys';
 
@@ -44,12 +45,11 @@ export const CustomerTable = () => {
     setCurrentPage(newPage);
   };
 
-  const truncateStyle = {
+  const truncateStyle: CSSProperties = {
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   };
-
   const copyToClipboard = (text: string) => {
     navigator.clipboard
       .writeText(text)

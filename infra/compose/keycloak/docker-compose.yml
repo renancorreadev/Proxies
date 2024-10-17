@@ -1,37 +1,43 @@
+version: '3.8'
+
 services:
   keycloak:
     image: quay.io/keycloak/keycloak:21.1
     container_name: keycloak
-    command: start-dev
+    command: start --import-realm --hostname-strict=false
     environment:
-      - KEYCLOAK_ADMIN=admin                # Admin username
-      - KEYCLOAK_ADMIN_PASSWORD=admin        # Admin password
-      - KC_DB=mysql                         # Database type
-      - KC_DB_URL=jdbc:mysql://db_keycloak:3306/keycloak  # JDBC URL
-      - KC_DB_USERNAME=root                 # Database user
-      - KC_DB_PASSWORD=root                 # Database password
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=mysql
+      - KC_DB_URL=jdbc:mysql://db_keycloak:3306/keycloak
+      - KC_DB_USERNAME=root
+      - KC_DB_PASSWORD=root
+      - KC_HOSTNAME_STRICT=false
+      - KC_CACHE=local                     # Reduz complexidade do cluster em dev
+      - KC_HTTP_ENABLED=true               # Habilita HTTP em vez de HTTPS
     depends_on:
       db_keycloak:
-        condition: service_healthy           # Wait for DB to be healthy
+        condition: service_healthy
     volumes:
-      - ./data:/opt/keycloak/data           # Persistent data storage
+      - ./data:/opt/keycloak/data
+      - ./config:/opt/keycloak/data/import
     ports:
-      - "8080:8080"                         # Keycloak Web UI
+      - "8080:8080"
     networks:
       protocol:
         ipv4_address: 172.16.239.15
 
   db_keycloak:
-    image: mysql:8.2.0-oracle               # MySQL image
+    image: mysql:8.2.0-oracle
     container_name: db_keycloak
     environment:
-      - MYSQL_ROOT_PASSWORD=root            # MySQL root password
-      - MYSQL_DATABASE=keycloak             # Database name for Keycloak
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=keycloak
     volumes:
-      - ./mysql_data:/var/lib/mysql         # MySQL data storage
+      - ./mysql_data:/var/lib/mysql
     ports:
-      - "3306:3306"                         # Expose MySQL port
-    healthcheck:                            # Ensure MySQL is healthy before Keycloak starts
+      - "3306:3306"
+    healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       timeout: 10s
@@ -48,6 +54,4 @@ volumes:
 
 networks:
   protocol:
-    external: true  
-
-
+    external: true
