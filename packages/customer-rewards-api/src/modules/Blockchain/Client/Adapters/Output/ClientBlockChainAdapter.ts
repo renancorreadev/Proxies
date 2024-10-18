@@ -7,7 +7,7 @@ import { DependencyInjectionBlockchainConnector, DependencyInjectionTokens } fro
 import { ClientManagerConnector } from '@helper/blockchain/connector';
 import { AddressLocal, ClientData, ClientDataInput } from '@helper/blockchain/types/contracts/client-manager-types';
 import axios from 'axios';
-import { CustomerDBStorageOutputPort } from '../../Port/Output/db/CustomerDBStorageOutputPort';
+
 import { CustomerDBService } from '../../Domain/CustomerDBService';
 
 config();

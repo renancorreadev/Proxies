@@ -10,11 +10,11 @@ import {
 	Param,
 	Post,
 	Query,
-	UseGuards,
+	// UseGuards,
 } from '@nestjs/common';
 import {
 	ApiBadRequestResponse,
-	ApiBearerAuth,
+	// ApiBearerAuth,
 	ApiBody,
 	ApiForbiddenResponse,
 	ApiInternalServerErrorResponse,
@@ -22,7 +22,7 @@ import {
 	ApiOkResponse,
 	ApiOperation,
 	ApiTags,
-	ApiUnauthorizedResponse,
+	// @ApiUnauthorizedResponse({ description: 'Unauthorized' }),
 } from '@nestjs/swagger';
 import { BaseUrls, DependencyInjectionTokens } from 'customer-rewards-api/src/helper/AppConstants';
 
@@ -35,7 +35,7 @@ import { GetClientLevelResponse } from '../../Domain/Dto/HTTPResponse/GetClientL
 import { GetUniqueNFTResponse } from '../../Domain/Dto/HTTPResponse/GetUniqueNFTResponse';
 import { JwtAuthGuard } from '@/src/modules/Authentication/Guards/Auth.Guard';
 
-@ApiBearerAuth('JWT-auth')
+// @ApiBearerAuth('JWT-auth')
 @Controller({
 	path: BaseUrls.POINTS_BLOCKCHAIN,
 })
@@ -61,11 +61,11 @@ export class PointsBlockchainWebAdapter {
 		type: String,
 	})
 	@ApiBadRequestResponse({ description: 'Bad request' })
-	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
+	// @	// @ApiUnauthorizedResponse({ description: 'Unauthorized' })({ description: 'Unauthorized' })
 	@ApiForbiddenResponse({ description: 'Forbidden' })
 	@ApiNotFoundResponse({ description: 'Segment not found' })
 	@ApiInternalServerErrorResponse({ description: 'Unexpected error' })
-	@UseGuards(JwtAuthGuard)
+	// @UseGuards(JwtAuthGuard)
 	@Post('add')
 	async addPoints(@Body() clientBlockchainRequestDTO: AddPointsRequestDto): Promise<string> {
 		try {
@@ -96,11 +96,11 @@ export class PointsBlockchainWebAdapter {
 		type: String,
 	})
 	@ApiBadRequestResponse({ description: 'Bad request' })
-	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
+	// @	// @ApiUnauthorizedResponse({ description: 'Unauthorized' })({ description: 'Unauthorized' })
 	@ApiForbiddenResponse({ description: 'Forbidden' })
 	@ApiNotFoundResponse({ description: 'Segment not found' })
 	@ApiInternalServerErrorResponse({ description: 'Unexpected error' })
-	@UseGuards(JwtAuthGuard)
+	// @UseGuards(JwtAuthGuard)
 	@Patch('/remove')
 	async removePoints(@Body() removePointsDTO: RemovePointsRequestDTO): Promise<string> {
 		try {
@@ -130,10 +130,10 @@ export class PointsBlockchainWebAdapter {
 		type: GetClientPointsResponse,
 	})
 	@ApiBadRequestResponse({ description: 'Bad request' })
-	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
+	// @ApiUnauthorizedResponse({ description: 'Unauthorized' })({ description: 'Unauthorized' })
 	@ApiForbiddenResponse({ description: 'Forbidden' })
 	@ApiNotFoundResponse({ description: 'Segment not found' })
-	@UseGuards(JwtAuthGuard)
+	// @UseGuards(JwtAuthGuard)
 	@Get('/:id')
 	async getClientPoints(@Param('id') id: number) {
 		try {
@@ -161,10 +161,10 @@ export class PointsBlockchainWebAdapter {
 		type: GetClientLevelResponse,
 	})
 	@ApiBadRequestResponse({ description: 'Bad request' })
-	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
+	// @ApiUnauthorizedResponse({ description: 'Unauthorized' })({ description: 'Unauthorized' })
 	@ApiForbiddenResponse({ description: 'Forbidden' })
 	@ApiNotFoundResponse({ description: 'Segment not found' })
-	@UseGuards(JwtAuthGuard)
+	// @UseGuards(JwtAuthGuard)
 	@Get('/level/:id')
 	async getClientLevel(@Param('id') id: number) {
 		try {
@@ -192,10 +192,10 @@ export class PointsBlockchainWebAdapter {
 		type: GetUniqueNFTResponse,
 	})
 	@ApiBadRequestResponse({ description: 'Bad request' })
-	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
+	// @ApiUnauthorizedResponse({ description: 'Unauthorized' })({ description: 'Unauthorized' })
 	@ApiForbiddenResponse({ description: 'Forbidden' })
 	@ApiNotFoundResponse({ description: 'Segment not found' })
-	@UseGuards(JwtAuthGuard)
+	// @UseGuards(JwtAuthGuard)
 	@Get('/nfts/all')
 	async getMultiplesNFT(@Query('accounts') accounts: string[], @Query('NFTIDs') ids: number[]): Promise<number[]> {
 		this.logger.log('---------- PROCESS BEGIN ----------');
@@ -230,10 +230,10 @@ export class PointsBlockchainWebAdapter {
 		type: GetUniqueNFTResponse,
 	})
 	@ApiBadRequestResponse({ description: 'Bad request' })
-	@ApiUnauthorizedResponse({ description: 'Unauthorized' })
+	// @ApiUnauthorizedResponse({ description: 'Unauthorized' })({ description: 'Unauthorized' })
 	@ApiForbiddenResponse({ description: 'Forbidden' })
 	@ApiNotFoundResponse({ description: 'Segment not found' })
-	@UseGuards(JwtAuthGuard)
+	// @UseGuards(JwtAuthGuard)
 	@Get('/nfts/simple')
 	async getUniqueNFT(@Query('accounts') accounts: string, @Query('NFTID') id: number): Promise<number> {
 		this.logger.log('---------- PROCESS BEGIN ----------');

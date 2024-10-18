@@ -26,6 +26,8 @@ export const CustomerTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
+  console.log(`customers: ${JSON.stringify(customers)}`);
+
   const fetchCustomers = async () => {
     try {
       const response = await axios.get<ClientData[]>(`${apiURL}/customer/all`);

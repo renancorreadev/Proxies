@@ -20,6 +20,7 @@
     "sc:compile": "lerna run --scope smart-contracts compile",
     "sc:deploy:client:core": "lerna run --scope smart-contracts deploy-client-core",
     "sc:upgrade:client:core": "lerna run --scope smart-contracts upgrade-client-core",
+    "deploy-sc": "pnpm sc:deploy:client:core && pnpm sc:deploy:points:core",
     "sc:deploy:points:core": "lerna run --scope smart-contracts deploy-points-core",
     "sc:upgrade:points:core": "lerna run --scope smart-contracts upgrade-points-core",
     "sc:clean": "lerna run --scope smart-contracts cache",
