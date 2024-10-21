@@ -18,8 +18,6 @@ import { formatEther } from "ethers";
 
 const persistConfig = {
   key: "root",
-  // TODO: Remove this in favor of a more secure storage.
-  // This is for development purposes only.
   storage: AsyncStorage,
 };
 
@@ -35,11 +33,9 @@ export const webSocketMiddleware: Middleware =
   (next) =>
   (action: PayloadAction<string> | PayloadAction<number>) => {
     next(action);
-
     if (action.type === "wallet/saveEthereumAddress") {
       const state = store.getState();
       const { ethereum } = state.wallet;
-
       webSocketProvider.on("block", async () => {
         const balance = await webSocketProvider.getBalance(ethereum.address);
         store.dispatch({

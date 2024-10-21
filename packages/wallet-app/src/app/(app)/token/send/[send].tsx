@@ -280,10 +280,10 @@ export default function SendPage() {
         amount
       );
 
-      const tokenBalanceLamports = parseFloat(tokenBalance) * LAMPORTS_PER_SOL;
+      const tokenBalanceLamports = amount * LAMPORTS_PER_SOL;
       const maxAmountLamports = tokenBalanceLamports - transactionFeeLamports;
       const maxAmount = maxAmountLamports / LAMPORTS_PER_SOL;
-      if (amount > maxAmount) {
+      if (maxAmount > amount) {
         errors.amount = "Insufficient funds for amount plus transaction fees";
       }
     }
@@ -317,11 +317,6 @@ export default function SendPage() {
         );
         setFieldValue("amount", totalCostMinusGas);
       } else if (chainName === "solana") {
-        console.log("args:", {
-          address,
-          toAddress,
-          amount: parseFloat(tokenBalance),
-        });
         const totalBalanceLamports =
           parseFloat(tokenBalance) * LAMPORTS_PER_SOL;
         const transactionFeeLamports = await calculateSolanaTransactionFee(

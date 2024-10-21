@@ -11,7 +11,6 @@ import {
   fetchEthereumBalance,
   updateSolanaBalance,
 } from "../../store/walletSlice";
-// import { fetchCryptoPrices } from "../../utils/fetchCryptoPrices";
 import { formatDollar } from "../../utils/formatDollars";
 import { getSolanaBalance } from "../../utils/solanaHelpers";
 import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
@@ -103,7 +102,7 @@ export default function Index() {
     setRefreshing(true);
     dispatch(fetchPrices());
     fetchTokenBalances();
-    updatePrices();
+
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
@@ -114,15 +113,15 @@ export default function Index() {
     dispatch(updateSolanaBalance(currentSolBalance));
   };
 
-  const fetchTokenBalances = async () => {
+  const fetchTokenBalances = useCallback(async () => {
     if (ethWalletAddress) {
       dispatch(fetchEthereumBalance(ethWalletAddress));
     }
 
     if (solWalletAddress) {
-      fetchSolanaBalance();
+      await fetchSolanaBalance();
     }
-  };
+  }, [ethBalance, solBalance, dispatch]);
 
   const updatePrices = () => {
     const ethUsd = ethPrice * ethBalance;
@@ -134,18 +133,19 @@ export default function Index() {
   };
 
   useEffect(() => {
-    dispatch(fetchPrices());
-    fetchTokenBalances();
-    updatePrices();
-
-    const interval = setInterval(async () => {
+    const fetchAndUpdatePrices = async () => {
+      await dispatch(fetchPrices());
       await fetchTokenBalances();
-      dispatch(fetchPrices());
-      updatePrices();
-    }, FETCH_PRICES_INTERVAL);
+    };
+    fetchAndUpdatePrices();
+    const interval = setInterval(fetchAndUpdatePrices, FETCH_PRICES_INTERVAL);
 
     return () => clearInterval(interval);
   }, [dispatch]);
+
+  useEffect(() => {
+    updatePrices();
+  }, [ethBalance, solBalance]);
 
   return (
     <SafeAreaContainer>
