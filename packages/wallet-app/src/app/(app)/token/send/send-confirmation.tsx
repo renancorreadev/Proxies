@@ -7,6 +7,7 @@ import {
   useNavigationContainerRef,
   router,
 } from "expo-router";
+import { useSelector } from "react-redux";
 import type { ThemeType } from "../../../../styles/theme";
 import ConfirmSend from "../../../../assets/svg/confirm-send.svg";
 import { formatDollar } from "../../../../utils/formatDollars";
@@ -20,6 +21,7 @@ import {
   sendTransaction,
 } from "../../../../utils/etherHelpers";
 import { getPrivateKey } from "../../../../hooks/use-storage-state";
+import type { RootState } from "../../../../store";
 
 const SafeAreaContainer = styled(SafeAreaView)<{ theme: ThemeType }>`
   flex: 1;
@@ -90,20 +92,6 @@ const ErrorText = styled.Text<{ theme: ThemeType }>`
 
 const ButtonView = styled.View<{ theme: ThemeType }>``;
 
-const ethPriceMock = 3006.94;
-const solPriceMock = 127.22;
-
-const findChainPrice = (chainName: string, amount: string) => {
-  switch (chainName) {
-    case "ethereum":
-      return ethPriceMock * parseFloat(amount);
-    case "solana":
-      return solPriceMock * parseFloat(amount);
-    default:
-      return 0;
-  }
-};
-
 export default function SendConfirmationPage() {
   const rootNavigation = useNavigationContainerRef();
   const theme = useTheme();
@@ -112,8 +100,13 @@ export default function SendConfirmationPage() {
     amount: tokenAmount,
     chainName: chain,
   } = useLocalSearchParams();
+
+  const prices = useSelector((state: RootState) => state.price.data);
+  const solPrice = prices.solana.usd;
+  const ethPrice = prices.ethereum.usd;
+
   const [gasEstimate, setGasEstimate] = useState("0.00");
-  const [totalCostMinusGas, setTotalCostMinusGas] = useState("0.00");
+  const [totalCost, setTotalCost] = useState("0.00");
   const [error, setError] = useState<string | null>(null);
   const [isBtnDisabled, setIsBtnDisabled] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -124,9 +117,6 @@ export default function SendConfirmationPage() {
   const address = toAddress as string;
 
   const chainBalance = `${amount} ${ticker}`;
-  // const usdBalance = findChainPrice(chainName, amount);
-  const ethPriceMock = 3006.94;
-  const solPriceMock = 127.22;
 
   const handleSubmit = async () => {
     try {
@@ -150,20 +140,18 @@ export default function SendConfirmationPage() {
   };
 
   const calculateTransactionCosts = async () => {
-    const chainPriceMock =
-      chainName === "ethereum" ? ethPriceMock : solPriceMock;
+    const chainPrice = chainName === "ethereum" ? ethPrice : solPrice;
     try {
       const { gasEstimate, totalCost, totalCostMinusGas } =
         await calculateGasAndAmounts(address, amount);
 
-      const gasEstimateUsd = formatDollar(
-        parseFloat(gasEstimate) * chainPriceMock
-      );
+      const gasEstimateUsd = formatDollar(parseFloat(gasEstimate) * chainPrice);
+
       const totalCostPlusGasUsd = formatDollar(
-        parseFloat(totalCost) * chainPriceMock
+        parseFloat(totalCost) * chainPrice
       );
       setGasEstimate(gasEstimateUsd);
-      setTotalCostMinusGas(totalCostPlusGasUsd);
+      setTotalCost(totalCostPlusGasUsd);
 
       if (totalCostMinusGas > amount) {
         setError("Not enough funds to send transaction.");
@@ -202,7 +190,7 @@ export default function SendConfirmationPage() {
         </IconView>
         <BalanceContainer>
           <CryptoBalanceText>{chainBalance}</CryptoBalanceText>
-          <UsdBalanceText>{totalCostMinusGas}</UsdBalanceText>
+          <UsdBalanceText>{totalCost}</UsdBalanceText>
         </BalanceContainer>
         <CryptoInfoCardContainer>
           <SendConfCard

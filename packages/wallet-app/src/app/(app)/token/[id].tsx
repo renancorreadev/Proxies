@@ -10,8 +10,9 @@ import {
   fetchEthereumBalance,
   updateSolanaBalance,
   fetchEthereumTransactions,
+  // fetchSolanaTransactions,
 } from "../../../store/walletSlice";
-import { getSolanaBalance } from "../../../utils/getSolanaBalance";
+import { getSolanaBalance } from "../../../utils/solanaHelpers";
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
 import { formatDollar } from "../../../utils/formatDollars";
 import PrimaryButton from "../../../components/PrimaryButton/PrimaryButton";
@@ -114,13 +115,13 @@ export default function Index() {
   const transactionHistory = useSelector(
     (state: RootState) => state.wallet[chainName].transactions
   );
+  const prices = useSelector((state: RootState) => state.price.data);
+  const solPrice = prices.solana.usd;
+  const ethPrice = prices.ethereum.usd;
 
   const [usdBalance, setUsdBalance] = useState(0);
   const [transactions, setTransactions] = useState<AssetTransfer[]>([]);
 
-  // TODO: Find cheap api to find real prices of tokens
-  const ethPriceMock = 3006.94;
-  const solPriceMock = 127.22;
   const ticker = TICKERS[chainName];
   const isSolana = chainName === Chains.Solana;
   const isEthereum = chainName === Chains.Ethereum;
@@ -159,12 +160,13 @@ export default function Index() {
   const fetchPrices = async () => {
     if (chainName === Chains.Ethereum) {
       dispatch(fetchEthereumTransactions(tokenAddress));
-      const usd = ethPriceMock * tokenBalance;
+      const usd = ethPrice * tokenBalance;
       setUsdBalance(usd);
     }
 
     if (chainName === Chains.Solana) {
-      const usd = solPriceMock * tokenBalance;
+      // dispatch(fetchSolanaTransactions(tokenAddress));
+      const usd = solPrice * tokenBalance;
       setUsdBalance(usd);
     }
   };
@@ -187,7 +189,11 @@ export default function Index() {
     const intervalId = setInterval(async () => {
       await fetchPrices();
     }, 5000);
-    return () => clearInterval(intervalId);
+
+    return () => {
+      console.log("clearing interval");
+      clearInterval(intervalId);
+    };
   }, [tokenBalance]);
 
   useEffect(() => {
