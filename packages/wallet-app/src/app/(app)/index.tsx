@@ -123,22 +123,24 @@ export default function Index() {
   const sheetRef = useRef<BottomSheet>(null);
   const theme = useTheme();
   const ethWalletAddress = useSelector(
-    (state: RootState) => state.wallet.ethereum.address
+    (state: RootState) => state.wallet.ethereum.activeAddress.address
   );
   const ethBalance = useSelector(
-    (state: RootState) => state.wallet.ethereum.balance
+    (state: RootState) => state.wallet.ethereum.activeAddress.balance
   );
   const solWalletAddress = useSelector(
-    (state: RootState) => state.wallet.solana.address
+    (state: RootState) => state.wallet.solana.activeAddress.address
   );
   const solBalance = useSelector(
-    (state: RootState) => state.wallet.solana.balance
+    (state: RootState) => state.wallet.solana.activeAddress.balance
   );
   const solTransactions = useSelector(
-    (state: RootState) => state.wallet.solana.transactionMetadata.transactions
+    (state: RootState) =>
+      state.wallet.solana.activeAddress.transactionMetadata.transactions
   );
   const ethTransactions = useSelector(
-    (state: RootState) => state.wallet.ethereum.transactionMetadata.transactions
+    (state: RootState) =>
+      state.wallet.ethereum.activeAddress.transactionMetadata.transactions
   );
   const failedEthStatus = useSelector(
     (state: RootState) => state.wallet.ethereum.status === "failed"
@@ -146,7 +148,10 @@ export default function Index() {
   const failedSolStatus = useSelector(
     (state: RootState) => state.wallet.solana.status === "failed"
   );
-
+  const test = useSelector(
+    (state: RootState) => state.wallet.ethereum.allAddresses
+  );
+  console.log("test:", test);
   const snapPoints = useMemo(() => ["10%", "33%", "68%", "90%"], []);
 
   const prices = useSelector((state: RootState) => state.price.data);
