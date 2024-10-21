@@ -68,6 +68,42 @@ export default function RootLayout() {
                 ),
               }}
             />
+            <Stack.Screen
+              name="(wallet)/confirm-seed-phrase"
+              options={{
+                title: "Confirm Seed Phrase",
+                headerTransparent: true,
+                headerTitleStyle: {
+                  color: "transparent",
+                },
+                headerLeft: () => (
+                  <LeftArrow
+                    width={35}
+                    height={35}
+                    fill="#FFF"
+                    onPress={goBack}
+                  />
+                ),
+              }}
+            />
+            <Stack.Screen
+              name="(wallet)/wallet-created-successfully"
+              options={{
+                title: "Confirm Seed Phrase",
+                headerTransparent: true,
+                headerTitleStyle: {
+                  color: "transparent",
+                },
+                headerLeft: () => (
+                  <LeftArrow
+                    width={35}
+                    height={35}
+                    fill="#FFF"
+                    onPress={goBack}
+                  />
+                ),
+              }}
+            />
           </Stack>
         </WalletProvider>
       </ThemeProvider>
