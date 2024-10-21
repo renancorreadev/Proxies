@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "rn-crypto-wallet",
-    "slug": "rn-crypto-wallet",
+    "name": "customer-rewards-wallet",
+    "slug": "customer-rewards-wallet",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "scheme": "rn-crypto-wallet",
+    "scheme": "customer-rewards-wallet",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
