@@ -245,10 +245,9 @@ export default function Page() {
       <ScrollView contentContainerStyle={{ paddingVertical: 50 }}>
         <ContentContainer>
           <TextContainer>
-            <Title>Secret Recovery Phrase</Title>
+            <Title>Frase Secreta de Recuperação</Title>
             <Subtitle>
-              Start the process to restore your wallet by entering your 12 or
-              24-word recovery phrase below.
+            Inicie o processo para restaurar sua carteira inserindo seus 12 ou Frase de recuperação de 24 palavras abaixo.
             </Subtitle>
           </TextContainer>
           <SeedTextInput
@@ -287,7 +286,7 @@ export default function Page() {
           color={theme.colors.white}
           backgroundColor={theme.colors.primary}
           onPress={handleVerifySeedPhrase}
-          title="Verify seed phrase"
+          title="Verificar sua frase"
         />
       </ButtonContainer>
     </SafeAreaContainer>

@@ -299,7 +299,7 @@ export default function SendConfirmationPage() {
               disabled={isBtnDisabled}
               backgroundColor={theme.colors.primary}
               onPress={handleSubmit}
-              title="Send"
+              title="Enviar"
             />
           </ButtonContainer>
         </ButtonView>

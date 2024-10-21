@@ -96,8 +96,8 @@ const InfoButton = () => {
         <ImportWalletIcon width={25} height={25} fill={theme.colors.white} />
       </Circle>
       <InfoTextContainer>
-        <InfoButtonText>Import Secret Recovery Phrase</InfoButtonText>
-        <InfoText>Import an existing wallet</InfoText>
+        <InfoButtonText>Importar frase secreta</InfoButtonText>
+        <InfoText>Importe uma carteira existente</InfoText>
       </InfoTextContainer>
     </InfoButtonContainer>
   );
@@ -115,10 +115,9 @@ export default function WalletSetup() {
         </ImageContainer>
 
         <TextContainer>
-          <Title>Import a wallet</Title>
+          <Title>Importar uma Wallet</Title>
           <Subtitle>
-            Import an existing wallet with your secret phrase or with your
-            private key
+          Importe uma carteira ja criada em qualquer blockchain com a frase de recuperação de segurança
           </Subtitle>
         </TextContainer>
         <ButtonContainer>

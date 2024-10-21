@@ -386,7 +386,7 @@ export default function Index() {
                     />
                   }
                   onPress={() => router.push(ROUTES.sendOptions)}
-                  btnText="Send"
+                  btnText="Enviar"
                 />
                 <View style={{ width: 15 }} />
                 <PrimaryButton
@@ -398,7 +398,7 @@ export default function Index() {
                     />
                   }
                   onPress={() => router.push(ROUTES.receiveOptions)}
-                  btnText="Receive"
+                  btnText="Receber"
                 />
               </ActionContainer>
               <SectionTitle>Recent Activity</SectionTitle>

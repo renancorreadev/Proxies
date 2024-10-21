@@ -156,16 +156,15 @@ export default function WalletSetup() {
             }}
           >
             <ExpoImage
-              source={require("../../../assets/images/wallet_alt.png")}
+              source={require("../../../assets/images/rewards.png")}
               contentFit="cover"
             />
           </ImageContainer>
 
           <TextContainer>
-            <Title>Get Started with Ease</Title>
+            <Title>Comece com facilidade</Title>
             <Subtitle>
-              Secure your financial future with a few easy steps. Your
-              decentralized wallet awaits.
+              Crie seu cadastro na carteira digital para visualizar as recompensas do ecossistema e verificar os ganhos em DREX em tempo real!
             </Subtitle>
           </TextContainer>
         </ContentContainer>
@@ -175,7 +174,7 @@ export default function WalletSetup() {
             loading={loading}
             disabled={loading}
             onPress={walletSetup}
-            title="Create Wallet"
+            title="Criar carteira"
             icon={
               <WalletIcon width={25} height={25} fill={theme.colors.white} />
             }
@@ -184,7 +183,7 @@ export default function WalletSetup() {
             onPress={() => router.push(ROUTES.walletImportOptions)}
           >
             <SecondaryButtonText>
-              Got a wallet? Let's import it
+              Ja possui uma carteira web3? Importe aqui
             </SecondaryButtonText>
           </SecondaryButtonContainer>
         </ButtonContainer>
