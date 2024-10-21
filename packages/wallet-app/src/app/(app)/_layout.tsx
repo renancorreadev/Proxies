@@ -16,6 +16,10 @@ const IconTouchContainer = styled.TouchableOpacity`
   padding: 10px;
 `;
 
+const IconContainer = styled.View`
+  padding: 10px;
+`;
+
 export default function AppLayout() {
   const theme = useTheme();
   const ethWallet = useSelector((state: RootState) => state.wallet.ethereum);
@@ -37,7 +41,7 @@ export default function AppLayout() {
     return null;
   }
 
-  if (!seedPhraseConfirmed) {
+  if (!seedPhraseConfirmed && (ethWallet.address || solWallet.address)) {
     return <Redirect href={ROUTES.seedPhrase} />;
   }
 
@@ -52,13 +56,13 @@ export default function AppLayout() {
           headerTransparent: true,
           gestureEnabled: true,
           headerLeft: () => (
-            <Link href={ROUTES.settings}>
+            <IconTouchContainer onPress={() => router.push(ROUTES.settings)}>
               <SettingsIcon
                 width={25}
                 height={25}
                 fill={theme.colors.primary}
               />
-            </Link>
+            </IconTouchContainer>
           ),
         }}
       >
@@ -100,6 +104,23 @@ export default function AppLayout() {
           }}
         />
         <Stack.Screen
+          name="token/receive/[receive]"
+          options={{
+            headerShown: true,
+            headerTransparent: true,
+            gestureEnabled: true,
+            headerTitleStyle: {
+              color: theme.colors.white,
+            },
+            presentation: "modal",
+            headerLeft: () => (
+              <IconTouchContainer onPress={() => router.back()}>
+                <LeftIcon width={25} height={25} fill={theme.colors.white} />
+              </IconTouchContainer>
+            ),
+          }}
+        />
+        <Stack.Screen
           name="token/send/send-confirmation"
           options={{
             headerShown: true,
@@ -114,7 +135,7 @@ export default function AppLayout() {
           }}
         />
         <Stack.Screen
-          name="token/receive"
+          name="token/receive-options"
           options={{
             headerShown: true,
             headerTransparent: true,

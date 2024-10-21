@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { View, SafeAreaView, FlatList } from "react-native";
+import { useEffect, useState, useCallback } from "react";
+import { View, SafeAreaView, FlatList, RefreshControl } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { router, useLocalSearchParams } from "expo-router";
 import styled, { useTheme } from "styled-components/native";
@@ -26,6 +26,7 @@ import CryptoInfoCard from "../../../components/CryptoInfoCard/CryptoInfoCard";
 import { truncateWalletAddress } from "../../../utils/truncateWalletAddress";
 import { TICKERS } from "../../../constants/tickers";
 import { Chains } from "../../../types";
+import { FETCH_PRICES_INTERVAL } from "../../../constants/price";
 
 const SafeAreaContainer = styled(SafeAreaView)<{ theme: ThemeType }>`
   flex: 1;
@@ -121,11 +122,21 @@ export default function Index() {
 
   const [usdBalance, setUsdBalance] = useState(0);
   const [transactions, setTransactions] = useState<AssetTransfer[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const ticker = TICKERS[chainName];
   const isSolana = chainName === Chains.Solana;
   const isEthereum = chainName === Chains.Ethereum;
   const Icon = isSolana ? SolanaIcon : EthereumIcon;
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await fetchTokenBalance();
+    await fetchPrices();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, [dispatch]);
 
   const renderItem = ({ item }) => {
     if (
@@ -171,32 +182,22 @@ export default function Index() {
     }
   };
 
-  useEffect(() => {
+  const fetchSolanaBalance = async () => {
+    const currentSolBalance = await getSolanaBalance(tokenAddress);
+    dispatch(updateSolanaBalance(currentSolBalance));
+  };
+
+  const fetchTokenBalance = async () => {
     if (isSolana && tokenAddress) {
-      const fetchSolanaBalance = async () => {
-        const currentSolBalance = await getSolanaBalance(tokenAddress);
-        dispatch(updateSolanaBalance(currentSolBalance));
-      };
       fetchSolanaBalance();
     }
 
     if (isEthereum && tokenAddress) {
       dispatch(fetchEthereumBalance(tokenAddress));
     }
-  }, [tokenAddress, dispatch]);
+  };
 
-  useEffect(() => {
-    const intervalId = setInterval(async () => {
-      await fetchPrices();
-    }, 5000);
-
-    return () => {
-      console.log("clearing interval");
-      clearInterval(intervalId);
-    };
-  }, [tokenBalance]);
-
-  useEffect(() => {
+  const setTokenTransactions = async () => {
     if (transactionHistory.length !== 0 && isEthereum) {
       const walletTransactions = transactionHistory.transfers.filter(
         (tx: AssetTransfer) => {
@@ -205,12 +206,34 @@ export default function Index() {
       );
       setTransactions(walletTransactions.reverse());
     }
+  };
+
+  useEffect(() => {
+    const intervalId = setInterval(async () => {
+      await fetchTokenBalance();
+      await fetchPrices();
+    }, FETCH_PRICES_INTERVAL);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    setTokenTransactions();
   }, [transactionHistory]);
 
   return (
     <SafeAreaContainer>
       <ContentContainer>
         <FlatList
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              tintColor={theme.colors.white}
+            />
+          }
           ListHeaderComponent={
             <>
               <BalanceContainer>
@@ -240,7 +263,7 @@ export default function Index() {
                       fill={theme.colors.primary}
                     />
                   }
-                  onPress={() => router.push(ROUTES.receive)}
+                  onPress={() => router.push(`token/receive/${chainName}`)}
                   btnText="Receive"
                 />
               </ActionContainer>
