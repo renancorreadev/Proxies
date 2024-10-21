@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { SafeAreaView, ScrollView } from "react-native";
+import { BlurView } from "expo-blur";
 import * as Clipboard from "expo-clipboard";
 import { router, useLocalSearchParams } from "expo-router";
 import styled from "styled-components/native";
 import { useTheme } from "styled-components";
-import { ThemeType } from "../../styles/theme";
-import Copy from "../../assets/svg/copy.svg";
-import Button from "../../components/Button/Button";
-import Bubble from "../../components/Bubble/Bubble";
-import { ROUTES } from "../../constants/routes";
-import { Title, Subtitle } from "../../components/Styles/Text.styles";
+import { ThemeType } from "../../../styles/theme";
+import CopyIcon from "../../../assets/svg/copy.svg";
+import Button from "../../../components/Button/Button";
+import Bubble from "../../../components/Bubble/Bubble";
+import { ROUTES } from "../../../constants/routes";
+import { Title, Subtitle } from "../../../components/Styles/Text.styles";
+import { getPhrase } from "../../../hooks/useStorageState";
 
 const SafeAreaContainer = styled(SafeAreaView)<{ theme: ThemeType }>`
   flex: 1;
@@ -62,25 +64,45 @@ export const SecondaryButtonText = styled.Text<{ theme: ThemeType }>`
   color: ${(props) => props.theme.fonts.colors.primary};
 `;
 
+export const BlurContainer = styled(BlurView)<{ theme: ThemeType }>`
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-right: ${(props) => props.theme.spacing.medium};
+  margin-left: ${(props) => props.theme.spacing.medium};
+`;
+
 const LogoContainer = styled.View``;
 
 export default function Page() {
   const theme = useTheme();
-  const { phrase } = useLocalSearchParams();
-  const seedPhrase = phrase ? (phrase as string).split(" ") : [];
+  const { phrase, readOnly } = useLocalSearchParams();
+  const seedPhraseParams = phrase ? (phrase as string).split(" ") : [];
+  const [seedPhrase, setPhrase] = useState(seedPhraseParams);
   const [buttonText, setButtonText] = useState("Copy to clipboard");
 
   const handleCopy = async () => {
-    await Clipboard.setStringAsync(seedPhrase.join(" "));
+    await Clipboard.setStringAsync(seedPhraseParams.join(" "));
     setButtonText("Copied!");
     setTimeout(() => {
       setButtonText("Copy to clipboard");
     }, 4000);
   };
 
+  useEffect(() => {
+    const fetchPhrase = async () => {
+      const phraseStorage = await getPhrase();
+      setPhrase(phraseStorage.split(" "));
+    };
+    if (readOnly) {
+      fetchPhrase();
+    }
+  }, [readOnly]);
+
   return (
     <SafeAreaContainer>
-      <ScrollView contentContainerStyle={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={{ paddingTop: 50 }}>
         <ContentContainer>
           <TextContainer>
             <Title>Secret Recovery Phrase</Title>
@@ -96,25 +118,27 @@ export default function Page() {
           </SeedPhraseContainer>
           <SecondaryButtonContainer onPress={handleCopy}>
             <LogoContainer>
-              <Copy fill={theme.colors.white} />
+              <CopyIcon fill={theme.colors.white} />
             </LogoContainer>
             <SecondaryButtonText>{buttonText}</SecondaryButtonText>
           </SecondaryButtonContainer>
         </ContentContainer>
       </ScrollView>
-      <ButtonContainer>
-        <Button
-          color={theme.colors.white}
-          backgroundColor={theme.colors.primary}
-          onPress={() =>
-            router.push({
-              pathname: ROUTES.confirmSeedPhrase,
-              params: { phrase: seedPhrase },
-            })
-          }
-          title="Ok, I saved it"
-        />
-      </ButtonContainer>
+      {readOnly ? null : (
+        <ButtonContainer>
+          <Button
+            color={theme.colors.white}
+            linearGradient={theme.colors.primaryLinearGradient}
+            onPress={() =>
+              router.push({
+                pathname: ROUTES.confirmSeedPhrase,
+                params: { phrase: seedPhrase },
+              })
+            }
+            title="Ok, I saved it"
+          />
+        </ButtonContainer>
+      )}
     </SafeAreaContainer>
   );
 }

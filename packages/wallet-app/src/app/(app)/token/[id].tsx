@@ -9,13 +9,22 @@ import type { ThemeType } from "../../../styles/theme";
 import type { RootState, AppDispatch } from "../../../store";
 import {
   fetchEthereumBalance,
-  fetchSolanaBalance,
   fetchEthereumTransactions,
+  fetchEthereumTransactionsInterval,
+  fetchEthereumBalanceInterval,
+} from "../../../store/ethereumSlice";
+import {
+  fetchSolanaBalance,
   fetchSolanaTransactions,
-} from "../../../store/walletSlice";
+  fetchSolanaTransactionsInterval,
+  fetchSolanaBalanceInterval,
+} from "../../../store/solanaSlice";
+import { useLoadingState } from "../../../hooks/redux";
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
 import { formatDollar } from "../../../utils/formatDollars";
+import { placeholderArr } from "../../../utils/placeholder";
 import { Chains, GenericTransaction } from "../../../types";
+import { GeneralStatus } from "../../../store/types";
 import { truncateWalletAddress } from "../../../utils/truncateWalletAddress";
 // import { isCloseToBottom } from "../../../utils/isCloseToBottom";
 import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
@@ -25,6 +34,7 @@ import SolanaIcon from "../../../assets/svg/solana.svg";
 import EthereumIcon from "../../../assets/svg/ethereum_plain.svg";
 import TokenInfoCard from "../../../components/TokenInfoCard/TokenInfoCard";
 import CryptoInfoCard from "../../../components/CryptoInfoCard/CryptoInfoCard";
+import CryptoInfoCardSkeleton from "../../../components/CryptoInfoCard/CryptoInfoCardSkeleton";
 import PrimaryButton from "../../../components/PrimaryButton/PrimaryButton";
 import { TICKERS } from "../../../constants/tickers";
 import { FETCH_PRICES_INTERVAL } from "../../../constants/price";
@@ -41,6 +51,7 @@ const ContentContainer = styled.View<{ theme: ThemeType }>`
   flex: 1;
   justify-content: flex-start;
   padding: ${(props) => props.theme.spacing.medium};
+  margin-top: ${(props) => (Platform.OS === "android" ? "40px" : "0px")};
 `;
 
 const BalanceTokenText = styled.Text<{ theme: ThemeType }>`
@@ -150,28 +161,35 @@ export default function Index() {
   const sheetRef = useRef<BottomSheet>(null);
   const { id } = useLocalSearchParams();
   const theme = useTheme();
+  const isStateLoading = useLoadingState();
   const chainName = id as string;
+
+  const activeIndex = useSelector(
+    (state: RootState) => state.ethereum.activeIndex
+  );
   const tokenAddress = useSelector(
-    (state: RootState) => state.wallet[chainName].activeAddress.address
+    (state: RootState) => state[chainName].addresses[activeIndex].address
   );
   const tokenBalance = useSelector(
-    (state: RootState) => state.wallet[chainName].activeAddress.balance
+    (state: RootState) => state[chainName].addresses[activeIndex].balance
   );
   const transactionHistory = useSelector(
     (state: RootState) =>
-      state.wallet[chainName].activeAddress.transactionMetadata.transactions
+      state[chainName].addresses[activeIndex].transactionMetadata.transactions
   );
 
   const failedNetworkRequest = useSelector(
-    (state: RootState) => state.wallet[chainName].failedNetworkRequest
+    (state: RootState) =>
+      state[chainName].addresses[activeIndex].failedNetworkRequest
   );
 
   const failedStatus = useSelector(
-    (state: RootState) => state.wallet[chainName].status === "failed"
+    (state: RootState) =>
+      state[chainName].addresses[activeIndex].status === GeneralStatus.Failed
   );
 
   // const loadingStatus = useSelector(
-  //   (state: RootState) => state.wallet[chainName].status === "loading"
+  //   (state: RootState) => state.wallet[chainName].status === GeneralStatus.Loading
   // );
 
   // const paginationKey: string[] | string = useSelector(
@@ -193,10 +211,14 @@ export default function Index() {
   const isEthereum = chainName === Chains.Ethereum;
   const Icon = isSolana ? SolanaIcon : EthereumIcon;
 
-  const onRefresh = useCallback(async () => {
-    setRefreshing(true);
+  const fetchAndUpdatePrices = async () => {
     await fetchTokenBalance();
     await fetchPrices(tokenBalance);
+  };
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await fetchAndUpdatePrices();
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
@@ -218,6 +240,9 @@ export default function Index() {
   };
 
   const renderItem = ({ item }) => {
+    if (isStateLoading) {
+      return <CryptoInfoCardSkeleton hideBackground={true} />;
+    }
     if (failedStatus) {
       return (
         <ErrorContainer>
@@ -268,6 +293,20 @@ export default function Index() {
     }
   };
 
+  const fetchPricesInterval = async (currentTokenBalance: number) => {
+    if (chainName === Chains.Ethereum) {
+      dispatch(fetchEthereumTransactionsInterval({ address: tokenAddress }));
+      const usd = ethPrice * currentTokenBalance;
+      setUsdBalance(usd);
+    }
+
+    if (chainName === Chains.Solana) {
+      dispatch(fetchSolanaTransactionsInterval(tokenAddress));
+      const usd = solPrice * currentTokenBalance;
+      setUsdBalance(usd);
+    }
+  };
+
   const fetchTokenBalance = async () => {
     if (isSolana && tokenAddress) {
       dispatch(fetchSolanaBalance(tokenAddress));
@@ -278,9 +317,19 @@ export default function Index() {
     }
   };
 
-  const fetchAndUpdatePrices = async () => {
-    await fetchTokenBalance();
-    await fetchPrices(tokenBalance);
+  const fetchTokenBalanceInterval = async () => {
+    if (isSolana && tokenAddress) {
+      dispatch(fetchSolanaBalanceInterval(tokenAddress));
+    }
+
+    if (isEthereum && tokenAddress) {
+      dispatch(fetchEthereumBalanceInterval(tokenAddress));
+    }
+  };
+
+  const fetchAndUpdatePricesInterval = async () => {
+    await fetchTokenBalanceInterval();
+    await fetchPricesInterval(tokenBalance);
   };
 
   const snapPoints = useMemo(() => ["38%", "66%", "90%"], []);
@@ -306,7 +355,10 @@ export default function Index() {
 
   useEffect(() => {
     fetchAndUpdatePrices();
-    const intervalId = setInterval(fetchAndUpdatePrices, FETCH_PRICES_INTERVAL);
+    const intervalId = setInterval(
+      fetchAndUpdatePricesInterval,
+      FETCH_PRICES_INTERVAL
+    );
 
     return () => {
       clearInterval(intervalId);
@@ -407,31 +459,26 @@ export default function Index() {
         }}
       >
         <BottomScrollFlatList
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              tintColor={theme.colors.white}
-            />
-          }
           ListHeaderComponent={
             <>
               <BottomSectionTitle>Transaction History</BottomSectionTitle>
               <SortContainer>
                 <SortButton
-                  onPress={() => setFilter(FilterTypes.ALL)}
+                  onPress={() => !isStateLoading && setFilter(FilterTypes.ALL)}
                   highlighted={filter === FilterTypes.ALL}
                 >
                   <SortText>All</SortText>
                 </SortButton>
                 <SortButton
-                  onPress={() => setFilter(FilterTypes.RECEIVE)}
+                  onPress={() =>
+                    !isStateLoading && setFilter(FilterTypes.RECEIVE)
+                  }
                   highlighted={filter === FilterTypes.RECEIVE}
                 >
                   <SortText>Received</SortText>
                 </SortButton>
                 <SortButton
-                  onPress={() => setFilter(FilterTypes.SENT)}
+                  onPress={() => !isStateLoading && setFilter(FilterTypes.SENT)}
                   highlighted={filter === FilterTypes.SENT}
                 >
                   <SortText>Sent</SortText>
@@ -439,7 +486,7 @@ export default function Index() {
               </SortContainer>
             </>
           }
-          data={failedStatus ? [] : transactions}
+          data={isStateLoading ? placeholderArr(8) : transactions}
           renderItem={renderItem}
           keyExtractor={(item: GenericTransaction) => item.uniqueId}
           initialNumToRender={10}

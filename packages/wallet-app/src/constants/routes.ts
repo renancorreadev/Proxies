@@ -1,14 +1,13 @@
 export interface Routes {
   home: string;
   walletSetup: string;
-  wallet: string;
+  walletCreatedSuccessfully: string;
+  walletImportOptions: string;
   seedPhrase: string;
   confirmSeedPhrase: string;
   restoreSeedPhrase: string;
-  restoreWallet: string;
-  walletCreatedSuccessfully: string;
-  walletImportOptions: string;
   walletImportSeedPhrase: string;
+  biometrics: string;
   sendOptions: string;
   send: string;
   receiveOptions: string;
@@ -20,19 +19,21 @@ export interface Routes {
   settings: string;
   camera: string;
   accounts: string;
+  accountModal: string;
+  accountNameModal: string;
+  confirmation: string;
 }
 
 export const ROUTES: Routes = {
   home: "/",
-  walletSetup: "(wallet)/wallet-setup",
-  wallet: "(wallet)/wallet",
-  seedPhrase: "(wallet)/seed-phrase",
-  confirmSeedPhrase: "(wallet)/confirm-seed-phrase",
-  restoreSeedPhrase: "(wallet)/restore-seed-phrase",
-  restoreWallet: "(wallet)/restore-wallet",
-  walletCreatedSuccessfully: "(wallet)/wallet-created-successfully",
-  walletImportOptions: "(wallet)/wallet-import-options",
-  walletImportSeedPhrase: "(wallet)/wallet-import-seed-phrase",
+  walletSetup: "(wallet)/setup/wallet-setup",
+  walletCreatedSuccessfully: "(wallet)/setup/wallet-created-successfully",
+  walletImportOptions: "(wallet)/setup/wallet-import-options",
+  seedPhrase: "(wallet)/seed/seed-phrase",
+  confirmSeedPhrase: "(wallet)/seed/confirm-seed-phrase",
+  restoreSeedPhrase: "(wallet)/seed/restore-seed-phrase",
+  walletImportSeedPhrase: "(wallet)/seed/wallet-import-seed-phrase",
+  biometrics: "(wallet)/biometrics",
   sendOptions: "/token/send/send-options",
   send: "/token/send",
   receiveOptions: "/token/receive/receive-options",
@@ -43,5 +44,8 @@ export const ROUTES: Routes = {
   sendConfirmation: "/token/send/send-confirmation",
   settings: "/(app)/settings/settings-modal",
   camera: "/(app)/camera",
-  accounts: "/(app)/accounts/accounts-modal",
+  accounts: "/(app)/accounts/accounts",
+  accountModal: "/(app)/accounts/account-modal",
+  accountNameModal: "/(app)/accounts/account-name-modal",
+  confirmation: "/(app)/token/confirmation",
 };

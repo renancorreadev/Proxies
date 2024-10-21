@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
+        "Arbitrum",
         "Blockhash",
         "blurhash",
         "devnet",
@@ -8,7 +9,10 @@
         "gorhom",
         "Keypair",
         "lamports",
+        "Moti",
         "nacl",
+        "networth",
+        "passcode",
         "persistor",
         "qrcode",
         "reduxjs",
