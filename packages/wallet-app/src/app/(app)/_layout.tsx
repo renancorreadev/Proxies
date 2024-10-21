@@ -10,7 +10,7 @@ import { ROUTES } from "../../constants/routes";
 import SettingsIcon from "../../assets/svg/settings.svg";
 import LeftIcon from "../../assets/svg/left-arrow.svg";
 import CloseIcon from "../../assets/svg/close.svg";
-import { getPhrase } from "../../hooks/use-storage-state";
+import { getPhrase, clearStorage } from "../../hooks/use-storage-state";
 import { clearPersistedState } from "../../store";
 
 const IconTouchContainer = styled.TouchableOpacity`
@@ -27,12 +27,12 @@ export default function AppLayout() {
   const [loading, setLoading] = useState<boolean>(true);
 
   const walletsExist = ethWallet.address && solWallet.address;
-
   useEffect(() => {
     const loadSeedPhraseConfirmation = async () => {
       const phrase = await getPhrase();
       if (!phrase && !ethWallet.address && !solWallet.address) {
         clearPersistedState();
+        clearStorage();
         setLoading(false);
         router.replace(ROUTES.walletSetup);
       }
@@ -49,11 +49,11 @@ export default function AppLayout() {
     SplashScreen.hideAsync();
   }
 
-  if (!seedPhraseConfirmed && !loading && !walletsExist) {
+  if (!seedPhraseConfirmed && !loading && walletsExist) {
     return <Redirect href={ROUTES.seedPhrase} />;
   }
 
-  if (seedPhraseConfirmed && !loading && !walletsExist) {
+  if (!seedPhraseConfirmed && !loading && !walletsExist) {
     return <Redirect href={ROUTES.walletSetup} />;
   }
 
@@ -63,6 +63,7 @@ export default function AppLayout() {
         screenOptions={{
           headerTransparent: true,
           gestureEnabled: true,
+          headerTitle: "",
           headerLeft: () => (
             <IconTouchContainer onPress={() => router.push(ROUTES.settings)}>
               <SettingsIcon
@@ -157,6 +158,20 @@ export default function AppLayout() {
             headerLeft: () => (
               <IconTouchContainer onPress={() => router.back()}>
                 <CloseIcon width={25} height={25} fill={theme.colors.primary} />
+              </IconTouchContainer>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="camera/index"
+          options={{
+            headerShown: false,
+            headerTransparent: true,
+            headerTitle: "",
+            gestureEnabled: true,
+            headerLeft: () => (
+              <IconTouchContainer onPress={() => router.back()}>
+                <CloseIcon width={25} height={25} fill={theme.colors.white} />
               </IconTouchContainer>
             ),
           }}
