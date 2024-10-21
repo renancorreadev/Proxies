@@ -5,7 +5,7 @@
 <br />
 <div align="center">
   <a>
-    <img src="assets/readme_banner.png" alt="Logo" width="100%">
+    <img src="assets/readme_banner_alt.png" alt="Logo" width="100%">
   </a>
 
   <h3 align="center">React Native Crypto Wallet</h3>
@@ -86,14 +86,6 @@ EXPO_PUBLIC_ENVIRONMENT=development
 ```bash
 expo start
 ```
-
-## Features
-
-- View Ethereum and Solana balance and transactions
-- Send and receive cryptocurrencies
-- Connect to blockchain networks via Alchemy API
-- Responsive UI compatible with both iOS and Android devices
-
 
 ## Environment Variables
 
