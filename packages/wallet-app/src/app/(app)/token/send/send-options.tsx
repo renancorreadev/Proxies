@@ -19,7 +19,7 @@ const SafeAreaContainer = styled(SafeAreaView)<{ theme: ThemeType }>`
 const ContentContainer = styled.View<{ theme: ThemeType }>`
   flex: 1;
   justify-content: flex-start;
-  padding: ${(props) => props.theme.spacing.large};
+  padding: ${(props) => props.theme.spacing.medium};
   margin-top: ${Platform.OS === "android" ? "75px" : "0"};
 `;
 
@@ -46,13 +46,12 @@ export default function SendOptions() {
 
   useEffect(() => {
     const fetchPrices = async () => {
-      const ethUsd = solPrice * ethBalance;
-      const solUsd = ethPrice * solBalance;
+      const ethUsd = ethPrice * ethBalance;
+      const solUsd = solPrice * solBalance;
 
       setEthUsd(ethUsd);
       setSolUsd(solUsd);
     };
-
     fetchPrices();
   }, [ethBalance, solBalance]);
 

@@ -5,6 +5,7 @@
         "devnet",
         "ethersproject",
         "formik",
+        "gorhom",
         "Keypair",
         "lamports",
         "nacl",
@@ -16,6 +17,7 @@
         "SEPOLIA",
         "solana",
         "specialnft",
+        "toolbelt",
         "tweetnacl"
     ]
 }

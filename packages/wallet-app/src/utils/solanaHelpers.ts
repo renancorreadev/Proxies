@@ -1,16 +1,19 @@
 import {
   Connection,
   PublicKey,
-  clusterApiUrl,
   SystemProgram,
   Transaction,
   LAMPORTS_PER_SOL,
   sendAndConfirmTransaction,
-  Signer,
   Keypair,
 } from "@solana/web3.js";
+import { TransactionObject } from "../types";
 
-const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+const { EXPO_PUBLIC_ALCHEMY_SOL_URL, EXPO_PUBLIC_ALCHEMY_SOL_API_KEY } =
+  process.env;
+const customRpcUrl =
+  EXPO_PUBLIC_ALCHEMY_SOL_URL + EXPO_PUBLIC_ALCHEMY_SOL_API_KEY;
+const connection = new Connection(customRpcUrl, "confirmed");
 
 export const getSolanaBalance = async (publicKeyString: string) => {
   try {
@@ -24,25 +27,57 @@ export const getSolanaBalance = async (publicKeyString: string) => {
   }
 };
 
-export const getTransactionsByWallet = async (walletAddress: string) => {
+const fetchTransactionsSequentially = async (signatures: any[]) => {
+  const transactions = [];
+
+  for (const signature of signatures) {
+    try {
+      const transaction = await connection.getParsedTransaction(
+        signature.signature
+      );
+      transactions.push(transaction);
+    } catch (error) {
+      if (error.message.includes("429")) {
+        console.log("Rate limit hit, slowing down requests");
+        await new Promise((resolve) => setTimeout(resolve, 250));
+      } else {
+        console.error("Failed to fetch transaction:", error);
+      }
+    }
+  }
+
+  return transactions;
+};
+
+export const getTransactionsByWallet = async (
+  walletAddress: string,
+  beforeSignature?: string,
+  limit = 50
+) => {
   const publicKey = new PublicKey(walletAddress);
+  let signatures: any;
 
   try {
-    const signatures = await connection.getSignaturesForAddress(publicKey);
+    signatures = await connection.getSignaturesForAddress(publicKey, {
+      before: beforeSignature,
+      limit,
+    });
+  } catch (err) {
+    console.error("Error fetching signatures:", err);
+  }
 
-    const response = await Promise.all(
-      signatures.map(async (signature) => {
-        const transaction = await connection.getParsedTransaction(
-          signature.signature
-        );
-        return transaction;
-      })
-    );
-    console.log("response", response);
-    return response;
-  } catch (error) {
-    console.error("Failed to fetch transactions:", error);
-    return [];
+  if (signatures) {
+    try {
+      const rawTransactions = await fetchTransactionsSequentially(signatures);
+
+      const transactions = rawTransactions
+        .map((tx: any) => extractTransactionDetails(tx, walletAddress))
+        .sort((a, b) => b.blockTime - a.blockTime);
+      return transactions;
+    } catch (error) {
+      console.error("Failed to process transactions:", error);
+      return [];
+    }
   }
 };
 
@@ -113,3 +148,45 @@ export const sendSolanaTransaction = async (
     throw err;
   }
 };
+
+export function extractTransactionDetails(
+  transactionObject: TransactionObject,
+  addressOfInterest: string
+) {
+  const transferInstruction =
+    transactionObject.transaction.message.instructions.find(
+      (instruction) =>
+        instruction.parsed && instruction.parsed.type === "transfer"
+    );
+
+  if (!transferInstruction) {
+    return;
+  }
+
+  const info = transferInstruction.parsed.info;
+  let direction = "other";
+  if (info.source === addressOfInterest) {
+    direction = "sent";
+  } else if (info.destination === addressOfInterest) {
+    direction = "received";
+  }
+
+  const hash = transactionObject.transaction.message.recentBlockhash;
+  const uniqueId = info.destination + info.source + hash;
+  const from = info.source;
+  const to = info.destination;
+  const amountSentLamports = info.lamports;
+  const value = amountSentLamports / 1000000000;
+  const blockTime = transactionObject.blockTime;
+
+  return {
+    uniqueId,
+    from,
+    to,
+    hash,
+    value,
+    direction,
+    blockTime,
+    asset: "SOL",
+  };
+}

@@ -5,7 +5,7 @@
 <br />
 <div align="center">
   <a>
-    <img src="assets/readme_banner_alt.png" alt="Logo" width="100%">
+    <img src="assets/readme_banner_main.png" alt="Logo" width="100%">
   </a>
 
   <h3 align="center">React Native Crypto Wallet</h3>
@@ -54,13 +54,20 @@ __Note__: The security architecture for this project is currently in a developme
 
 #### Solana Actions
 - [x] Send Solana
-- [ ] List transactions transactions on Solana
+- [x] List transactions transactions on Solana
+
+### Other wallet actions
+- [x] Scan QR code to share address or send crypto
+
+### Security
+- [x] Improve security and management of private keys (this wallet will never be 
+- [ ] Add biometrics screen and offer biometrics for wallet
 
 #### Nice to haves
+- [x] Android ui bugs
+production but it'd be fun to add)
 - [ ] UI improvements - loaders, animation, etc
-- [X] Android ui bugs
 - [ ] Refactor repeating styled components and some logic
-- [ ] Improve security and management of private keys (this wallet will never be production but it'd be fun to add)
 
 ## Prerequisites
 
@@ -89,9 +96,14 @@ yarn install
 3. Set up environment variables. Rename .env.example to .env and update the following keys with appropriate values:
 
 ```bash
-EXPO_PUBLIC_ALCHEMY_KEY=your_alchemy_key
-EXPO_PUBLIC_ALCHEMY_URL=https://eth-sepolia.g.alchemy.com/v2/
+EXPO_PUBLIC_ALCHEMY_ETH_KEY=YOUR_ALCHEMY_KEY
+EXPO_PUBLIC_ALCHEMY_ETH_URL=https://eth-sepolia.g.alchemy.com/v2/
+
 EXPO_PUBLIC_ALCHEMY_SOCKET_URL=wss://eth-sepolia.g.alchemy.com/v2/
+
+EXPO_PUBLIC_ALCHEMY_SOL_URL=https://solana-devnet.g.alchemy.com/v2/
+EXPO_PUBLIC_ALCHEMY_SOL_API_KEY=YOUR_ALCHEMY_KEY
+
 EXPO_PUBLIC_ENVIRONMENT=development
 EXPO_PUBLIC_PASSWORD=
 EXPO_PUBLIC_SALT=
@@ -106,9 +118,9 @@ expo start
 
 ## Environment Variables
 
-`EXPO_PUBLIC_ALCHEMY_KEY`: Your Alchemy API key for accessing Ethereum blockchain data.
+`EXPO_PUBLIC_ALCHEMY_ETH_KEY`: Your Alchemy API key for accessing Ethereum blockchain data.
 
-`EXPO_PUBLIC_ALCHEMY_URL`: The base URL for Alchemy API requests.
+`EXPO_PUBLIC_ALCHEMY_ETH_URL`: The base URL for Alchemy API requests.
 
 `EXPO_PUBLIC_ALCHEMY_SOCKET_URL`: The WebSocket URL for real-time updates from Alchemy.
 
