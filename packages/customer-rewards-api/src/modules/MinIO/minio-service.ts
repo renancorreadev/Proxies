@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as Minio from 'minio';
+import { UploadedObjectInfo } from 'minio/dist/main/internal/type';
 
 @Injectable()
 export class MinioService {
@@ -15,7 +16,7 @@ export class MinioService {
 		});
 	}
 
-	async uploadImage(buffer: Buffer, filename: string): Promise<Minio.UploadedObjectInfo> {
+	async uploadImage(buffer: Buffer, filename: string): Promise<UploadedObjectInfo> {
 		const minioUrl = await this.minioClient.putObject('profile-images', filename, buffer, buffer.length);
 		return minioUrl;
 	}

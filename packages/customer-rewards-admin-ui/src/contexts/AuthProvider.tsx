@@ -5,47 +5,41 @@ import * as utils from './utils';
 
 type AuthContextProps = {
   auth: JWTPayload | null;
-  makeLoginUrl: () => string;
-  makeLogoutUrl: () => string;
+  isLogged: boolean;
+  makeLoginUrl: () => void;
+  makeLogoutUrl: () => void;
   login: (
     accessToken: string,
     idToken: string,
     code: string,
     state: string,
-  ) => JWTPayload;
+  ) => JWTPayload | void;
 };
 
 const initContextData: AuthContextProps = {
   auth: null,
+  isLogged: false,
   makeLoginUrl: utils.makeLoginUrl,
-  //@ts-expect-error - this is a mock function
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   makeLogoutUrl: () => {},
-  //@ts-expect-error - this is a mock function
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   login: () => {},
 };
 
-//create a context for the login state
 export const AuthContext = createContext(initContextData);
 
-//create a provider for the login state
 export const AuthProvider = (props: PropsWithChildren) => {
   const makeLogin = useCallback(
     (accessToken: string, idToken: string, code: string, state: string) => {
       const authData = utils.login(accessToken, idToken, undefined, state);
       setData((oldData) => ({
+        ...oldData,
         auth: authData,
-        makeLoginUrl: oldData.makeLoginUrl,
-        makeLogoutUrl: oldData.makeLogoutUrl,
-        login: oldData.login,
+        isLogged: !!authData,
       }));
-      utils.exchangeCodeForToken(code).then((authData) => {
+      utils.exchangeCodeForToken(code).then((tokenData) => {
         setData((oldData) => ({
-          auth: authData,
-          makeLoginUrl: oldData.makeLoginUrl,
-          makeLogoutUrl: oldData.makeLogoutUrl,
-          login: oldData.login,
+          ...oldData,
+          auth: tokenData,
+          isLogged: !!tokenData,
         }));
       });
       return authData;
@@ -60,7 +54,7 @@ export const AuthProvider = (props: PropsWithChildren) => {
     login: makeLogin,
   });
 
-  console.log(data);
+  console.log('login data: ', data);
 
   //@ts-expect-error - for refresh token param
   return <AuthContext.Provider value={data}>{props.children}</AuthContext.Provider>;
