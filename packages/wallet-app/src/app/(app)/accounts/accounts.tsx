@@ -434,7 +434,7 @@ const AccountsIndex = () => {
             >
               <PhraseTextContent>
                 <PhraseIcon width={25} height={25} fill={theme.colors.white} />
-                <SectionTitle>Secret Recovery Phrase</SectionTitle>
+                <SectionTitle>Frase Secreta de Recuperação</SectionTitle>
               </PhraseTextContent>
               <RightArrowIcon
                 width={25}
