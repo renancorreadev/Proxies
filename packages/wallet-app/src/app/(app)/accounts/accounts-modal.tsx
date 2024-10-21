@@ -42,6 +42,7 @@ const SectionTitle = styled.Text<{ theme: ThemeType }>`
   font-size: ${(props) => props.theme.fonts.sizes.title};
   margin-bottom: ${(props) => props.theme.spacing.large};
   margin-left: ${(props) => props.theme.spacing.medium};
+  text-align: center;
 `;
 
 const TopBar = styled.View<{ theme: ThemeType }>`
@@ -55,16 +56,9 @@ const IconTouch = styled.TouchableHighlight`
   padding: 20px;
 `;
 
-const SettingsIndex = () => {
+const AccountsIndex = () => {
   const theme = useTheme();
-  // TODO: This is for quickly resetting the wallet state
-  // This is not a real production wallet and should be removed if ever in production
-  // It is here for easy development and testing for myself lol
-  const clearWallets = () => {
-    clearPersistedState();
-    clearStorage();
-    router.replace(ROUTES.walletSetup);
-  };
+
   return (
     <>
       <TopBar>
@@ -74,19 +68,11 @@ const SettingsIndex = () => {
       </TopBar>
       <SafeAreaContainer>
         <ContentContainer>
-          <SectionTitle>Settings</SectionTitle>
-          <TextTouchContainer onPress={clearWallets}>
-            <TextContainer>
-              <IconContainer>
-                <ClearIcon width={25} height={25} fill={theme.colors.primary} />
-              </IconContainer>
-              <Text>Clear Wallets</Text>
-            </TextContainer>
-          </TextTouchContainer>
+          <SectionTitle>Accounts</SectionTitle>
         </ContentContainer>
       </SafeAreaContainer>
     </>
   );
 };
 
-export default SettingsIndex;
+export default AccountsIndex;
