@@ -16,6 +16,7 @@ import LeftArrow from "../assets/svg/left-arrow.svg";
 import { clearStorage } from "../hooks/use-storage-state";
 import Theme from "../styles/theme";
 import { store } from "../store";
+import { ROUTES } from "../constants/routes";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -47,7 +48,7 @@ export default function RootLayout() {
             }}
           >
             <Stack.Screen
-              name="(wallet)/wallet-setup"
+              name={ROUTES.walletSetup}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -88,6 +89,24 @@ export default function RootLayout() {
             />
             <Stack.Screen
               name="(wallet)/wallet-created-successfully"
+              options={{
+                title: "Confirm Seed Phrase",
+                headerTransparent: true,
+                headerTitleStyle: {
+                  color: "transparent",
+                },
+                headerLeft: () => (
+                  <LeftArrow
+                    width={35}
+                    height={35}
+                    fill="#FFF"
+                    onPress={goBack}
+                  />
+                ),
+              }}
+            />
+            <Stack.Screen
+              name="(wallet)/wallet-import"
               options={{
                 title: "Confirm Seed Phrase",
                 headerTransparent: true,
