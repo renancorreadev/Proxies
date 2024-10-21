@@ -102,11 +102,8 @@ export default function ReceivePage() {
   const { receive } = useLocalSearchParams();
   const chainName = receive as string;
   const navigation = useNavigation();
-  const activeIndex = useSelector(
-    (state: RootState) => state.ethereum.activeIndex
-  );
   const tokenAddress = useSelector(
-    (state: RootState) => state[chainName].addresses[activeIndex].address
+    (state: RootState) => state.wallet[chainName].activeAddress.address
   );
   const [isAmountInputFocused, setIsAmountInputFocused] = useState(false);
   const [buttonText, setButtonText] = useState("Copy");

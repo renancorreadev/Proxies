@@ -50,11 +50,8 @@ const Header: React.FC<{
   route: any;
 }> = ({ navigation, options, route }) => {
   const theme = useTheme();
-  const activeEthIndex = useSelector(
-    (state: RootState) => state.ethereum.activeIndex
-  );
   const activeAccountName = useSelector(
-    (state: RootState) => state.ethereum.addresses[activeEthIndex].accountName
+    (state: RootState) => state.wallet.activeAccountName
   );
 
   return (

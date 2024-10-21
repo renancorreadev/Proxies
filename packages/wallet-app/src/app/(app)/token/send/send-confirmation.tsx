@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Platform } from "react-native";
-import styled, { useTheme } from "styled-components/native";
-import { useLocalSearchParams, router, useNavigation } from "expo-router";
 import { StackActions } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
+import styled, { useTheme } from "styled-components/native";
+import {
+  useLocalSearchParams,
+  useNavigationContainerRef,
+  router,
+} from "expo-router";
+import { useSelector } from "react-redux";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { Chains } from "../../../../types";
 import type { ThemeType } from "../../../../styles/theme";
 import ConfirmSend from "../../../../assets/svg/confirm-send.svg";
 import { formatDollar } from "../../../../utils/formatDollars";
@@ -14,15 +17,20 @@ import { truncateWalletAddress } from "../../../../utils/truncateWalletAddress";
 import SendConfCard from "../../../../components/SendConfCard/SendConfCard";
 import { capitalizeFirstLetter } from "../../../../utils/capitalizeFirstLetter";
 import Button from "../../../../components/Button/Button";
-import ethService from "../../../../services/EthereumService";
-import solanaService from "../../../../services/SolanaService";
-import { getPhrase } from "../../../../hooks/useStorageState";
-import type { RootState, AppDispatch } from "../../../../store";
-import { sendEthereumTransaction } from "../../../../store/ethereumSlice";
-import { sendSolanaTransaction } from "../../../../store/solanaSlice";
+import {
+  calculateGasAndAmounts,
+  sendTransaction,
+  deriveEthPrivateKeysFromPhrase,
+} from "../../../../utils/etherHelpers";
+import {
+  sendSolanaTransaction,
+  calculateSolanaTransactionFee,
+  deriveSolPrivateKeysFromPhrase,
+} from "../../../../utils/solanaHelpers";
+import { getPhrase } from "../../../../hooks/use-storage-state";
+import type { RootState } from "../../../../store";
 import { BalanceContainer } from "../../../../components/Styles/Layout.styles";
 import { SafeAreaContainer } from "../../../../components/Styles/Layout.styles";
-import { ROUTES } from "../../../../constants/routes";
 
 const ContentContainer = styled.View<{ theme: ThemeType }>`
   flex: 1;
@@ -85,14 +93,13 @@ const ErrorText = styled.Text<{ theme: ThemeType }>`
 const ButtonView = styled.View<{ theme: ThemeType }>``;
 
 export default function SendConfirmationPage() {
-  const dispatch = useDispatch<AppDispatch>();
+  const rootNavigation = useNavigationContainerRef();
   const theme = useTheme();
   const {
     address: toAddress,
     amount: tokenAmount,
     chainName: chain,
   } = useLocalSearchParams();
-  const navigation = useNavigation();
 
   const chainName = chain as string;
   const ticker = TICKERS[chainName];
@@ -100,18 +107,8 @@ export default function SendConfirmationPage() {
   const address = toAddress as string;
 
   const prices = useSelector((state: RootState) => state.price.data);
-  const activeEthIndex = useSelector(
-    (state: RootState) => state.ethereum.activeIndex
-  );
-  const activeSolIndex = useSelector(
-    (state: RootState) => state.solana.activeIndex
-  );
   const walletAddress = useSelector(
-    (state: RootState) => state[chainName].addresses[activeEthIndex].address
-  );
-  const derivationPath = useSelector(
-    (state: RootState) =>
-      state[chainName].addresses[activeSolIndex].derivationPath
+    (state: RootState) => state.wallet[chainName].activeAddress.address
   );
 
   const solPrice = prices.solana.usd;
@@ -128,66 +125,57 @@ export default function SendConfirmationPage() {
   const handleSubmit = async () => {
     const seedPhrase = await getPhrase();
 
-    setLoading(true);
-    setBtnDisabled(true);
-
-    try {
-      if (chainName === Chains.Ethereum) {
-        const ethPrivateKey = await ethService.derivePrivateKeysFromPhrase(
-          seedPhrase,
-          derivationPath
-        );
-
-        const result = await dispatch(
-          sendEthereumTransaction({
-            address,
-            privateKey: ethPrivateKey,
-            amount,
-          })
-        ).unwrap();
-        if (result) {
-          navigation.dispatch(StackActions.popToTop());
-          router.push({
-            pathname: ROUTES.confirmation,
-            params: { txHash: result.hash, blockchain: Chains.Ethereum },
-          });
+    if (chainName === "ethereum") {
+      const ethPrivateKey = await deriveEthPrivateKeysFromPhrase(seedPhrase);
+      try {
+        setLoading(true);
+        setBtnDisabled(true);
+        const response = await sendTransaction(address, ethPrivateKey, amount);
+        if (response) {
+          rootNavigation.dispatch(StackActions.popToTop());
+          const dynamicUrl = `/token/${chainName}`;
+          router.navigate(dynamicUrl);
         }
-      } else if (chainName === Chains.Solana) {
-        const solPrivateKey = await solanaService.derivePrivateKeysFromPhrase(
-          seedPhrase,
-          derivationPath
-        );
-        const result = await dispatch(
-          sendSolanaTransaction({
-            privateKey: solPrivateKey,
-            address,
-            amount,
-          })
-        ).unwrap();
-
-        if (result) {
-          navigation.dispatch(StackActions.popToTop());
-          router.push({
-            pathname: ROUTES.confirmation,
-            params: { txHash: result, blockchain: Chains.Solana },
-          });
-        }
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to send transaction:", error);
+        setError("Failed to send transaction. Please try again later.");
+        setLoading(false);
+        setBtnDisabled(false);
       }
-    } catch (error) {
-      console.error("Failed to send transaction:", error);
-      setError("Failed to send transaction. Please try again later.");
-    } finally {
-      setLoading(false);
-      setBtnDisabled(false);
+    }
+
+    if (chainName === "solana") {
+      const solPrivateKey = await deriveSolPrivateKeysFromPhrase(seedPhrase);
+      try {
+        setLoading(true);
+        setBtnDisabled(true);
+        const response = await sendSolanaTransaction(
+          solPrivateKey,
+          address,
+          parseFloat(amount)
+        );
+        if (response) {
+          rootNavigation.dispatch(StackActions.popToTop());
+          const dynamicUrl = `/token/${chainName}`;
+          router.navigate(dynamicUrl);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to send transaction:", error);
+        setError("Failed to send transaction. Please try again later.");
+        setLoading(false);
+        setBtnDisabled(false);
+      }
     }
   };
 
   const calculateTransactionCosts = async () => {
-    const chainPrice = chainName === Chains.Ethereum ? ethPrice : solPrice;
+    const chainPrice = chainName === "ethereum" ? ethPrice : solPrice;
     try {
-      if (chainName === Chains.Ethereum) {
+      if (chainName === "ethereum") {
         const { gasEstimate, totalCost, totalCostMinusGas } =
-          await ethService.calculateGasAndAmounts(address, amount);
+          await calculateGasAndAmounts(address, amount);
 
         const gasEstimateUsd = formatDollar(
           parseFloat(gasEstimate) * chainPrice
@@ -209,13 +197,12 @@ export default function SendConfirmationPage() {
         }
       }
 
-      if (chainName === Chains.Solana) {
-        const transactionFeeLamports =
-          await solanaService.calculateTransactionFee(
-            walletAddress,
-            address,
-            parseFloat(amount)
-          );
+      if (chainName === "solana") {
+        const transactionFeeLamports = await calculateSolanaTransactionFee(
+          walletAddress,
+          address,
+          parseFloat(amount)
+        );
 
         const tokenBalanceLamports = parseFloat(amount) * LAMPORTS_PER_SOL;
         const maxAmountLamports = tokenBalanceLamports - transactionFeeLamports;
@@ -259,7 +246,7 @@ export default function SendConfirmationPage() {
 
   const renderNetworkName = () => {
     const isDev = process.env.EXPO_PUBLIC_ENVIRONMENT === "development";
-    if (chainName === Chains.Ethereum) {
+    if (chainName === "ethereum") {
       return isDev ? "Sepolia" : "Mainnet";
     }
     return isDev ? "Devnet" : "Mainnet";
@@ -294,7 +281,6 @@ export default function SendConfirmationPage() {
         <ButtonView>
           <ButtonContainer>
             <Button
-              linearGradient={theme.colors.primaryLinearGradient}
               loading={loading}
               disabled={isBtnDisabled}
               backgroundColor={theme.colors.primary}

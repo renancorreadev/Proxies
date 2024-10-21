@@ -1,44 +1,49 @@
-// Inject node globals into React Native global scope.
-global.Buffer = require("buffer").Buffer;
-
-// @ts-ignore
-global.location = {
-  protocol: "file:",
-};
-
 import "react-native-reanimated";
 import "react-native-gesture-handler";
-
 import { StatusBar } from "expo-status-bar";
 import { Stack, router, useNavigation } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import styled, { ThemeProvider } from "styled-components/native";
-import * as SplashScreen from "expo-splash-screen";
-import { clearStorage } from "../hooks/useStorageState";
+import {
+  useFonts,
+  OpenSans_400Regular,
+  OpenSans_700Bold,
+} from "@expo-google-fonts/open-sans";
+import {
+  Roboto_400Regular as RobotoReg,
+  Roboto_700Bold as RobotoBld,
+} from "@expo-google-fonts/roboto";
+import { clearStorage } from "../hooks/use-storage-state";
 import Theme from "../styles/theme";
 import { store, persistor, clearPersistedState } from "../store";
-import { resetSolanaState } from "../store/solanaSlice";
-import { resetEthereumState } from "../store/ethereumSlice";
+import { resetState } from "../store/walletSlice";
 import { ROUTES } from "../constants/routes";
 import LeftIcon from "../assets/svg/left-arrow.svg";
-
-SplashScreen.preventAutoHideAsync();
 
 const IconTouchContainer = styled.TouchableOpacity`
   padding: 10px;
 `;
 
 export default function RootLayout() {
+  const [fontsLoaded] = useFonts({
+    OpenSans_400Regular,
+    OpenSans_700Bold,
+    Roboto_400Regular: RobotoReg,
+    Roboto_700Bold: RobotoBld,
+  });
   const navigation = useNavigation();
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   const goBack = () => {
     if (navigation.canGoBack()) {
       navigation.goBack();
     } else {
-      resetSolanaState();
-      resetEthereumState();
+      resetState();
       clearStorage();
       clearPersistedState();
       router.replace(ROUTES.walletSetup);
@@ -65,9 +70,7 @@ export default function RootLayout() {
             >
               <Stack.Screen
                 name={ROUTES.walletSetup}
-                options={{
-                  headerShown: false,
-                }}
+                options={{ headerShown: false }}
               />
               <Stack.Screen
                 name="(wallet)/seed/seed-phrase"

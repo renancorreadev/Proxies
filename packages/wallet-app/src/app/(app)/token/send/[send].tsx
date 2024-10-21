@@ -9,13 +9,18 @@ import { ThemeType } from "../../../../styles/theme";
 import { TICKERS } from "../../../../constants/tickers";
 import { ROUTES } from "../../../../constants/routes";
 import type { RootState } from "../../../../store";
-import { Chains } from "../../../../types";
 import SolanaIcon from "../../../../assets/svg/solana.svg";
 import EthereumIcon from "../../../../assets/svg/ethereum_plain.svg";
 import { capitalizeFirstLetter } from "../../../../utils/capitalizeFirstLetter";
 import { formatDollar } from "../../../../utils/formatDollars";
-import ethService from "../../../../services/EthereumService";
-import solanaService from "../../../../services/SolanaService";
+import {
+  validateEthereumAddress,
+  calculateGasAndAmounts,
+} from "../../../../utils/etherHelpers";
+import {
+  validateSolanaAddress,
+  calculateSolanaTransactionFee,
+} from "../../../../utils/solanaHelpers";
 import Button from "../../../../components/Button/Button";
 import { SafeAreaContainer } from "../../../../components/Styles/Layout.styles";
 
@@ -168,17 +173,11 @@ export default function SendPage() {
   const toWalletAddress = toAddress as string;
   const ticker = TICKERS[chainName];
 
-  const activeEthIndex = useSelector(
-    (state: RootState) => state.ethereum.activeIndex
-  );
-  const activeSolIndex = useSelector(
-    (state: RootState) => state.solana.activeIndex
-  );
   const tokenBalance = useSelector(
-    (state: RootState) => state[chainName].addresses[activeEthIndex].balance
+    (state: RootState) => state.wallet[chainName].activeAddress.balance
   );
   const address = useSelector(
-    (state: RootState) => state[chainName].addresses[activeSolIndex].address
+    (state: RootState) => state.wallet[chainName].activeAddress.address
   );
   const prices = useSelector((state: RootState) => state.price.data);
   const solPrice = prices.solana.usd;
@@ -189,9 +188,9 @@ export default function SendPage() {
 
   const renderIcons = () => {
     switch (chainName) {
-      case Chains.Solana:
+      case "solana":
         return <SolanaIcon width={45} height={45} />;
-      case Chains.Ethereum:
+      case "ethereum":
         return <EthereumIcon width={45} height={45} />;
       default:
         return null;
@@ -200,7 +199,7 @@ export default function SendPage() {
 
   const renderDollarAmount = (amountValue: string) => {
     if (amountValue === "") return formatDollar(0);
-    const chainPrice = chainName === Chains.Ethereum ? ethPrice : solPrice;
+    const chainPrice = chainName === "ethereum" ? ethPrice : solPrice;
     const USDAmount = chainPrice * parseFloat(amountValue);
     return formatDollar(USDAmount);
   };
@@ -242,9 +241,9 @@ export default function SendPage() {
   };
 
   const validateAddress = async (address: string): Promise<boolean> => {
-    return chainName === Chains.Ethereum
-      ? ethService.validateAddress(address)
-      : await solanaService.validateAddress(address);
+    return chainName === "ethereum"
+      ? validateEthereumAddress(address)
+      : await validateSolanaAddress(address);
   };
 
   const validateFunds = async (
@@ -264,17 +263,20 @@ export default function SendPage() {
     toAddress: string,
     errors: Record<string, string>
   ) => {
-    if (chainName === Chains.Ethereum) {
-      const { totalCostMinusGas } = await ethService.calculateGasAndAmounts(
+    if (chainName === "ethereum") {
+      const { totalCostMinusGas } = await calculateGasAndAmounts(
         toAddress,
         amount.toString()
       );
       if (totalCostMinusGas > tokenBalance) {
         errors.amount = "Insufficient funds for amount plus gas costs";
       }
-    } else if (chainName === Chains.Solana) {
-      const transactionFeeLamports =
-        await solanaService.calculateTransactionFee(address, toAddress, amount);
+    } else if (chainName === "solana") {
+      const transactionFeeLamports = await calculateSolanaTransactionFee(
+        address,
+        toAddress,
+        amount
+      );
 
       const tokenBalanceLamports = amount * LAMPORTS_PER_SOL;
       const maxAmountLamports = tokenBalanceLamports - transactionFeeLamports;
@@ -293,9 +295,9 @@ export default function SendPage() {
     const toAddress = formRef.current?.values?.address || "";
 
     const isAddressValid =
-      chainName === Chains.Ethereum
-        ? ethService.validateAddress(toAddress)
-        : await solanaService.validateAddress(toAddress);
+      chainName === "ethereum"
+        ? validateEthereumAddress(toAddress)
+        : await validateSolanaAddress(toAddress);
 
     if (!isAddressValid) {
       formRef.current?.setFieldError(
@@ -306,21 +308,20 @@ export default function SendPage() {
     }
 
     try {
-      if (chainName === Chains.Ethereum) {
-        const { totalCostMinusGas } = await ethService.calculateGasAndAmounts(
+      if (chainName === "ethereum") {
+        const { totalCostMinusGas } = await calculateGasAndAmounts(
           address,
           tokenBalance
         );
         setFieldValue("amount", totalCostMinusGas);
-      } else if (chainName === Chains.Solana) {
+      } else if (chainName === "solana") {
         const totalBalanceLamports =
           parseFloat(tokenBalance) * LAMPORTS_PER_SOL;
-        const transactionFeeLamports =
-          await solanaService.calculateTransactionFee(
-            address,
-            toAddress,
-            totalBalanceLamports
-          );
+        const transactionFeeLamports = await calculateSolanaTransactionFee(
+          address,
+          toAddress,
+          totalBalanceLamports
+        );
         const maxAmountLamports = totalBalanceLamports - transactionFeeLamports;
         const maxAmount = maxAmountLamports / LAMPORTS_PER_SOL;
         if (maxAmountLamports > 0) {

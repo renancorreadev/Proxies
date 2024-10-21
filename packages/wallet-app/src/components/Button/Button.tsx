@@ -3,7 +3,6 @@ import { ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ThemeType } from "../../styles/theme";
-import PulseDotLoader from "../Loader/DotLoader";
 
 interface ButtonTextProps {
   color?: string;
@@ -91,7 +90,7 @@ const Button: React.FC<ButtonProps> = ({
               <ButtonText color={color}>{title}</ButtonText>
             </Row>
           ) : (
-            <PulseDotLoader size={50} color="#fff" />
+            <ActivityIndicator size="large" color="#fff" />
           )}
         </LinearGradientBackground>
       </ButtonContainer>
@@ -109,7 +108,7 @@ const Button: React.FC<ButtonProps> = ({
           <ButtonText color={color}>{title}</ButtonText>
         </Row>
       ) : (
-        <PulseDotLoader size={50} color="#fff" />
+        <ActivityIndicator size="large" color="#fff" />
       )}
     </ButtonContainer>
   );

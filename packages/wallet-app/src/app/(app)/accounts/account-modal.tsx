@@ -1,13 +1,13 @@
 import { router } from "expo-router";
 import styled, { useTheme } from "styled-components/native";
 import { useSelector } from "react-redux";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 import * as Clipboard from "expo-clipboard";
 import Toast from "react-native-toast-message";
 import { ROUTES } from "../../../constants/routes";
 import type { ThemeType } from "../../../styles/theme";
 import type { RootState } from "../../../store";
-import type { AddressState } from "../../../store/types";
+import type { AddressState } from "../../../store/walletSlice";
 import EditIcon from "../../../assets/svg/edit.svg";
 import SolanaIcon from "../../../assets/svg/solana.svg";
 import EthereumPlainIcon from "../../../assets/svg/ethereum_plain.svg";
@@ -122,14 +122,15 @@ const IconOnPressView = styled.TouchableOpacity`
 
 const AccountsModalIndex = () => {
   const theme = useTheme();
+  const navigation = useNavigation();
   const { ethAddress, solAddress, balance } = useLocalSearchParams();
   const ethereumAccount = useSelector((state: RootState) =>
-    state.ethereum.addresses.find(
+    state.wallet.ethereum.inactiveAddresses.find(
       (item: AddressState) => item.address === ethAddress
     )
   );
   const solanaAccount = useSelector((state: RootState) =>
-    state.solana.addresses.find(
+    state.wallet.solana.inactiveAddresses.find(
       (item: AddressState) => item.address === solAddress
     )
   );

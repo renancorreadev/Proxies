@@ -5,14 +5,17 @@ import { Image } from "expo-image";
 import { router } from "expo-router";
 import { View } from "moti";
 import styled, { useTheme } from "styled-components/native";
-import ethService from "../../../services/EthereumService";
-import solanaService from "../../../services/SolanaService";
+import { createEthWallet } from "../../../utils/etherHelpers";
+import { restoreSolWalletFromPhrase } from "../../../utils/solanaHelpers";
 import Button from "../../../components/Button/Button";
 import { ThemeType } from "../../../styles/theme";
-import { saveEthereumAddresses } from "../../../store/ethereumSlice";
-import { saveSolanaAddresses } from "../../../store/solanaSlice";
-import type { AddressState } from "../../../store/types";
-import { GeneralStatus } from "../../../store/types";
+import {
+  saveEthereumAccountDetails,
+  saveSolanaAccountDetails,
+  saveAllEthereumAddresses,
+  saveAllSolanaAddresses,
+} from "../../../store/walletSlice";
+import type { AddressState } from "../../../store/walletSlice";
 import { ROUTES } from "../../../constants/routes";
 import WalletIcon from "../../../assets/svg/wallet.svg";
 import { LinearGradientBackground } from "../../../components/Styles/Gradient";
@@ -86,13 +89,11 @@ export default function WalletSetup() {
   const [loading, setLoading] = useState(false);
 
   const walletSetup = async () => {
-    setLoading(true);
     try {
-      const ethWallet = await ethService.createWallet();
+      setLoading(true);
+      const ethWallet = await createEthWallet();
       const masterMnemonicPhrase = ethWallet.mnemonic.phrase;
-      const solWallet = await solanaService.restoreWalletFromPhrase(
-        masterMnemonicPhrase
-      );
+      const solWallet = restoreSolWalletFromPhrase(masterMnemonicPhrase);
 
       const ethereumAccount: AddressState = {
         accountName: "Account 1",
@@ -100,13 +101,6 @@ export default function WalletSetup() {
         address: ethWallet.address,
         publicKey: ethWallet.publicKey,
         balance: 0,
-        transactionMetadata: {
-          paginationKey: undefined,
-          transactions: [],
-        },
-        failedNetworkRequest: false,
-        status: GeneralStatus.Idle,
-        transactionConfirmations: [],
       };
 
       const solanaAccount: AddressState = {
@@ -115,28 +109,25 @@ export default function WalletSetup() {
         address: solWallet.publicKey.toBase58(),
         publicKey: solWallet.publicKey.toBase58(),
         balance: 0,
-        transactionMetadata: {
-          paginationKey: undefined,
-          transactions: [],
-        },
-        failedNetworkRequest: false,
-        status: GeneralStatus.Idle,
-        transactionConfirmations: [],
       };
 
-      dispatch(saveEthereumAddresses([ethereumAccount]));
-      dispatch(saveSolanaAddresses([solanaAccount]));
+      dispatch(saveEthereumAccountDetails(ethereumAccount));
+      dispatch(saveAllEthereumAddresses([ethereumAccount]));
 
+      dispatch(saveSolanaAccountDetails(solanaAccount));
+      dispatch(saveAllSolanaAddresses([solanaAccount]));
+
+      setLoading(false);
       router.push({
         pathname: ROUTES.seedPhrase,
         params: { phrase: masterMnemonicPhrase },
       });
     } catch (err) {
-      console.error("Failed to create wallet", err);
-    } finally {
       setLoading(false);
+      console.error("Failed to create wallet", err);
     }
   };
+
   return (
     <LinearGradientBackground colors={theme.colors.primaryLinearGradient}>
       <SafeAreaContainer>
