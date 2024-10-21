@@ -45,6 +45,10 @@ export default function AppLayout() {
     return <Redirect href={ROUTES.walletSetup} />;
   }
 
+  const goHome = () => {
+    router.push(ROUTES.home);
+  };
+
   return (
     <>
       <Stack
@@ -69,7 +73,7 @@ export default function AppLayout() {
             headerTransparent: true,
             gestureEnabled: true,
             headerLeft: () => (
-              <IconTouchContainer onPress={() => router.back()}>
+              <IconTouchContainer onPress={goHome}>
                 <LeftIcon width={25} height={25} fill={theme.colors.primary} />
               </IconTouchContainer>
             ),
@@ -96,9 +100,19 @@ export default function AppLayout() {
             headerTransparent: true,
             gestureEnabled: true,
             presentation: "modal",
+            headerLeft: null,
+          }}
+        />
+        <Stack.Screen
+          name="token/send/send-confirmation"
+          options={{
+            headerShown: true,
+            headerTransparent: true,
+            gestureEnabled: true,
+            presentation: "modal",
             headerLeft: () => (
               <IconTouchContainer onPress={() => router.back()}>
-                <CloseIcon width={25} height={25} fill={theme.colors.primary} />
+                <LeftIcon width={25} height={25} fill={theme.colors.primary} />
               </IconTouchContainer>
             ),
           }}

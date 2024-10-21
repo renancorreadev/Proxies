@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
-import { View, SafeAreaView, ScrollView, FlatList } from "react-native";
+import { View, SafeAreaView, FlatList } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { router, useLocalSearchParams } from "expo-router";
 import styled, { useTheme } from "styled-components/native";
-import { ThemeType } from "../../../styles/theme";
+import type { ThemeType } from "../../../styles/theme";
 import { ROUTES } from "../../../constants/routes";
-import type { RootState } from "../../../store";
+import type { RootState, AppDispatch } from "../../../store";
 import {
   fetchEthereumBalance,
   updateSolanaBalance,
   fetchEthereumTransactions,
 } from "../../../store/walletSlice";
-import type { AppDispatch } from "../../../store";
 import { getSolanaBalance } from "../../../utils/getSolanaBalance";
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
 import { formatDollar } from "../../../utils/formatDollars";
@@ -24,6 +23,8 @@ import EthereumIcon from "../../../assets/svg/ethereum_plain.svg";
 import { AssetTransfer } from "../../../types";
 import CryptoInfoCard from "../../../components/CryptoInfoCard/CryptoInfoCard";
 import { truncateWalletAddress } from "../../../utils/truncateWalletAddress";
+import { TICKERS } from "../../../constants/tickers";
+import { Chains } from "../../../types";
 
 const SafeAreaContainer = styled(SafeAreaView)<{ theme: ThemeType }>`
   flex: 1;
@@ -65,7 +66,6 @@ const ActionContainer = styled.View<{ theme: ThemeType }>`
 `;
 
 const CryptoInfoCardContainer = styled.View<{ theme: ThemeType }>`
-  flex: 1;
   flex-direction: column;
   align-items: center;
   width: 100%;
@@ -100,28 +100,19 @@ const ComingSoonText = styled.Text<{ theme: ThemeType }>`
   margin-top: ${(props) => props.theme.spacing.medium};
 `;
 
-enum Chain {
-  Ethereum = "ethereum",
-  Solana = "solana",
-}
-
-const tickers = {
-  ethereum: "ETH",
-  solana: "SOL",
-};
-
 export default function Index() {
   const dispatch = useDispatch<AppDispatch>();
   const { id } = useLocalSearchParams();
   const theme = useTheme();
+  const chainName = id as string;
   const tokenAddress = useSelector(
-    (state: RootState) => state.wallet[id.toString()].address
+    (state: RootState) => state.wallet[chainName].address
   );
   const tokenBalance = useSelector(
-    (state: RootState) => state.wallet[id.toString()].balance
+    (state: RootState) => state.wallet[chainName].balance
   );
   const transactionHistory = useSelector(
-    (state: RootState) => state.wallet[id.toString()].transactions
+    (state: RootState) => state.wallet[chainName].transactions
   );
 
   const [usdBalance, setUsdBalance] = useState(0);
@@ -130,9 +121,9 @@ export default function Index() {
   // TODO: Find cheap api to find real prices of tokens
   const ethPriceMock = 3006.94;
   const solPriceMock = 127.22;
-  const ticker = tickers[id.toString()];
-  const isSolana = id.toString() === Chain.Solana;
-  const isEthereum = id.toString() === Chain.Ethereum;
+  const ticker = TICKERS[chainName];
+  const isSolana = chainName === Chains.Solana;
+  const isEthereum = chainName === Chains.Ethereum;
   const Icon = isSolana ? SolanaIcon : EthereumIcon;
 
   const renderItem = ({ item }) => {
@@ -165,6 +156,19 @@ export default function Index() {
     }
   };
 
+  const fetchPrices = async () => {
+    if (chainName === Chains.Ethereum) {
+      dispatch(fetchEthereumTransactions(tokenAddress));
+      const usd = ethPriceMock * tokenBalance;
+      setUsdBalance(usd);
+    }
+
+    if (chainName === Chains.Solana) {
+      const usd = solPriceMock * tokenBalance;
+      setUsdBalance(usd);
+    }
+  };
+
   useEffect(() => {
     if (isSolana && tokenAddress) {
       const fetchSolanaBalance = async () => {
@@ -180,20 +184,10 @@ export default function Index() {
   }, [tokenAddress, dispatch]);
 
   useEffect(() => {
-    const fetchPrices = async () => {
-      if (id.toString() === Chain.Ethereum) {
-        dispatch(fetchEthereumTransactions(tokenAddress));
-        const usd = ethPriceMock * tokenBalance;
-        setUsdBalance(usd);
-      }
-
-      if (id.toString() === Chain.Solana) {
-        const usd = solPriceMock * tokenBalance;
-        setUsdBalance(usd);
-      }
-    };
-
-    fetchPrices();
+    const intervalId = setInterval(async () => {
+      await fetchPrices();
+    }, 5000);
+    return () => clearInterval(intervalId);
   }, [tokenBalance]);
 
   useEffect(() => {
@@ -203,11 +197,10 @@ export default function Index() {
           return tx.asset === ticker;
         }
       );
-      setTransactions(walletTransactions);
+      setTransactions(walletTransactions.reverse());
     }
   }, [transactionHistory]);
 
-  console.log("transactions", transactions);
   return (
     <SafeAreaContainer>
       <ContentContainer>
@@ -229,7 +222,7 @@ export default function Index() {
                       fill={theme.colors.primary}
                     />
                   }
-                  onPress={() => router.push(ROUTES.send)}
+                  onPress={() => router.push(`token/send/${chainName}`)}
                   btnText="Send"
                 />
                 <View style={{ width: 15 }} />
@@ -246,13 +239,13 @@ export default function Index() {
                 />
               </ActionContainer>
               <SectionTitle>
-                About {capitalizeFirstLetter(id.toString())}
+                About {capitalizeFirstLetter(chainName)}
               </SectionTitle>
               <CryptoInfoCardContainer>
                 <TokenInfoCard
-                  tokenName={capitalizeFirstLetter(id.toString())}
+                  tokenName={capitalizeFirstLetter(chainName)}
                   tokenSymbol={ticker}
-                  network={capitalizeFirstLetter(id.toString())}
+                  network={capitalizeFirstLetter(chainName)}
                 />
               </CryptoInfoCardContainer>
 
