@@ -29,9 +29,16 @@ export const getTransactionsByWallet = async (walletAddress: string) => {
 
   try {
     const signatures = await connection.getSignaturesForAddress(publicKey);
-    const signature = signatures.map((signature) => signature.signature)[0];
-    const response = await connection.getParsedTransaction(signature);
 
+    const response = await Promise.all(
+      signatures.map(async (signature) => {
+        const transaction = await connection.getParsedTransaction(
+          signature.signature
+        );
+        return transaction;
+      })
+    );
+    console.log("response", response);
     return response;
   } catch (error) {
     console.error("Failed to fetch transactions:", error);

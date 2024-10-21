@@ -4,43 +4,56 @@ import { useState, useEffect } from "react";
 import { Redirect, Stack, router } from "expo-router";
 import { useSelector } from "react-redux";
 import styled, { useTheme } from "styled-components/native";
+import * as SplashScreen from "expo-splash-screen";
 import type { RootState } from "../../store";
 import { ROUTES } from "../../constants/routes";
 import SettingsIcon from "../../assets/svg/settings.svg";
 import LeftIcon from "../../assets/svg/left-arrow.svg";
 import CloseIcon from "../../assets/svg/close.svg";
-import { getSeedPhraseConfirmation } from "../../hooks/use-storage-state";
+import { getPhrase } from "../../hooks/use-storage-state";
+import { clearPersistedState } from "../../store";
 
 const IconTouchContainer = styled.TouchableOpacity`
   padding: 10px;
 `;
+SplashScreen.preventAutoHideAsync();
 
 export default function AppLayout() {
   const theme = useTheme();
   const ethWallet = useSelector((state: RootState) => state.wallet.ethereum);
   const solWallet = useSelector((state: RootState) => state.wallet.solana);
-  const [seedPhraseConfirmed, setSeedPhraseConfirmed] = useState<
-    boolean | null
-  >(null);
+  const [seedPhraseConfirmed, setSeedPhraseConfirmed] =
+    useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const walletsExist = ethWallet.address && solWallet.address;
 
   useEffect(() => {
     const loadSeedPhraseConfirmation = async () => {
-      const confirmation = await getSeedPhraseConfirmation();
-      setSeedPhraseConfirmed(confirmation);
+      const phrase = await getPhrase();
+      if (!phrase && !ethWallet.address && !solWallet.address) {
+        clearPersistedState();
+        setLoading(false);
+        router.replace(ROUTES.walletSetup);
+      }
+      if (!phrase && ethWallet.address && solWallet.address) {
+        setSeedPhraseConfirmed(true);
+        setLoading(false);
+      }
     };
 
     loadSeedPhraseConfirmation();
   }, []);
 
-  if (seedPhraseConfirmed === null) {
-    return null;
+  if (!loading) {
+    SplashScreen.hideAsync();
   }
 
-  if (!seedPhraseConfirmed && (ethWallet.address || solWallet.address)) {
+  if (!seedPhraseConfirmed && !loading && !walletsExist) {
     return <Redirect href={ROUTES.seedPhrase} />;
   }
 
-  if (!ethWallet.address || !solWallet.address) {
+  if (seedPhraseConfirmed && !loading && !walletsExist) {
     return <Redirect href={ROUTES.walletSetup} />;
   }
 
@@ -66,6 +79,7 @@ export default function AppLayout() {
           options={{
             headerShown: true,
             headerTransparent: true,
+            headerTitle: "",
             gestureEnabled: true,
             headerLeft: () => (
               <IconTouchContainer onPress={() => router.back()}>
@@ -93,6 +107,7 @@ export default function AppLayout() {
           options={{
             headerShown: true,
             headerTransparent: true,
+            headerTitle: "",
             gestureEnabled: true,
             presentation: "modal",
             headerLeft: null,
@@ -103,6 +118,7 @@ export default function AppLayout() {
           options={{
             headerShown: true,
             headerTransparent: true,
+            headerTitle: "",
             gestureEnabled: true,
             headerTitleStyle: {
               color: theme.colors.white,
@@ -120,6 +136,7 @@ export default function AppLayout() {
           options={{
             headerShown: true,
             headerTransparent: true,
+            headerTitle: "",
             gestureEnabled: true,
             presentation: "modal",
             headerLeft: () => (
@@ -134,6 +151,7 @@ export default function AppLayout() {
           options={{
             headerShown: true,
             headerTransparent: true,
+            headerTitle: "",
             gestureEnabled: true,
             presentation: "modal",
             headerLeft: () => (

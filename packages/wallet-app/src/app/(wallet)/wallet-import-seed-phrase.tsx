@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Dimensions, Keyboard, ScrollView } from "react-native";
+import { Dimensions, Keyboard, ScrollView, Platform } from "react-native";
 import { SafeAreaView } from "react-native";
 import { router } from "expo-router";
 import { useDispatch } from "react-redux";
@@ -16,8 +16,10 @@ import {
 import Button from "../../components/Button/Button";
 import { ROUTES } from "../../constants/routes";
 import { savePrivateKeys } from "../../hooks/use-storage-state";
-import { setSeedPhraseConfirmation } from "../../hooks/use-storage-state";
+import { removePhrase } from "../../hooks/use-storage-state";
 import { uint8ArrayToBase64 } from "../../utils/uint8ArrayToBase64";
+
+const isAndroid = Platform.OS === "android";
 
 const SafeAreaContainer = styled(SafeAreaView)<{ theme: ThemeType }>`
   flex: 1;
@@ -31,6 +33,7 @@ const ContentContainer = styled.View<{ theme: ThemeType }>`
   justify-content: center;
   align-items: center;
   padding: ${(props) => props.theme.spacing.medium};
+  margin-top: ${(props) => isAndroid && props.theme.spacing.huge};
 `;
 
 const TextContainer = styled.View<{ theme: ThemeType }>`
@@ -66,7 +69,6 @@ const SeedTextInput = styled.TextInput<{ theme: ThemeType }>`
   margin: ${(props) => props.theme.spacing.large};
   background-color: ${(props) => props.theme.colors.dark};
   border-radius: ${(props) => props.theme.borderRadius.extraLarge};
-  min-height: 135px;
   width: ${(Dimensions.get("window").width - 80).toFixed(0)}px;
   color: ${(props) => props.theme.colors.white};
   font-size: ${(props) => props.theme.fonts.sizes.large};\
@@ -132,7 +134,7 @@ export default function Page() {
       dispatch(saveSolanaAddress(solanaAddress));
       dispatch(saveSolanaPublicKey(solanaPublicKey));
 
-      setSeedPhraseConfirmation(true);
+      removePhrase();
 
       router.push({
         pathname: ROUTES.walletCreatedSuccessfully,
