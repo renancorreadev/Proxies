@@ -9,19 +9,22 @@ import type { ThemeType } from "../../../styles/theme";
 import type { RootState, AppDispatch } from "../../../store";
 import {
   fetchEthereumBalance,
-  fetchSolanaBalance,
   fetchEthereumTransactions,
-  fetchSolanaTransactions,
   fetchEthereumTransactionsInterval,
-  fetchSolanaTransactionsInterval,
   fetchEthereumBalanceInterval,
+} from "../../../store/ethereumSlice";
+import {
+  fetchSolanaBalance,
+  fetchSolanaTransactions,
+  fetchSolanaTransactionsInterval,
   fetchSolanaBalanceInterval,
-} from "../../../store/walletSlice";
+} from "../../../store/solanaSlice";
 import { useLoadingState } from "../../../hooks/redux";
 import { capitalizeFirstLetter } from "../../../utils/capitalizeFirstLetter";
 import { formatDollar } from "../../../utils/formatDollars";
 import { placeholderArr } from "../../../utils/placeholder";
 import { Chains, GenericTransaction } from "../../../types";
+import { GeneralStatus } from "../../../store/types";
 import { truncateWalletAddress } from "../../../utils/truncateWalletAddress";
 // import { isCloseToBottom } from "../../../utils/isCloseToBottom";
 import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
@@ -160,27 +163,33 @@ export default function Index() {
   const theme = useTheme();
   const isStateLoading = useLoadingState();
   const chainName = id as string;
+
+  const activeIndex = useSelector(
+    (state: RootState) => state.ethereum.activeIndex
+  );
   const tokenAddress = useSelector(
-    (state: RootState) => state.wallet[chainName].activeAddress.address
+    (state: RootState) => state[chainName].addresses[activeIndex].address
   );
   const tokenBalance = useSelector(
-    (state: RootState) => state.wallet[chainName].activeAddress.balance
+    (state: RootState) => state[chainName].addresses[activeIndex].balance
   );
   const transactionHistory = useSelector(
     (state: RootState) =>
-      state.wallet[chainName].activeAddress.transactionMetadata.transactions
+      state[chainName].addresses[activeIndex].transactionMetadata.transactions
   );
 
   const failedNetworkRequest = useSelector(
-    (state: RootState) => state.wallet[chainName].failedNetworkRequest
+    (state: RootState) =>
+      state[chainName].addresses[activeIndex].failedNetworkRequest
   );
 
   const failedStatus = useSelector(
-    (state: RootState) => state.wallet[chainName].status === "failed"
+    (state: RootState) =>
+      state[chainName].addresses[activeIndex].status === GeneralStatus.Failed
   );
 
   // const loadingStatus = useSelector(
-  //   (state: RootState) => state.wallet[chainName].status === "loading"
+  //   (state: RootState) => state.wallet[chainName].status === GeneralStatus.Loading
   // );
 
   // const paginationKey: string[] | string = useSelector(
@@ -345,6 +354,7 @@ export default function Index() {
   };
 
   useEffect(() => {
+    fetchAndUpdatePrices();
     const intervalId = setInterval(
       fetchAndUpdatePricesInterval,
       FETCH_PRICES_INTERVAL

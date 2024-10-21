@@ -5,30 +5,35 @@ import { router } from "expo-router";
 import { useDispatch } from "react-redux";
 import styled from "styled-components/native";
 import { useTheme } from "styled-components";
-import {
-  importAllActiveEthAddresses,
-  findNextUnusedEthWalletIndex,
-} from "../../../utils/etherHelpers";
-import {
-  importAllActiveSolAddresses,
-  findNextUnusedSolWalletIndex,
-} from "../../../utils/solanaHelpers";
+import ethService from "../../../services/EthereumService";
+import solanaService from "../../../services/SolanaService";
 import { ThemeType } from "../../../styles/theme";
 import {
-  saveEthereumAccountDetails,
-  saveSolanaAccountDetails,
-  saveAllEthereumAddresses,
-  saveAllSolanaAddresses,
-} from "../../../store/walletSlice";
-import type { AddressState } from "../../../store/walletSlice";
+  saveSolanaAddresses,
+  fetchSolanaBalance,
+  fetchSolanaTransactions,
+} from "../../../store/solanaSlice";
+import {
+  saveEthereumAddresses,
+  fetchEthereumBalance,
+  fetchEthereumTransactions,
+} from "../../../store/ethereumSlice";
+import { GeneralStatus } from "../../../store/types";
+import type { AddressState } from "../../../store/types";
+import type { AppDispatch } from "../../../store";
 import Button from "../../../components/Button/Button";
 import { ROUTES } from "../../../constants/routes";
-import { savePhrase } from "../../../hooks/use-storage-state";
+import { savePhrase } from "../../../hooks/useStorageState";
 import { Title, Subtitle } from "../../../components/Styles/Text.styles";
 import {
   ErrorTextCenter,
   ErrorTextContainer,
 } from "../../../components/Styles/Errors.styles";
+
+interface SeedTextInputProps {
+  theme: ThemeType;
+  isInputFocused: boolean;
+}
 
 const isAndroid = Platform.OS === "android";
 
@@ -59,10 +64,7 @@ const ButtonContainer = styled.View<{ theme: ThemeType }>`
   width: 100%;
 `;
 
-const SeedTextInput = styled.TextInput<{
-  theme: ThemeType;
-  isInputFocused: boolean;
-}>`
+const SeedTextInput = styled.TextInput<SeedTextInputProps>`
   justify-content: flex-start;
   padding: ${(props) => props.theme.spacing.large};
   margin: ${(props) => props.theme.spacing.large};
@@ -77,7 +79,7 @@ const SeedTextInput = styled.TextInput<{
       isInputFocused ? theme.colors.primary : theme.colors.grey};
 `;
 
-export const InfoContainer = styled.View<{ theme: ThemeType }>`
+const InfoContainer = styled.View<{ theme: ThemeType }>`
   justify-content: center;
   flex-direction: column;
   align-items: center;
@@ -88,14 +90,14 @@ export const InfoContainer = styled.View<{ theme: ThemeType }>`
   margin-bottom: ${(props) => props.theme.spacing.large};
 `;
 
-export const InfoTitle = styled.Text<{ theme: ThemeType }>`
+const InfoTitle = styled.Text<{ theme: ThemeType }>`
   font-family: ${(props) => props.theme.fonts.families.openBold};
   font-size: ${(props) => props.theme.fonts.sizes.large};
   color: ${(props) => props.theme.colors.white};
   margin-bottom: 5px;
 `;
 
-export const InfoText = styled.Text<{ theme: ThemeType }>`
+const InfoText = styled.Text<{ theme: ThemeType }>`
   font-family: ${(props) => props.theme.fonts.families.openRegular};
   font-size: ${(props) => props.theme.fonts.sizes.normal};
   color: ${(props) => props.theme.colors.white};
@@ -115,7 +117,7 @@ const titleArr: string[] = [
 
 export default function Page() {
   const theme = useTheme();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [textValue, setTextValue] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -155,18 +157,20 @@ export default function Page() {
       // Logic is needed to find the crypto currency with the highest amount of accounts created
       // and using that index to create the same amount of addresses via hd wallets
       let highestIndex = 0;
-      const unusedEthIndex = await findNextUnusedEthWalletIndex(
-        phraseTextValue
-      );
-      const unusedSolIndex = await findNextUnusedSolWalletIndex(
-        phraseTextValue
-      );
-      highestIndex = Math.max(unusedEthIndex, unusedSolIndex);
-      const importedEthWallets = await importAllActiveEthAddresses(
+      const unusedEthIndex = await ethService.findNextUnusedWalletIndex(
         phraseTextValue
       );
 
-      const importedSolWallets = await importAllActiveSolAddresses(
+      const unusedSolIndex = await solanaService.findNextUnusedWalletIndex(
+        phraseTextValue
+      );
+
+      highestIndex = Math.max(unusedEthIndex, unusedSolIndex);
+      const importedEthWallets = await ethService.importAllActiveAddresses(
+        phraseTextValue
+      );
+
+      const importedSolWallets = await solanaService.importAllActiveAddresses(
         phraseTextValue,
         highestIndex
       );
@@ -179,6 +183,13 @@ export default function Page() {
             address: info.address,
             publicKey: info.publicKey,
             balance: 0,
+            transactionMetadata: {
+              paginationKey: undefined,
+              transactions: [],
+            },
+            failedNetworkRequest: false,
+            status: GeneralStatus.Idle,
+            transactionConfirmations: [],
           };
         });
 
@@ -190,19 +201,31 @@ export default function Page() {
             address: info.publicKey,
             publicKey: info.publicKey,
             balance: 0,
+            transactionMetadata: {
+              paginationKey: undefined,
+              transactions: [],
+            },
+            failedNetworkRequest: false,
+            status: GeneralStatus.Idle,
+            transactionConfirmations: [],
           };
         });
 
-      const firstEthWallet = transformedActiveEthAddresses[0];
-      const firstSolWallet = transformedActiveSolAddresses[0];
-
       await savePhrase(JSON.stringify(phraseTextValue));
 
-      dispatch(saveEthereumAccountDetails(firstEthWallet));
-      dispatch(saveAllEthereumAddresses(transformedActiveEthAddresses));
+      dispatch(saveEthereumAddresses(transformedActiveEthAddresses));
+      dispatch(fetchEthereumBalance(transformedActiveEthAddresses[0].address));
+      dispatch(
+        fetchEthereumTransactions({
+          address: transformedActiveEthAddresses[0].address,
+        })
+      );
 
-      dispatch(saveSolanaAccountDetails(firstSolWallet));
-      dispatch(saveAllSolanaAddresses(transformedActiveSolAddresses));
+      dispatch(saveSolanaAddresses(transformedActiveSolAddresses));
+      dispatch(fetchSolanaBalance(transformedActiveSolAddresses[0].address));
+      dispatch(
+        fetchSolanaTransactions(transformedActiveSolAddresses[0].address)
+      );
 
       router.push({
         pathname: ROUTES.walletCreatedSuccessfully,

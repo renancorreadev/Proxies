@@ -12,11 +12,12 @@ import {
 } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import walletReducer from "./walletSlice";
+import ethereumReducer from "./ethereumSlice";
+import solanaReducer from "./solanaSlice";
 import priceReduce from "./priceSlice";
 import biometricsReducer from "./biometricsSlice";
-import { webSocketProvider } from "../utils/etherHelpers";
 import { formatEther } from "ethers";
+import ethService from "../services/EthereumService";
 
 const persistConfig = {
   key: "root",
@@ -24,7 +25,8 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-  wallet: walletReducer,
+  ethereum: ethereumReducer,
+  solana: solanaReducer,
   price: priceReduce,
   biometrics: biometricsReducer,
 });
@@ -38,16 +40,18 @@ export const webSocketMiddleware: Middleware =
     next(action);
     if (action.type === "wallet/saveEthereumAddress") {
       const state = store.getState();
-      const { ethereum } = state.wallet;
-      webSocketProvider.on("block", async () => {
-        const balance = await webSocketProvider.getBalance(ethereum.address);
+      const { ethereum, activeIndex } = state.ethereum;
+      ethService.getWebSocketProvider().on("block", async () => {
+        const balance = await ethService
+          .getWebSocketProvider()
+          .getBalance(ethereum.addresses[activeIndex]);
         store.dispatch({
           type: "wallet/updateEthereumBalance",
           payload: formatEther(balance),
         });
       });
 
-      return () => webSocketProvider.removeAllListeners();
+      return () => ethService.getWebSocketProvider().removeAllListeners();
     }
   };
 
@@ -65,17 +69,7 @@ export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [
-          "persist/PERSIST",
-          "persist/REHYDRATE",
-          "persist/PURGE",
-          "persist/FLUSH",
-          "persist/PAUSE",
-          "persist/REGISTER",
-          "persist/DEFAULT_VERSION",
-        ],
-      },
+      serializableCheck: false,
     })
       .prepend(listenerMiddleware.middleware)
       .concat(webSocketMiddleware),
@@ -93,11 +87,3 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   unknown,
   Action<string>
 >;
-
-// listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
-//   predicate: (_action, currentState, previousState) => {
-//     return currentState.wallet.solana.transactions !== previousState.wallet.solana.transactions
-//   },
-//   effect: async (_action, listenerApi) => {
-//   },
-// });

@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
 import { ThemeType } from "../../styles/theme";
-import { formatDollar } from "../../utils/formatDollars";
 
 interface ButtonContainerProps {
   backgroundColor?: string;
@@ -83,7 +82,7 @@ const SendConfCard: React.FC<SendConfCardProps> = ({
   return (
     <SendConfCardContainer>
       <TokenSectionViewTop>
-        <TokenNameLabel>Token Name</TokenNameLabel>
+        <TokenNameLabel>Address</TokenNameLabel>
         <TokenNameText>{toAddress}</TokenNameText>
       </TokenSectionViewTop>
       <TokenSectionViewMid>
