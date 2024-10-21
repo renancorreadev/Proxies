@@ -20,6 +20,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function AppLayout() {
   const theme = useTheme();
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const ethWallet = useSelector((state: RootState) => state.wallet.ethereum);
   const solWallet = useSelector((state: RootState) => state.wallet.solana);
   const [seedPhraseConfirmed, setSeedPhraseConfirmed] =
@@ -90,7 +91,7 @@ export default function AppLayout() {
           }}
         />
         <Stack.Screen
-          name="token/send-options"
+          name="token/send/send-options"
           options={{
             headerShown: true,
             headerTransparent: true,
@@ -148,7 +149,7 @@ export default function AppLayout() {
           }}
         />
         <Stack.Screen
-          name="token/receive-options"
+          name="token/receive/receive-options"
           options={{
             headerShown: true,
             headerTransparent: true,
