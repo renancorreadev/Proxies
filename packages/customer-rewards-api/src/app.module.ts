@@ -41,6 +41,12 @@ import { UserService } from './modules/User/Domain/UserService';
 import { UserAdapter } from './modules/User/Adapters/Output/UserAdapter';
 import { UserEntity } from './modules/User/Adapters/Output/db/UserEntity';
 
+import { Redis } from 'ioredis';
+import { KeycloakAuthWebAdapter } from './modules/Authentication/Adapters/Input/AuthenticationKeycloakWebAdapter';
+import { KeycloakAuthService } from './modules/Authentication/Domain/KeycloakAuthenticationService';
+import { KeycloakAuthAdapter } from './modules/Authentication/Adapters/Output/KeycloakAdapter';
+import { KeycloakStrategy } from './modules/Authentication/Strategies/KeycloakStrategy';
+
 @Module({
 	imports: [
 		PassportModule.register({ defaultStrategy: 'jwt' }),
@@ -56,6 +62,7 @@ import { UserEntity } from './modules/User/Adapters/Output/db/UserEntity';
 		CustomerDBWebAdapter,
 		AuthenticationWebAdapter,
 		UserWebAdapter,
+		KeycloakAuthWebAdapter,
 	],
 	providers: [
 		{
@@ -134,6 +141,26 @@ import { UserEntity } from './modules/User/Adapters/Output/db/UserEntity';
 
 				return dataSource.initialize();
 			},
+		},
+		{
+			useClass: KeycloakAuthAdapter,
+			provide: DependencyInjectionTokens.KEYCLOAK_TOKEN_OUTPUT_PORT,
+		},
+		{
+			useClass: KeycloakAuthService,
+			provide: DependencyInjectionTokens.KEYCLOAK_AUTH_SERVICE,
+		},
+		{
+			useClass: KeycloakStrategy,
+			provide: DependencyInjectionTokens.KEYCLOAK_STRATEGY,
+		},
+		{
+			provide: DependencyInjectionTokens.REDIS_CLIENT,
+			useFactory: () =>
+				new Redis({
+					host: process.env.REDIS_HOST || 'localhost',
+					port: parseInt(process.env.REDIS_PORT) || 6379,
+				}),
 		},
 
 		BlockchainClientConnectionProvider,

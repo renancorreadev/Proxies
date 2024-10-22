@@ -11,11 +11,11 @@ import { UserEntity } from '@user/Adapters/Output/db/UserEntity';
 @Injectable()
 export class AuthenticationAdapter implements AuthenticationTokenOutputPort {
 	constructor(
-		@Inject(DependencyInjectionTokens.DATA_SOURCE) private dataSource: DataSource,
-		private jwtService: JwtService,
+		@Inject(DependencyInjectionTokens.DATA_SOURCE) private readonly dataSource: DataSource,
+		private readonly jwtService: JwtService,
 	) {}
 
-	private userRepository: Repository<UserEntity> = this.dataSource.getRepository(UserEntity);
+	private readonly userRepository: Repository<UserEntity> = this.dataSource.getRepository(UserEntity);
 
 	async login(loginDTO: LoginDTO): Promise<{ access_token: string }> {
 		const user = await this.userRepository.findOneBy({ email: loginDTO.email });

@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   keycloak:
     image: quay.io/keycloak/keycloak:21.1
@@ -12,15 +10,13 @@ services:
       - KC_DB_URL=jdbc:mysql://db_keycloak:3306/keycloak
       - KC_DB_USERNAME=root
       - KC_DB_PASSWORD=root
-      - KC_HOSTNAME_STRICT=false
-      - KC_CACHE=local                     # Reduz complexidade do cluster em dev
-      - KC_HTTP_ENABLED=true               # Habilita HTTP em vez de HTTPS
+      - KC_CACHE=local
+      - KC_HTTP_ENABLED=true
     depends_on:
       db_keycloak:
         condition: service_healthy
-    volumes:
-      - ./data:/opt/keycloak/data
-      - ./config:/opt/keycloak/data/import
+      redis:
+        condition: service_healthy
     ports:
       - "8080:8080"
     networks:
@@ -46,9 +42,22 @@ services:
       protocol:
         ipv4_address: 172.16.239.16
 
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      protocol:
+        ipv4_address: 172.16.239.30
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
 volumes:
-  keycloak_data:
-    driver: local
   mysql_data:
     driver: local
 
