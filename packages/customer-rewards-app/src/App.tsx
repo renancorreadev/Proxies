@@ -1,11 +1,10 @@
-import { HomeOnLockPage } from './pages/Home/OnLockPage';
+import { HomeContent } from './pages/Home';
 import Layout from './shared';
 
 function App() {
-  console.log('teste');
   return (
     <Layout>
-      <HomeOnLockPage />
+      <HomeContent />
     </Layout>
   );
 }
