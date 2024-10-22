@@ -60,9 +60,9 @@ const ImageContainer = styled(View)<{ theme: ThemeType }>`
 export default function WalletCreationSuccessPage() {
   const { successState } = useLocalSearchParams();
   const theme = useTheme();
-  const [title, setTitle] = useState("Bem-vindo a bordo!");
+  const [title, setTitle] = useState("Welcome Aboard!");
   const [subtitle, setSubtitle] = useState(
-    "Sua nova carteira digital está pronta! Mergulhe em segurança e veja seu saldo e pontuação."
+    "Your new digital wallet is ready! Dive into securing and exploring your financial future. Your crypto journey starts now."
   );
 
   useEffect(() => {
@@ -107,7 +107,7 @@ export default function WalletCreationSuccessPage() {
           <Button
             linearGradient={theme.colors.secondaryLinearGradient}
             onPress={() => router.replace(ROUTES.home)}
-            title="Continuar para carteira"
+            title="Continue to wallet"
             icon={
               <CheckMark width={25} height={25} fill={theme.colors.white} />
             }
