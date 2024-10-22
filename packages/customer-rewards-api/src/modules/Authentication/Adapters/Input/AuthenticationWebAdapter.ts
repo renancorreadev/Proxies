@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // src/modules/Authentication/Adapters/Input/AuthenticationWebAdapter.ts
 import { Body, Controller, Inject, Logger, Post } from '@nestjs/common';
 import {
@@ -21,7 +22,7 @@ export class AuthenticationWebAdapter {
 
 	constructor(
 		@Inject(DependencyInjectionTokens.AUTH_TOKEN_USE_CASE)
-		private authenticationService: AuthenticationService,
+		private readonly authenticationService: AuthenticationService,
 	) {}
 
 	/**

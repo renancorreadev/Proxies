@@ -1,15 +1,21 @@
+// Logout.tsx
 import { useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { AuthContext } from '../../contexts/AuthProvider';
 
 export function Logout() {
-  const { makeLogoutUrl } = useContext(AuthContext);
-  useEffect(() => {
-    const logoutUrl = makeLogoutUrl();
-    if (logoutUrl) {
-      window.location.href = logoutUrl;
-    }
-  }, [makeLogoutUrl]);
+  const { makeLogout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  return <div>Loading...</div>;
+  useEffect(() => {
+    const performLogout = () => {
+      makeLogout();
+      navigate('/login');
+    };
+
+    performLogout();
+  }, [makeLogout, navigate]);
+
+  return <div>Logging out...</div>;
 }

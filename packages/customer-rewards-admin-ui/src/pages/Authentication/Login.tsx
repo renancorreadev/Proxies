@@ -1,17 +1,31 @@
-import { useContext, useEffect } from 'react';
+// Login.tsx
+import { useContext, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
 import { AuthContext } from '../../contexts/AuthProvider';
-import { makeLoginUrl } from '../../contexts/utils';
+import SignIn from './SignIn'; // Importa o seu formulário de SignIn
 
 export function Login() {
-  const { auth } = useContext(AuthContext);
+  const { auth, login } = useContext(AuthContext);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!auth) {
-      window.location.href = makeLoginUrl();
+  const handleLogin = async (username: string, password: string) => {
+    try {
+      await login(username, password);
+    } catch (err) {
+      setError('Invalid credentials, please try again.');
     }
-  }, [auth]);
+  };
 
-  return auth ? <Navigate to="/" /> : <div>Loading...</div>;
+  if (auth) {
+    return <Navigate to="/" />;
+  }
+
+  return (
+    <div className="login-container">
+      <h1 className="text-center">Login</h1>
+      {error && <p className="error-message text-center">{error}</p>}
+      <SignIn onSubmit={handleLogin} />
+    </div>
+  );
 }
