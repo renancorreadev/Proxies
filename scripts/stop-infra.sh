@@ -8,6 +8,7 @@ SERVICE_DIRS=(
   "infra/compose/minio"
   "infra/compose/monitoring"
   "infra/compose/vault"
+  "infra/compose/thegraph"
 )
 
 # Loop pelos diretórios e executa 'docker-compose down'
