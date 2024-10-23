@@ -87,9 +87,21 @@ export const fetchEthereumTransactions = createAsyncThunk(
   async ({ address }: FetchTransactionsArg, { rejectWithValue }) => {
     try {
       const transactions = await ethService.fetchERC20Transfers(address);
-      return transactions;
-    } catch (error) {
-      console.error("error", error);
+
+      // Mapear a resposta no formato correto
+      return transactions.map((tx: any) => ({
+        uniqueId: tx.transactionHash,
+        hash: tx.transactionHash,
+        blockTime: tx.blockTimestamp, 
+        asset: "ETH",
+        direction: tx.from.toLowerCase() === address.toLowerCase() ? "out" : "in",
+        from: tx.from,
+        to: tx.to,
+        value:  tx.value, 
+        blockNumber: tx.blockNumber,
+      }));
+    } catch (error: any) {
+      console.error("Failed to fetch transactions:", error);
       return rejectWithValue(error.message);
     }
   }
@@ -100,13 +112,28 @@ export const fetchEthereumTransactionsInterval = createAsyncThunk(
   async ({ address }: FetchTransactionsArg, { rejectWithValue }) => {
     try {
       const transactions = await ethService.fetchERC20Transfers(address);
-      return transactions;
-    } catch (error) {
-      console.error("error", error);
+
+ 
+      return transactions.map((tx: any) => ({
+        uniqueId: tx.transactionHash,
+        hash: tx.transactionHash,
+        blockTime: tx.blockTimestamp, 
+        asset: "ETH",
+        direction: tx.from.toLowerCase() === address.toLowerCase() ? "out" : "in",
+        from: tx.from,
+        to: tx.to,
+        value:  tx.value, 
+        blockNumber: tx.blockNumber,
+      }));
+    } catch (error: any) {
+      console.error("Failed to fetch transactions:", error);
       return rejectWithValue(error.message);
     }
   }
 );
+
+
+
 interface EthTransactionArgs {
   address: ethers.AddressLike;
   privateKey: string;
@@ -120,9 +147,9 @@ export const sendEthereumTransaction = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await ethService.sendTransaction(
-        address,
+      const response = await ethService.transferERC20(
         privateKey,
+        address,
         amount
       );
       return response;
@@ -238,18 +265,18 @@ export const ethereumSlice = createSlice({
     .addCase(fetchEthereumTransactions.fulfilled, (state, action) => {
       if (Array.isArray(action.payload)) {
         state.addresses[state.activeIndex].failedNetworkRequest = false;
-        state.addresses[state.activeIndex].transactionMetadata.transactions = 
-          action.payload.map(tx => ({
-            uniqueId: tx.transactionHash,
-            hash: tx.transactionHash,
-            blockTime: new Date(tx.blockNumber * 1000).toISOString(), // Assuming blockNumber is a Unix timestamp
-            asset: 'ETH',
-            direction: tx.from.toLowerCase() === state.addresses[state.activeIndex].address.toLowerCase() ? 'out' : 'in',
-            from: tx.from,
-            to: tx.to,
-            value: tx.value,
-            blockNumber: tx.blockNumber,
-          }));
+        // state.addresses[state.activeIndex].transactionMetadata.transactions = 
+        //   action.payload.map(tx => ({
+        //     uniqueId: tx.transactionHash,
+        //     hash: tx.transactionHash,
+        //     blockTime: new Date(tx.blockNumber * 1000).toISOString(), // Assuming blockNumber is a Unix timestamp
+        //     asset: 'ETH',
+        //     direction: tx.from.toLowerCase() === state.addresses[state.activeIndex].address.toLowerCase() ? 'out' : 'in',
+        //     from: tx.from,
+        //     to: tx.to,
+        //     value: tx.value,
+        //     blockNumber: tx.blockNumber,
+        //   }));
       } else {
         state.addresses[state.activeIndex].failedNetworkRequest = true;
       }

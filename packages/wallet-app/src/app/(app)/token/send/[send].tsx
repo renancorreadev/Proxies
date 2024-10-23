@@ -252,6 +252,7 @@ export default function SendPage() {
     errors: Record<string, string>
   ) => {
     const amount = parseFloat(values.amount);
+
     if (amount > tokenBalance) {
       errors.amount = "Insufficient funds";
     } else {
@@ -290,6 +291,7 @@ export default function SendPage() {
     tokenBalance: string,
     address: string
   ) => {
+    console.log("tokenBalance", tokenBalance);
     const toAddress = formRef.current?.values?.address || "";
 
     const isAddressValid =

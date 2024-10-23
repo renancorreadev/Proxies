@@ -13,16 +13,27 @@ import {
   Contract,
   Mnemonic,
   formatUnits,
-  Log,
-  Interface,
 } from "ethers";
 import { validateMnemonic } from "bip39";
+import axios from "axios";
 
 // ABI para ERC-20
 const ERC20_ABI = [
+  // Eventos
   "event Transfer(address indexed from, address indexed to, uint256 value)",
-  "function balanceOf(address owner) view returns (uint256)",
-  "function decimals() view returns (uint8)"
+  "event Approval(address indexed owner, address indexed spender, uint256 value)",
+
+
+  "function name() view returns (string)", // Nome do token
+  "function symbol() view returns (string)", // Símbolo do token
+  "function decimals() view returns (uint8)", // Casas decimais
+  "function totalSupply() view returns (uint256)", // Suprimento total
+  "function balanceOf(address owner) view returns (uint256)", // Saldo de um endereço
+
+  
+  "function transfer(address to, uint256 amount) returns (bool)", // Transferência de tokens
+  "function approve(address spender, uint256 amount) returns (bool)", // Aprova o uso de tokens por terceiros
+  "function transferFrom(address from, address to, uint256 amount) returns (bool)" // Transferência delegada
 ];
 
 interface SendTransactionResponse {
@@ -70,23 +81,27 @@ class EthereumService {
       throw new Error("Failed to send transaction.");
     }
   }
-
   async calculateGasAndAmounts(
     toAddress: string,
     amount: string
   ): Promise<SendTransactionResponse> {
     const amountInWei = parseEther(amount);
     const tx = { to: toAddress, value: amountInWei };
-
+  
     try {
+      // Estima o gas (mesmo que seja 0)
       const gasEstimate = await this.provider.estimateGas(tx);
-      const gasFee = (await this.provider.getFeeData()).maxFeePerGas!;
-      const gasPrice = gasEstimate * gasFee;
-
+  
+      // Obtenha informações sobre taxas, mas trate zero gas de forma segura
+      const feeData = await this.provider.getFeeData();
+      const gasFee = feeData.maxFeePerGas || BigInt(0); // Tratar zero gas
+  
+  
+  
       return {
-        gasEstimate: formatEther(gasPrice),
-        totalCost: formatEther(amountInWei + gasPrice),
-        totalCostMinusGas: formatEther(amountInWei - gasPrice),
+        gasEstimate: formatEther(BigInt(gasEstimate)), // Exibe gas estimado em Ether
+        totalCost: formatEther(amountInWei), // Custo total é apenas o valor enviado
+        totalCostMinusGas: formatEther(amountInWei), // Sem gas, o custo total é igual ao valor
         gasFee,
       };
     } catch (error) {
@@ -94,6 +109,7 @@ class EthereumService {
       throw new Error("Unable to calculate gas.");
     }
   }
+  
 
   async getERC20Balance(walletAddress: AddressLike): Promise<{ balance: string }> {
     const contractAddress = process.env.EXPO_PUBLIC_ERC20_CONTRACT_ADDRESS!;
@@ -113,9 +129,24 @@ class EthereumService {
     }
   }
 
+  async getERC20BalanceWei(walletAddress: AddressLike): Promise<{ balance: bigint }> {
+    const contractAddress = process.env.EXPO_PUBLIC_ERC20_CONTRACT_ADDRESS!;
+    const contract = new Contract(contractAddress, ERC20_ABI, this.provider);
+
+    try {
+      const balance: bigint = await contract.balanceOf(walletAddress);
+      return { balance };
+    } catch (error) {
+      console.error("Failed to fetch ERC-20 balance:", error);
+      throw new Error("Unable to fetch token balance.");
+    }
+  }
+
+
   async getBalance(address: AddressLike): Promise<bigint> {
     try {
-      return await this.provider.getBalance(address);
+      const data = await this.getERC20BalanceWei(address);
+      return data.balance;
     } catch (error) {
       console.error("Balance fetch failed:", error);
       throw new Error("Unable to fetch balance.");
@@ -144,13 +175,6 @@ class EthereumService {
     return this.webSocketProvider;
   }
 
-  private async resolveAddress(address: AddressLike): Promise<string> {
-    if (typeof address === "string") return address;
-    if ("getAddress" in address && typeof address.getAddress === "function") {
-      return await address.getAddress();
-    }
-    throw new Error("Invalid address type");
-  }
 
   async createWalletByIndex(
     phrase: string,
@@ -176,48 +200,85 @@ class EthereumService {
   }
 
   async fetchERC20Transfers(walletAddress: string) {
-    const contractAddress = process.env.EXPO_PUBLIC_ERC20_CONTRACT_ADDRESS!;
-    const iface = new Interface(ERC20_ABI);
-  
-    const eventFragment = iface.getEvent("Transfer");
-    const topic = eventFragment.topicHash;
-  
-    const latestBlock = await this.provider.getBlockNumber();
-    const blockRange = 5000;
-    const logs: Log[] = [];
-  
-    try {
-      for (let fromBlock = 0; fromBlock <= latestBlock; fromBlock += blockRange) {
-        const toBlock = Math.min(fromBlock + blockRange - 1, latestBlock);
-        const filter = {
-          address: contractAddress,
-          topics: [topic, null, `0x${walletAddress.slice(2).padStart(64, "0")}`],
-          fromBlock,
-          toBlock,
-        };
-        const partialLogs = await this.provider.getLogs(filter);
-        logs.push(...partialLogs);
+    const query = `
+      {
+        transfers(where: { to: "${walletAddress.toLowerCase()}" }) {
+          id
+          from
+          to
+          value
+          blockTimestamp  # Certifique-se de que o subgraph indexa este campo
+        }
       }
-  
-      return logs.map((log) => {
-        const parsedLog = iface.parseLog(log);
-        const { from, to, value } = parsedLog.args;
-        return {
-          from,
-          to,
-          value: parseFloat(formatUnits(value, 18)).toFixed(2),
-          blockNumber: log.blockNumber,
-          transactionHash: log.transactionHash,
-        };
-      });
-    } catch (error) {
+    `;
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/subgraphs/name/drex",
+        { query },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.data.errors) {
+        console.error("GraphQL errors:", response.data.errors);
+        throw new Error("Failed to fetch ERC-20 transfers.");
+      }
+
+      const transfers = response.data.data.transfers;
+
+      return transfers.map((transfer: any) => ({
+        id: transfer.id,
+        from: transfer.from,
+        to: transfer.to,
+        value: parseFloat(formatUnits(transfer.value.toString(), 18)).toFixed(2),
+        date: transfer.blockTimestamp
+      }));
+    } catch (error: any) {
       console.error("Failed to fetch ERC-20 transfers:", error);
       throw new Error("Unable to fetch transactions.");
     }
   }
-  
-  
+
+  async transferERC20(
+    fromPrivateKey: string, 
+    toAddress: AddressLike, 
+    amount: string 
+  ): Promise<any> {
+    const contractAddress = process.env.EXPO_PUBLIC_ERC20_CONTRACT_ADDRESS!;
+    const signer = new Wallet(fromPrivateKey, this.provider); // Assinador a partir da chave privada
+    const contract = new Contract(contractAddress, ERC20_ABI, signer); // Instância do contrato ERC-20
+
+    try {
+
+      const amountInWei = parseEther(amount); 
+
+      // Chama a função de transferência do contrato ERC-20
+      const tx = await contract.transfer(toAddress, amountInWei);
+
+      console.log(`Transferência enviada: ${tx.hash}`);
+
+      // Aguarde a transação ser minerada
+      await tx.wait();
+
+      console.log("Transferência confirmada!");
+
+      return tx; // Retorna os detalhes da transação
+    } catch (error: any) {
+      console.error("Transferência ERC-20 falhou:", error);
+      throw new Error("Não foi possível transferir os tokens ERC-20.");
+    }
+  }
+
+ 
+
 }
+  
+  
+
 
 const ethService = new EthereumService();
 export default ethService;

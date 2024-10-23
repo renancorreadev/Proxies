@@ -10,7 +10,6 @@ import type { ThemeType } from "../../styles/theme";
 import type { RootState, AppDispatch } from "../../store";
 import { fetchPrices } from "../../store/priceSlice";
 import {
-  fetchEthereumBalance,
   fetchEthereumTransactions,
   fetchEthereumTransactionsInterval,
   fetchEthereumBalanceInterval,
@@ -204,6 +203,7 @@ export default function Index() {
         const erc20BalancePromise = await  ethService.getERC20Balance(ethWalletAddress);
 
 
+       
 
   
         setErc20Balance(erc20BalancePromise.balance);
@@ -370,9 +370,7 @@ export default function Index() {
           contentContainerStyle={{ gap: 10 }}
           data={isLoading ? placeholderArr(8) : transactions}
           renderItem={renderItem}
-          keyExtractor={(item) => {
-            return item.uniqueId;
-          }}
+          keyExtractor={(item, index) => item.uniqueId || index.toString()} // Garantir chave única
           initialNumToRender={10}
           maxToRenderPerBatch={10}
           windowSize={5}
