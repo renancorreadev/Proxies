@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef, useMemo } from "react";
+import React, { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import { View, RefreshControl, FlatList, Platform } from "react-native";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { useDispatch, useSelector } from "react-redux";
@@ -41,6 +41,8 @@ import { TICKERS } from "../../constants/tickers";
 import { SafeAreaContainer } from "../../components/Styles/Layout.styles";
 import InfoBanner from "../../components/InfoBanner/InfoBanner";
 import { SNAP_POINTS } from "../../constants/storage";
+import ethService from "../../services/EthereumService";
+
 
 const ContentContainer = styled.View<{ theme: ThemeType }>`
   flex: 1;
@@ -178,6 +180,7 @@ export default function Index() {
 
   const [refreshing, setRefreshing] = useState(false);
   const [usdBalance, setUsdBalance] = useState(0);
+  const [erc20Balance, setErc20Balance] = useState<any>(0);
   const [solUsd, setSolUsd] = useState(0);
   const [ethUsd, setEthUsd] = useState(0);
   const [transactions, setTransactions] = useState([]);
@@ -195,14 +198,25 @@ export default function Index() {
   }, [dispatch, solWalletAddress, ethWalletAddress]);
 
   const fetchTokenBalances = useCallback(async () => {
-    if (ethWalletAddress) {
-      dispatch(fetchEthereumBalance(ethWalletAddress));
-    }
+    try {
+      if (ethWalletAddress) {
+        // const ethBalancePromise = dispatch(fetchEthereumBalance(ethWalletAddress));
+        const erc20BalancePromise = await  ethService.getERC20Balance(ethWalletAddress);
 
-    if (solWalletAddress) {
-      dispatch(fetchSolanaBalance(solWalletAddress));
+
+
+  
+        setErc20Balance(erc20BalancePromise.balance);
+      }
+  
+      if (solWalletAddress) {
+        dispatch(fetchSolanaBalance(solWalletAddress));
+      }
+    } catch (error) {
+      console.error("Failed to fetch token balances:", error);
     }
-  }, [ethBalance, solBalance, dispatch]);
+  }, [ethWalletAddress, solWalletAddress, ethPrice, dispatch]);
+  
 
   const fetchTokenBalancesInterval = useCallback(async () => {
     if (ethWalletAddress) {
@@ -373,8 +387,8 @@ export default function Index() {
           ListHeaderComponent={
             <>
               <BalanceContainer>
-                <DollarSign>$</DollarSign>
-                <BalanceText>{formatDollarRaw(usdBalance)}</BalanceText>
+                <DollarSign>R$</DollarSign>
+                <BalanceText>{erc20Balance}</BalanceText>
               </BalanceContainer>
               <ActionContainer>
                 <PrimaryButton
@@ -386,7 +400,7 @@ export default function Index() {
                     />
                   }
                   onPress={() => router.push(ROUTES.sendOptions)}
-                  btnText="Enviar"
+                  btnText="Send"
                 />
                 <View style={{ width: 15 }} />
                 <PrimaryButton
@@ -398,7 +412,7 @@ export default function Index() {
                     />
                   }
                   onPress={() => router.push(ROUTES.receiveOptions)}
-                  btnText="Receber"
+                  btnText="Receive"
                 />
               </ActionContainer>
               <SectionTitle>Recent Activity</SectionTitle>

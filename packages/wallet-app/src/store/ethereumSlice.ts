@@ -86,7 +86,7 @@ export const fetchEthereumTransactions = createAsyncThunk(
   "wallet/fetchEthereumTransactions",
   async ({ address }: FetchTransactionsArg, { rejectWithValue }) => {
     try {
-      const transactions = await ethService.fetchTransactions(address);
+      const transactions = await ethService.fetchERC20Transfers(address);
       return transactions;
     } catch (error) {
       console.error("error", error);
@@ -99,7 +99,7 @@ export const fetchEthereumTransactionsInterval = createAsyncThunk(
   "wallet/fetchEthereumTransactionsInterval",
   async ({ address }: FetchTransactionsArg, { rejectWithValue }) => {
     try {
-      const transactions = await ethService.fetchTransactions(address);
+      const transactions = await ethService.fetchERC20Transfers(address);
       return transactions;
     } catch (error) {
       console.error("error", error);
@@ -207,119 +207,118 @@ export const ethereumSlice = createSlice({
       state = initialState;
     },
   },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchEthereumBalance.pending, (state) => {
-        state.addresses[state.activeIndex].status = GeneralStatus.Loading;
-      })
-      .addCase(fetchEthereumBalance.fulfilled, (state, action) => {
-        state.addresses[state.activeIndex].balance = parseFloat(
-          truncateBalance(action.payload)
-        );
-        state.addresses[state.activeIndex].status = GeneralStatus.Idle;
-      })
-      .addCase(fetchEthereumBalance.rejected, (state, action) => {
-        state.addresses[state.activeIndex].status = GeneralStatus.Failed;
-        console.error("Failed to fetch balance:", action.payload);
-      })
-      .addCase(fetchEthereumBalanceInterval.fulfilled, (state, action) => {
-        state.addresses[state.activeIndex].balance = parseFloat(
-          truncateBalance(action.payload)
-        );
-        state.addresses[state.activeIndex].status = GeneralStatus.Idle;
-      })
-      .addCase(fetchEthereumBalanceInterval.rejected, (state, action) => {
-        state.addresses[state.activeIndex].status = GeneralStatus.Failed;
-        console.error("Failed to fetch balance:", action.payload);
-      })
-      .addCase(fetchEthereumTransactions.pending, (state) => {
-        state.addresses[state.activeIndex].status = GeneralStatus.Loading;
-      })
-      .addCase(fetchEthereumTransactions.fulfilled, (state, action) => {
-        if (action.payload) {
-          state.addresses[state.activeIndex].failedNetworkRequest = false;
-          state.addresses[state.activeIndex].transactionMetadata.transactions =
-            action.payload.transferHistory;
-          state.addresses[state.activeIndex].transactionMetadata.paginationKey =
-            action.payload.paginationKey;
-        } else {
-          state.addresses[state.activeIndex].failedNetworkRequest = true;
-        }
-        state.addresses[state.activeIndex].status = GeneralStatus.Idle;
-      })
-      .addCase(fetchEthereumTransactions.rejected, (state, action) => {
-        state.addresses[state.activeIndex].status = GeneralStatus.Failed;
-        console.error("Failed to fetch transactions:", action.payload);
-      })
-      .addCase(fetchEthereumTransactionsInterval.fulfilled, (state, action) => {
-        if (action.payload) {
-          state.addresses[state.activeIndex].failedNetworkRequest = false;
-          state.addresses[state.activeIndex].transactionMetadata.transactions =
-            action.payload.transferHistory;
-          state.addresses[state.activeIndex].transactionMetadata.paginationKey =
-            action.payload.paginationKey;
-        } else {
-          state.addresses[state.activeIndex].failedNetworkRequest = true;
-        }
-        state.addresses[state.activeIndex].status = GeneralStatus.Idle;
-      })
-      .addCase(fetchEthereumTransactionsInterval.rejected, (state, action) => {
-        state.addresses[state.activeIndex].status = GeneralStatus.Failed;
-        console.error("Failed to fetch transactions:", action.payload);
-      })
-      .addCase(confirmEthereumTransaction.pending, (state, action) => {
-        const { txHash } = action.meta.arg;
-        const newConfirmation: TransactionConfirmation = {
-          txHash,
-          status: ConfirmationState.Pending,
-        };
-        state.addresses[state.activeIndex].transactionConfirmations.push(
-          newConfirmation
-        );
-      })
-      .addCase(confirmEthereumTransaction.fulfilled, (state, action) => {
-        const { txHash, confirmation } = action.payload;
-        const index = state.addresses[
-          state.activeIndex
-        ].transactionConfirmations.findIndex((tx) => tx.txHash === txHash);
-        if (index !== -1) {
-          state.addresses[state.activeIndex].transactionConfirmations[
-            index
-          ].status = confirmation
-            ? ConfirmationState.Confirmed
-            : ConfirmationState.Failed;
-        }
-      })
-      .addCase(confirmEthereumTransaction.rejected, (state, action) => {
-        const { txHash, error } = action.payload as any;
-        const index = state.addresses[
-          state.activeIndex
-        ].transactionConfirmations.findIndex((tx: any) => tx.txHash === txHash);
-        if (index !== -1) {
-          state.addresses[state.activeIndex].transactionConfirmations[
-            index
-          ].status = ConfirmationState.Failed;
-          state.addresses[state.activeIndex].transactionConfirmations[
-            index
-          ].error = error;
-        }
-      })
-      .addCase(sendEthereumTransaction.pending, (state) => {
-        state.addresses[state.activeIndex].status = GeneralStatus.Loading;
-      })
-      .addCase(sendEthereumTransaction.fulfilled, (state, action) => {
-        state.addresses[state.activeIndex].status = GeneralStatus.Idle;
-
-        state.addresses[state.activeIndex].transactionConfirmations.push({
-          txHash: action.payload.hash,
-          status: ConfirmationState.Pending,
-        });
-      })
-      .addCase(sendEthereumTransaction.rejected, (state, action) => {
-        state.addresses[state.activeIndex].status = GeneralStatus.Failed;
-        console.error("Failed to send transaction:", action.payload);
+ extraReducers: (builder) => {
+  builder
+    .addCase(fetchEthereumBalance.pending, (state) => {
+      state.addresses[state.activeIndex].status = GeneralStatus.Loading;
+    })
+    .addCase(fetchEthereumBalance.fulfilled, (state, action) => {
+      state.addresses[state.activeIndex].balance = parseFloat(
+        truncateBalance(action.payload)
+      );
+      state.addresses[state.activeIndex].status = GeneralStatus.Idle;
+    })
+    .addCase(fetchEthereumBalance.rejected, (state, action) => {
+      state.addresses[state.activeIndex].status = GeneralStatus.Failed;
+      console.error("Failed to fetch balance:", action.payload);
+    })
+    .addCase(fetchEthereumBalanceInterval.fulfilled, (state, action) => {
+      state.addresses[state.activeIndex].balance = parseFloat(
+        truncateBalance(action.payload)
+      );
+      state.addresses[state.activeIndex].status = GeneralStatus.Idle;
+    })
+    .addCase(fetchEthereumBalanceInterval.rejected, (state, action) => {
+      state.addresses[state.activeIndex].status = GeneralStatus.Failed;
+      console.error("Failed to fetch balance:", action.payload);
+    })
+    .addCase(fetchEthereumTransactions.pending, (state) => {
+      state.addresses[state.activeIndex].status = GeneralStatus.Loading;
+    })
+    .addCase(fetchEthereumTransactions.fulfilled, (state, action) => {
+      if (Array.isArray(action.payload)) {
+        state.addresses[state.activeIndex].failedNetworkRequest = false;
+        state.addresses[state.activeIndex].transactionMetadata.transactions = 
+          action.payload.map(tx => ({
+            uniqueId: tx.transactionHash,
+            hash: tx.transactionHash,
+            blockTime: new Date(tx.blockNumber * 1000).toISOString(), // Assuming blockNumber is a Unix timestamp
+            asset: 'ETH',
+            direction: tx.from.toLowerCase() === state.addresses[state.activeIndex].address.toLowerCase() ? 'out' : 'in',
+            from: tx.from,
+            to: tx.to,
+            value: tx.value,
+            blockNumber: tx.blockNumber,
+          }));
+      } else {
+        state.addresses[state.activeIndex].failedNetworkRequest = true;
+      }
+      state.addresses[state.activeIndex].status = GeneralStatus.Idle;
+    })
+    .addCase(fetchEthereumTransactions.rejected, (state, action) => {
+      state.addresses[state.activeIndex].status = GeneralStatus.Failed;
+      console.error("Failed to fetch transactions:", action.payload);
+    })
+    .addCase(fetchEthereumTransactionsInterval.fulfilled, (state, action) => {
+      if (Array.isArray(action.payload)) {
+        state.addresses[state.activeIndex].failedNetworkRequest = false;
+        state.addresses[state.activeIndex].transactionMetadata.transactions = 
+          action.payload;
+      } else {
+        state.addresses[state.activeIndex].failedNetworkRequest = true;
+      }
+      state.addresses[state.activeIndex].status = GeneralStatus.Idle;
+    })
+    .addCase(fetchEthereumTransactionsInterval.rejected, (state, action) => {
+      state.addresses[state.activeIndex].status = GeneralStatus.Failed;
+      console.error("Failed to fetch transactions:", action.payload);
+    })
+    .addCase(confirmEthereumTransaction.pending, (state, action) => {
+      const { txHash } = action.meta.arg;
+      const newConfirmation: TransactionConfirmation = {
+        txHash,
+        status: ConfirmationState.Pending,
+      };
+      state.addresses[state.activeIndex].transactionConfirmations.push(
+        newConfirmation
+      );
+    })
+    .addCase(confirmEthereumTransaction.fulfilled, (state, action) => {
+      const { txHash, confirmation } = action.payload;
+      const index = state.addresses[state.activeIndex]
+        .transactionConfirmations.findIndex((tx) => tx.txHash === txHash);
+      if (index !== -1) {
+        state.addresses[state.activeIndex].transactionConfirmations[index].status = 
+          confirmation ? ConfirmationState.Confirmed : ConfirmationState.Failed;
+      }
+    })
+    .addCase(confirmEthereumTransaction.rejected, (state, action) => {
+      const { txHash, error } = action.payload as any;
+      const index = state.addresses[state.activeIndex]
+        .transactionConfirmations.findIndex((tx) => tx.txHash === txHash);
+      if (index !== -1) {
+        state.addresses[state.activeIndex].transactionConfirmations[index].status = 
+          ConfirmationState.Failed;
+        state.addresses[state.activeIndex].transactionConfirmations[index].error = 
+          error;
+      }
+    })
+    .addCase(sendEthereumTransaction.pending, (state) => {
+      state.addresses[state.activeIndex].status = GeneralStatus.Loading;
+    })
+    .addCase(sendEthereumTransaction.fulfilled, (state, action) => {
+      state.addresses[state.activeIndex].status = GeneralStatus.Idle;
+      state.addresses[state.activeIndex].transactionConfirmations.push({
+        txHash: action.payload.hash,
+        status: ConfirmationState.Pending,
       });
-  },
+    })
+    .addCase(sendEthereumTransaction.rejected, (state, action) => {
+      state.addresses[state.activeIndex].status = GeneralStatus.Failed;
+      console.error("Failed to send transaction:", action.payload);
+    });
+},
+
 });
 
 export const {

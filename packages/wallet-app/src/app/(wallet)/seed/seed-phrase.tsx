@@ -80,13 +80,13 @@ export default function Page() {
   const { phrase, readOnly } = useLocalSearchParams();
   const seedPhraseParams = phrase ? (phrase as string).split(" ") : [];
   const [seedPhrase, setPhrase] = useState(seedPhraseParams);
-  const [buttonText, setButtonText] = useState("Copiar para área de transferêrencia");
+  const [buttonText, setButtonText] = useState("Copy to clipboard");
 
   const handleCopy = async () => {
     await Clipboard.setStringAsync(seedPhraseParams.join(" "));
     setButtonText("Copied!");
     setTimeout(() => {
-      setButtonText("Copiar para área de transferêrencia");
+      setButtonText("Copy to clipboard");
     }, 4000);
   };
 
@@ -105,10 +105,10 @@ export default function Page() {
       <ScrollView contentContainerStyle={{ paddingTop: 50 }}>
         <ContentContainer>
           <TextContainer>
-            <Title>Frase Secreta de Recuperação</Title>
+            <Title>Secret Recovery Phrase</Title>
             <Subtitle>
-            Só assim você poderá recuperar seu
-            conta. Por favor, guarde-o em algum lugar seguro!
+              This is the only way you will be able to recover your account.
+              Please store it somewhere safe!
             </Subtitle>
           </TextContainer>
           <SeedPhraseContainer>
@@ -135,7 +135,7 @@ export default function Page() {
                 params: { phrase: seedPhrase },
               })
             }
-            title="Ok, eu quero salvar"
+            title="Ok, I saved it"
           />
         </ButtonContainer>
       )}

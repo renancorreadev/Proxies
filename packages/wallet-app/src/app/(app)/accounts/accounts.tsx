@@ -232,20 +232,15 @@ const AccountsIndex = () => {
       const nextEthIndex = ethAccounts.length;
       const nextSolIndex = solAccounts.length;
       const phrase = await getPhrase();
-      const newEthWallet = await ethService.createWalletByIndex(
-        phrase,
-        nextEthIndex
-      );
-      const newSolWallet = await solanaService.createWalletByIndex(
-        phrase,
-        nextSolIndex
-      );
-
+  
+      const ethWalletData = await ethService.createWalletByIndex(phrase, nextEthIndex);
+      const solWalletData = await solanaService.createWalletByIndex(phrase, nextSolIndex);
+  
       const transformedEthWallet: AddressState = {
         accountName: `Account ${nextEthIndex + 1}`,
-        derivationPath: newEthWallet.derivationPath,
-        address: newEthWallet.address,
-        publicKey: newEthWallet.publicKey,
+        derivationPath: ethWalletData.derivationPath,
+        address: ethWalletData.address,
+        publicKey: ethWalletData.publicKey,
         balance: 0,
         transactionMetadata: {
           paginationKey: undefined,
@@ -255,11 +250,12 @@ const AccountsIndex = () => {
         status: GeneralStatus.Idle,
         transactionConfirmations: [],
       };
+  
       const transformedSolWallet: AddressState = {
         accountName: `Account ${nextSolIndex + 1}`,
-        derivationPath: newSolWallet.derivationPath,
-        address: newSolWallet.address,
-        publicKey: newSolWallet.publicKey,
+        derivationPath: solWalletData.derivationPath,
+        address: solWalletData.address,
+        publicKey: solWalletData.publicKey,
         balance: 0,
         transactionMetadata: {
           paginationKey: undefined,
@@ -269,7 +265,7 @@ const AccountsIndex = () => {
         status: GeneralStatus.Idle,
         transactionConfirmations: [],
       };
-
+  
       dispatch(updateEthereumAddresses(transformedEthWallet));
       dispatch(updateSolanaAddresses(transformedSolWallet));
     } catch (err) {
@@ -278,6 +274,7 @@ const AccountsIndex = () => {
       setWalletCreationLoading(false);
     }
   }, [dispatch]);
+  
 
   const setNextActiveAccounts = useCallback(
     (index: number) => {
@@ -373,9 +370,6 @@ const AccountsIndex = () => {
   );
 
   const fetchBalances = useCallback(async () => {
-    // TODO: Need to rethink how to calculate this. Possibly
-    // Have a price and wallet section in redux. Currently
-    // this causes too many re-renders
     try {
       const { ethereum, solana } = await compileAddressesConcurrently(
         ethAccounts,
@@ -434,7 +428,7 @@ const AccountsIndex = () => {
             >
               <PhraseTextContent>
                 <PhraseIcon width={25} height={25} fill={theme.colors.white} />
-                <SectionTitle>Frase Secreta de Recuperação</SectionTitle>
+                <SectionTitle>Secret Recovery Phrase</SectionTitle>
               </PhraseTextContent>
               <RightArrowIcon
                 width={25}

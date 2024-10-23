@@ -9,17 +9,21 @@ import {
   formatEther,
   parseEther,
   HDNodeWallet,
-  Mnemonic,
   AddressLike,
+  Contract,
+  Mnemonic,
+  formatUnits,
+  Log,
+  Interface,
 } from "ethers";
 import { validateMnemonic } from "bip39";
-import { Alchemy, Network } from "alchemy-sdk";
-import uuid from "react-native-uuid";
-import { truncateBalance } from "../utils/truncateBalance";
 
-interface ExtendedHDNodeWallet extends HDNodeWallet {
-  derivationPath: string;
-}
+// ABI para ERC-20
+const ERC20_ABI = [
+  "event Transfer(address indexed from, address indexed to, uint256 value)",
+  "function balanceOf(address owner) view returns (uint256)",
+  "function decimals() view returns (uint8)"
+];
 
 interface SendTransactionResponse {
   gasEstimate: string;
@@ -28,109 +32,27 @@ interface SendTransactionResponse {
   gasFee: bigint;
 }
 
-interface AssetTransferParams {
-  fromBlock: string;
-  excludeZeroValue: boolean;
-  withMetadata: boolean;
-  maxCount?: number;
-  toAddress?: string;
-  fromAddress?: string;
-  pageKey?: string;
-  category: string[];
-}
-
 class EthereumService {
-  private provider: JsonRpcProvider;
-  private webSocketProvider: WebSocketProvider;
-  private alchemy: Alchemy;
+  private readonly provider: JsonRpcProvider;
+  private readonly webSocketProvider: WebSocketProvider;
 
-  constructor(
-    private apiKey: string,
-    private ethUrl: string,
-    private socketUrl: string,
-    private environment: string
-  ) {
-    const network =
-      environment === "production" ? Network.ETH_MAINNET : Network.ETH_SEPOLIA;
-    this.provider = new JsonRpcProvider(ethUrl + apiKey);
-    this.webSocketProvider = new WebSocketProvider(socketUrl + apiKey);
-    this.alchemy = new Alchemy({
-      apiKey: apiKey,
-      network: network,
-    });
+  constructor() {
+    const rpcUrl = process.env.EXPO_PUBLIC_BESU_RPC_URL!;
+    const socketUrl = process.env.EXPO_PUBLIC_BESU_SOCKET_URL!;
+
+    this.provider = new JsonRpcProvider(rpcUrl);
+    this.webSocketProvider = new WebSocketProvider(socketUrl);
   }
 
   async createWallet(): Promise<HDNodeWallet> {
-    return new Promise((resolve, reject) => {
-      try {
-        const wallet = HDNodeWallet.createRandom();
-        resolve(wallet);
-      } catch (error) {
-        reject(new Error("Failed to create wallet: " + error.message));
-      }
-    });
+    return HDNodeWallet.createRandom();
   }
 
   async restoreWalletFromPhrase(mnemonicPhrase: string): Promise<HDNodeWallet> {
-    if (!mnemonicPhrase) {
-      throw new Error("Mnemonic phrase cannot be empty.");
-    }
-
     if (!validateMnemonic(mnemonicPhrase)) {
-      throw new Error("Invalid mnemonic phrase ");
+      throw new Error("Invalid mnemonic phrase");
     }
-
-    try {
-      const ethWallet = HDNodeWallet.fromPhrase(mnemonicPhrase);
-      return ethWallet;
-    } catch (error) {
-      throw new Error(
-        "Failed to restore wallet from mnemonic: " + (error as Error).message
-      );
-    }
-  }
-
-  async derivePrivateKeysFromPhrase(
-    mnemonicPhrase: string,
-    derivationPath: string
-  ) {
-    if (!mnemonicPhrase) {
-      throw new Error("Empty mnemonic phrase ");
-    }
-
-    if (!validateMnemonic(mnemonicPhrase)) {
-      throw new Error("Invalid mnemonic phrase ");
-    }
-
-    const mnemonic = Mnemonic.fromPhrase(mnemonicPhrase);
-    try {
-      const ethWallet = HDNodeWallet.fromMnemonic(mnemonic, derivationPath);
-      return ethWallet.privateKey;
-    } catch (error) {
-      throw new Error(
-        "Failed to derive wallet from mnemonic: " + (error as Error).message
-      );
-    }
-  }
-
-  async createWalletByIndex(
-    phrase: string,
-    index: number = 0
-    // TODO: Fix extending type
-  ): Promise<any> {
-    try {
-      const mnemonic = Mnemonic.fromPhrase(phrase);
-      const path = `m/44'/60'/0'/0/${index}`;
-      const wallet = HDNodeWallet.fromMnemonic(mnemonic, path);
-      return {
-        ...wallet,
-        derivationPath: path,
-      };
-    } catch (error) {
-      throw new Error(
-        "failed to create Ethereum wallet by index: " + (error as Error).message
-      );
-    }
+    return HDNodeWallet.fromPhrase(mnemonicPhrase);
   }
 
   async sendTransaction(
@@ -139,16 +61,13 @@ class EthereumService {
     value: string
   ): Promise<any> {
     const signer = new Wallet(privateKey, this.provider);
-    const transaction = {
-      to: toAddress,
-      value: parseEther(value),
-    };
+    const tx = { to: toAddress, value: parseEther(value) };
+
     try {
-      const response = await signer.sendTransaction(transaction);
-      return response;
-    } catch (error) {
-      console.error("Failed to send transaction:", error);
-      throw new Error("Failed to send transaction. Please try again later.");
+      return await signer.sendTransaction(tx);
+    } catch (error: any) {
+      console.error("Transaction failed:", error);
+      throw new Error("Failed to send transaction.");
     }
   }
 
@@ -156,160 +75,50 @@ class EthereumService {
     toAddress: string,
     amount: string
   ): Promise<SendTransactionResponse> {
-    const amountInWei = parseEther(amount.toString());
-    const transaction = {
-      to: toAddress,
-      value: amountInWei,
-    };
-    try {
-      // Estimate gas
-      const gasEstimate = await this.provider.estimateGas(transaction);
-      const gasFee = (await this.provider.getFeeData()).maxFeePerGas;
-      const gasPrice = BigInt(gasEstimate) * BigInt(gasFee);
+    const amountInWei = parseEther(amount);
+    const tx = { to: toAddress, value: amountInWei };
 
-      // Calculate total cost
-      const totalCost = amountInWei + gasPrice;
-      const totalCostMinusGas = amountInWei - gasPrice;
+    try {
+      const gasEstimate = await this.provider.estimateGas(tx);
+      const gasFee = (await this.provider.getFeeData()).maxFeePerGas!;
+      const gasPrice = gasEstimate * gasFee;
 
       return {
         gasEstimate: formatEther(gasPrice),
-        totalCost: formatEther(totalCost),
-        totalCostMinusGas: formatEther(totalCostMinusGas),
+        totalCost: formatEther(amountInWei + gasPrice),
+        totalCostMinusGas: formatEther(amountInWei - gasPrice),
         gasFee,
       };
     } catch (error) {
-      console.error("Failed to calculate gas:", error);
-      throw new Error("Unable to calculate gas. Please try again later.");
+      console.error("Gas calculation failed:", error);
+      throw new Error("Unable to calculate gas.");
     }
   }
 
-  async fetchTransactions(address: string, pageKeys?: string[]): Promise<any> {
-    const paramsBuilder = (): AssetTransferParams => ({
-      fromBlock: "0x0",
-      excludeZeroValue: true,
-      withMetadata: true,
-      category: [
-        "internal",
-        "external",
-        "erc20",
-        "erc721",
-        "erc1155",
-        "specialnft",
-      ],
-    });
+  async getERC20Balance(walletAddress: AddressLike): Promise<{ balance: string }> {
+    const contractAddress = process.env.EXPO_PUBLIC_ERC20_CONTRACT_ADDRESS!;
+    const contract = new Contract(contractAddress, ERC20_ABI, this.provider);
 
-    const sentParams = paramsBuilder();
-    const receivedParams = paramsBuilder();
+    try {
+      const balance: bigint = await contract.balanceOf(walletAddress);
+      const decimals: number = await contract.decimals();
 
-    if (pageKeys && pageKeys.length === 2) {
-      sentParams.pageKey = pageKeys[0];
-      receivedParams.pageKey = pageKeys[1];
+      const formattedBalance = formatUnits(balance, decimals);
+      const balanceWithTwoDecimals = parseFloat(formattedBalance).toFixed(2);
+
+      return { balance: balanceWithTwoDecimals };
+    } catch (error) {
+      console.error("Failed to fetch ERC-20 balance:", error);
+      throw new Error("Unable to fetch token balance.");
     }
-
-    sentParams.fromAddress = address;
-    receivedParams.toAddress = address;
-
-    const sentTransfers = await this.alchemy.core.getAssetTransfers(
-      // @ts-ignore
-      sentParams
-    );
-    const receivedTransfers = await this.alchemy.core.getAssetTransfers(
-      // @ts-ignore
-      receivedParams
-    );
-
-    const transformTransfers = (txs: any, direction: any) =>
-      txs.map((tx: any) => ({
-        ...tx,
-        uniqueId: uuid.v4(),
-        value: parseFloat(truncateBalance(tx.value)),
-        blockTime: new Date(tx.metadata.blockTimestamp).getTime() / 1000,
-        direction,
-      }));
-
-    const allTransfers = [
-      ...transformTransfers(sentTransfers.transfers, "sent"),
-      ...transformTransfers(receivedTransfers.transfers, "received"),
-    ].sort((a, b) => b.blockTime - a.blockTime);
-
-    return {
-      transferHistory: allTransfers,
-      paginationKey: [sentTransfers.pageKey, receivedTransfers.pageKey],
-    };
-  }
-
-  validateAddress(address: string): boolean {
-    return isAddress(address);
-  }
-
-  async findNextUnusedWalletIndex(phrase: string, index: number = 0) {
-    if (!phrase) {
-      throw new Error("Empty mnemonic phrase ");
-    }
-
-    if (!validateMnemonic(phrase)) {
-      throw new Error("Invalid mnemonic phrase ");
-    }
-
-    let currentIndex = index;
-    const mnemonic = Mnemonic.fromPhrase(phrase);
-
-    while (true) {
-      const path = `m/44'/60'/0'/0/${currentIndex}`;
-      const wallet = HDNodeWallet.fromMnemonic(mnemonic, path);
-
-      const transactions = await this.fetchTransactions(wallet.address);
-      if (transactions.transferHistory.length === 0) {
-        break;
-      }
-      currentIndex += 1;
-    }
-
-    return currentIndex > 0 ? currentIndex + 1 : 0;
-  }
-
-  async importAllActiveAddresses(mnemonicPhrase: string, index?: number) {
-    if (index) {
-      const usedAddresses = await this.collectedUsedAddresses(
-        mnemonicPhrase,
-        index
-      );
-      return usedAddresses;
-    } else {
-      const unusedAddressIndex = await this.findNextUnusedWalletIndex(
-        mnemonicPhrase
-      );
-      const usedAddresses = await this.collectedUsedAddresses(
-        mnemonicPhrase,
-        unusedAddressIndex
-      );
-      return usedAddresses;
-    }
-  }
-
-  async collectedUsedAddresses(phrase: string, unusedIndex: number) {
-    const startingIndex = unusedIndex > 0 ? unusedIndex - 1 : unusedIndex;
-    const mnemonic = Mnemonic.fromPhrase(phrase);
-    const addressesUsed = [];
-
-    for (let i = 0; i <= startingIndex; i++) {
-      const path = `m/44'/60'/0'/0/${i}`;
-      const wallet = HDNodeWallet.fromMnemonic(mnemonic, path);
-      const walletWithDetails = {
-        ...wallet,
-        derivationPath: path,
-      };
-      addressesUsed.push(walletWithDetails);
-    }
-
-    return addressesUsed;
   }
 
   async getBalance(address: AddressLike): Promise<bigint> {
     try {
-      return this.provider.getBalance(address);
-    } catch (err) {
-      console.error("Error fetching balance:", err);
+      return await this.provider.getBalance(address);
+    } catch (error) {
+      console.error("Balance fetch failed:", error);
+      throw new Error("Unable to fetch balance.");
     }
   }
 
@@ -318,25 +127,97 @@ class EthereumService {
       const receipt = await this.provider.waitForTransaction(txHash);
       return receipt.status === 1;
     } catch (error) {
-      console.error("Error confirming Ethereum transaction:", error);
+      console.error("Transaction confirmation failed:", error);
       return false;
     }
+  }
+
+  validateAddress(address: string): boolean {
+    return isAddress(address);
+  }
+
+  getProvider() {
+    return this.provider;
   }
 
   getWebSocketProvider() {
     return this.webSocketProvider;
   }
 
-  getProvider() {
-    return this.provider;
+  private async resolveAddress(address: AddressLike): Promise<string> {
+    if (typeof address === "string") return address;
+    if ("getAddress" in address && typeof address.getAddress === "function") {
+      return await address.getAddress();
+    }
+    throw new Error("Invalid address type");
   }
+
+  async createWalletByIndex(
+    phrase: string,
+    index = 0
+  ): Promise<{ address: string; publicKey: string; derivationPath: string }> {
+    if (!validateMnemonic(phrase)) {
+      throw new Error("Invalid mnemonic phrase");
+    }
+
+    const mnemonic = Mnemonic.fromPhrase(phrase);
+    const derivationPath = `m/44'/60'/0'/0/${index}`;
+
+    try {
+      const wallet = HDNodeWallet.fromMnemonic(mnemonic, derivationPath);
+      return {
+        address: await wallet.getAddress(),
+        publicKey: wallet.publicKey,
+        derivationPath,
+      };
+    } catch (error: any) {
+      throw new Error(`Failed to create wallet by index: ${error.message}`);
+    }
+  }
+
+  async fetchERC20Transfers(walletAddress: string) {
+    const contractAddress = process.env.EXPO_PUBLIC_ERC20_CONTRACT_ADDRESS!;
+    const iface = new Interface(ERC20_ABI);
+  
+    const eventFragment = iface.getEvent("Transfer");
+    const topic = eventFragment.topicHash;
+  
+    const latestBlock = await this.provider.getBlockNumber();
+    const blockRange = 5000;
+    const logs: Log[] = [];
+  
+    try {
+      for (let fromBlock = 0; fromBlock <= latestBlock; fromBlock += blockRange) {
+        const toBlock = Math.min(fromBlock + blockRange - 1, latestBlock);
+        const filter = {
+          address: contractAddress,
+          topics: [topic, null, `0x${walletAddress.slice(2).padStart(64, "0")}`],
+          fromBlock,
+          toBlock,
+        };
+        const partialLogs = await this.provider.getLogs(filter);
+        logs.push(...partialLogs);
+      }
+  
+      return logs.map((log) => {
+        const parsedLog = iface.parseLog(log);
+        const { from, to, value } = parsedLog.args;
+        return {
+          from,
+          to,
+          value: parseFloat(formatUnits(value, 18)).toFixed(2),
+          blockNumber: log.blockNumber,
+          transactionHash: log.transactionHash,
+        };
+      });
+    } catch (error) {
+      console.error("Failed to fetch ERC-20 transfers:", error);
+      throw new Error("Unable to fetch transactions.");
+    }
+  }
+  
+  
 }
 
-const ethService = new EthereumService(
-  process.env.EXPO_PUBLIC_ALCHEMY_ETH_KEY,
-  process.env.EXPO_PUBLIC_ALCHEMY_ETH_URL,
-  process.env.EXPO_PUBLIC_ALCHEMY_SOCKET_URL,
-  process.env.EXPO_PUBLIC_ENVIRONMENT
-);
-
+const ethService = new EthereumService();
 export default ethService;
