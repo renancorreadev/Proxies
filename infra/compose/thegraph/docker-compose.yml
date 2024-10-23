@@ -1,4 +1,3 @@
-
 services:
   ipfs:
     image: ipfs/go-ipfs:v0.9.1
@@ -13,7 +12,8 @@ services:
       POSTGRES_USER: graph
       POSTGRES_PASSWORD: letmein
       POSTGRES_DB: graph
-      LANG: C  # Definindo a collation correta
+      LC_COLLATE: C  # Configuração correta de collation
+      LC_CTYPE: C
     ports:
       - '5433:5432'
     volumes:
@@ -36,15 +36,15 @@ services:
       postgres_user: graph
       postgres_pass: letmein
       postgres_db: graph
-      ipfs: 'ipfs:5001'
-      ethereum: 'http://besu:8545'  # Apontando para o Besu existente
+      ipfs: 'http://ipfs:5001'
+      ethereum: 'private:http://bootnode:8545'  # Corrigido para 'bootnode'
     networks:
       - protocol
-
-networks:
-  protocol:
-    external: true 
 
 volumes:
   pgdata:
     driver: local
+
+networks:
+  protocol:
+    external: true
