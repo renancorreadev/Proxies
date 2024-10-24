@@ -86,6 +86,23 @@ const Circle = styled.View<{ theme: ThemeType }>`
   margin-right: ${(props) => props.theme.spacing.large};
 `;
 
+const InfoButtonPrivateKey = () => {
+  const theme = useTheme();
+  return (
+    <InfoButtonContainer
+      onPress={() => router.push(ROUTES.walletImportPrivateKey)}
+    >
+      <Circle>
+        <ImportWalletIcon width={25} height={25} fill={theme.colors.white} />
+      </Circle>
+      <InfoTextContainer>
+        <InfoButtonText>Import Private Key</InfoButtonText>
+        <InfoText>Import a wallet using a private key</InfoText>
+      </InfoTextContainer>
+    </InfoButtonContainer>
+  );
+};
+
 const InfoButton = () => {
   const theme = useTheme();
   return (
@@ -106,25 +123,26 @@ const InfoButton = () => {
 export default function WalletSetup() {
   return (
     <SafeAreaContainer>
-      <ContentContainer>
-        <ImageContainer>
-          <ExpoImage
-            source={require("../../../assets/images/import_wallet.png")}
-            contentFit="cover"
-          />
-        </ImageContainer>
+    <ContentContainer>
+      <ImageContainer>
+        <ExpoImage
+          source={require("../../../assets/images/import_wallet.png")}
+          contentFit="cover"
+        />
+      </ImageContainer>
 
-        <TextContainer>
-          <Title>Import a wallet</Title>
-          <Subtitle>
-            Import an existing wallet with your secret phrase or with your
-            private key
-          </Subtitle>
-        </TextContainer>
-        <ButtonContainer>
-          <InfoButton />
-        </ButtonContainer>
-      </ContentContainer>
-    </SafeAreaContainer>
+      <TextContainer>
+        <Title>Import a wallet</Title>
+        <Subtitle>
+          Import an existing wallet with your secret phrase or private key
+        </Subtitle>
+      </TextContainer>
+
+      <ButtonContainer>
+        <InfoButton />
+        <InfoButtonPrivateKey /> 
+      </ButtonContainer>
+    </ContentContainer>
+  </SafeAreaContainer>
   );
 }

@@ -7,6 +7,7 @@ export interface Routes {
   confirmSeedPhrase: string;
   restoreSeedPhrase: string;
   walletImportSeedPhrase: string;
+  walletImportPrivateKey: string;
   biometrics: string;
   sendOptions: string;
   send: string;
@@ -33,6 +34,7 @@ export const ROUTES: Routes = {
   confirmSeedPhrase: "(wallet)/seed/confirm-seed-phrase",
   restoreSeedPhrase: "(wallet)/seed/restore-seed-phrase",
   walletImportSeedPhrase: "(wallet)/seed/wallet-import-seed-phrase",
+  walletImportPrivateKey: "(wallet)/setup/wallet-import-private-key",
   biometrics: "(wallet)/biometrics",
   sendOptions: "/token/send/send-options",
   send: "/token/send",

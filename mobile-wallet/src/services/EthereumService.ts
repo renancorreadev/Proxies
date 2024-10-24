@@ -13,9 +13,13 @@ import {
   Contract,
   Mnemonic,
   formatUnits,
+  toUtf8Bytes,
+  hashMessage,
 } from "ethers";
+
 import { validateMnemonic } from "bip39";
 import axios from "axios";
+import { getPublicKey } from "ed25519-hd-key";
 
 // ABI para ERC-20
 const ERC20_ABI = [
@@ -299,9 +303,31 @@ class EthereumService {
       throw new Error("Não foi possível transferir os tokens ERC-20.");
     }
   }
-  
 
- 
+
+  async importWalletFromPrivateKey(
+    privateKey: string
+  ): Promise<{ address: string; publicKey: string }> {
+    try {
+      const wallet = new Wallet(privateKey); // Cria a wallet
+
+      const address = wallet.address; // Recupera o endereço
+
+      // Remove o prefixo '0x' da chave privada e converte para bytes
+      const privateKeyBytes = Buffer.from(privateKey.replace(/^0x/, ""), "hex");
+
+      // Deriva a chave pública a partir dos bytes da chave privada
+      const publicKeyBytes = getPublicKey(privateKeyBytes, false); // 'false' para chave não compactada
+
+      // Converte a chave pública para hexadecimal
+      const publicKeyHex = `0x${Buffer.from(publicKeyBytes).toString("hex")}`;
+
+      return { address, publicKey: publicKeyHex };
+    } catch (error: any) {
+      console.error("Failed to import wallet from private key:", error);
+      throw new Error("Invalid private key or import failed.");
+    }
+  }
 
 }
   

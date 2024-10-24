@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Dimensions, Keyboard, ScrollView, Platform } from "react-native";
-import { SafeAreaView } from "react-native";
-import { router } from "expo-router";
+import { Dimensions, Keyboard, ScrollView, Platform, SafeAreaView } from "react-native";
+
+import  router  from "expo-router";
 import { useDispatch } from "react-redux";
 import styled from "styled-components/native";
 import { useTheme } from "styled-components";
@@ -239,6 +239,9 @@ export default function Page() {
       captionsInterval();
     }
   };
+
+
+  
 
   return (
     <SafeAreaContainer>
