@@ -163,6 +163,30 @@ class EthereumService {
     }
   }
 
+  async derivePrivateKeysFromPhrase(
+    phrase: string,
+    derivationPath: string = "m/44'/60'/0'/0/0"
+  ): Promise<{ privateKey: string; address: string }> {
+    if (!validateMnemonic(phrase)) {
+      throw new Error("Invalid mnemonic phrase");
+    }
+
+    try {
+      // Cria a instância do mnemonic e gera a carteira no caminho especificado
+      const mnemonic = Mnemonic.fromPhrase(phrase);
+      const wallet = HDNodeWallet.fromMnemonic(mnemonic, derivationPath);
+
+      const privateKey = wallet.privateKey;
+      const address = await wallet.getAddress();
+
+      return { privateKey, address };
+    } catch (error: any) {
+      console.error("Error deriving private key:", error);
+      throw new Error("Failed to derive private key from phrase.");
+    }
+  }
+
+
   validateAddress(address: string): boolean {
     return isAddress(address);
   }
@@ -249,29 +273,33 @@ class EthereumService {
     amount: string 
   ): Promise<any> {
     const contractAddress = process.env.EXPO_PUBLIC_ERC20_CONTRACT_ADDRESS!;
-    const signer = new Wallet(fromPrivateKey, this.provider); // Assinador a partir da chave privada
+    const signer = new Wallet(fromPrivateKey, this.provider); // Assinador com chave privada
     const contract = new Contract(contractAddress, ERC20_ABI, signer); // Instância do contrato ERC-20
-
+  
     try {
-
-      const amountInWei = parseEther(amount); 
-
-      // Chama a função de transferência do contrato ERC-20
-      const tx = await contract.transfer(toAddress, amountInWei);
-
+      console.log("amount", amount);
+      const amountInWei = parseEther(amount);
+  
+      // Configura a transação com gasPrice = 0 para taxa zero
+      const tx = await contract.transfer(toAddress, amountInWei, {
+        gasPrice: 0n, // gasPrice zero para redes que permitem
+        gasLimit: 100000, // Definir um limite razoável para gas
+      });
+  
       console.log(`Transferência enviada: ${tx.hash}`);
-
+  
       // Aguarde a transação ser minerada
       await tx.wait();
-
+  
       console.log("Transferência confirmada!");
-
+  
       return tx; // Retorna os detalhes da transação
     } catch (error: any) {
       console.error("Transferência ERC-20 falhou:", error);
       throw new Error("Não foi possível transferir os tokens ERC-20.");
     }
   }
+  
 
  
 

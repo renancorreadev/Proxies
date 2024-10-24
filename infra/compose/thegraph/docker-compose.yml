@@ -1,5 +1,6 @@
 services:
   ipfs:
+    container_name: ipfs
     image: ipfs/go-ipfs:v0.9.1
     ports:
       - '5001:5001'
@@ -7,21 +8,23 @@ services:
       - protocol
 
   postgres-graph:
+    container_name: postgres-graph
     image: postgres:13
     environment:
       POSTGRES_USER: graph
       POSTGRES_PASSWORD: letmein
       POSTGRES_DB: graph
-      LC_COLLATE: C  # Configuração correta de collation
-      LC_CTYPE: C
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
     ports:
       - '5433:5432'
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - protocol
 
   graph-node:
+    container_name: graph-node
     image: graphprotocol/graph-node
     ports:
       - '8000:8000'
@@ -37,7 +40,7 @@ services:
       postgres_pass: letmein
       postgres_db: graph
       ipfs: 'http://ipfs:5001'
-      ethereum: 'private:http://bootnode:8545'  # Corrigido para 'bootnode'
+      ethereum: 'private:http://bootnode:8545'
     networks:
       - protocol
 
