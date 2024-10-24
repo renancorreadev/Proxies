@@ -266,13 +266,11 @@ export default function SendPage() {
     errors: Record<string, string>
   ) => {
     if (chainName === Chains.Ethereum) {
-      const { totalCostMinusGas } = await ethService.calculateGasAndAmounts(
-        toAddress,
-        amount.toString()
-      );
-      if (totalCostMinusGas > tokenBalance) {
-        errors.amount = "Insufficient funds for amount plus gas costs";
-      }
+      const totalCostMinusGas = 0;
+
+      // if (totalCostMinusGas > tokenBalance) {
+      //   errors.amount = "Insufficient funds for amount plus gas costs";
+      // }
     } else if (chainName === Chains.Solana) {
       const transactionFeeLamports =
         await solanaService.calculateTransactionFee(address, toAddress, amount);
@@ -403,22 +401,18 @@ export default function SendPage() {
                       keyboardType="numeric"
                     />
                     <AmountDetailsView>
-                      <TickerText>{ticker}</TickerText>
+                      <TickerText>Drex</TickerText>
                       <MaxButton
                         onPress={() =>
-                          calculateMaxAmount(
-                            setFieldValue,
-                            tokenBalance,
-                            values.address
-                          )
+                          console.log("Max button pressed")
                         }
-                      >
+                      > 
                         <MaxText>Max</MaxText>
                       </MaxButton>
                     </AmountDetailsView>
                   </AmountTextInputContainer>
                 </TextView>
-                {errors.amount && <ErrorText>{errors.amount}</ErrorText>}
+                {/* {errors.amount && <ErrorText>{errors.amount}</ErrorText>} */}
                 <TransactionDetailsContainer>
                   <TransactionDetailsText>
                     {renderDollarAmount(values.amount)}

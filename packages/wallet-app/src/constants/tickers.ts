@@ -1,4 +1,4 @@
 export const TICKERS = {
-  ethereum: "ETH",
+  drex: "Drex",
   solana: "SOL",
 };

@@ -118,7 +118,7 @@ export const fetchEthereumTransactionsInterval = createAsyncThunk(
         uniqueId: tx.transactionHash,
         hash: tx.transactionHash,
         blockTime: tx.blockTimestamp, 
-        asset: "ETH",
+        asset: "Drex",
         direction: tx.from.toLowerCase() === address.toLowerCase() ? "out" : "in",
         from: tx.from,
         to: tx.to,

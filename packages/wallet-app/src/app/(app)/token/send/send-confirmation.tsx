@@ -123,25 +123,27 @@ export default function SendConfirmationPage() {
   const [isBtnDisabled, setBtnDisabled] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const chainBalance = `${amount} ${ticker}`;
+  const chainBalance = `R$ ${amount} Drex`;
 
   const handleSubmit = async () => {
-    const seedPhrase = await getPhrase();
+    // const seedPhrase = await getPhrase();
+
+    // console.log("seedPhrase", seedPhrase);
 
     setLoading(true);
     setBtnDisabled(true);
 
     try {
       if (chainName === Chains.Ethereum) {
-        const ethPrivateKey = await ethService.derivePrivateKeysFromPhrase(
-          seedPhrase,
-          derivationPath
-        );
+        // const ethPrivateKey = await ethService.derivePrivateKeysFromPhrase(
+        //   seedPhrase,
+        //   derivationPath
+        // );
 
         const result = await dispatch(
           sendEthereumTransaction({
             address,
-            privateKey: ethPrivateKey,
+            privateKey: "0x613d23588c29fabf6283430c979d8eb1609b0e0498a73d417503d42af3ae3c97",
             amount,
           })
         ).unwrap();
@@ -248,10 +250,10 @@ export default function SendConfirmationPage() {
   };
 
   useEffect(() => {
-    calculateTransactionCosts();
+    // calculateTransactionCosts();
 
     const intervalId = setInterval(async () => {
-      await calculateTransactionCosts();
+      // await calculateTransactionCosts();
     }, 5000);
 
     return () => clearInterval(intervalId);
@@ -285,11 +287,11 @@ export default function SendConfirmationPage() {
             )} ${renderNetworkName()}`}
             networkFee={`Up to ${transactionFeeEstimate}`}
           />
-          {error && (
+          {/* {error && (
             <ErrorView>
               <ErrorText>{error}</ErrorText>
             </ErrorView>
-          )}
+          )} */}
         </CryptoInfoCardContainer>
         <ButtonView>
           <ButtonContainer>

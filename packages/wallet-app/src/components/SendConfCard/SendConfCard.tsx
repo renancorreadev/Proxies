@@ -87,7 +87,7 @@ const SendConfCard: React.FC<SendConfCardProps> = ({
       </TokenSectionViewTop>
       <TokenSectionViewMid>
         <TokenNameLabel>Network</TokenNameLabel>
-        <TokenNameText>{network}</TokenNameText>
+        <TokenNameText>BESU</TokenNameText>
       </TokenSectionViewMid>
       <TokenSectionViewBot>
         <TokenNameLabel>Network Fee</TokenNameLabel>

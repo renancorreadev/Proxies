@@ -397,7 +397,7 @@ export default function Index() {
         <ContentContainer>
           <BalanceContainer>
             <BalanceTokenText>
-              {tokenBalance} {ticker}
+              {tokenBalance} $Drex
             </BalanceTokenText>
             <BalanceUsdText>{formatDollar(usdBalance)}</BalanceUsdText>
           </BalanceContainer>
@@ -422,12 +422,12 @@ export default function Index() {
               btnText="Receive"
             />
           </ActionContainer>
-          <SectionTitle>About {capitalizeFirstLetter(chainName)}</SectionTitle>
+          <SectionTitle>About Drex</SectionTitle>
           <CryptoInfoCardContainer>
             <TokenInfoCard
-              tokenName={capitalizeFirstLetter(chainName)}
-              tokenSymbol={ticker}
-              network={capitalizeFirstLetter(chainName)}
+              tokenName={"Drex"}
+              tokenSymbol={"DREX"}
+              network={"BESU"}
             />
           </CryptoInfoCardContainer>
         </ContentContainer>

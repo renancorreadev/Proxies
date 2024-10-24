@@ -3160,7 +3160,7 @@ export default function Index() {
 
   const urlBuilder = (hash: string, asset: string) => {
     let url: string;
-    if (asset.toLowerCase() === TICKERS.ethereum.toLowerCase()) {
+    if (asset.toLowerCase() === TICKERS.drex.toLowerCase()) {
       url = `https://sepolia.etherscan.io/tx/${hash}`;
     } else {
       url = `https://explorer.solana.com/?cluster=testnet/tx/${hash}`;
@@ -3174,7 +3174,7 @@ export default function Index() {
     }
     const isSolana = item.asset.toLowerCase() === TICKERS.solana.toLowerCase();
     const isEthereum =
-      item.asset.toLowerCase() === TICKERS.ethereum.toLowerCase();
+      item.asset.toLowerCase() === TICKERS.drex.toLowerCase();
     const Icon = isSolana ? SolanaIcon : EthereumPlainIcon;
     const sign = item.direction === "received" ? "+" : "-";
     if (isSolana) {
@@ -3383,7 +3383,7 @@ export default function Index() {
                 <CryptoInfoCard
                   onPress={() => router.push(ROUTES.ethDetails)}
                   title="Ethereum"
-                  caption={`${ethBalance} ETH`}
+                  caption={`${ethBalance} Drex`}
                   details={formatDollar(ethUsd)}
                   icon={
                     <EthereumIcon

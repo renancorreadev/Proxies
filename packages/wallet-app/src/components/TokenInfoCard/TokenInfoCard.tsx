@@ -88,7 +88,7 @@ const TokenInfoCard: React.FC<TokenInfoCardProps> = ({
   const ethPrice = prices.ethereum.usd;
 
   const findTokenPrice = (tokenSymbol: string) => {
-    if (tokenSymbol === "ETH") {
+    if (tokenSymbol === "Drex") {
       return ethPrice;
     } else if (tokenSymbol === "SOL") {
       return solPrice;
