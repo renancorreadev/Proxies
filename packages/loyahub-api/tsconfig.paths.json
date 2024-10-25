@@ -1,0 +1,40 @@
+{
+	"compilerOptions": {
+		"baseUrl": "../",
+		"paths": {
+			"@smart-contracts/*": [
+				"./smart-contracts/typechain/*"
+			],
+			"@smart-contracts": [
+				"./smart-contracts/typechain"
+			],
+			"@helper/*": [
+				"./loyahub-api/src/helper/*"
+			],
+			"@config/*": [
+				"./loyahub-api/src/config/*"
+			],
+			"@/*": [
+				"./loyahub-api/*"
+			],
+			"@src/*": [
+				"./loyahub-api/src/*"
+			],
+			"@modules/*": [
+				"./loyahub-api/src/modules/*"
+			],
+			"@client-manager-contract-types/*": [
+				"./loyahub-api/src/helper/blockchain/types/contracts/client-manager-types.ts"
+			],
+			"@client-manager-connector/*": [
+				"./loyahub-api/src/helper/blockchain/types/contracts/client-manager-types.ts"
+			],
+			"@metadata/*": [
+				"./loyahub-api/src/modules/Metadata/*"
+			],
+			"@user/*": [
+				"./loyahub-api/src/modules/User/*"
+			]
+		}
+	}
+}

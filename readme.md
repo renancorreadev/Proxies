@@ -1,6 +1,6 @@
 # Customer Rewards Blockchain
 
-- [Customer Rewards Blockchain](#customer-rewards-blockchain)
+- [Customer Rewards Blockchain](#loyahub-blockchain)
   - [Visão Geral](#visão-geral)
   - [Auto Code Review GPT](#auto-code-review-gpt)
   - [Interação com a Blockchain](#interação-com-a-blockchain)
@@ -16,6 +16,12 @@
   - [🧠 Ideias para Explorar](#-ideias-para-explorar)
   - [🛠️ Melhorias Futuras](#️-melhorias-futuras)
   - [📚 Documentação](#-documentação)
+
+Escopo do projeto: 
+
+
+
+
 
 
 ## Visão Geral
@@ -133,11 +139,11 @@ monoRepo/
 ├─ packages/
 │    ├── blockchain-service
 │    │   ├── package.json
-│    ├── customer-rewards-api
+│    ├── loyahub-api
 │    │   ├── package.json
-│    ├── customer-rewards-admin-ui
+│    ├── loyahub-admin-ui
 │    │   ├── package.json
-│    ├── customer-rewards-ui
+│    ├── loyahub-ui
 │    │   ├── package.json
 │    ├── smart-contracts
 │    │   ├── package.json
@@ -155,12 +161,12 @@ monoRepo/
 
 ```json
  "scripts": {
-    "start:dev": "lerna run --parallel --stream dev --scope customer-rewards-api --scope customer-rewards-ui --scope blockchain-service",
-    "dev": "lerna run --parallel --stream dev --scope customer-rewards-api --scope customer-rewards-ui",
+    "start:dev": "lerna run --parallel --stream dev --scope loyahub-api --scope loyahub-ui --scope blockchain-service",
+    "dev": "lerna run --parallel --stream dev --scope loyahub-api --scope loyahub-ui",
     "sc": "lerna run --scope smart-contracts compile",
     "bs": "lerna run --scope blockchain-service --stream dev",
-    "api": "lerna run --scope customer-rewards-api --stream dev",
-    "ui": "lerna run --scope customer-rewards-ui --stream dev",
+    "api": "lerna run --scope loyahub-api --stream dev",
+    "ui": "lerna run --scope loyahub-ui --stream dev",
     "clean": "lerna run clean",
     "build": "pnpm recursive run build",
     "test": "pnpm recursive run test"
@@ -186,18 +192,18 @@ monoRepo/
 - blockchain-service
   - [ ] Integrar banco de dados PostGree no Micro Serviço Go
 
-- customer-rewards-admin-ui 
+- loyahub-admin-ui 
   - [ ] Implementar Elastick Search para monitoramento de eventos 
   - [ ] Implementar Grafana para visualização de logs em tempo real da infraestrutura
 
-- customer-rewards-api
+- loyahub-api
   - [ ] Implementar novas rotas para interagir com os contratos inteligentes 
   - [ ] Configurar e implementar WebSocket para eventos 
   - [ ] Configurar e implementar Prometheus para Kafta
   - [ ] Configurar e implementar Apache Kafta 
   - [ ] Confiturar e implementar Grafana 
 
-- customer-rewards-ui
+- loyahub-ui
 
 
 - smart-contracts

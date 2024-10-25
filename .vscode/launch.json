@@ -5,12 +5,11 @@
 		"type": "node",
 		"request": "launch",
 		"name": "Debug Nest Framework Main",
-		"program": "${workspaceFolder}/packages/customer-rewards-api/src/main.ts",
+		"program": "${workspaceFolder}/packages/loyahub-api/src/main.ts",
 		"sourceMaps": true,
-		"envFile": "${workspaceFolder}/packages/customer-rewards-api/.env",
-		"cwd": "${workspaceFolder}/packages/customer-rewards-api",
+		"envFile": "${workspaceFolder}/packages/loyahub-api/.env",
+		"cwd": "${workspaceFolder}/packages/loyahub-api",
 		"console": "integratedTerminal",
-		"protocol": "inspector"
 		},
 	]
 }
