@@ -6,7 +6,7 @@
   "scripts": {
     "run-infra": "bash scripts/run-infra.sh",
     "stop-infra": "bash scripts/stop-infra.sh",
-   "start:full": "lerna run --parallel --stream --no-bail dev --scope loyahub-api --scope loyahub-blockchain-service --scope loyahub-admin-ui --scope loyahub-app",
+    "start:full": "lerna run --parallel --stream --no-bail dev --scope loyahub-api --scope loyahub-blockchain-service --scope loyahub-admin-ui --scope loyahub-app --scope loyahub-doc",
     "start:dev": "lerna run --parallel --stream dev --scope loyahub-api --scope loyahub-blockchain-service",
     "bs:download": "lerna run --scope loyahub-blockchain-service --stream download",
     "bs": "lerna run --scope loyahub-blockchain-service --stream dev --ignore-missing ",
@@ -28,7 +28,8 @@
     "clean": "lerna run clean",
     "clear": "rm -rf node_modules && rm -rf packages/loyahub-api/node_modules && rm -rf packages/loyahub-app/node_modules && packages/loyahub-smart-contracts/node_modules && rm -rf packages/loyahub-admin-ui/node_modules",
     "build": "pnpm recursive run build",
-    "test": "pnpm recursive run test"
+    "test": "pnpm recursive run test",
+    "link": "lerna bootstrap"
   },
   "keywords": [],
   "author": "",
