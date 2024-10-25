@@ -1,0 +1,8 @@
+{
+    "label": "Vault",
+    "position": 4,
+    "link": {
+      "type": "generated-index",
+      "description": "Vault is a tool for managing secrets in the LoyaHub project"
+    }
+  }

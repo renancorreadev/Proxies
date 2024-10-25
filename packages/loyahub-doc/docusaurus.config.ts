@@ -18,12 +18,12 @@ const config: Config = {
       },
     },
   },  
-  title: 'Customer Rewards Blockchain',
-  tagline: 'Dinosaurs are cool',
+  title: 'LoyaHub Blockchain',
+  tagline: 'A Blockchain for the Future',
   favicon: 'img/favicon.svg',
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-site.example.com',
+  url: 'http://localhost:2000',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -31,7 +31,7 @@ const config: Config = {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  projectName: 'LoyaHub', // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -59,6 +59,7 @@ const config: Config = {
   themeConfig: {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
+    hideOnScroll: false, 
     navbar: {
       title: 'LoyaHub',
       logo: {
@@ -72,6 +73,13 @@ const config: Config = {
           sidebarId: 'aboutSidebar',
           position: 'left',
           label: 'About',
+        },
+        {
+          type: 'docSidebar',
+          to: '/infrasctruture',
+          sidebarId: 'infrastructureSidebar',
+          position: 'left',
+          label: 'Infrastructure',
         },
         // {to: '/blog', label: 'Blog', position: 'left'},
   

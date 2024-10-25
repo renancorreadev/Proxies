@@ -1,0 +1,8 @@
+{
+    "label": "TheGraph",
+    "position": 5,
+    "link": {
+      "type": "generated-index",
+      "description": "TheGraph is a decentralized data indexing platform for blockchain data"
+    }
+  }
