@@ -1,5 +1,9 @@
 # Customer Rewards Blockchain
 
+```shell
+pnpm install --recursive
+
+```
 - [Customer Rewards Blockchain](#loyahub-blockchain)
   - [Visão Geral](#visão-geral)
   - [Auto Code Review GPT](#auto-code-review-gpt)
