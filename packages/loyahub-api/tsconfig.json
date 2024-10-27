@@ -30,7 +30,7 @@
 	],
 	"references": [
 		{
-			"path": "../smart-contracts"
+			"path": "../loyahub-smart-contracts"
 		}
 	]
 }

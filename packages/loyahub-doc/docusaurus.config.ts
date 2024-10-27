@@ -61,6 +61,7 @@ const config: Config = {
     image: 'img/docusaurus-social-card.jpg',
     hideOnScroll: false, 
     navbar: {
+      hideOnScroll: false,
       title: 'LoyaHub',
       logo: {
         alt: 'LoyaHub Blockchain',
@@ -80,6 +81,20 @@ const config: Config = {
           sidebarId: 'infrastructureSidebar',
           position: 'left',
           label: 'Infrastructure',
+        },
+        {
+          type: 'docSidebar',
+          to: '/smart-contracts',
+          sidebarId: 'smartContractsSidebar',
+          position: 'left',
+          label: 'Smart Contracts',
+        },
+        {
+          type: 'docSidebar',
+          to: '/api',
+          sidebarId: 'apiSidebar',
+          position: 'left',
+          label: 'API',
         },
         // {to: '/blog', label: 'Blog', position: 'left'},
   

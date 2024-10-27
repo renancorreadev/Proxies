@@ -2,8 +2,10 @@ import { Controller, Post, Get, Body, Inject, Logger } from '@nestjs/common';
 import { KeycloakAuthService } from '../../Domain/KeycloakAuthenticationService';
 import { DependencyInjectionTokens, BaseUrls } from '../../../../helper/AppConstants';
 import { KeycloakLoginDTO } from '../../Domain/DTO/HTTPRequest/AuthenticationRequest';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller(BaseUrls.AUTH)
+@ApiTags('Auth Keycloak API Endpoint')
 export class KeycloakAuthWebAdapter {
 	private readonly logger = new Logger(KeycloakAuthWebAdapter.name);
 
