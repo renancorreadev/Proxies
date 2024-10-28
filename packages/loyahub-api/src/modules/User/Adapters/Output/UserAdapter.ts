@@ -13,9 +13,9 @@ import { UserRegisterDTORequest } from '../../Domain/DTO/HTTPRequest/userHttpReq
 
 @Injectable()
 export class UserAdapter implements UserTokenOutputPort {
-	constructor(@Inject(DependencyInjectionTokens.DATA_SOURCE) private dataSource: DataSource) {}
+	constructor(@Inject(DependencyInjectionTokens.DATA_SOURCE) private readonly dataSource: DataSource) {}
 
-	private userRepository: Repository<UserEntity> = this.dataSource.getRepository(UserEntity);
+	private readonly userRepository: Repository<UserEntity> = this.dataSource.getRepository(UserEntity);
 
 	/**
 	 *
