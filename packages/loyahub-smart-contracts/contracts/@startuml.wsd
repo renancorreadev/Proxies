@@ -1,0 +1,54 @@
+@startuml
+' -- Contractos e Estruturas Importadas --
+
+interface IPointCore
+class PointStorage
+class BadgeToken
+
+' -- Classes e Heranças --
+abstract class Initializable
+abstract class UUPSUpgradeable
+abstract class OwnableUpgradeable
+class CustomerManagementCore {
+    +isClientExists(uint256 clientId): bool
+    +getClientWalletAddress(uint256 clientId): address
+    +getUserTokenID(address user): uint256
+}
+
+' -- Classe Principal: PointCore --
+
+class PointCore {
+    + customerManagerInstance: CustomerManagementCore
+    + pointsForPremium: uint256
+    + pointsForGold: uint256
+    + pointsForTitanium: uint256
+    + metadataURI: string
+
+    ' -- Métodos Públicos --
+    + initialize(address _customerManagerInstanceAddress, string uri)
+    + setPointThresholds(uint256 premium, uint256 gold, uint256 titanium)
+    + addPoints(uint256 clientId, uint points)
+    + removePoints(uint256 clientId, uint points)
+    + getClientPoints(uint256 clientId): uint
+    + getClientLevel(uint256 clientId): uint
+    + getVersion(): string
+    + tokenURI(uint256 tokenId): string
+
+    ' -- Métodos Internos --
+    # updateClientLevel(uint256 clientId)
+    # burnPreviousLevelToken(uint256 clientId, address clientAddress, uint256 currentLevel)
+    # emitMintEvent(uint256 clientId, uint256 level)
+    # emitBurnEvent(uint256 clientId, uint256 burnedLevel)
+    # _exists(uint256 tokenId): bool
+}
+
+' -- Relacionamentos de Herança e Composição --
+PointCore --|> Initializable
+PointCore --|> UUPSUpgradeable
+PointCore --|> OwnableUpgradeable
+PointCore --|> IPointCore
+PointCore --|> PointStorage
+PointCore --|> BadgeToken
+PointCore --> CustomerManagementCore : usa
+
+@enduml
