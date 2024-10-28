@@ -13,6 +13,10 @@ This API provides integration for various applications, such as:
 - **Web app:** Allows customers to track their points balance and NFTs.
 - **Wallet app:** Integration for managing digital assets and secure authentication.
 
+### Infrastruture 
+![API Infrastructure](https://github.com/renancorreadev/customer-rewards-blockchain/blob/develop/docs/images/API_Infra.png?raw=true)
+
+
 The API follows the **Hexagonal Architecture** model, promoting higher modularity through the use of `Ports` and `Adapters`. This structure simplifies maintenance and future expansions, ensuring flexibility and decoupling of essential modules.
 
 

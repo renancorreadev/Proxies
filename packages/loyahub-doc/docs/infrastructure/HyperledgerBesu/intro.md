@@ -6,6 +6,10 @@ sidebar_position: 1
 
 Hyperledger Besu is an open-source Ethereum client designed for enterprise use, offering a high level of flexibility to support both public and private networks. In this project, it manages the private blockchain network using the IBFT consensus protocol.
 
+## General Architecture
+
+![General Architecture](https://github.com/renancorreadev/customer-rewards-blockchain/blob/develop/docs/images/Besu.png?raw=true)
+
 ## Features of Hyperledger Besu
 
 - **Private Blockchain Network**: Ensures controlled access.
