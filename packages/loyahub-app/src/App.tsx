@@ -3,8 +3,8 @@ import Layout from './shared';
 
 function App() {
   return (
-    <Layout>
-      <HomeContent />
+    <Layout data-testid="layout">
+      <HomeContent data-testid="home-content" />
     </Layout>
   );
 }
