@@ -1,11 +1,35 @@
-import { HomeContent } from './pages/Home';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
 import Layout from './shared';
+import { HomeContent } from './pages/Home';
+import { Login } from './components/app/Authentication/Login';
+import { UserProfile } from './components/app/User/UserProfile';
+import { useUserStore } from '@/store/store';
 
 function App() {
+  const { isLogged } = useUserStore();
+
   return (
-    <Layout data-testid="layout">
-      <HomeContent data-testid="home-content" />
-    </Layout>
+    <Router>
+      <Layout data-testid="layout">
+        <Routes>
+          <Route
+            path="/"
+            element={<HomeContent data-testid="home-content" />}
+          />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/profile"
+            element={isLogged ? <UserProfile /> : <Navigate to="/login" />}
+          />
+          {/* Outras rotas podem ser adicionadas aqui */}
+        </Routes>
+      </Layout>
+    </Router>
   );
 }
 
