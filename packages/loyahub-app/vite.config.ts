@@ -5,7 +5,7 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 5000,
+    port: 5007,
   },
   resolve: {
     alias: {
@@ -14,5 +14,10 @@ export default defineConfig({
   },
   build: {
     assetsInlineLimit: 0,
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/setupTests.ts',
   },
 });

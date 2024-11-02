@@ -6,7 +6,7 @@ scrape_configs:
     metrics_path: /metrics
     static_configs:
       - targets:
-          - "bootnode:8545"
+          - "bootnode:9545"
           - "validator_1:9546"
           - "validator_2:9547"
           - "validator_3:9548"

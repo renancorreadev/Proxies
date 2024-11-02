@@ -22,6 +22,7 @@ import {
   LoginForm,
   RegisterForm,
 } from '../auth.types';
+import { useNavigate } from 'react-router-dom';
 
 export function Login() {
   const {
@@ -36,6 +37,8 @@ export function Login() {
     formState: { errors: errorsRegister },
   } = useForm<RegisterForm>();
   const setUser = useUserStore((state) => state.setUser);
+  const navigate = useNavigate();
+
   const [isRegistering, setIsRegistering] = useState(false);
 
   const onSubmitLogin = async (data: LoginForm) => {
@@ -45,6 +48,7 @@ export function Login() {
       const decoded = jwtDecode<JwtPayload>(access_token);
       if (decoded.email) {
         setUser(decoded.email, access_token);
+        navigate('/profile');
       }
     } catch (error) {
       console.error('Login error:', error);

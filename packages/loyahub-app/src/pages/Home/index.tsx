@@ -83,7 +83,7 @@ export const HomeContent: React.FC = () => {
   ];
 
   return (
-    <React.Fragment>
+    <div data-testid="home-content">
       <Hero />
 
       <FeaturesSection />
@@ -102,6 +102,6 @@ export const HomeContent: React.FC = () => {
       </Container>
 
       <Footer />
-    </React.Fragment>
+    </div>
   );
 };

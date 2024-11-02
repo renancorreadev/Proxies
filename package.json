@@ -11,7 +11,7 @@
     "bs:download": "lerna run --scope loyahub-blockchain-service --stream download",
     "bs": "lerna run --scope loyahub-blockchain-service --stream dev --ignore-missing ",
     "api": "lerna run --scope loyahub-api --stream dev",
-    "ui": "lerna run --scope loyahub-app --stream dev",
+    "app": "lerna run --scope loyahub-app --stream dev",
     "admin:ui": "lerna run --scope loyahub-admin-ui --stream dev",
     "api:test": "lerna run --scope loyahub-api test",
     "sc": "lerna run --scope loyahub-smart-contracts compile",

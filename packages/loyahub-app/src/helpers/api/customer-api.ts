@@ -6,9 +6,7 @@ import {
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
-const apiUrl = import.meta.env.VITE_CUSTOMER_API;
-
-console.log('apiUrl:', apiUrl);
+export const apiUrl = import.meta.env.VITE_CUSTOMER_API;
 
 const api = axios.create({
   baseURL: apiUrl,
@@ -28,4 +26,22 @@ export const register = async (registerParams: UserRegisterParamsType) => {
     profileImageUrl,
     isAdmin,
   });
+};
+
+interface UserResponse {
+  id: number;
+  username: string;
+  email: string;
+  walletAddress: string;
+  profileImageUrl: string;
+  isAdmin: boolean;
+}
+export const getUser = async (email: string): Promise<UserResponse> => {
+  try {
+    const response = await api.get(`user/get/${encodeURIComponent(email)}`);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar dados do usuário:', error);
+    throw error;
+  }
 };

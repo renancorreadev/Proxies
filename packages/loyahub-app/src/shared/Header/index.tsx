@@ -1,23 +1,14 @@
-import { Login } from '@/components/app/Authentication/Login';
-import { NavigationMenuHeader } from './Navitation';
+import { HeaderDesktop } from './Desktop';
+import { HeaderMobile } from './Mobile';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { useUserStore } from '@/store/store';
-import { UserProfile } from '@/components/app/User/UserProfile';
-
 export function Header() {
   const { email, token } = useUserStore();
+  const isMobile = useIsMobile();
 
-  console.log('email:', email, 'token:', token);
-
-  return (
-    <header className="w-full bg-slate-950 flex justify-around p-4">
-      <h1 className="text-2xl font-bold tracking-tight text-slate-300">
-        CustomerRewards
-      </h1>
-
-      <NavigationMenuHeader />
-
-      {email && token && <UserProfile />}
-      {!email && !token && <Login />}
-    </header>
+  return isMobile ? (
+    <HeaderMobile email={email} token={token} />
+  ) : (
+    <HeaderDesktop email={email} token={token} />
   );
 }
