@@ -11,11 +11,15 @@ import { CogIcon } from '@heroicons/react/24/outline'; // Importando ícone de d
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export const UserProfile = () => {
-  const { email } = useUserStore();
-  const walletAddress = '0x1234567890abcdef';
+export const HeaderProfile = () => {
+  const { email, userData, isLogged } = useUserStore();
 
-  // Função para extrair e formatar o nome do usuário a partir do e-mail
+  if (!isLogged || !userData) return <p>Loading...</p>;
+
+  const formatWalletAddress = (walletAddress: string) => {
+    return `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
+  };
+
   const formatUserName = (email: string) => {
     const [username] = email.split('@');
     const formattedName = username
@@ -48,7 +52,10 @@ export const UserProfile = () => {
         >
           <MenuItems className="absolute right-0 mt-2 w-56 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
             <div className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
-              Digital Wallet: <span className="font-mono">{walletAddress}</span>
+              Digital Wallet:{' '}
+              <span className="font-mono">
+                {formatWalletAddress(userData.walletAddress)}
+              </span>
             </div>
 
             <MenuItem>

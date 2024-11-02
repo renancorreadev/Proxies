@@ -1,13 +1,16 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React from 'react';
 import { Login } from '@/components/app/Authentication/Login';
-import { useUserStore } from '@/store/store';
-import { UserProfile } from '@/components/app/User/UserProfile';
+
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { HeaderProfile } from '../HeaderProfile';
 
-export const HeaderMobile: React.FC = () => {
-  const { email, token } = useUserStore();
-
+interface HeaderProps {
+  email: string | null;
+  token: string | null;
+}
+export const HeaderMobile: React.FC<HeaderProps> = ({ email, token }) => {
   return (
     <header className="w-full bg-slate-950 p-4 flex items-center justify-between">
       {/* Logo e título */}
@@ -24,8 +27,8 @@ export const HeaderMobile: React.FC = () => {
       <div>
         <h1 className="text-xl font-semibold text-slate-300">LoyaHub</h1>
       </div>
-      {/* Menu para mobile */}
-      <Menu as={'div'} className="relative">
+      {/* @ts-ignore */}
+      <Menu as="div" className="relative">
         {({ open }: { open: boolean }) => (
           <>
             <MenuButton
@@ -87,7 +90,7 @@ export const HeaderMobile: React.FC = () => {
                         active ? 'bg-slate-100' : ''
                       } px-4 py-2 rounded-md`}
                     >
-                      {email && token ? <UserProfile /> : <Login />}
+                      {email && token ? <HeaderProfile /> : <Login />}
                     </div>
                   )}
                 </MenuItem>
