@@ -20,11 +20,13 @@ export class UserService implements UserTokenUseCase {
 
 	async register(registerUserDTO: UserRegisterDTORequest): Promise<UserRegisterResponse> {
 		try {
-			const { email, username, password, profileImageUrl, isAdmin } = registerUserDTO;
+			const { email, username, age, password, profileImageUrl, isAdmin, address } = registerUserDTO;
 			/** TODO: Validations for requires fields */
 			if (!password) throw new BadRequestError('Password is required');
 			if (!username) throw new BadRequestError('Username is required');
 			if (!email) throw new BadRequestError('Email is required');
+			if (!age) throw new BadRequestError('Age is required');
+			if (!address) throw new BadRequestError('Address is required');
 
 			if (isAdmin !== undefined && typeof isAdmin !== 'boolean') {
 				throw new BadRequestError('isAdmin must be a boolean');
@@ -34,9 +36,11 @@ export class UserService implements UserTokenUseCase {
 			const user = await this.userTokenAdapter.register({
 				email: email,
 				username: username,
+				age: age,
 				password: password,
 				profileImageUrl: profileImageUrl,
 				isAdmin: isAdmin,
+				address: address,
 			});
 
 			// Return user data registered

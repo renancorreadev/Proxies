@@ -18,10 +18,10 @@ export class ClientBlockchainAdapter implements ClientBlockchainTokenOutputPort 
 
 	constructor(
 		@Inject(DependencyInjectionTokens.CUSTOMER_DB_TOKEN_USE_CASE)
-		private customerDBService: CustomerDBService,
+		private readonly customerDBService: CustomerDBService,
 
 		@Inject(DependencyInjectionBlockchainConnector.CLIENT_MANAGER_CONNECTOR)
-		private contractInstance: ClientManagerConnector,
+		private readonly contractInstance: ClientManagerConnector,
 	) {}
 
 	async registerClient(registerClientBlockchainDto: RegisterClientRequestDto): Promise<any> {

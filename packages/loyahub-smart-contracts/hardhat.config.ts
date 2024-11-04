@@ -3,7 +3,6 @@ import '@nomicfoundation/hardhat-toolbox';
 import '@openzeppelin/hardhat-upgrades';
 import env from 'dotenv';
 
-
 env.config();
 
 const config: HardhatUserConfig = {
