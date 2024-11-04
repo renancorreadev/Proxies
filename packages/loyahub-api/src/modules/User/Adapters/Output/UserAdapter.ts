@@ -2,74 +2,86 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { UserEntity } from './db/UserEntity';
-import { UserTokenOutputPort } from '../../Port/Output/UserTokenOutputPort';
 import * as bcrypt from 'bcrypt';
-import { DependencyInjectionTokens } from '../../../../helper/AppConstants';
 import { WalletCreator } from '@helper/walletCreator';
-import { UserData, UserInfo, UserUpdater } from '../../Domain/@types/user';
 import { storePrivateKeyInVault } from '@helper/vault';
 import { InternalServerError, UserNotFoundError } from '../../Domain/errors/user.errors';
 import { UserRegisterDTORequest } from '../../Domain/DTO/HTTPRequest/userHttpRequest';
 
+import { UserData, UserInfo, UserUpdater } from '../../Domain/@types/user';
+import { RegisterClientRequestDto } from '@/src/modules/Blockchain/Client/Domain/Dto/HTTPRequest/ClientBlockchainRequestDto';
+import { AddressLocal, ClientDataInput } from '@helper/blockchain/types/contracts/client-manager-types';
+import axios from 'axios';
+import { DependencyInjectionTokens } from '@helper/AppConstants';
+
 @Injectable()
-export class UserAdapter implements UserTokenOutputPort {
+export class UserAdapter {
 	constructor(@Inject(DependencyInjectionTokens.DATA_SOURCE) private readonly dataSource: DataSource) {}
 
 	private readonly userRepository: Repository<UserEntity> = this.dataSource.getRepository(UserEntity);
 
-	/**
-	 *
-	 * @param registerUserDTO
-	 * @returns: Promise<UserData>
-	 *
-	 */
 	async register(registerUserDTO: UserRegisterDTORequest): Promise<UserData> {
-		const { email, username, password, profileImageUrl, isAdmin } = registerUserDTO;
+		const { email, username, age, password, profileImageUrl, isAdmin, address } = registerUserDTO;
 		if (!password) throw new InternalServerError('Password is required');
 		if (!username) throw new InternalServerError('Username is required');
 		if (!email) throw new InternalServerError('Email is required');
 
 		const hashedPassword = await bcrypt.hash(password, 10);
-		// 1. Create a new Ethereum wallet
+
+		// 1. Cria uma nova carteira Ethereum
 		const walletCreator = new WalletCreator();
 		const { walletAddress, privateKey } = walletCreator.createNewEthereumWallet();
-
 		if (!walletAddress || !privateKey) throw new InternalServerError('Failed to create a new Ethereum wallet.');
 
 		const newUser = this.userRepository.create({
-			email: email,
-			username: username,
+			email,
+			username,
 			password: hashedPassword,
-			profileImageUrl: profileImageUrl,
-			walletAddress: walletAddress,
-			isAdmin: isAdmin,
+			profileImageUrl,
+			walletAddress,
+			isAdmin,
 		});
-		// 2. Save the new user in the database
+
+		// 2. Salva o novo usuário no banco de dados
 		await this.userRepository.save(newUser);
-		// 3. Store the private key in the vault
+
+		// 3. Armazena a chave privada no Vault
 		await storePrivateKeyInVault(email, privateKey);
+
+		// 5. Chama o método registerClient no serviço de blockchain
+		await this.registerClient({
+			name: username,
+			age,
+			WalletAddress: walletAddress,
+			paymentStatus: 0,
+			address: {
+				Street: address.Street,
+				City: address.City,
+				PostalCode: address.PostalCode,
+				HouseNumber: address.HouseNumber,
+			},
+		});
 
 		const userCreated = {
 			...newUser,
-			privateKey: privateKey,
+			privateKey,
 		};
 
 		return userCreated;
 	}
 
+	// Outros métodos
 	async getUser(email: string): Promise<UserInfo | undefined> {
 		const user = await this.userRepository.findOne({
 			select: ['id', 'email', 'username', 'profileImageUrl', 'walletAddress', 'isAdmin', 'createdAt', 'updatedAt'],
 			where: { email },
 		});
-
-		return user ? user : undefined;
+		return user ?? undefined;
 	}
 
 	async deleteUser(email: string): Promise<string> {
 		const user = await this.userRepository.findOne({ where: { email } });
 		if (!user) throw new UserNotFoundError('User not found');
-
 		const result = await this.userRepository.delete({ id: user.id });
 		return result.affected === 1 ? 'User deleted successfully' : 'User not found';
 	}
@@ -85,5 +97,46 @@ export class UserAdapter implements UserTokenOutputPort {
 
 		await this.userRepository.save(user);
 		return user;
+	}
+
+	private async registerClient(registerClientBlockchainDto: RegisterClientRequestDto): Promise<void> {
+		try {
+			const { name, age, WalletAddress, paymentStatus, address } = registerClientBlockchainDto;
+
+			// Estrutura de dados para `address`, assegurando correspondência exata
+			const addressPayload: AddressLocal = {
+				City: address.City,
+				Street: address.Street,
+				PostalCode: address.PostalCode,
+				HouseNumber: Number(address.HouseNumber),
+			};
+
+			// Dados do `payload`, correspondendo à estrutura JSON fornecida no `curl`
+			const payload = {
+				name,
+				age,
+				WalletAddress,
+				paymentStatus,
+				address: addressPayload,
+			};
+
+			// Configuração da requisição `axios`
+			const config = {
+				method: 'post',
+				maxBodyLength: Infinity,
+				url: `${process.env.BASE_URL}/api/v1/client/new`,
+				headers: {
+					accept: 'application/json',
+					'Content-Type': 'application/json',
+				},
+				data: JSON.stringify(payload),
+			};
+
+			const response = await axios.request(config);
+			return response.data;
+		} catch (error) {
+			console.error('Erro ao registrar cliente na blockchain:', error);
+			throw new Error('An error occurred in write contract registerClient function on blockchain');
+		}
 	}
 }

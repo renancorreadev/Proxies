@@ -23,7 +23,7 @@ export class ClientWebAdapter {
 	private readonly logger = new Logger('ClientWebAdapter');
 	constructor(
 		@Inject(DependencyInjectionTokens.CLIENT_BLOCKCHAIN_TOKEN_USE_CASE)
-		private clientBlockchainService: ClientBlockchainTokenUseCase,
+		private readonly clientBlockchainService: ClientBlockchainTokenUseCase,
 	) {}
 
 	/// --------------------------------------------------------------------------------------

@@ -69,9 +69,11 @@ export class UserWebAdapter {
 				return this.userService.register({
 					email: registerDTO.email,
 					username: registerDTO.username,
+					age: registerDTO.age,
 					password: registerDTO.password,
 					profileImageUrl: registerDTO.profileImageUrl,
 					isAdmin: registerDTO.isAdmin,
+					address: registerDTO.address,
 				});
 			} else {
 				throw new Error('Bad request');
