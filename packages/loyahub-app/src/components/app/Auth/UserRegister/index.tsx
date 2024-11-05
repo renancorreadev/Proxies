@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Input, Label } from '@/components/ui';
@@ -8,6 +9,8 @@ import {
   UserRegisterResponse,
 } from '@/helpers/@types/api-types';
 import { AxiosResponse } from 'axios';
+import { toast, Toaster } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 export const RegisterForm = () => {
   const {
@@ -16,22 +19,34 @@ export const RegisterForm = () => {
     watch,
     formState: { errors },
   } = useForm<UserRegisterParamsType>();
+  const navigate = useNavigate();
 
   const password = watch('password');
 
   const onSubmit = async (data: UserRegisterParamsType) => {
-    console.log('data', data);
     if (data.password !== data.confirmPassword) {
-      alert('Passwords do not match!');
+      toast.error('Passwords do not match!', {
+        description: 'Please make sure both passwords are the same.',
+        duration: 5000,
+      });
       return;
     }
     try {
       const response: AxiosResponse<UserRegisterResponse> =
         await apiRegister(data);
-      alert(response.data.message);
+      toast.success(response.data.message, {
+        description: 'You have successfully registered! Go to Home...',
+        duration: 5000,
+      });
+      setTimeout(() => {
+        navigate('/');
+      }, 4000); // Redireciona após 1 segundo
     } catch (error) {
       console.error('Registration error:', error);
-      alert('Registration failed!');
+      toast.error('Registration failed!', {
+        description: 'Please check your details and try again.',
+        duration: 5000,
+      });
     }
   };
 
@@ -40,6 +55,7 @@ export const RegisterForm = () => {
       onSubmit={handleSubmit(onSubmit)}
       className="w-full max-w-10xl bg-white shadow-md rounded-lg p-8 space-y-6"
     >
+      <Toaster position="top-right" closeButton duration={5000} />
       <h2 className="text-3xl font-semibold text-start text-gray-700 mb-6">
         Register a New Account
       </h2>
@@ -84,7 +100,7 @@ export const RegisterForm = () => {
         </div>
       </div>
 
-      <div className="w-full max-w-10xl  flex space-x-4  gap-8">
+      <div className="w-full max-w-10xl flex space-x-4 gap-8">
         <div className="max-w-2xl space-y-4">
           <InputField
             label="Password"
@@ -171,6 +187,7 @@ export const RegisterForm = () => {
   );
 };
 
+// Componente InputField
 interface InputFieldProps {
   label: string;
   id: string;
