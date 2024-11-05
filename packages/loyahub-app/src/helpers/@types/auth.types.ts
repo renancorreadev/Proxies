@@ -27,5 +27,5 @@ export interface InputFieldsProps {
   register: UseFormRegister<any>;
   requiredMsg: string;
   validate?: (value: string) => string | boolean;
-  errors?: FieldError | undefined;
+  errors: FieldError | undefined;
 }

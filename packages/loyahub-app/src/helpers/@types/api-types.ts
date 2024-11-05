@@ -1,9 +1,19 @@
+interface Address {
+  City: string;
+  Street: string;
+  PostalCode: number;
+  HouseNumber: string;
+}
+
 export interface UserRegisterParamsType {
   email: string;
   username: string;
   password: string;
   profileImageUrl?: string;
   isAdmin?: boolean;
+  age: string;
+  address: Address;
+  confirmPassword?: string;
 }
 
 interface User {
@@ -12,6 +22,8 @@ interface User {
   walletAddress: string;
   profileImageUrl?: string;
   isAdmin: boolean;
+  age: string;
+  address: Address;
   createdAt: Date;
 }
 

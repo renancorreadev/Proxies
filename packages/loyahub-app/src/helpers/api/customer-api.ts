@@ -17,14 +17,17 @@ export const login = async (email: string, password: string) => {
 };
 
 export const register = async (registerParams: UserRegisterParamsType) => {
-  const { email, username, password, profileImageUrl, isAdmin } =
+  const { email, username, password, profileImageUrl, isAdmin, age, address } =
     registerParams;
+
   return await api.post<UserRegisterResponse>('user/register', {
     email,
     username,
     password,
     profileImageUrl,
     isAdmin,
+    age,
+    address,
   });
 };
 

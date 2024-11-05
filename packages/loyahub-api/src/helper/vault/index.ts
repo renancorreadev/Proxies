@@ -1,6 +1,8 @@
 import axios from 'axios';
 
 export async function storePrivateKeyInVault(email: string, privateKey: string): Promise<string> {
+	console.log('email', email);
+	console.log('privateKey', privateKey);
 	const headers = {
 		'X-Vault-Token': process.env.VAULT_TOKEN,
 		'Content-Type': 'application/json',
@@ -24,7 +26,7 @@ export async function storePrivateKeyInVault(email: string, privateKey: string):
 		}
 	} catch (error) {
 		const errorMessage = error.response?.data || error.message || 'Unknown error';
-		console.error(`Error storing key in Vault: ${errorMessage}`);
-		throw new Error(`Error storing key in Vault: ${errorMessage}`);
+		console.error(`Error storing key in Vault: ${JSON.stringify(errorMessage)}`);
+		throw new Error(`Error storing key in Vault: ${JSON.stringify(errorMessage)}`);
 	}
 }
