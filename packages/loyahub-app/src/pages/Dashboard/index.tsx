@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'sonner';
@@ -35,9 +36,7 @@ export const Dashboard = () => {
   const { userData } = useUserStore();
 
   useEffect(() => {
-    const userId = userData;
-
-    console.log('userId', userId);
+    const userId = userData?.id;
 
     const fetchMetadata = async () => {
       setLoading(true);
@@ -50,8 +49,12 @@ export const Dashboard = () => {
             `http://localhost:3001/api/v1/points/${userId}`
           ),
         ]);
-        setMetadata(metadataResponse.data);
-        setPoints(pointsResponse.data.points);
+
+        if (metadataResponse.data && pointsResponse.data !== null) {
+          setMetadata(metadataResponse.data);
+          // @ts-ignore
+          setPoints(pointsResponse.data);
+        }
       } catch (error) {
         console.error('Erro ao buscar dados:', error);
         toast.error('Erro ao carregar os dados. Tente novamente.', {
@@ -66,8 +69,8 @@ export const Dashboard = () => {
     };
 
     fetchMetadata();
-  }, []);
-
+  }, [userData]);
+  console.log('points', points);
   if (loading)
     return (
       <div className="flex justify-center items-center h-screen">
