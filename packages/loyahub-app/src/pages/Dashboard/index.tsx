@@ -118,6 +118,9 @@ export const Dashboard = () => {
             {new Date(metadata?.updatedAt || '').toLocaleDateString()}
           </p>
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 lg:px-24 gap-4 mb-8 justify-center ">
         <div className="bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-lg shadow p-4 text-center">
           <h3 className="text-lg font-semibold">Pontos</h3>
           <p className="text-2xl font-bold">
