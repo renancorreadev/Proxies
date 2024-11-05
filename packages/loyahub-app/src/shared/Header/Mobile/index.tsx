@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React from 'react';
-import { Login } from '@/components/app/Authentication/Login';
+import { Login } from '@/components/app/Auth/Login';
 
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';

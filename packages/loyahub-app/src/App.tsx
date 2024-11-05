@@ -6,12 +6,12 @@ import {
 } from 'react-router-dom';
 import Layout from './shared';
 import { HomeContent } from './pages/Home';
-import { Login } from './components/app/Authentication/Login';
 
 import { useUserStore } from '@/store/store';
 import { Dashboard } from './pages/Dashboard';
 
 import { HeaderProfile } from './shared/Header/HeaderProfile';
+import { Register } from './pages/Register';
 
 function App() {
   const { isLogged } = useUserStore();
@@ -20,7 +20,7 @@ function App() {
     <Layout data-testid="layout">
       <Routes>
         <Route path="/" element={<HomeContent data-testid="home-content" />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route
           path="/profile"
           element={isLogged ? <HeaderProfile /> : <Navigate to="/login" />}

@@ -1,4 +1,4 @@
-import { Login } from '@/components/app/Authentication/Login';
+import { AuthDialog } from '@/components/app/Auth/AuthDialog';
 import { NavigationMenuHeader } from './Navitation';
 import { HeaderProfile } from '../HeaderProfile';
 
@@ -28,7 +28,7 @@ export function HeaderDesktop({ email, token }: HeaderProps) {
 
       <NavigationMenuHeader />
 
-      {email && token ? <HeaderProfile /> : <Login />}
+      {email && token ? <HeaderProfile /> : <AuthDialog />}
     </header>
   );
 }
