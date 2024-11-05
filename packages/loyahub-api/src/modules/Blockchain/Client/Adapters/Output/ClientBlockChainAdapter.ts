@@ -129,26 +129,26 @@ export class ClientBlockchainAdapter implements ClientBlockchainTokenOutputPort 
 				tokenID: clientID,
 				customer: name,
 				description: 'Voce ainda não alcançou nenhuma insignia e nenhum nivel',
-				image: 'https://meusite.com/imagens/nft/1.png',
+				image:
+					'https://github.com/renancorreadev/loyahub/blob/develop/docs/images/Insignias/CustomerPremium.png?raw=true',
 				insight: 'sem insignia',
-				attributes: {
-					level: 0,
-					points: 0,
-					benefits: [
-						{
-							level_type: 'Nível',
-							value: 0,
-						},
-						{
-							nft_type: 'NFT',
-							value: 'Sem NFT',
-						},
-						{
-							benefit_type: 'Benefits',
-							value: [],
-						},
-					],
-				},
+				attributes: [
+					{
+						type: 'level_type',
+						value: 0,
+					},
+					{
+						type: 'nft_type',
+						value: 'Sem NFT',
+					},
+					{
+						type: 'benefit_type',
+						value: [],
+					},
+				],
+				id: clientID,
+				createdAt: new Date().toISOString(), // Data de criação atual
+				updatedAt: new Date().toISOString(), // Data de atualização atual
 			});
 
 			const config = {

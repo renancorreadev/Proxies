@@ -40,17 +40,27 @@ func (updater *MetadataUpdaterURI) UpdateMetadata(ctx context.Context, clientID 
 
 func determineMetadata(clientID string, newPoints int64, thresholds domain.Thresholds) (domain.Metadata, error) {
 	clientIDBigInt := new(big.Int)
-	clientIDBigInt.SetString(clientID, 10) // Converte clientID de string para *big.Int
+	clientIDBigInt.SetString(clientID, 10) 
 
 	clientName, err := initialize.InitializeCustomerSC(clientIDBigInt)
 	if err != nil {
 		return domain.Metadata{}, fmt.Errorf("erro ao obter nome do cliente: %s", err)
 	}
 
+
+	imageURL := "https://github.com/renancorreadev/loyahub/blob/develop/docs/images/Insignias/CustomerPremium.png?raw=true"
+	if newPoints >= thresholds.PointsForPremium && newPoints < thresholds.PointsForGold {
+		imageURL = "https://github.com/renancorreadev/loyahub/blob/develop/docs/images/Insignias/CustomerPremium.png?raw=true"
+	} else if newPoints >= thresholds.PointsForGold && newPoints < thresholds.PointsForTitanium {
+		imageURL = "https://github.com/renancorreadev/loyahub/blob/develop/docs/images/Insignias/CustomerGOld.png?raw=true"
+	} else if newPoints >= thresholds.PointsForTitanium {
+		imageURL = "https://github.com/renancorreadev/loyahub/blob/develop/docs/images/Insignias/CustomerTitanium.png?raw=true"
+	}
+
 	metadata := domain.Metadata{
 		TokenID:  clientID,
 		Customer: clientName,
-		Image:    "https://meusite.com/imagens/nft/1.png",
+		Image:    imageURL, 
 	}
 
 	switch {

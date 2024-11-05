@@ -11,7 +11,7 @@ export class MetadataAdapter implements MetadataTokenOutputPort {
 
 	constructor(
 		@Inject(DependencyInjectionTokens.METADATA_STORAGE_OUTPUT_PORT)
-		private metadataStorage: MetadataStorageOutputPort,
+		private readonly metadataStorage: MetadataStorageOutputPort,
 	) {}
 
 	/**
