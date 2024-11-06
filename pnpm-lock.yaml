@@ -595,6 +595,9 @@ importers:
         specifier: 6.8.1
         version: 6.8.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     devDependencies:
+      '@nomicfoundation/hardhat-foundry':
+        specifier: ^1.1.2
+        version: 1.1.2(hardhat@2.19.1(bufferutil@4.0.8)(ts-node@10.9.2(@types/node@22.7.5)(typescript@5.3.3))(typescript@5.3.3)(utf-8-validate@5.0.10))
       '@nomicfoundation/hardhat-toolbox':
         specifier: 3.0.0
         version: 3.0.0(t64eyxoga5fu5lf3sby2ux56iu)
@@ -2799,6 +2802,11 @@ packages:
     peerDependencies:
       ethers: ^6.1.0
       hardhat: ^2.0.0
+
+  '@nomicfoundation/hardhat-foundry@1.1.2':
+    resolution: {integrity: sha512-f5Vhj3m2qvKGpr6NAINYwNgILDsai8dVCsFb1rAVLkJxOmD2pAtfCmOH5SBVr9yUI5B1z9rbTwPBJVrqnb+PXQ==}
+    peerDependencies:
+      hardhat: ^2.17.2
 
   '@nomicfoundation/hardhat-network-helpers@1.0.12':
     resolution: {integrity: sha512-xTNQNI/9xkHvjmCJnJOTyqDSl8uq1rKb2WOVmixQxFtRd7Oa3ecO8zM0cyC2YmOK+jHB9WPZ+F/ijkHg1CoORA==}
@@ -16345,6 +16353,11 @@ snapshots:
       lodash.isequal: 4.5.0
     transitivePeerDependencies:
       - supports-color
+
+  '@nomicfoundation/hardhat-foundry@1.1.2(hardhat@2.19.1(bufferutil@4.0.8)(ts-node@10.9.2(@types/node@22.7.5)(typescript@5.3.3))(typescript@5.3.3)(utf-8-validate@5.0.10))':
+    dependencies:
+      chalk: 2.4.2
+      hardhat: 2.19.1(bufferutil@4.0.8)(ts-node@10.9.2(@types/node@22.7.5)(typescript@5.3.3))(typescript@5.3.3)(utf-8-validate@5.0.10)
 
   '@nomicfoundation/hardhat-network-helpers@1.0.12(hardhat@2.19.1(bufferutil@4.0.8)(ts-node@10.9.2(@types/node@22.7.5)(typescript@5.3.3))(typescript@5.3.3)(utf-8-validate@5.0.10))':
     dependencies:
