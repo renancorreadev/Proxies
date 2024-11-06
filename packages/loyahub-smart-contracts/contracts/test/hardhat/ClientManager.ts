@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { expect } from 'chai';
 import { ethers, upgrades } from 'hardhat';
-import { CustomerManagementCore } from '../typechain';
+import { CustomerManagementCore } from '../../../typechain';
 
 describe('CustomerManagementCore', function () {
   let clientManager: CustomerManagementCore;

@@ -12,6 +12,8 @@ import {Strings} from '@openzeppelin/contracts/utils/Strings.sol';
 
 import {CustomerManagementCore} from './CustomerManagementCore.sol';
 import {IPointCore} from './interfaces/IPointCore.sol';
+import {IERC20} from './interfaces/IERC20.sol'; 
+
 
 contract PointCore is
     Initializable,
@@ -22,12 +24,18 @@ contract PointCore is
     BadgeToken
 {
     CustomerManagementCore public customerManagerInstance;
+    IERC20 public drexToken;
 
     uint256 public pointsForPremium;
     uint256 public pointsForGold;
     uint256 public pointsForTitanium;
 
     string public metadataURI;
+
+    event TokensTransferred(uint256 indexed clientId, uint256 amount);
+    event PointsTokenAddressSet(address indexed tokenAddress); // Evento para mudança do endereço ERC20
+
+
 
     modifier validClient(uint256 clientId) {
         require(
@@ -64,12 +72,25 @@ contract PointCore is
     }
 
     /// @dev add points
-    function addPoints(
+ function addPoints(
         uint256 clientId,
         uint points
     ) public onlyOwner validClient(clientId) {
         clientPoints[clientId] += points;
         updateClientLevel(clientId);
+
+        uint256 tokensToTransfer = (clientPoints[clientId] / 10) * 10;
+        if (tokensToTransfer > 0) {
+            clientPoints[clientId] %= 10;
+
+            address clientAddress = customerManagerInstance.getClientWalletAddress(clientId);
+            require(
+                drexToken.transfer(clientAddress, tokensToTransfer),
+                "Token transfer failed"
+            );
+
+            emit TokensTransferred(clientId, tokensToTransfer);
+        }
 
         emit PointsAdded(clientId, points);
     }
@@ -84,6 +105,12 @@ contract PointCore is
 
         clientPoints[clientId] -= points;
         emit PointsRemoved(clientId, points);
+    }
+
+     /// @dev Função para definir o endereço do token ERC20
+    function setPointsTokenAddress(address tokenAddress) external onlyOwner {
+        drexToken = IERC20(tokenAddress);
+        emit PointsTokenAddressSet(tokenAddress);
     }
 
     /// ---------- GETTERS ----------
