@@ -30,6 +30,9 @@ export class PointsBlockchainAdapter implements PointsBlockchainTokenOutputPort 
 				points,
 			});
 
+			console.log('clientId: ', clientId);
+			console.log('points: ', points);
+
 			if (transaction.hash) {
 				// Atualize o banco de dados apenas se a transação na blockchain for bem-sucedida
 				await this.pointDBStorage.addPointsOnDb(clientId, points);

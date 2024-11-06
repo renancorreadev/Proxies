@@ -29,6 +29,7 @@ export class PointsDBStorageAdapter implements PointsDBStorageOutputPort {
 			const customer = await this.pontsDBRepository.findOne({
 				where: { clientID: clientId },
 			});
+			console.log('customer: ', customer);
 			if (!customer) {
 				throw new ApplicationError({ code: HttpStatus.NOT_FOUND, message: 'Customer not found' });
 			}
@@ -49,6 +50,7 @@ export class PointsDBStorageAdapter implements PointsDBStorageOutputPort {
 
 			return `Added ${pointsToAdd} points successfully`;
 		} catch (error) {
+			console.log(error);
 			this.logger.error(`Error in addPointsOnDb: ${JSON.stringify(error)}`);
 			throw new ContractError(`An error occurred while adding points: ${error.message}`);
 		}

@@ -26,7 +26,7 @@ async function bootstrap() {
 	app.setGlobalPrefix(BaseUrls.API_BASE_URL);
 
 	const swaggerConfig = new DocumentBuilder()
-		.setTitle('Customer Rewards Api')
+		.setTitle('LoyaHub Api')
 		.setDescription('Descrição da API.')
 		.setVersion('1.0.0')
 		.addBearerAuth(
