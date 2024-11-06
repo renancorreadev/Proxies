@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Input, Label } from '@/components/ui';
 import { register as apiRegister } from '@/helpers/api/customer-api';
@@ -20,6 +20,7 @@ export const RegisterForm = () => {
     formState: { errors },
   } = useForm<UserRegisterParamsType>();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false); // Estado de carregamento
 
   const password = watch('password');
 
@@ -31,6 +32,8 @@ export const RegisterForm = () => {
       });
       return;
     }
+
+    setIsLoading(true);
     try {
       const response: AxiosResponse<UserRegisterResponse> =
         await apiRegister(data);
@@ -40,13 +43,15 @@ export const RegisterForm = () => {
       });
       setTimeout(() => {
         navigate('/');
-      }, 4000); // Redireciona após 1 segundo
+      }, 4000);
     } catch (error) {
       console.error('Registration error:', error);
       toast.error('Registration failed!', {
         description: 'Please check your details and try again.',
         duration: 5000,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -178,9 +183,10 @@ export const RegisterForm = () => {
         <Button
           type="submit"
           variant="default"
-          className="px-6 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700 transition duration-200"
+          className="px-6 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700 transition duration-200 flex items-center"
+          disabled={isLoading}
         >
-          Register
+          {isLoading ? <span className="loader mr-2"></span> : 'Register'}
         </Button>
       </div>
     </form>

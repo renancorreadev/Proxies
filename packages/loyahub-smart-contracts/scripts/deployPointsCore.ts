@@ -3,6 +3,7 @@ import { getImplementationAddress } from '@openzeppelin/upgrades-core';
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { proxyAddress as customerManagementAddress } from '../.deployed/deploys/CustomerManagementCore.json';
 import fs from 'fs';
+import path from 'path';
 
 const provider = new JsonRpcProvider(process.env.JSON_RPC_URL);
 
@@ -36,6 +37,38 @@ async function main() {
   fs.writeFileSync(
     '.deployed/deploys/PointCore.json',
     JSON.stringify(data, null, 2)
+  );
+
+  // Função auxiliar para atualizar o arquivo .env
+  function updateEnvFile(
+    filePath: string,
+    variableName: string,
+    value: string
+  ) {
+    const envPath = path.resolve(__dirname, filePath);
+    let envFileContent = fs.readFileSync(envPath, 'utf-8');
+    const regex = new RegExp(`^${variableName}=.*`, 'm');
+    if (envFileContent.match(regex)) {
+      envFileContent = envFileContent.replace(
+        regex,
+        `${variableName}="${value}"`
+      );
+    } else {
+      envFileContent += `\n${variableName}="${value}"`;
+    }
+    fs.writeFileSync(envPath, envFileContent);
+  }
+
+  // Atualizar .env nos dois projetos
+  updateEnvFile(
+    '../../loyahub-api/.env',
+    'POINTS_CONTRACT_ADDRESS',
+    proxyContractAddress
+  );
+  updateEnvFile(
+    '../../loyahub-blockchain-service/.env',
+    'POINT_CORE_CONTRACT_ADDRESS',
+    proxyContractAddress
   );
 }
 
