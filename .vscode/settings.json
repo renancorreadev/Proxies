@@ -5,7 +5,7 @@
     "source.fixAll.eslint": "explicit"
   },
   "[solidity]": {
-    "editor.defaultFormatter": "NomicFoundation.hardhat-solidity"
+    "editor.defaultFormatter": "JuanBlanco.solidity"
   },
   "editor.formatOnSave": true,
   "[javascript]": {
