@@ -12,6 +12,7 @@ import {Strings} from '@openzeppelin/contracts/utils/Strings.sol';
 
 import {CustomerManagementCore} from './CustomerManagementCore.sol';
 import {IPointCore} from './interfaces/IPointCore.sol';
+import {IERC20} from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 
 contract PointCore is
     Initializable,
@@ -22,12 +23,20 @@ contract PointCore is
     BadgeToken
 {
     CustomerManagementCore public customerManagerInstance;
+    IERC20 public drexToken;
 
     uint256 public pointsForPremium;
     uint256 public pointsForGold;
     uint256 public pointsForTitanium;
 
+    /// @dev a cada 10 pontos o customer recebe 5 tokens DREX
+    uint256 public tokensPerPointsMultiplerThreshold = 5; // quantidade de tokens DREX que vai receber
+    uint256 public multiplerPointsThreshold = 10; // contador pontos
+
     string public metadataURI;
+
+    event TokensTransferred(uint256 indexed clientId, uint256 amount);
+    event PointsTokenAddressSet(address indexed tokenAddress);
 
     modifier validClient(uint256 clientId) {
         require(
@@ -63,14 +72,41 @@ contract PointCore is
         pointsForTitanium = titanium;
     }
 
+    function setTokensPerPointsMultiplerThreshold(
+        uint256 newValue
+    ) external onlyOwner {
+        tokensPerPointsMultiplerThreshold = newValue;
+    }
+
+    function setMultiplerPointsThreshold(uint256 newValue) external onlyOwner {
+        multiplerPointsThreshold = newValue;
+    }
+
     /// @dev add points
     function addPoints(
         uint256 clientId,
         uint points
     ) public onlyOwner validClient(clientId) {
+        // Adiciona os pontos ao total de pontos do cliente
         clientPoints[clientId] += points;
+
         updateClientLevel(clientId);
 
+        /// @dev calcula quantos tokens DREX ira transferir com base no ratio tokens por pontos : 10ponts/5tokens
+        uint256 tokensToTransfer = (points / multiplerPointsThreshold) *
+            tokensPerPointsMultiplerThreshold;
+
+        address clientAddress = customerManagerInstance.getClientWalletAddress(
+            clientId
+        );
+
+        // Realiza a transferência de tokens
+        require(
+            drexToken.transferFrom(owner(), clientAddress, tokensToTransfer),
+            'Token transfer failed'
+        );
+
+        emit TokensTransferred(clientId, tokensToTransfer);
         emit PointsAdded(clientId, points);
     }
 
@@ -84,6 +120,12 @@ contract PointCore is
 
         clientPoints[clientId] -= points;
         emit PointsRemoved(clientId, points);
+    }
+
+    /// @dev Função para definir o endereço do token ERC20
+    function setPointsTokenAddress(address tokenAddress) external onlyOwner {
+        drexToken = IERC20(tokenAddress);
+        emit PointsTokenAddressSet(tokenAddress);
     }
 
     /// ---------- GETTERS ----------

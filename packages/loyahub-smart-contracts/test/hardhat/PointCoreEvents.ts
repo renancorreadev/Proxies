@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { ethers, upgrades } from 'hardhat';
-import { CustomerManagementCore, PointCore } from '../typechain';
+import { CustomerManagementCore, PointCore } from '../../typechain';
 
 describe('PointCore Events Ommiteds', function () {
   let pointCoreInstance: PointCore;
