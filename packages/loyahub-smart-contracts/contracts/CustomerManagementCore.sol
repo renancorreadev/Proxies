@@ -132,7 +132,7 @@ contract CustomerManagementCore is
         return clientMappingStorage[clientId].name;
     }
 
-    function getNextId() private returns (uint256) {
+    function getNextId() public returns (uint256) {
         return ++currentId;
     }
 
