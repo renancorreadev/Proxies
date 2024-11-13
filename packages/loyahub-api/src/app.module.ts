@@ -11,6 +11,11 @@ import { BlockchainClientConnectionProvider, BlockchainPointsConnectionProvider 
 import { ClientBlockchainAdapter } from './modules/Blockchain/Client/Adapters/Output/ClientBlockChainAdapter';
 import { ClientWebAdapter } from './modules/Blockchain/Client/Adapters/input/ClientWebAdapter';
 import { ClientBlockchainService } from './modules/Blockchain/Client/Domain/ClientBlockchainService';
+/** ALL BLOCKCHAIN ERC20 MODULES IMPORT */
+import { ERC20ManagerBlockchainAdapter } from './modules/Blockchain/ERC20Manager/Adapters/Output/ERC20ManagerBlockchainAdapter';
+import { ERC20ManagerBlockchainWebAdapter } from './modules/Blockchain/ERC20Manager/Adapters/Input/ERC20ManagerBlockchainWebAdapter';
+import { ERC20ManagerBlockchainService } from './modules/Blockchain/ERC20Manager/Domain/ERC20ManagerBlockchainService';
+
 /** ALL BLOCKCHAIN CUSTOMER MODULES IMPORT */
 import { CustomerDBService } from './modules/Blockchain/Client/Domain/CustomerDBService';
 import { CustomerEntity } from './modules/Blockchain/Client/Adapters/Output/db/entity/CustomerEntity';
@@ -58,6 +63,7 @@ import { KeycloakStrategy } from './modules/Authentication/Strategies/KeycloakSt
 	controllers: [
 		ClientWebAdapter,
 		PointsBlockchainWebAdapter,
+		ERC20ManagerBlockchainWebAdapter,
 		MetadataWebAdapter,
 		CustomerDBWebAdapter,
 		AuthenticationWebAdapter,
@@ -72,6 +78,14 @@ import { KeycloakStrategy } from './modules/Authentication/Strategies/KeycloakSt
 		{
 			useClass: ClientBlockchainAdapter,
 			provide: DependencyInjectionTokens.CLIENTBLOCKCHAIN_TOKEN_OUTPUT_PORT,
+		},
+		{
+			useClass: ERC20ManagerBlockchainService,
+			provide: DependencyInjectionTokens.ERC20_MANAGER_BLOCKCHAIN_TOKEN_USE_CASE,
+		},
+		{
+			useClass: ERC20ManagerBlockchainAdapter,
+			provide: DependencyInjectionTokens.ERC20_MANAGER_BLOCKCHAIN_TOKEN_OUTPUT_PORT,
 		},
 		{
 			useClass: PointsBlockchainService,

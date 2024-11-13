@@ -10,7 +10,7 @@ import { UserRegisterDTORequest } from '../../Domain/DTO/HTTPRequest/userHttpReq
 
 import { UserData, UserInfo, UserUpdater } from '../../Domain/@types/user';
 import { RegisterClientRequestDto } from '@/src/modules/Blockchain/Client/Domain/Dto/HTTPRequest/ClientBlockchainRequestDto';
-import { AddressLocal, ClientDataInput } from '@helper/blockchain/types/contracts/client-manager-types';
+import { AddressLocal } from '@helper/blockchain/types/contracts/client-manager-types';
 import axios from 'axios';
 import { DependencyInjectionTokens } from '@helper/AppConstants';
 
