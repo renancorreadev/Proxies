@@ -4,6 +4,7 @@ import { DependencyInjectionTokens } from 'loyahub-api/src/helper/AppConstants';
 import { ERC20ManagerBlockchainTokenUseCase } from '../Port/Input/ERC20ManagerBlockchainTokenUseCase';
 import { GetBalanceRequestDTO } from './Dto/HTTPRequest/get-balance-request-dto';
 import { ERC20ManagerBlockchainTokenOutputPort } from '../Port/Output/ERC20ManagerBlockchainTokenOutputPort';
+import { ApproveDrexRequestDTO } from './Dto/HTTPRequest/approve-request-dto';
 
 @Injectable()
 export class ERC20ManagerBlockchainService implements ERC20ManagerBlockchainTokenUseCase {
@@ -23,6 +24,17 @@ export class ERC20ManagerBlockchainService implements ERC20ManagerBlockchainToke
 		} catch (e) {
 			this.logger.error(`Error in ERC20ManagerBlockchainService: ${JSON.stringify(e)}`);
 			throw new Error('An error occurred while getting the Drex balance');
+		}
+	}
+
+	async approveDrex(params: ApproveDrexRequestDTO): Promise<boolean> {
+		try {
+			const { amount, spender } = params;
+			this.logger.log(`Approving Drex with amount: ${amount} and spender: ${spender}`);
+			return await this.erc20ManagerBlockchainTokenAdapter.approveDrex(params);
+		} catch (e) {
+			this.logger.error(`Error in ERC20ManagerBlockchainService: ${JSON.stringify(e)}`);
+			throw new Error('An error occurred while approving the Drex');
 		}
 	}
 }
