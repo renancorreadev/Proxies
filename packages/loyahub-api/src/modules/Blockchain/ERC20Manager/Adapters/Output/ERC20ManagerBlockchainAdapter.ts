@@ -9,6 +9,7 @@ import { getUserByEmail } from '@helper/api';
 
 /** Connector Blockchain */
 import { ERC20ManagerConnector } from '@helper/blockchain/connector/ERC20ManagerConnector';
+import { ApproveDrexRequestDTO } from '../../Domain/Dto/HTTPRequest/approve-request-dto';
 config();
 
 @Injectable()
@@ -34,6 +35,37 @@ export class ERC20ManagerBlockchainAdapter implements ERC20ManagerBlockchainToke
 		} catch (error) {
 			this.logger.error(`Error: ${JSON.stringify(error.message || error)}`);
 			throw new Error('An error occurred in the balanceOf function on the blockchain');
+		}
+	}
+
+	/**
+	 * This function approves a specified amount of Drex tokens to be spent by a specified spender.
+	 *
+	 * @param {ApproveDrexRequestDTO} params - The parameters required to approve Drex tokens.
+	 * @param {number} params.amount - The amount of Drex tokens to approve.
+	 * @param {string} params.spender - The address of the spender who is approved to spend the tokens.
+	 *
+	 * @returns {Promise<boolean>} - Returns a promise that resolves to a boolean indicating whether the approval was successful.
+	 *
+	 * @throws {Error} - Throws an error if there is an issue with the approval process.
+	 */
+	async approveDrex(params: ApproveDrexRequestDTO): Promise<boolean> {
+		try {
+			const { amount, spender } = params;
+
+			const { ERC20_CONTRACT_ADDRESS, PROVIDER, PRIVATE_KEY } = process.env;
+			if (!ERC20_CONTRACT_ADDRESS || !PROVIDER) {
+				throw new Error('Missing required environment variables');
+			}
+
+			const drexContractInstance = new ERC20ManagerConnector(ERC20_CONTRACT_ADDRESS, PROVIDER, PRIVATE_KEY);
+
+			const { hash } = await drexContractInstance.approve({ spender, amount });
+
+			return !!hash;
+		} catch (error) {
+			this.logger.error(`Error: ${JSON.stringify(error.message || error)}`);
+			throw new Error('An error occurred in the approve function on the blockchain');
 		}
 	}
 }

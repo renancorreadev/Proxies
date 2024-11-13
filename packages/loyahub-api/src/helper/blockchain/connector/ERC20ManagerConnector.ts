@@ -1,6 +1,6 @@
 import { ContractTransactionReceipt } from 'ethers';
 import { ERC20ManagerBlockchainConnector } from '../ERC20ManagerBlockchainConnector';
-import { BalanceOfParam, TransferToParam } from '../types/contracts/erc20-manager-types';
+import { BalanceOfParam, TransferToParam, ApproveParam } from '../types/contracts/erc20-manager-types';
 
 import { IERC20ManagerConnector } from './interfaces/IERC20ManagerConnector';
 
@@ -33,6 +33,20 @@ export class ERC20ManagerConnector extends ERC20ManagerBlockchainConnector imple
 
 			const errorMessage = e instanceof Error ? e.message : 'Unknown error';
 			throw new Error(`Erro ao escrever na função transfer do contrato na EVM: ${errorMessage}`);
+		}
+	}
+
+	async approve(params: ApproveParam): Promise<ContractTransactionReceipt> {
+		try {
+			const { spender, amount } = params;
+			const tx = await this.contract.approve(spender, amount, {
+				gasLimit: 500000,
+				gasPrice: 0,
+			});
+
+			return await tx.wait();
+		} catch (e) {
+			console.error('Erro ao aprovar o gasto do token Drex:', e);
 		}
 	}
 }

@@ -1,4 +1,4 @@
-import { Query, Controller, Get, HttpException, Inject, Logger } from '@nestjs/common';
+import { Query, Controller, Get, HttpException, Inject, Logger, Post, Body } from '@nestjs/common';
 import {
 	ApiBadRequestResponse,
 	ApiForbiddenResponse,
@@ -10,6 +10,7 @@ import {
 } from '@nestjs/swagger';
 import { BaseUrls, DependencyInjectionTokens } from 'loyahub-api/src/helper/AppConstants';
 import { ERC20ManagerBlockchainTokenUseCase } from '../../Port/Input/ERC20ManagerBlockchainTokenUseCase';
+import { ApproveDrexRequestDTO } from '../../Domain/Dto/HTTPRequest/approve-request-dto';
 
 @Controller({
 	path: BaseUrls.ERC20_BLOCKCHAIN,
@@ -49,6 +50,41 @@ export class ERC20ManagerBlockchainWebAdapter {
 		} catch (error) {
 			this.logger.error(`Error in ERC20 Blockchain Service: ${JSON.stringify(error)}`);
 			throw new HttpException('An error occurred while getting the Drex balance', 500);
+		}
+	}
+
+	@ApiOperation({
+		summary: 'Approve Drex',
+		description: 'Esse Endpoint aprova o gasto do token DREX',
+	})
+	@ApiOkResponse({
+		description: 'Success operation',
+		type: String,
+	})
+	@ApiBadRequestResponse({ description: 'Bad request' })
+	@ApiForbiddenResponse({ description: 'Forbidden' })
+	@ApiNotFoundResponse({ description: 'Segment not found' })
+	@ApiInternalServerErrorResponse({ description: 'Unexpected error' })
+	@Post('approveDrex')
+	async approveDrex(@Body() params: ApproveDrexRequestDTO): Promise<string> {
+		try {
+			const { amount, spender } = params;
+			this.logger.log('----------PROCESS BEGIN ----------');
+			this.logger.log(`Running ERC20 Blockchain Web adapter`);
+			this.logger.log(`Execution: approveDrex with params: amount=${amount} and spender=${spender}`);
+
+			const response = await this.erc20BlockchainService.approveDrex(params);
+
+			if (!response) {
+				throw new HttpException('An error occurred while approving the Drex', 500);
+			} else {
+				this.logger.log('Approval successful');
+			}
+			this.logger.log('---------- PROCESS END ----------');
+			return 'Approval successful';
+		} catch (error) {
+			this.logger.error(`Error in ERC20 Blockchain Service: ${JSON.stringify(error)}`);
+			throw new HttpException('An error occurred while approving the Drex', 500);
 		}
 	}
 }
