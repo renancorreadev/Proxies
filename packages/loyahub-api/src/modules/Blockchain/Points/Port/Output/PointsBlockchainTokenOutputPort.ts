@@ -1,5 +1,9 @@
 import { BalanceOfBatchParam, BalanceOfParam } from '@helper/blockchain/types/contracts/points-core-types';
-import { AddPointsRequestDto, RemovePointsRequestDTO } from '../../Domain/Dto/HTTPRequest/AddPointsRequestDto';
+import {
+	AddPointsRequestDto,
+	RemovePointsRequestDTO,
+	SetDrexAddressRequestDTO,
+} from '../../Domain/Dto/HTTPRequest/AddPointsRequestDto';
 
 export interface PointsBlockchainTokenOutputPort {
 	addPoints(registerClientBlockchainDto: AddPointsRequestDto): Promise<string>;
@@ -8,4 +12,5 @@ export interface PointsBlockchainTokenOutputPort {
 	getClientLevel(clientId: number): Promise<number>;
 	getMultiplesNFT(params: BalanceOfBatchParam): Promise<number[]>;
 	getUniqueNFT(params: BalanceOfParam): Promise<number>;
+	setDrexContractAddress(address: SetDrexAddressRequestDTO): Promise<string>;
 }
