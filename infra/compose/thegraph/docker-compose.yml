@@ -1,12 +1,4 @@
 services:
-  ipfs:
-    container_name: ipfs
-    image: ipfs/go-ipfs:v0.9.1
-    ports:
-      - '5001:5001'
-    networks:
-      - protocol
-
   postgres-graph:
     container_name: postgres-graph
     image: postgres:13
@@ -27,20 +19,19 @@ services:
     container_name: graph-node
     image: graphprotocol/graph-node
     ports:
-      - '8000:8000'
-      - '8020:8020'
-      - '8030:8030'
-      - '8040:8040'
-    depends_on:
-      - ipfs
-      - postgres-graph
+      - "8000:8000"
+      - "8020:8020"
+      - "8030:8030"
+      - "8040:8040"
     environment:
+      ipfs: 'http://rust-ipfs:8081'
       postgres_host: postgres-graph
       postgres_user: graph
       postgres_pass: letmein
       postgres_db: graph
-      ipfs: 'http://ipfs:5001'
       ethereum: 'private:http://bootnode:8545'
+    depends_on:
+      - postgres-graph
     networks:
       - protocol
 
@@ -51,3 +42,4 @@ volumes:
 networks:
   protocol:
     external: true
+

@@ -6,6 +6,7 @@
   "scripts": {
     "run-infra": "bash scripts/run-infra.sh",
     "stop-infra": "bash scripts/stop-infra.sh",
+    "subgraph-server": "lerna run --scope subgraph-server --stream start",
     "start": "lerna run --parallel --stream --no-bail dev --scope loyahub-blockchain-service --scope loyahub-admin-ui --scope loyahub-app --scope loyahub-doc",
     "start:full": "lerna run --parallel --stream --no-bail dev --scope loyahub-blockchain-service --scope loyahub-api --scope loyahub-admin-ui --scope loyahub-app --scope loyahub-doc",
     "start:dev": "lerna run --parallel --stream dev --scope loyahub-api --scope loyahub-blockchain-service",
