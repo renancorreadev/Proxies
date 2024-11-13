@@ -1,5 +1,10 @@
 import { PointCoreBlockchainConnector } from '../PointsCoreBlockchainConnector';
-import { AddPointsParamInput, BalanceOfBatchParam, RemovePointsParamInput } from '../types/contracts/points-core-types';
+import {
+	AddPointsParamInput,
+	BalanceOfBatchParam,
+	RemovePointsParamInput,
+	SetDrexAddressParamInput,
+} from '../types/contracts/points-core-types';
 import { IPointManagerConnector } from './interfaces/IPointManagerConnector';
 import { ContractTransactionReceipt } from 'ethers';
 
@@ -41,6 +46,23 @@ export class PointsManagerConnector extends PointCoreBlockchainConnector impleme
 
 			const errorMessage = e instanceof Error ? e.message : 'Unknown error';
 			throw new Error(`Erro ao escrever na função addPoints do contrato na EVM: ${errorMessage}`);
+		}
+	}
+
+	async setDrexContractAddress(params: SetDrexAddressParamInput): Promise<ContractTransactionReceipt> {
+		try {
+			const { newAddress } = params;
+			const tx = await this.contract.setPointsTokenAddress(newAddress, {
+				gasLimit: 500000,
+				gasPrice: 0,
+			});
+
+			return await tx.wait();
+		} catch (e) {
+			console.error('Erro ao setar o endereço do contrato DREX:', e);
+
+			const errorMessage = e instanceof Error ? e.message : 'Unknown error';
+			throw new Error(`Erro ao escrever na função setPointsTokenAddress do contrato na EVM: ${errorMessage}`);
 		}
 	}
 
