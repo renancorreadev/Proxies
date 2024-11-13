@@ -28,12 +28,16 @@ import { BaseUrls, DependencyInjectionTokens } from 'loyahub-api/src/helper/AppC
 
 import { PointsBlockchainTokenUseCase } from '../../Port/Input/PointsBlockchainTokenUseCase';
 
-import { AddPointsRequestDto, RemovePointsRequestDTO } from '../../Domain/Dto/HTTPRequest/AddPointsRequestDto';
+import {
+	AddPointsRequestDto,
+	RemovePointsRequestDTO,
+	SetDrexAddressRequestDTO,
+} from '../../Domain/Dto/HTTPRequest/AddPointsRequestDto';
 import { GetClientPointsResponse } from '../../Domain/Dto/HTTPResponse/GetClientPointsResponse';
 import { GetClientLevelResponse } from '../../Domain/Dto/HTTPResponse/GetClientLevelResponse';
 
 import { GetUniqueNFTResponse } from '../../Domain/Dto/HTTPResponse/GetUniqueNFTResponse';
-import { JwtAuthGuard } from '@/src/modules/Authentication/Guards/Auth.Guard';
+// import { JwtAuthGuard } from '@/src/modules/Authentication/Guards/Auth.Guard';
 
 // @ApiBearerAuth('JWT-auth')
 @Controller({
@@ -115,6 +119,41 @@ export class PointsBlockchainWebAdapter {
 		} catch (error) {
 			this.logger.error(`Error in Points Blockchain Service: ${JSON.stringify(error)}`);
 			throw new HttpException('An error ocurred while adding the points', 500);
+		}
+	}
+
+	/// --------------------------------------------------------------------------------------
+	/// ------------------------      REMOVE POINTS TO CUSTOMER          ---------------------
+	/// --------------------------------------------------------------------------------------
+	@ApiOperation({
+		summary: 'Set DREX address to recover tokens',
+		description: 'Esse endpoint atualiza o endereço do contrato DREX',
+	})
+	@ApiBody({ required: true, type: SetDrexAddressRequestDTO })
+	@ApiOkResponse({
+		description: 'Success operation',
+		type: String,
+	})
+	@ApiBadRequestResponse({ description: 'Bad request' })
+	// @	// @ApiUnauthorizedResponse({ description: 'Unauthorized' })({ description: 'Unauthorized' })
+	@ApiForbiddenResponse({ description: 'Forbidden' })
+	@ApiNotFoundResponse({ description: 'Segment not found' })
+	@ApiInternalServerErrorResponse({ description: 'Unexpected error' })
+	// @UseGuards(JwtAuthGuard)
+	@Post('/set-drex')
+	async setDrexAddress(@Body() setDrexAddressDTO: SetDrexAddressRequestDTO): Promise<string> {
+		try {
+			this.logger.log('----------PROCESS BEGIN ----------');
+			this.logger.log(`Running Client Blockchain Web adapter`);
+			this.logger.log(`Execution: setDrexAddress with params: ${JSON.stringify(setDrexAddressDTO)}`);
+
+			const response = await this.pointsBlockchainService.setDrexContractAddress(setDrexAddressDTO);
+
+			this.logger.log('---------- PROCESS END ----------');
+			return response;
+		} catch (error) {
+			this.logger.error(`Error in Points Blockchain Service: ${JSON.stringify(error)}`);
+			throw new HttpException('An error ocurred while setting the drex address', 500);
 		}
 	}
 

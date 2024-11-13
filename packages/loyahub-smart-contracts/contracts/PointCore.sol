@@ -30,8 +30,8 @@ contract PointCore is
     uint256 public pointsForTitanium;
 
     /// @dev a cada 10 pontos o customer recebe 5 tokens DREX
-    uint256 public tokensPerPointsMultiplerThreshold = 5; // quantidade de tokens DREX que vai receber
-    uint256 public multiplerPointsThreshold = 10; // contador pontos
+    uint256 public tokensPerPointsMultiplerThreshold; // quantidade de tokens DREX que vai receber
+    uint256 public multiplerPointsThreshold; // contador pontos
 
     string public metadataURI;
 
@@ -58,6 +58,8 @@ contract PointCore is
 
         setPointThresholds(200, 500, 1000);
         metadataURI = uri;
+        tokensPerPointsMultiplerThreshold = 5;
+        multiplerPointsThreshold = 10;
     }
 
     // ---------- SETTERS ----------

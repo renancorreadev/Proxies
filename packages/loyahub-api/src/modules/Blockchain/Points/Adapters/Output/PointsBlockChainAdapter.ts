@@ -1,7 +1,11 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { config } from 'dotenv';
 import { PointsBlockchainTokenOutputPort } from '@/src/modules/Blockchain/Points/Port/Output/PointsBlockchainTokenOutputPort';
-import { AddPointsRequestDto, RemovePointsRequestDTO } from '../../Domain/Dto/HTTPRequest/AddPointsRequestDto';
+import {
+	AddPointsRequestDto,
+	RemovePointsRequestDTO,
+	SetDrexAddressRequestDTO,
+} from '../../Domain/Dto/HTTPRequest/AddPointsRequestDto';
 import { DependencyInjectionBlockchainConnector, DependencyInjectionTokens } from '@helper/AppConstants';
 import { PointsManagerConnector } from '@helper/blockchain/connector';
 import { BalanceOfBatchParam, BalanceOfParam } from '@helper/blockchain/types/contracts/points-core-types';
@@ -65,6 +69,26 @@ export class PointsBlockchainAdapter implements PointsBlockchainTokenOutputPort 
 			}
 
 			return 'Points removed successfully on blockchain and saved in db';
+		} catch (e) {
+			const errorMessage = e.response ? e.response.data : e.message;
+			this.logger.error(`Error: ${JSON.stringify(errorMessage)}`);
+			throw new Error(`An error occurred in write contract removePoints function on blockchain`);
+		}
+	}
+
+	async setDrexContractAddress(setDrexNewAddress: SetDrexAddressRequestDTO): Promise<string> {
+		try {
+			const { newAddress } = setDrexNewAddress;
+
+			const transaction = await this.contractInstance.setDrexContractAddress({
+				newAddress,
+			});
+
+			if (transaction.hash) {
+				return `The Contract Address changed to ${newAddress}`;
+			} else {
+				throw new Error(`An error occurred in write contract removePoints function on blockchain`);
+			}
 		} catch (e) {
 			const errorMessage = e.response ? e.response.data : e.message;
 			this.logger.error(`Error: ${JSON.stringify(errorMessage)}`);

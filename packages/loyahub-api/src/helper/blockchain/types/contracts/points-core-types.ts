@@ -10,6 +10,10 @@ export type RemovePointsParamInput = {
 	points: BigNumberish;
 };
 
+export type SetDrexAddressParamInput = {
+	newAddress: string;
+};
+
 export type BalanceOfParam = {
 	account: string;
 	id: number;

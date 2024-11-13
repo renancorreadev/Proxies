@@ -3,7 +3,11 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DependencyInjectionTokens } from 'loyahub-api/src/helper/AppConstants';
 import { PointsBlockchainTokenUseCase } from '../Port/Input/PointsBlockchainTokenUseCase';
 import { PointsBlockchainTokenOutputPort } from '../Port/Output/PointsBlockchainTokenOutputPort';
-import { AddPointsRequestDto, RemovePointsRequestDTO } from './Dto/HTTPRequest/AddPointsRequestDto';
+import {
+	AddPointsRequestDto,
+	RemovePointsRequestDTO,
+	SetDrexAddressRequestDTO,
+} from './Dto/HTTPRequest/AddPointsRequestDto';
 
 import { BalanceOfBatchParam, BalanceOfParam } from '@helper/blockchain/types/contracts/points-core-types';
 
@@ -33,6 +37,17 @@ export class PointsBlockchainService implements PointsBlockchainTokenUseCase {
 		} catch (e) {
 			this.logger.error(`Error in Points Blockchain Service: ${JSON.stringify(e)}`);
 			throw new Error('An error ocurred while adding the points');
+		}
+	}
+
+	async setDrexContractAddress(address: SetDrexAddressRequestDTO): Promise<string> {
+		try {
+			await this.clientBlockchainTokenAdapter.setDrexContractAddress(address);
+
+			return 'Drex address successfully updated on blockchain';
+		} catch (e) {
+			this.logger.error(`Error in Points Blockchain Service: ${JSON.stringify(e)}`);
+			throw new Error('An error ocurred while set the points token address');
 		}
 	}
 
