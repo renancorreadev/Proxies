@@ -1,5 +1,9 @@
-import { BalanceOfBatchParam, RemovePointsParamInput } from '@helper/blockchain/types/contracts/points-core-types';
-import { AddPointsParamInput } from '@helper/blockchain/types/contracts/points-core-types';
+import {
+	BalanceOfBatchParam,
+	RemovePointsParamInput,
+	AddPointsParamInput,
+} from '@helper/blockchain/types/contracts/points-core-types';
+
 import { ContractTransactionReceipt } from 'ethers';
 
 export interface IPointManagerConnector {
