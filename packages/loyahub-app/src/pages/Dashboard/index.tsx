@@ -1,87 +1,28 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { toast } from 'sonner';
+import { useFetchMetadata } from '@/hooks/useFetchMetadata';
+import { useFetchPoints } from '@/hooks/useFetchPoints';
+import { useFetchDrexBalance } from '@/hooks/useFetchDrexBalance';
 import { Toaster } from '@/components/ui';
 import { useUserStore } from '@/store/store';
-import { FaCoins } from 'react-icons/fa';
-import { MdOutlineAccountBalanceWallet } from 'react-icons/md';
-
-interface Benefit {
-  discount?: string;
-  FreeFrete?: string;
-  description: string;
-  promotionLevel?: string;
-  doublePoints?: string;
-}
-
-interface Attribute {
-  type: string;
-  value: number | string | Benefit[];
-}
-
-interface Metadata {
-  tokenID: number;
-  customer: string;
-  description: string;
-  image: string;
-  insight: string;
-  attributes: Attribute[];
-  createdAt: string;
-  updatedAt: string;
-}
+import { FaCoins, FaUserAlt, FaMapMarkerAlt } from 'react-icons/fa';
+import {
+  MdOutlineAccountBalanceWallet,
+  MdOutlinePayment,
+} from 'react-icons/md';
 
 export const Dashboard = () => {
-  const [metadata, setMetadata] = useState<Metadata | null>(null);
-  const [drexBalance, setDrexBalance] = useState<number | null>(null);
-  const [points, setPoints] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true);
   const { userData } = useUserStore();
+  const userId = userData?.id;
+  const email = sessionStorage.getItem('email');
 
-  useEffect(() => {
-    const userId = userData?.id;
-    const email = sessionStorage.getItem('email');
+  const { metadata, loading: metadataLoading } = useFetchMetadata(
+    userId?.toString()
+  );
+  const { points, loading: pointsLoading } = useFetchPoints(userId?.toString());
+  const { drexBalance, loading: drexLoading } = useFetchDrexBalance(email);
 
-    const fetchMetadata = async () => {
-      setLoading(true);
-      try {
-        const [metadataResponse, pointsResponse, drexBalanceResponse] =
-          await Promise.all([
-            axios.get<Metadata>(
-              `http://localhost:3001/api/v1/metadata/${userId}`
-            ),
-            axios.get<number>(`http://localhost:3001/api/v1/points/${userId}`),
-            axios.get<number>(
-              `http://localhost:3001/api/v1/erc20/balanceDrex/?email=${email}`
-            ),
-          ]);
+  const loading = metadataLoading || pointsLoading || drexLoading;
 
-        if (
-          metadataResponse.data &&
-          pointsResponse.data &&
-          drexBalanceResponse.data !== null
-        ) {
-          setMetadata(metadataResponse.data);
-          setPoints(pointsResponse.data);
-          setDrexBalance(drexBalanceResponse.data);
-        }
-      } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-        toast.error('Erro ao carregar os dados. Tente novamente.', {
-          action: {
-            label: 'Tentar novamente',
-            onClick: fetchMetadata,
-          },
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMetadata();
-  }, [userData]);
-
-  if (loading)
+  if (loading) {
     return (
       <div className="flex justify-center items-center h-screen bg-gray-900 text-white">
         <span className="animate-pulse text-2xl font-semibold">
@@ -89,74 +30,84 @@ export const Dashboard = () => {
         </span>
       </div>
     );
+  }
+
+  let paymentStatusText;
+  if (userData?.paymentStatus === 0) {
+    paymentStatusText = 'Pendente';
+  } else if (userData?.paymentStatus === 1) {
+    paymentStatusText = 'Completo';
+  } else {
+    paymentStatusText = 'Indefinido';
+  }
 
   return (
-    <div className="p-4 md:p-8 max-w-screen-xl mx-auto text-white bg-gradient-to-br from-gray-900 to-gray-800">
+    <div className="p-4 md:p-8 max-w-screen-xxl mx-auto text-white bg-gradient-to-br from-gray-900 to-gray-800 px-8">
       <Toaster />
-
-      {/* Perfil do Usuário */}
-      <div className="flex flex-col md:flex-row items-center gap-6 mb-10 bg-gray-800 bg-opacity-70 p-6 rounded-lg shadow-lg animate-fade-in">
+      <div className="flex flex-col md:flex-row items-center gap-6 mb-10 bg-gray-800 bg-opacity-70 p-6 rounded-lg shadow-lg">
         <img
           src={userData?.profileImageUrl}
           alt="User Profile"
           className="w-28 h-28 md:w-36 md:h-36 rounded-full shadow-lg border-4 border-gray-700"
         />
-        <div className="text-center md:text-left">
-          <h2 className="text-3xl md:text-4xl font-semibold mb-2">
+        <div>
+          <h2 className="text-3xl md:text-4xl font-semibold">
             {userData?.username}
           </h2>
           <p className="text-gray-400">Email: {userData?.email}</p>
           <p className="text-gray-400">Wallet: {userData?.walletAddress}</p>
-          <p className="text-gray-400">Localização: {userData?.address.City}</p>
         </div>
       </div>
 
-      {/* Informações do Token e Pontos */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10 animate-fade-in-up">
-        <div className="bg-gray-700 bg-opacity-75 rounded-lg shadow-lg p-6 text-center">
-          <h3 className="text-lg font-semibold">Token ID</h3>
-          <p className="text-3xl font-bold text-yellow-500">
-            {metadata?.tokenID}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+        <div className="flex flex-col items-center bg-gradient-to-r from-blue-500 to-blue-400 text-white rounded-lg p-6 text-center animate-fade-in-up transform hover:scale-105 transition-transform duration-300">
+          <FaUserAlt size={40} className="mb-4" />
+          <h3 className="text-lg font-semibold">Idade</h3>
+          <p className="text-3xl font-bold">
+            {userData?.age ?? 'Não Informado'}
           </p>
         </div>
-        <div className="bg-gray-700 bg-opacity-75 rounded-lg shadow-lg p-6 text-center">
-          <h3 className="text-lg font-semibold">Criado em</h3>
-          <p className="text-xl font-medium text-gray-300">
-            {new Date(metadata?.createdAt || '').toLocaleDateString()}
+        <div className="flex flex-col items-center bg-gradient-to-r from-purple-500 to-purple-400 text-white rounded-lg p-6 text-center animate-fade-in-up transform hover:scale-105 transition-transform duration-300">
+          <FaMapMarkerAlt size={40} className="mb-4" />
+          <h3 className="text-lg font-semibold">Endereço Local</h3>
+          <p className="text-xl font-medium">
+            {userData?.address?.City}, {userData?.address?.Street}, Nº{' '}
+            {userData?.address?.HouseNumber} - {userData?.address?.PostalCode}
           </p>
         </div>
-        <div className="bg-gray-700 bg-opacity-75 rounded-lg shadow-lg p-6 text-center">
-          <h3 className="text-lg font-semibold">Atualizado em</h3>
-          <p className="text-xl font-medium text-gray-300">
-            {new Date(metadata?.updatedAt || '').toLocaleDateString()}
+        <div className="flex flex-col items-center bg-gradient-to-r from-red-500 to-red-400 text-white rounded-lg p-6 text-center animate-fade-in-up transform hover:scale-105 transition-transform duration-300">
+          <MdOutlinePayment size={40} className="mb-4" />
+          <h3 className="text-lg font-semibold">Status do Pagamento</h3>
+          <p
+            className={`text-3xl font-bold ${
+              userData?.paymentStatus === 0
+                ? 'text-yellow-200'
+                : 'text-green-500'
+            }`}
+          >
+            {paymentStatusText}
           </p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 lg:px-24 animate-fade-in-up">
-        {/* Pontos Card */}
-        <div className="flex flex-col items-center bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform duration-300">
-          {/** // @ts-ignore */}
-          <FaCoins size={40} className="mb-4" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+        <div className="flex flex-col items-center bg-purple-500 text-white rounded-lg p-6 text-center animate-fade-in-up transform hover:scale-105 transition-transform duration-300">
+          <FaCoins size={40} />
           <h3 className="text-lg font-semibold">Pontos</h3>
           <p className="text-3xl font-bold">
             {points !== null ? points : 'N/A'}
           </p>
         </div>
-
-        {/* Balance Card */}
-        <div className="flex flex-col items-center bg-gradient-to-r from-teal-500 to-cyan-600 text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform duration-300">
-          {/** // @ts-ignore */}
-          <MdOutlineAccountBalanceWallet size={40} className="mb-4" />
+        <div className="flex flex-col items-center bg-teal-500 text-white rounded-lg p-6 text-center animate-fade-in-up transform hover:scale-105 transition-transform duration-300">
+          <MdOutlineAccountBalanceWallet size={40} />
           <h3 className="text-lg font-semibold">Drex</h3>
           <p className="text-3xl font-bold">
-            R$ {drexBalance !== null ? drexBalance : 'N/A'}
+            {drexBalance !== null ? `${drexBalance}` : 'N/A'}
           </p>
         </div>
       </div>
 
-      {/* Atributos */}
-      <div className="mb-10 animate-fade-in-up">
+      <div className="mb-10">
         <h3 className="text-2xl font-semibold mb-6">Atributos</h3>
         <ul className="space-y-6">
           {metadata?.attributes.map((attr, index) => (
@@ -164,7 +115,7 @@ export const Dashboard = () => {
               key={index}
               className="bg-gray-800 bg-opacity-75 rounded-lg shadow-lg p-6"
             >
-              <p className="text-lg font-medium text-gray-100">{attr.type}</p>
+              <p className="text-lg font-medium">{attr.type}</p>
               {Array.isArray(attr.value) ? (
                 <ul className="mt-2 space-y-2">
                   {(attr.value as Benefit[]).map((benefit, i) => (
@@ -185,8 +136,7 @@ export const Dashboard = () => {
         </ul>
       </div>
 
-      {/* Benefícios Exclusivos */}
-      <div className="animate-fade-in-up">
+      <div>
         <h3 className="text-2xl font-semibold mb-6">Benefícios Exclusivos</h3>
         <ul className="space-y-6">
           {metadata?.attributes
@@ -197,9 +147,7 @@ export const Dashboard = () => {
                 key={i}
                 className="bg-gradient-to-r from-yellow-500 to-yellow-300 rounded-lg p-6 shadow-lg transform hover:scale-105 transition-transform duration-300"
               >
-                <p className="text-lg font-medium text-gray-900">
-                  {benefit.description}
-                </p>
+                <p className="text-lg font-medium">{benefit.description}</p>
                 <p className="text-gray-700 text-sm">
                   {benefit.discount ||
                     benefit.FreeFrete ||
