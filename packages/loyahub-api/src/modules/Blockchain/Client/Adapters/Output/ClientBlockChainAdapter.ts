@@ -26,7 +26,7 @@ export class ClientBlockchainAdapter implements ClientBlockchainTokenOutputPort 
 
 	async registerClient(registerClientBlockchainDto: RegisterClientRequestDto): Promise<any> {
 		try {
-			const { name, age, WalletAddress, paymentStatus, address } = registerClientBlockchainDto;
+			const { name, age, walletAddress, paymentStatus, address } = registerClientBlockchainDto;
 
 			const addressLocal: AddressLocal = {
 				City: address.City,
@@ -37,7 +37,7 @@ export class ClientBlockchainAdapter implements ClientBlockchainTokenOutputPort 
 			const payload: ClientDataInput = {
 				name,
 				age,
-				WalletAddress,
+				walletAddress,
 				paymentStatus,
 				addressLocal,
 			};

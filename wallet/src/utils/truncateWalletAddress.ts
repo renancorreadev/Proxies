@@ -1,4 +1,4 @@
-export const truncateWalletAddress = (
+export const truncatewalletAddress = (
   address: string,
   end: number = 5,
   offset: number = 5

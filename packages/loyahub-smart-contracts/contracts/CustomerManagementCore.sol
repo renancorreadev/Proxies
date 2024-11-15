@@ -40,12 +40,12 @@ contract CustomerManagementCore is
     function _registerClient(ClientDataInput calldata newClient) internal {
         checkValidPaymentStatus(newClient.paymentStatus);
         checkClientDataIsEmpty(newClient);
-        checkClientExistsByWallet(newClient.WalletAddress);
+        checkClientExistsByWallet(newClient.walletAddress);
 
         uint256 nextId = getNextId();
 
         /// @dev use clientID (nextID) to register tokenID
-        userTokenIDs[newClient.WalletAddress] = nextId;
+        userTokenIDs[newClient.walletAddress] = nextId;
 
         AddressLocal memory newAddressLocal = AddressLocal({
             City: newClient.addressLocal.City,
@@ -58,18 +58,18 @@ contract CustomerManagementCore is
             clientId: nextId,
             name: newClient.name,
             age: newClient.age,
-            WalletAddress: newClient.WalletAddress,
+            walletAddress: newClient.walletAddress,
             paymentStatus: newClient.paymentStatus,
             addressLocal: newAddressLocal
         });
 
         clientMappingStorage[nextId] = newClientData;
 
-        walletAddressExists[newClient.WalletAddress] = true;
+        walletAddressExists[newClient.walletAddress] = true;
 
         clientsByName[newClient.name].push(nextId);
 
-        clientsByAddress[newClient.WalletAddress].push(nextId);
+        clientsByAddress[newClient.walletAddress].push(nextId);
 
         clientsByAge[newClient.age].push(nextId);
 
@@ -89,10 +89,10 @@ contract CustomerManagementCore is
         return clientMappingStorage[clientId];
     }
 
-    function getClientWalletAddress(
+    function getClientwalletAddress(
         uint256 clientId
     ) public view clientNotExists(clientId) returns (address) {
-        return clientMappingStorage[clientId].WalletAddress;
+        return clientMappingStorage[clientId].walletAddress;
     }
 
     function getClientsByName(
@@ -171,8 +171,8 @@ contract CustomerManagementCore is
         if (newClient.age == 0) {
             revert EmptyParameter('It cannot be empty age');
         }
-        if (newClient.WalletAddress == address(0)) {
-            revert EmptyParameter('It cannot be empty WalletAddress');
+        if (newClient.walletAddress == address(0)) {
+            revert EmptyParameter('It cannot be empty walletAddress');
         }
         checkAddressLocal(newClient.addressLocal);
     }
@@ -194,7 +194,7 @@ contract CustomerManagementCore is
         }
     }
 
-    error ClientAlreadyExists(address WalletAddress);
+    error ClientAlreadyExists(address walletAddress);
 
     function checkClientExistsByWallet(address walletAddress) private view {
         if (walletAddressExists[walletAddress]) {

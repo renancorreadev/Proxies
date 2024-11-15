@@ -12,7 +12,7 @@ interface AddressLocalDto {
 interface ClientFormData {
   name: string;
   age: number;
-  WalletAddress: string;
+  walletAddress: string;
   paymentStatus: number;
   address: AddressLocalDto;
 }
@@ -21,7 +21,7 @@ export const ClientRegistrationForm: React.FC = () => {
   const initialFormData: ClientFormData = {
     name: '',
     age: 0,
-    WalletAddress: '',
+    walletAddress: '',
     paymentStatus: 0,
     address: {
       City: '',
@@ -119,7 +119,7 @@ export const ClientRegistrationForm: React.FC = () => {
           {/* Input para Wallet Address */}
           <div className="mb-4">
             <label
-              htmlFor="WalletAddress"
+              htmlFor="walletAddress"
               className="block text-sm font-medium text-gray-700"
             >
               Wallet Address:
@@ -127,8 +127,8 @@ export const ClientRegistrationForm: React.FC = () => {
             <input
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               type="text"
-              name="WalletAddress"
-              value={formData.WalletAddress}
+              name="walletAddress"
+              value={formData.walletAddress}
               onChange={handleChange}
               required
             />

@@ -25,7 +25,7 @@ import { formatDollar } from "../../../utils/formatDollars";
 import { placeholderArr } from "../../../utils/placeholder";
 import { Chains, GenericTransaction } from "../../../types";
 import { GeneralStatus } from "../../../store/types";
-import { truncateWalletAddress } from "../../../utils/truncateWalletAddress";
+import { truncatewalletAddress } from "../../../utils/truncatewalletAddress";
 // import { isCloseToBottom } from "../../../utils/isCloseToBottom";
 import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import SendIcon from "../../../assets/svg/send.svg";
@@ -259,7 +259,7 @@ export default function Index() {
         <CryptoInfoCard
           onPress={() => _handlePressButtonAsync(urlBuilder(item.hash))}
           title={capitalizeFirstLetter(item.direction)}
-          caption={`To ${truncateWalletAddress(item.to)}`}
+          caption={`To ${truncatewalletAddress(item.to)}`}
           details={`${sign} ${item.value} ${item.asset}`}
           icon={<Icon width={35} height={35} fill={theme.colors.white} />}
         />
@@ -271,7 +271,7 @@ export default function Index() {
         <CryptoInfoCard
           onPress={() => _handlePressButtonAsync(urlBuilder(item.hash))}
           title={capitalizeFirstLetter(item.direction)}
-          caption={`To ${truncateWalletAddress(item.to)}`}
+          caption={`To ${truncatewalletAddress(item.to)}`}
           details={`${sign} ${item.value} ${item.asset}`}
           icon={<Icon width={35} height={35} fill={theme.colors.white} />}
         />

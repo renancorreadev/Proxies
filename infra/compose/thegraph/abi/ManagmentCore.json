@@ -34,7 +34,7 @@
             { "name": "name", "type": "string", "internalType": "string" },
             { "name": "age", "type": "uint256", "internalType": "uint256" },
             {
-              "name": "WalletAddress",
+              "name": "walletAddress",
               "type": "address",
               "internalType": "address"
             },
@@ -82,7 +82,7 @@
     },
     {
       "type": "function",
-      "name": "getClientWalletAddress",
+      "name": "getClientwalletAddress",
       "inputs": [
         { "name": "clientId", "type": "uint256", "internalType": "uint256" }
       ],
@@ -113,7 +113,7 @@
             { "name": "name", "type": "string", "internalType": "string" },
             { "name": "age", "type": "uint256", "internalType": "uint256" },
             {
-              "name": "WalletAddress",
+              "name": "walletAddress",
               "type": "address",
               "internalType": "address"
             },
@@ -170,7 +170,7 @@
             { "name": "name", "type": "string", "internalType": "string" },
             { "name": "age", "type": "uint256", "internalType": "uint256" },
             {
-              "name": "WalletAddress",
+              "name": "walletAddress",
               "type": "address",
               "internalType": "address"
             },
@@ -227,7 +227,7 @@
             { "name": "name", "type": "string", "internalType": "string" },
             { "name": "age", "type": "uint256", "internalType": "uint256" },
             {
-              "name": "WalletAddress",
+              "name": "walletAddress",
               "type": "address",
               "internalType": "address"
             },
@@ -329,7 +329,7 @@
             { "name": "name", "type": "string", "internalType": "string" },
             { "name": "age", "type": "uint256", "internalType": "uint256" },
             {
-              "name": "WalletAddress",
+              "name": "walletAddress",
               "type": "address",
               "internalType": "address"
             },
@@ -486,7 +486,7 @@
       "name": "ClientAlreadyExists",
       "inputs": [
         {
-          "name": "WalletAddress",
+          "name": "walletAddress",
           "type": "address",
           "internalType": "address"
         }

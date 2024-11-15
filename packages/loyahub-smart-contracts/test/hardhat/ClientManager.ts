@@ -31,7 +31,7 @@ describe('CustomerManagementCore', function () {
     clientData = {
       name: 'John Doe',
       age: 30,
-      WalletAddress: owner.address,
+      walletAddress: owner.address,
       paymentStatus: 0,
       addressLocal: {
         City: 'Test City',
@@ -48,7 +48,7 @@ describe('CustomerManagementCore', function () {
     const retrievedData = await clientManager.getClientData(1);
     expect(retrievedData.name).to.equal(clientData.name);
     expect(retrievedData.age).to.equal(clientData.age);
-    expect(retrievedData.WalletAddress).to.equal(clientData.WalletAddress);
+    expect(retrievedData.walletAddress).to.equal(clientData.walletAddress);
     expect(retrievedData.paymentStatus).to.equal(clientData.paymentStatus);
     expect(retrievedData.addressLocal.City).to.equal(
       clientData.addressLocal.City
@@ -62,7 +62,7 @@ describe('CustomerManagementCore', function () {
       clientId: Number(retrievedData.clientId),
       name: retrievedData.name,
       age: Number(retrievedData.age),
-      WalletAddress: retrievedData.WalletAddress,
+      walletAddress: retrievedData.walletAddress,
       paymentStatus: Number(retrievedData.paymentStatus),
       addressLocal: {
         City: retrievedData.addressLocal.City,
@@ -186,6 +186,6 @@ describe('CustomerManagementCore', function () {
       owner.address
     );
 
-    expect(retrievedData.WalletAddress).to.equal(owner.address);
+    expect(retrievedData.walletAddress).to.equal(owner.address);
   });
 });

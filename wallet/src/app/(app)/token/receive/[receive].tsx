@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { ThemeType } from "../../../../styles/theme";
 import type { RootState } from "../../../../store";
 import { capitalizeFirstLetter } from "../../../../utils/capitalizeFirstLetter";
-import { truncateWalletAddress } from "../../../../utils/truncateWalletAddress";
+import { truncatewalletAddress } from "../../../../utils/truncatewalletAddress";
 import Button from "../../../../components/Button/Button";
 import { SafeAreaContainer } from "../../../../components/Styles/Layout.styles";
 const qrWidth = Dimensions.get("window").width * 0.8;
@@ -144,7 +144,7 @@ export default function ReceivePage() {
         <ReceiveTextInputContainer>
           <ReceiveTextInput
             isAmountInputFocused={isAmountInputFocused}
-            value={truncateWalletAddress(tokenAddress, 8, 8)}
+            value={truncatewalletAddress(tokenAddress, 8, 8)}
             editable={false}
             onEndEditing={() => setIsAmountInputFocused(false)}
             placeholderTextColor={theme.colors.lightGrey}

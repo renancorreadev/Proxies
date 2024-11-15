@@ -73,7 +73,7 @@ contract PointCoreTest is Test {
                 .ClientDataInput({
                     name: name,
                     age: age,
-                    WalletAddress: walletAddress,
+                    walletAddress: walletAddress,
                     paymentStatus: paymentStatus,
                     addressLocal: localAddress
                 });

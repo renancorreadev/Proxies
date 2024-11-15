@@ -98,7 +98,7 @@ contract PointCore is
         uint256 tokensToTransfer = ((points / multiplerPointsThreshold) *
             tokensPerPointsMultiplerThreshold) * 10 ** 18;
 
-        address clientAddress = customerManagerInstance.getClientWalletAddress(
+        address clientAddress = customerManagerInstance.getClientwalletAddress(
             clientId
         );
 
@@ -179,7 +179,7 @@ contract PointCore is
             newLevel = CUSTOMER_PREMIUM;
         }
 
-        address clientAddress = customerManagerInstance.getClientWalletAddress(
+        address clientAddress = customerManagerInstance.getClientwalletAddress(
             clientId
         );
 
@@ -209,7 +209,7 @@ contract PointCore is
     }
 
     function emitMintEvent(uint256 clientId, uint256 level) internal {
-        address clientAddress = customerManagerInstance.getClientWalletAddress(
+        address clientAddress = customerManagerInstance.getClientwalletAddress(
             clientId
         );
         if (level == CUSTOMER_TITANIUM) {
@@ -222,7 +222,7 @@ contract PointCore is
     }
 
     function emitBurnEvent(uint256 clientId, uint256 burnedLevel) internal {
-        address clientAddress = customerManagerInstance.getClientWalletAddress(
+        address clientAddress = customerManagerInstance.getClientwalletAddress(
             clientId
         );
         if (burnedLevel == CUSTOMER_GOLD) {

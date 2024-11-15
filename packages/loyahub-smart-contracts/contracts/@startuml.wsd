@@ -11,7 +11,7 @@ abstract class UUPSUpgradeable
 abstract class OwnableUpgradeable
 class CustomerManagementCore {
     +isClientExists(uint256 clientId): bool
-    +getClientWalletAddress(uint256 clientId): address
+    +getClientwalletAddress(uint256 clientId): address
     +getUserTokenID(address user): uint256
 }
 

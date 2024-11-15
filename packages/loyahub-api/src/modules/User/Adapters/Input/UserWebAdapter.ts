@@ -152,6 +152,8 @@ export class UserWebAdapter {
 			this.logger.log('----------PROCESS BEGIN ----------');
 			this.logger.log(`Running User Web adapter`);
 			this.logger.log(`email: ${email}`);
+
+			return await this.userService.getUser(email);
 		} catch (error) {
 			this.logger.error(`Error in getClientData: ${error.message}`);
 			throw new HttpException(error.message, error.statusCode || HttpStatus.BAD_REQUEST);

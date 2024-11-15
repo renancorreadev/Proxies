@@ -37,7 +37,7 @@ export class RegisterClientRequestDto {
 	@ApiProperty({ type: String, required: true, example: '0xeAB18Bc625415f978aFf59B9eD6228Ee106D8293' })
 	@IsNotEmpty()
 	@IsString()
-	WalletAddress: string;
+	walletAddress: string;
 
 	@ApiProperty({ type: Number, required: true, example: 1 })
 	@IsNotEmpty()
@@ -52,7 +52,7 @@ export class RegisterClientRequestDto {
 export interface RegisterClientRequestDto {
 	name: string;
 	age: number;
-	WalletAddress: string;
+	walletAddress: string;
 	paymentStatus: number;
 	address: AddressLocalDto;
 }

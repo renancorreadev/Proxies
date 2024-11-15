@@ -23,7 +23,7 @@ import {
 import { useLoadingState } from "../../hooks/redux";
 import { GeneralStatus } from "../../store/types";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter";
-import { truncateWalletAddress } from "../../utils/truncateWalletAddress";
+import { truncatewalletAddress } from "../../utils/truncatewalletAddress";
 import { formatDollar, formatDollarRaw } from "../../utils/formatDollars";
 import { placeholderArr } from "../../utils/placeholder";
 import { useStorage } from "../../hooks/useStorageState";
@@ -138,7 +138,7 @@ export default function Index() {
   const activeEthIndex = useSelector(
     (state: RootState) => state.ethereum.activeIndex
   );
-  const ethWalletAddress = useSelector(
+  const ethwalletAddress = useSelector(
     (state: RootState) => state.ethereum.addresses[activeEthIndex].address
   );
   const ethBalance = useSelector(
@@ -155,7 +155,7 @@ export default function Index() {
   const activeSolIndex = useSelector(
     (state: RootState) => state.solana.activeIndex
   );
-  const solWalletAddress = useSelector(
+  const solwalletAddress = useSelector(
     (state: RootState) => state.solana.addresses[activeSolIndex].address
   );
   const solBalance = useSelector(
@@ -194,37 +194,37 @@ export default function Index() {
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
-  }, [dispatch, solWalletAddress, ethWalletAddress]);
+  }, [dispatch, solwalletAddress, ethwalletAddress]);
 
   const fetchTokenBalances = useCallback(async () => {
     try {
-      if (ethWalletAddress) {
-        // const ethBalancePromise = dispatch(fetchEthereumBalance(ethWalletAddress));
-        const erc20BalancePromise = await  ethService.getERC20Balance(ethWalletAddress);
+      if (ethwalletAddress) {
+        // const ethBalancePromise = dispatch(fetchEthereumBalance(ethwalletAddress));
+        const erc20BalancePromise = await  ethService.getERC20Balance(ethwalletAddress);
         setErc20Balance(erc20BalancePromise.balance);
       }
   
-      if (solWalletAddress) {
-        dispatch(fetchSolanaBalance(solWalletAddress));
+      if (solwalletAddress) {
+        dispatch(fetchSolanaBalance(solwalletAddress));
       }
     } catch (error) {
       console.error("Failed to fetch token balances:", error);
     }
-  }, [ethWalletAddress, solWalletAddress, ethPrice, dispatch]);
+  }, [ethwalletAddress, solwalletAddress, ethPrice, dispatch]);
   
 
   const fetchTokenBalancesInterval = useCallback(async () => {
-    if (ethWalletAddress) {
-      dispatch(fetchEthereumBalanceInterval(ethWalletAddress));
+    if (ethwalletAddress) {
+      dispatch(fetchEthereumBalanceInterval(ethwalletAddress));
     }
 
-    if (solWalletAddress) {
-      dispatch(fetchSolanaBalanceInterval(solWalletAddress));
+    if (solwalletAddress) {
+      dispatch(fetchSolanaBalanceInterval(solwalletAddress));
     }
   }, [ethBalance, solBalance, dispatch]);
 
   const updatePrices = () => {
-    if (ethWalletAddress && solWalletAddress) {
+    if (ethwalletAddress && solwalletAddress) {
       const ethUsd = ethPrice * ethBalance;
       const solUsd = solPrice * solBalance;
 
@@ -260,8 +260,8 @@ export default function Index() {
     if (isSolana) {
       const caption =
         item.direction === "received"
-          ? `from ${truncateWalletAddress(item.from)}`
-          : `To ${truncateWalletAddress(item.to)}`;
+          ? `from ${truncatewalletAddress(item.from)}`
+          : `To ${truncatewalletAddress(item.to)}`;
       return (
         <CryptoInfoCard
           onPress={() =>
@@ -278,8 +278,8 @@ export default function Index() {
     if (isEthereum) {
       const caption =
         item.direction === "received"
-          ? `from ${truncateWalletAddress(item.from)}`
-          : `To ${truncateWalletAddress(item.to)}`;
+          ? `from ${truncatewalletAddress(item.from)}`
+          : `To ${truncatewalletAddress(item.to)}`;
       return (
         <CryptoInfoCard
           onPress={() =>
@@ -295,13 +295,13 @@ export default function Index() {
   };
 
   const fetchTransactions = async () => {
-    dispatch(fetchEthereumTransactions({ address: ethWalletAddress }));
-    dispatch(fetchSolanaTransactions(solWalletAddress));
+    dispatch(fetchEthereumTransactions({ address: ethwalletAddress }));
+    dispatch(fetchSolanaTransactions(solwalletAddress));
   };
 
   const fetchTransactionsInterval = async () => {
-    dispatch(fetchEthereumTransactionsInterval({ address: ethWalletAddress }));
-    dispatch(fetchSolanaTransactionsInterval(solWalletAddress));
+    dispatch(fetchEthereumTransactionsInterval({ address: ethwalletAddress }));
+    dispatch(fetchSolanaTransactionsInterval(solwalletAddress));
   };
 
   const fetchBalanceAndPrice = async () => {
@@ -315,7 +315,7 @@ export default function Index() {
   };
 
   const fetchAndUpdatePrices = async () => {
-    if (ethWalletAddress && solWalletAddress) {
+    if (ethwalletAddress && solwalletAddress) {
       await fetchBalanceAndPrice();
       await fetchTransactions();
     }
@@ -334,7 +334,7 @@ export default function Index() {
 
   useEffect(() => {
     fetchAndUpdatePrices();
-  }, [dispatch, ethWalletAddress, solWalletAddress]);
+  }, [dispatch, ethwalletAddress, solwalletAddress]);
 
   useEffect(() => {
     const interval = setInterval(
@@ -343,11 +343,11 @@ export default function Index() {
     );
 
     return () => clearInterval(interval);
-  }, [dispatch, ethWalletAddress, solWalletAddress]);
+  }, [dispatch, ethwalletAddress, solwalletAddress]);
 
   useEffect(() => {
     updatePrices();
-  }, [ethBalance, solBalance, ethWalletAddress, solWalletAddress]);
+  }, [ethBalance, solBalance, ethwalletAddress, solwalletAddress]);
 
   useEffect(() => {
     // TODO: Sort these somewhere else
@@ -356,7 +356,7 @@ export default function Index() {
       ...ethTransactions,
     ].sort((a, b) => b.blockTime - a.blockTime);
     setTransactions(mergedAndSortedTransactions);
-  }, [solTransactions, ethTransactions, ethWalletAddress, solWalletAddress]);
+  }, [solTransactions, ethTransactions, ethwalletAddress, solwalletAddress]);
 
   return (
     <SafeAreaContainer>

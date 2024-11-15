@@ -49,7 +49,7 @@ describe('PointCore Events Ommiteds', function () {
     clientData = {
       name: 'John Doe',
       age: 30,
-      WalletAddress: owner.address,
+      walletAddress: owner.address,
       paymentStatus: 0,
       addressLocal: {
         City: 'Test City',

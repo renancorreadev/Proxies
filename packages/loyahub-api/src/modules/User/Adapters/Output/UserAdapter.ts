@@ -54,18 +54,12 @@ export class UserAdapter {
 		// 3. Armazena a chave privada no Vault
 		await storePrivateKeyInVault(email, privateKey);
 
-		// 5. Chama o método registerClient no serviço de blockchain
 		await this.registerClient({
 			name: username,
 			age,
-			WalletAddress: walletAddress,
+			walletAddress,
 			paymentStatus: 0,
-			address: {
-				Street: address.Street,
-				City: address.City,
-				PostalCode: address.PostalCode,
-				HouseNumber: address.HouseNumber,
-			},
+			address,
 		});
 
 		const userCreated = {
@@ -119,9 +113,9 @@ export class UserAdapter {
 		return user;
 	}
 
-	private async registerClient(registerClientBlockchainDto: RegisterClientRequestDto): Promise<void> {
+	private async registerClient(registerClientBlockchainDto: RegisterClientRequestDto): Promise<string> {
 		try {
-			const { name, age, WalletAddress, paymentStatus, address } = registerClientBlockchainDto;
+			const { name, age, walletAddress, paymentStatus, address } = registerClientBlockchainDto;
 
 			// Estrutura de dados para `address`, assegurando correspondência exata
 			const addressPayload: AddressLocal = {
@@ -135,7 +129,7 @@ export class UserAdapter {
 			const payload = {
 				name,
 				age,
-				WalletAddress,
+				walletAddress,
 				paymentStatus,
 				address: addressPayload,
 			};

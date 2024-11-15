@@ -756,7 +756,7 @@ export class UserAdapter {
 		await this.registerClient({
 			name: username,
 			age,
-			WalletAddress: walletAddress,
+			walletAddress: walletAddress,
 			paymentStatus: 0,
 			address: {
 				Street: address.Street,
@@ -805,7 +805,7 @@ export class UserAdapter {
 
 	private async registerClient(registerClientBlockchainDto: RegisterClientRequestDto): Promise<void> {
 		try {
-			const { name, age, WalletAddress, paymentStatus, address } = registerClientBlockchainDto;
+			const { name, age, walletAddress, paymentStatus, address } = registerClientBlockchainDto;
 
 			// Estrutura de dados para `address`, assegurando correspondência exata
 			const addressPayload: AddressLocal = {
@@ -819,7 +819,7 @@ export class UserAdapter {
 			const payload = {
 				name,
 				age,
-				WalletAddress,
+				walletAddress,
 				paymentStatus,
 				address: addressPayload,
 			};

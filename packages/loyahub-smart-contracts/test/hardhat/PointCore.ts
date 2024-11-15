@@ -53,7 +53,7 @@ describe('PointCore', function () {
     clientData = {
       name: 'John Doe',
       age: 30,
-      WalletAddress: owner.address,
+      walletAddress: owner.address,
       paymentStatus: 0,
       addressLocal: {
         City: 'Test City',
@@ -169,25 +169,25 @@ describe('PointCore', function () {
       ...clientData,
       name: 'Joana Doe',
       age: 11,
-      WalletAddress: '0x1234567890123456789012345678901234567890',
+      walletAddress: '0x1234567890123456789012345678901234567890',
     };
     const clientTwoToRegister = {
       ...clientData,
       name: 'Kalice Doe',
       age: 12,
-      WalletAddress: '0x1234567890123456789012345678901234567891',
+      walletAddress: '0x1234567890123456789012345678901234567891',
     };
     const clientThreeToRegister = {
       ...clientData,
       name: 'Luisa Doe',
       age: 13,
-      WalletAddress: '0x1234567890123456789012345678901234567892',
+      walletAddress: '0x1234567890123456789012345678901234567892',
     };
     const clientFourToRegister = {
       ...clientData,
       name: 'Maria Doe',
       age: 14,
-      WalletAddress: '0x1234567890123456789012345678901234567893',
+      walletAddress: '0x1234567890123456789012345678901234567893',
     };
 
     /// @dev register 4 clients with different age
@@ -231,10 +231,10 @@ describe('PointCore', function () {
 
     const customerPremiumNftBalances = await pointCoreInstance.balanceOfBatch(
       [
-        clientOneToRegister.WalletAddress,
-        clientTwoToRegister.WalletAddress,
-        clientThreeToRegister.WalletAddress,
-        clientFourToRegister.WalletAddress,
+        clientOneToRegister.walletAddress,
+        clientTwoToRegister.walletAddress,
+        clientThreeToRegister.walletAddress,
+        clientFourToRegister.walletAddress,
       ],
       [
         CUSTOMER_PREMIUM_NFT_ID,
@@ -245,10 +245,10 @@ describe('PointCore', function () {
     );
     const customerGoldNftBalances = await pointCoreInstance.balanceOfBatch(
       [
-        clientOneToRegister.WalletAddress,
-        clientTwoToRegister.WalletAddress,
-        clientThreeToRegister.WalletAddress,
-        clientFourToRegister.WalletAddress,
+        clientOneToRegister.walletAddress,
+        clientTwoToRegister.walletAddress,
+        clientThreeToRegister.walletAddress,
+        clientFourToRegister.walletAddress,
       ],
       [
         CUSTOMER_GOLD_NFT_ID,
@@ -259,10 +259,10 @@ describe('PointCore', function () {
     );
     const customerTitaniumNftBalances = await pointCoreInstance.balanceOfBatch(
       [
-        clientOneToRegister.WalletAddress,
-        clientTwoToRegister.WalletAddress,
-        clientThreeToRegister.WalletAddress,
-        clientFourToRegister.WalletAddress,
+        clientOneToRegister.walletAddress,
+        clientTwoToRegister.walletAddress,
+        clientThreeToRegister.walletAddress,
+        clientFourToRegister.walletAddress,
       ],
       [
         CUSTOMER_TITANIUM_NFT_ID,

@@ -72,7 +72,7 @@ Stores all relevant information about a client.
 | `clientId` | uint256 | Unique ID of the client. |
 | `name` | string | Name of the client. |
 | `age` | uint | Age of the client. |
-| `WalletAddress` | address | Wallet address of the client. |
+| `walletAddress` | address | Wallet address of the client. |
 | `paymentStatus` | PaymentStatus | Payment status of the client. |
 | `addressLocal` | AddressLocal | Address information of the client. |
 

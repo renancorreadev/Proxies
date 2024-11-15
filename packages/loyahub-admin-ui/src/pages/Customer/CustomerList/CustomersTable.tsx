@@ -15,7 +15,7 @@ export interface ClientData {
   clientID: number;
   name: string;
   age: number;
-  WalletAddress: string;
+  walletAddress: string;
   paymentStatus: number;
   points: number;
   addressLocal: AddressLocal;
@@ -100,11 +100,11 @@ export const CustomerTable = () => {
 
             <div
               className="col-span-2 flex items-center justify-center p-2.5 xl:p-5 bg-bodydark1 bg-opacity-25"
-              onDoubleClick={() => copyToClipboard(customer.WalletAddress)}
+              onDoubleClick={() => copyToClipboard(customer.walletAddress)}
               style={{ cursor: 'pointer' }}
             >
               <p className="text-meta-3" style={truncateStyle}>
-                {customer.WalletAddress}
+                {customer.walletAddress}
               </p>
             </div>
 

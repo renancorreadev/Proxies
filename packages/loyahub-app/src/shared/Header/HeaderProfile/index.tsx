@@ -16,7 +16,7 @@ export const HeaderProfile = () => {
 
   if (!isLogged || !userData) return <p>Loading...</p>;
 
-  const formatWalletAddress = (walletAddress: string) => {
+  const formatwalletAddress = (walletAddress: string) => {
     return `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
   };
 
@@ -54,7 +54,7 @@ export const HeaderProfile = () => {
             <div className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
               Digital Wallet:{' '}
               <span className="font-mono">
-                {formatWalletAddress(userData.walletAddress)}
+                {formatwalletAddress(userData.walletAddress)}
               </span>
             </div>
 

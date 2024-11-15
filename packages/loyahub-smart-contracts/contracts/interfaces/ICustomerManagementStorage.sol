@@ -18,7 +18,7 @@ interface ICustomerManagementStorage {
         uint256 clientId;
         string name;
         uint age;
-        address WalletAddress;
+        address walletAddress;
         PaymentStatus paymentStatus;
         AddressLocal addressLocal;
     }
@@ -26,7 +26,7 @@ interface ICustomerManagementStorage {
     struct ClientDataInput {
         string name;
         uint age;
-        address WalletAddress;
+        address walletAddress;
         PaymentStatus paymentStatus;
         AddressLocal addressLocal;
     }

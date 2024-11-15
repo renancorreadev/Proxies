@@ -13,7 +13,7 @@ export class CustomerEntity {
 	age: number;
 
 	@Column({ type: 'varchar' })
-	WalletAddress: string;
+	walletAddress: string;
 
 	@Column({ type: 'int' })
 	paymentStatus: number;

@@ -165,7 +165,7 @@ export default function SendPage() {
   const formRef = useRef<FormikProps<FormValues>>(null);
 
   const chainName = send as string;
-  const toWalletAddress = toAddress as string;
+  const towalletAddress = toAddress as string;
   const ticker = TICKERS[chainName];
 
   const activeEthIndex = useSelector(
@@ -347,7 +347,7 @@ export default function SendPage() {
     });
   };
 
-  const initialValues = { address: toWalletAddress, amount: "" };
+  const initialValues = { address: towalletAddress, amount: "" };
 
   return (
     <SafeAreaContainer>

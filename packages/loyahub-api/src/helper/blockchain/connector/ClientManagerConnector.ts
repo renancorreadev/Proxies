@@ -7,12 +7,12 @@ export class ClientManagerConnector extends ClientManagerBlockchainConnector imp
 	// Setters blockchain States
 	async registerClient(params: ClientDataInput): Promise<ContractTransactionReceipt> {
 		try {
-			const { name, age, WalletAddress, paymentStatus, addressLocal } = params;
+			const { name, age, walletAddress, paymentStatus, addressLocal } = params;
 			const tx = await this.contract.registerClient(
 				{
 					name,
 					age,
-					WalletAddress,
+					walletAddress,
 					paymentStatus,
 					addressLocal,
 				},
@@ -41,7 +41,7 @@ export class ClientManagerConnector extends ClientManagerBlockchainConnector imp
 				clientID: parseInt(rawData[0].toString()),
 				name: rawData[1],
 				age: parseInt(rawData[2].toString()),
-				WalletAddress: rawData[3],
+				walletAddress: rawData[3],
 				paymentStatus: parseInt(rawData[4].toString()),
 				addressLocal: {
 					City: rawData[5][0],
@@ -66,7 +66,7 @@ export class ClientManagerConnector extends ClientManagerBlockchainConnector imp
 				clientID: parseInt(rawData[0].toString()),
 				name: rawData[1],
 				age: parseInt(rawData[2].toString()),
-				WalletAddress: rawData[3],
+				walletAddress: rawData[3],
 				paymentStatus: parseInt(rawData[4].toString()),
 				addressLocal: {
 					City: rawData[5][0],
@@ -91,7 +91,7 @@ export class ClientManagerConnector extends ClientManagerBlockchainConnector imp
 				clientID: parseInt(rawData[0].toString()),
 				name: rawData[1],
 				age: parseInt(rawData[2].toString()),
-				WalletAddress: rawData[3],
+				walletAddress: rawData[3],
 				paymentStatus: parseInt(rawData[4].toString()),
 				addressLocal: {
 					City: rawData[5][0],
@@ -118,7 +118,7 @@ export class ClientManagerConnector extends ClientManagerBlockchainConnector imp
 				clientID: parseInt(rawData[0].toString()),
 				name: rawData[1],
 				age: parseInt(rawData[2].toString()),
-				WalletAddress: rawData[3],
+				walletAddress: rawData[3],
 				paymentStatus: parseInt(rawData[4].toString()),
 				addressLocal: {
 					City: rawData[5][0],

@@ -10,7 +10,7 @@ import type { ThemeType } from "../../../../styles/theme";
 import ConfirmSend from "../../../../assets/svg/confirm-send.svg";
 import { formatDollar } from "../../../../utils/formatDollars";
 import { TICKERS } from "../../../../constants/tickers";
-import { truncateWalletAddress } from "../../../../utils/truncateWalletAddress";
+import { truncatewalletAddress } from "../../../../utils/truncatewalletAddress";
 import SendConfCard from "../../../../components/SendConfCard/SendConfCard";
 import { capitalizeFirstLetter } from "../../../../utils/capitalizeFirstLetter";
 import Button from "../../../../components/Button/Button";
@@ -281,7 +281,7 @@ export default function SendConfirmationPage() {
         </BalanceContainer>
         <CryptoInfoCardContainer>
           <SendConfCard
-            toAddress={truncateWalletAddress(address)}
+            toAddress={truncatewalletAddress(address)}
             network={`${capitalizeFirstLetter(
               chainName
             )} ${renderNetworkName()}`}

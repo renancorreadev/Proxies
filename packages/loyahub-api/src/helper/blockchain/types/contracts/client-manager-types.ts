@@ -9,7 +9,7 @@ export interface ClientData {
 	clientID: number;
 	name: string;
 	age: number;
-	WalletAddress: string;
+	walletAddress: string;
 	paymentStatus: number;
 	addressLocal: AddressLocal;
 }
@@ -17,7 +17,7 @@ export interface ClientData {
 export interface ClientDataInput {
 	name: string;
 	age: number;
-	WalletAddress: string;
+	walletAddress: string;
 	paymentStatus: number;
 	addressLocal: AddressLocal;
 }

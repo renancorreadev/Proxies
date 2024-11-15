@@ -33,6 +33,7 @@ import {
 	UpdateMetadataSwaggerBodyAPI,
 } from '@/src/modules/Metadata/Domain/Dto/Swagger';
 import { ApplicationError, ContractError } from '@helper/APIErrors';
+import { MetadataResponse } from '../../Domain/Dto/HTTPResponse/MetadataResponse';
 
 @Controller({
 	path: BaseUrls.META_DATA,
@@ -98,7 +99,7 @@ export class MetadataWebAdapter {
 	@ApiForbiddenResponse({ description: 'Forbidden' })
 	@ApiNotFoundResponse({ description: 'Segment not found' })
 	@Get('/:tokenID')
-	async getTokenID(@Param('tokenID') tokenIDParam: string) {
+	async getTokenID(@Param('tokenID') tokenIDParam: string): Promise<MetadataResponse> {
 		try {
 			this.logger.log('---------- PROCESS BEGIN ----------');
 			this.logger.log('Running Metadata Web Adapter');
@@ -110,7 +111,7 @@ export class MetadataWebAdapter {
 
 			this.logger.log(`TokenId Response:  ${JSON.stringify(response)}`);
 
-			return;
+			return response;
 		} catch (error) {
 			this.logger.log('---------- PROCESS END WITH ERROR ----------');
 			if (error instanceof ApplicationError || error instanceof ContractError) {
@@ -155,7 +156,7 @@ export class MetadataWebAdapter {
 			this.logger.log(`Metadata Updated: ${response}`);
 
 			this.logger.log('---------- PROCESS END ----------');
-			return;
+			return response;
 		} catch (e) {
 			this.logger.error(`Error in updateMetadata: ${e.message}`);
 			throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
