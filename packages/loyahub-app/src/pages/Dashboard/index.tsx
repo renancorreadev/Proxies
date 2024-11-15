@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { useFetchMetadata } from '@/hooks/useFetchMetadata';
 import { useFetchPoints } from '@/hooks/useFetchPoints';
 import { useFetchDrexBalance } from '@/hooks/useFetchDrexBalance';
@@ -8,6 +9,7 @@ import {
   MdOutlineAccountBalanceWallet,
   MdOutlinePayment,
 } from 'react-icons/md';
+import { Benefit } from '@/helpers/@types/metadata-types';
 
 export const Dashboard = () => {
   const { userData } = useUserStore();
@@ -61,6 +63,7 @@ export const Dashboard = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
         <div className="flex flex-col items-center bg-gradient-to-r from-blue-500 to-blue-400 text-white rounded-lg p-6 text-center animate-fade-in-up transform hover:scale-105 transition-transform duration-300">
+          {/** @ts-expect-error */}
           <FaUserAlt size={40} className="mb-4" />
           <h3 className="text-lg font-semibold">Idade</h3>
           <p className="text-3xl font-bold">
@@ -68,6 +71,7 @@ export const Dashboard = () => {
           </p>
         </div>
         <div className="flex flex-col items-center bg-gradient-to-r from-purple-500 to-purple-400 text-white rounded-lg p-6 text-center animate-fade-in-up transform hover:scale-105 transition-transform duration-300">
+          {/** @ts-expect-error */}
           <FaMapMarkerAlt size={40} className="mb-4" />
           <h3 className="text-lg font-semibold">Endereço Local</h3>
           <p className="text-xl font-medium">
@@ -76,6 +80,7 @@ export const Dashboard = () => {
           </p>
         </div>
         <div className="flex flex-col items-center bg-gradient-to-r from-red-500 to-red-400 text-white rounded-lg p-6 text-center animate-fade-in-up transform hover:scale-105 transition-transform duration-300">
+          {/** @ts-expect-error */}
           <MdOutlinePayment size={40} className="mb-4" />
           <h3 className="text-lg font-semibold">Status do Pagamento</h3>
           <p
