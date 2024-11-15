@@ -133,6 +133,20 @@ export class PointsBlockchainAdapter implements PointsBlockchainTokenOutputPort 
 			const { account, id } = params;
 
 			return await this.contractInstance.getBalanceOf(account, id);
-		} catch (e) {}
+		} catch (e) {
+			const errorMessage = e.response ? e.response.data : e.message;
+			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
+			throw new Error(`An error ocurred in read contract getUniqueNFT function on blockchain adapter `);
+		}
+	}
+
+	async getContractVersion(): Promise<string> {
+		try {
+			return await this.contractInstance.getContractVersion();
+		} catch (e) {
+			const errorMessage = e.response ? e.response.data : e.message;
+			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
+			throw new Error(`An error ocurred in read contract getContractVersion function on blockchain adapter `);
+		}
 	}
 }

@@ -3,9 +3,12 @@
 
 table -> truncate restart identity
 
-2. Delete all keys in vault in localhost:8082
+2. Delete all keys in vault in localhost:8082a
 
-3. Approve Drex to contract PointCore
+3. Set Drex token address in PointCore contract
+
+
+4. Approve Drex to contract PointCore
 ```shell
 curl -X 'POST' \
   'http://localhost:3001/api/v1/erc20/approveDrex' \

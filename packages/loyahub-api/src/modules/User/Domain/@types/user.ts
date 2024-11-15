@@ -3,6 +3,16 @@ export interface UserInfo {
 	email: string;
 	walletAddress: string;
 	isAdmin: boolean;
+	age: number;
+	address: {
+		Street: string;
+		City: string;
+		PostalCode: string;
+		HouseNumber: string;
+	};
+	paymentStatus: number;
+	username: string;
+	profileImageUrl: string;
 	createdAt: Date;
 	updatedAt: Date;
 }

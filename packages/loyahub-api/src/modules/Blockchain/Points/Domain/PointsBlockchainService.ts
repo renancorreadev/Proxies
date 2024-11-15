@@ -13,7 +13,7 @@ import { BalanceOfBatchParam, BalanceOfParam } from '@helper/blockchain/types/co
 
 @Injectable()
 export class PointsBlockchainService implements PointsBlockchainTokenUseCase {
-	private readonly logger = new Logger('ClientBlockchainService');
+	private readonly logger = new Logger('PointsBlockchainService');
 
 	constructor(
 		@Inject(DependencyInjectionTokens.POINTS_BLOCKCHAIN_TOKEN_OUTPUT_PORT)
@@ -26,7 +26,7 @@ export class PointsBlockchainService implements PointsBlockchainTokenUseCase {
 			return 'Foi adicionado os pontos ao cliente com sucesso!';
 		} catch (e) {
 			this.logger.error(`Error in Points Blockchain Service: ${JSON.stringify(e)}`);
-			throw new Error('An error ocurred while adding the points');
+			throw new Error('An error ocurred while adding the points on Points Blockchain Service');
 		}
 	}
 
@@ -36,7 +36,7 @@ export class PointsBlockchainService implements PointsBlockchainTokenUseCase {
 			return 'Foi removido os pontos ao cliente com sucesso!';
 		} catch (e) {
 			this.logger.error(`Error in Points Blockchain Service: ${JSON.stringify(e)}`);
-			throw new Error('An error ocurred while adding the points');
+			throw new Error('An error ocurred while removing the points on Points Blockchain Service');
 		}
 	}
 
@@ -47,7 +47,7 @@ export class PointsBlockchainService implements PointsBlockchainTokenUseCase {
 			return 'Drex address successfully updated on blockchain';
 		} catch (e) {
 			this.logger.error(`Error in Points Blockchain Service: ${JSON.stringify(e)}`);
-			throw new Error('An error ocurred while set the points token address');
+			throw new Error('An error ocurred while set the points token address on Points Blockchain Service');
 		}
 	}
 
@@ -56,8 +56,8 @@ export class PointsBlockchainService implements PointsBlockchainTokenUseCase {
 		try {
 			return await this.clientBlockchainTokenAdapter.getClientPoints(clientId);
 		} catch (e) {
-			this.logger.error(`Error in Client Blockchain Service: ${JSON.stringify(e)}`);
-			throw new Error('An error ocurred while get the client');
+			this.logger.error(`Error in Points Blockchain Service: ${JSON.stringify(e)}`);
+			throw new Error('An error ocurred while get the client points on Points Blockchain Service');
 		}
 	}
 
@@ -65,8 +65,8 @@ export class PointsBlockchainService implements PointsBlockchainTokenUseCase {
 		try {
 			return await this.clientBlockchainTokenAdapter.getClientLevel(clientId);
 		} catch (e) {
-			this.logger.error(`Error in Client Blockchain Service: ${JSON.stringify(e)}`);
-			throw new Error('An error ocurred while get the getClientLevel');
+			this.logger.error(`Error in Points Blockchain Service: ${JSON.stringify(e)}`);
+			throw new Error('An error ocurred while get the getClientLevel on Points Blockchain Service');
 		}
 	}
 
@@ -74,8 +74,8 @@ export class PointsBlockchainService implements PointsBlockchainTokenUseCase {
 		try {
 			return await this.clientBlockchainTokenAdapter.getMultiplesNFT(params);
 		} catch (e) {
-			this.logger.error(`Error in Client Blockchain Service: ${JSON.stringify(e)}`);
-			throw new Error('An error ocurred while get the getMultiplesNFT');
+			this.logger.error(`Error in Points Blockchain Service: ${JSON.stringify(e)}`);
+			throw new Error('An error ocurred while get the getMultiplesNFT on Points Blockchain Service');
 		}
 	}
 
@@ -83,8 +83,17 @@ export class PointsBlockchainService implements PointsBlockchainTokenUseCase {
 		try {
 			return await this.clientBlockchainTokenAdapter.getUniqueNFT(params);
 		} catch (e) {
-			this.logger.error(`Error in Client Blockchain Service: ${JSON.stringify(e)}`);
-			throw new Error('An error ocurred while get the getUniqueNFT');
+			this.logger.error(`Error in Points Blockchain Service: ${JSON.stringify(e)}`);
+			throw new Error('An error ocurred while get the getUniqueNFT on Points Blockchain Service');
+		}
+	}
+
+	async getContractVersion(): Promise<string> {
+		try {
+			return await this.clientBlockchainTokenAdapter.getContractVersion();
+		} catch (e) {
+			this.logger.error(`Error in Points Blockchain Service: ${JSON.stringify(e)}`);
+			throw new Error('An error ocurred while get the getContractVersion on Points Blockchain Service');
 		}
 	}
 }

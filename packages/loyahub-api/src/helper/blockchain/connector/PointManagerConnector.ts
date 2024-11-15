@@ -115,4 +115,8 @@ export class PointsManagerConnector extends PointCoreBlockchainConnector impleme
 			throw new Error(`Erro na function balanceOf do contrato na EVM: ${errorMessage}`);
 		}
 	}
+
+	async getContractVersion(): Promise<string> {
+		return await this.contract.getVersion();
+	}
 }

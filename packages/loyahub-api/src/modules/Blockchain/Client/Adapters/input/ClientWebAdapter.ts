@@ -71,7 +71,18 @@ export class ClientWebAdapter {
 	@ApiNotFoundResponse({ description: 'Segment not found' })
 	@Get('/data/:id')
 	async getClientData(@Param('id') id: number) {
-		return await this.clientBlockchainService.getClientData(+id);
+		try {
+			this.logger.log('---------- PROCESS BEGIN ----------');
+			this.logger.log(`Running Client Blockchain Web adapter`);
+			this.logger.log(`client id: ${id}`);
+			this.logger.log('---------- PROCESS END ----------');
+			return await this.clientBlockchainService.getClientData(+id);
+		} catch (e) {
+			this.logger.log('---------- PROCESS END WITH ERROR ----------');
+			const errorMessage = e.response ? e.response.data : e.message;
+			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
+			throw new Error(`An error ocurred in read contract getClientData on blockchain adapter `);
+		}
 	}
 
 	/// --------------------------------------------------------------------------------------
@@ -95,9 +106,10 @@ export class ClientWebAdapter {
 			this.logger.log('---------- PROCESS BEGIN ----------');
 			this.logger.log(`Running Client Blockchain Web adapter`);
 			this.logger.log(`name: ${name}`);
-
+			this.logger.log('---------- PROCESS END ----------');
 			return await this.clientBlockchainService.getClientByName(name);
 		} catch (e) {
+			this.logger.log('---------- PROCESS END WITH ERROR ----------');
 			const errorMessage = e.response ? e.response.data : e.message;
 			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
 			throw new Error(`An error ocurred in read contract getClientByName on blockchain `);
@@ -125,9 +137,10 @@ export class ClientWebAdapter {
 			this.logger.log('---------- PROCESS BEGIN ----------');
 			this.logger.log('Running PointBlockchain web adapter');
 			this.logger.log(`age: ${age}`);
-
+			this.logger.log('---------- PROCESS END ----------');
 			return await this.clientBlockchainService.getClientByAge(age);
 		} catch (e) {
+			this.logger.log('---------- PROCESS END WITH ERROR ----------');
 			const errorMessage = e.response ? e.response.data : e.message;
 			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
 			throw new Error(`An error ocurred in read contract getClientByAge on blockchain `);
@@ -155,9 +168,10 @@ export class ClientWebAdapter {
 			this.logger.log('---------- PROCESS BEGIN ----------');
 			this.logger.log(`Running Client Blockchain Web adapter`);
 			this.logger.log(`wallet: ${wallet}`);
-
+			this.logger.log('---------- PROCESS END ----------');
 			return await this.clientBlockchainService.getClientByWallet(wallet);
 		} catch (e) {
+			this.logger.log('---------- PROCESS END WITH ERROR ----------');
 			const errorMessage = e.response ? e.response.data : e.message;
 			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
 			throw new Error(`An error occurred in read contract getClientByWallet on blockchain`);
@@ -185,9 +199,10 @@ export class ClientWebAdapter {
 			this.logger.log('---------- PROCESS BEGIN ----------');
 			this.logger.log('Running Client Blockchain Web Adapter');
 			this.logger.log('Reading Current ID...');
-
+			this.logger.log('---------- PROCESS END ----------');
 			return await this.clientBlockchainService.getCurrentId();
 		} catch (e) {
+			this.logger.log('---------- PROCESS END WITH ERROR ----------');
 			const errorMessage = e.response ? e.response.data : e.message;
 			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
 			throw new Error(`An error ocurred in read contract getCurrentId on blockchain `);

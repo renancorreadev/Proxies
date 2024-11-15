@@ -64,14 +64,22 @@ export class MetadataWebAdapter {
 	@ApiInternalServerErrorResponse({ description: 'Unexpected error' })
 	@Post('/new')
 	async registerMetadata(@Body() registerMetadata: RegisterMetadataRequestDTO): Promise<string> {
-		this.logger.log('----------PROCESS BEGIN ----------');
-		this.logger.log(`Running Metadata WebAdapter`);
-		this.logger.log(`Data: ${JSON.stringify(registerMetadata)}`);
+		try {
+			this.logger.log('----------PROCESS BEGIN ----------');
+			this.logger.log(`Running Metadata WebAdapter`);
+			this.logger.log(`Data: ${JSON.stringify(registerMetadata)}`);
 
-		const response = await this.metadataService.registerMetadata(registerMetadata);
+			const response = await this.metadataService.registerMetadata(registerMetadata);
+			this.logger.log(`Metadata response: ${JSON.stringify(response)}`);
 
-		this.logger.log('---------- PROCESS END ----------');
-		return response;
+			this.logger.log('---------- PROCESS END ----------');
+			return response;
+		} catch (error) {
+			this.logger.log('---------- PROCESS END WITH ERROR ----------');
+			const errorMessage = error.response ? error.response.data : error.message;
+			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
+			throw new Error(`An error ocurred in registerMetadata on metadataWebAdapter`);
+		}
 	}
 
 	/// --------------------------------------------------------------------------------------
@@ -98,8 +106,13 @@ export class MetadataWebAdapter {
 			const tokenID = Number(tokenIDParam);
 			this.logger.log(`tokenID: ${tokenID}`);
 
-			return await this.metadataService.getTokenID(tokenID);
+			const response = await this.metadataService.getTokenID(tokenID);
+
+			this.logger.log(`TokenId Response:  ${JSON.stringify(response)}`);
+
+			return;
 		} catch (error) {
+			this.logger.log('---------- PROCESS END WITH ERROR ----------');
 			if (error instanceof ApplicationError || error instanceof ContractError) {
 				throw new HttpException(error.message, error.code);
 			}
@@ -134,11 +147,15 @@ export class MetadataWebAdapter {
 			this.logger.log(`Running Metadata Web adapter`);
 			this.logger.log(`Data: ${JSON.stringify(updateDataDto)}`);
 
-			this.logger.log('---------- PROCESS END ----------');
-			return await this.metadataService.updateMetadata({
+			const response = await this.metadataService.updateMetadata({
 				tokenID,
 				metadataUpdate: updateDataDto,
 			});
+
+			this.logger.log(`Metadata Updated: ${response}`);
+
+			this.logger.log('---------- PROCESS END ----------');
+			return;
 		} catch (e) {
 			this.logger.error(`Error in updateMetadata: ${e.message}`);
 			throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
@@ -169,10 +186,15 @@ export class MetadataWebAdapter {
 			this.logger.log(`Running Metadata Web adapter`);
 			this.logger.log(`tokenID: ${tokenID}`);
 
+			const response = await this.metadataService.deleteMetadata(tokenID);
+
+			this.logger.log(`Metadata Deleted: ${response}`);
+
 			this.logger.log('---------- PROCESS END ----------');
 
-			return await this.metadataService.deleteMetadata(Number(tokenID));
+			return response;
 		} catch (e) {
+			this.logger.log('---------- PROCESS END WITH ERROR ----------');
 			this.logger.error(`Error in deleteMetadata: ${e.message}`);
 			throw new HttpException(e.message, HttpStatus.NOT_FOUND);
 		}

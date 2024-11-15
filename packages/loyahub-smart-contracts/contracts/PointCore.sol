@@ -95,14 +95,13 @@ contract PointCore is
         updateClientLevel(clientId);
 
         /// @dev calcula quantos tokens DREX ira transferir com base no ratio tokens por pontos : 10ponts/5tokens
-        uint256 tokensToTransfer = (points / multiplerPointsThreshold) *
-            tokensPerPointsMultiplerThreshold;
+        uint256 tokensToTransfer = ((points / multiplerPointsThreshold) *
+            tokensPerPointsMultiplerThreshold) * 10 ** 18;
 
         address clientAddress = customerManagerInstance.getClientWalletAddress(
             clientId
         );
 
-        // Realiza a transferência de tokens
         require(
             drexToken.transferFrom(owner(), clientAddress, tokensToTransfer),
             'Token transfer failed'
@@ -149,7 +148,7 @@ contract PointCore is
     }
 
     function getVersion() public pure returns (string memory) {
-        return '1.0.0';
+        return '1.1.0';
     }
 
     function tokenURI(uint256 tokenId) public view returns (string memory) {

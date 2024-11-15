@@ -15,7 +15,7 @@ export class AddressLocalDto {
 	@ApiProperty({ type: Number, required: true, example: '2255454' })
 	@IsNotEmpty()
 	@IsNumber()
-	PostalCode: number;
+	PostalCode: string;
 
 	@ApiProperty({ type: String, required: true, example: '25' })
 	@IsNotEmpty()

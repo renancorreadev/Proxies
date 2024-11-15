@@ -23,6 +23,20 @@ export class UserEntity {
 	@Column({ default: false })
 	isAdmin: boolean;
 
+	@Column({ type: 'int', nullable: true })
+	age: number;
+
+	@Column({ type: 'jsonb', nullable: true })
+	address: {
+		Street: string;
+		City: string;
+		PostalCode: string;
+		HouseNumber: string;
+	};
+
+	@Column({ type: 'int', default: 0 })
+	paymentStatus: number;
+
 	@Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
 	createdAt: Date;
 

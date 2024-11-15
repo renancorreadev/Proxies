@@ -9,12 +9,21 @@ interface TokenPayload {
 
 interface UserData {
   id: number;
-  username: string;
+  email: string;
   walletAddress: string;
-  profileImageUrl: string;
   isAdmin: boolean;
-  createdAt: string;
-  updatedAt: string;
+  age: number;
+  address: {
+    Street: string;
+    City: string;
+    PostalCode: string;
+    HouseNumber: string;
+  };
+  paymentStatus: number;
+  username: string;
+  profileImageUrl: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 interface UserState {
