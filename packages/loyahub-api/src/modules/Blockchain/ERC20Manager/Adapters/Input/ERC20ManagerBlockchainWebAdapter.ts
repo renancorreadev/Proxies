@@ -42,12 +42,13 @@ export class ERC20ManagerBlockchainWebAdapter {
 			this.logger.log(`Running ERC20 Blockchain Web adapter`);
 			this.logger.log(`Execution: balanceOf with params: email=${email}`);
 
-			// Modifique o DTO para aceitar parâmetros como strings, se necessário
 			const response = await this.erc20BlockchainService.getBalanceDrex({ email });
 
+			this.logger.log(`Balance retrieved: ${response}`);
 			this.logger.log('---------- PROCESS END ----------');
 			return response;
 		} catch (error) {
+			this.logger.log('---------- PROCESS END WITH ERROR ----------');
 			this.logger.error(`Error in ERC20 Blockchain Service: ${JSON.stringify(error)}`);
 			throw new HttpException('An error occurred while getting the Drex balance', 500);
 		}
@@ -83,6 +84,7 @@ export class ERC20ManagerBlockchainWebAdapter {
 			this.logger.log('---------- PROCESS END ----------');
 			return 'Approval successful';
 		} catch (error) {
+			this.logger.log('---------- PROCESS END WITH ERROR ----------');
 			this.logger.error(`Error in ERC20 Blockchain Service: ${JSON.stringify(error)}`);
 			throw new HttpException('An error occurred while approving the Drex', 500);
 		}

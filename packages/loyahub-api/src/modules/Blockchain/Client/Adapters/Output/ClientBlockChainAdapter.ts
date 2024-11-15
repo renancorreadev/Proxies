@@ -31,7 +31,7 @@ export class ClientBlockchainAdapter implements ClientBlockchainTokenOutputPort 
 			const addressLocal: AddressLocal = {
 				City: address.City,
 				Street: address.Street,
-				PostalCode: address.PostalCode,
+				PostalCode: Number(address.PostalCode),
 				HouseNumber: Number(address.HouseNumber),
 			};
 			const payload: ClientDataInput = {

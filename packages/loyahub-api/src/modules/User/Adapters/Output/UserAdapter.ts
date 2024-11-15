@@ -39,6 +39,12 @@ export class UserAdapter {
 			password: hashedPassword,
 			profileImageUrl,
 			walletAddress,
+			address: {
+				Street: address.Street,
+				City: address.City,
+				PostalCode: address.PostalCode,
+				HouseNumber: address.HouseNumber,
+			},
 			isAdmin,
 		});
 
@@ -70,13 +76,27 @@ export class UserAdapter {
 		return userCreated;
 	}
 
-	// Outros métodos
 	async getUser(email: string): Promise<UserInfo | undefined> {
 		const user = await this.userRepository.findOne({
-			select: ['id', 'email', 'username', 'profileImageUrl', 'walletAddress', 'isAdmin', 'createdAt', 'updatedAt'],
+			select: [
+				'id',
+				'email',
+				'username',
+				'profileImageUrl',
+				'walletAddress',
+				'isAdmin',
+				'createdAt',
+				'updatedAt',
+				'age',
+				'address',
+				'paymentStatus',
+			],
 			where: { email },
 		});
-		return user ?? undefined;
+
+		if (!user) return undefined;
+
+		return user;
 	}
 
 	async deleteUser(email: string): Promise<string> {
@@ -107,7 +127,7 @@ export class UserAdapter {
 			const addressPayload: AddressLocal = {
 				City: address.City,
 				Street: address.Street,
-				PostalCode: address.PostalCode,
+				PostalCode: Number(address.PostalCode),
 				HouseNumber: Number(address.HouseNumber),
 			};
 

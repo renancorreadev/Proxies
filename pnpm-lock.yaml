@@ -419,6 +419,9 @@ importers:
       react-hook-form:
         specifier: 7.50.0
         version: 7.50.0(react@18.2.0)
+      react-icons:
+        specifier: 4.10.1
+        version: 4.10.1(react@18.2.0)
       react-router-dom:
         specifier: 6.21.0
         version: 6.21.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -649,6 +652,8 @@ importers:
       typescript:
         specifier: 5.3.3
         version: 5.3.3
+
+  packages/subgraph-server: {}
 
 packages:
 
@@ -4342,6 +4347,7 @@ packages:
 
   acorn-import-assertions@1.9.0:
     resolution: {integrity: sha512-cmMwop9x+8KFhxvKrKfPYmN6/pKTYYHBqLa0DfvVZcKMJWNyWLnaqND7dx/qn66R7ewM1UX5XMaDVP5wlVTaVA==}
+    deprecated: package has been renamed to acorn-import-attributes
     peerDependencies:
       acorn: ^8
 

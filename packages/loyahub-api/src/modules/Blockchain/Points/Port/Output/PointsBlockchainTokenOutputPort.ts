@@ -13,4 +13,5 @@ export interface PointsBlockchainTokenOutputPort {
 	getMultiplesNFT(params: BalanceOfBatchParam): Promise<number[]>;
 	getUniqueNFT(params: BalanceOfParam): Promise<number>;
 	setDrexContractAddress(address: SetDrexAddressRequestDTO): Promise<string>;
+	getContractVersion(): Promise<string>;
 }

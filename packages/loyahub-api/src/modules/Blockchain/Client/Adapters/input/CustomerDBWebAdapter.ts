@@ -43,9 +43,12 @@ export class CustomerDBWebAdapter {
 		try {
 			this.logger.log('---------- PROCESS BEGIN ----------');
 			this.logger.log(`Running Client Blockchain Web adapter`);
-
-			return await this.customerDBService.findAll();
+			const response = await this.customerDBService.findAll();
+			this.logger.log(`response: ${JSON.stringify(response)}`);
+			this.logger.log('---------- PROCESS END ----------');
+			return response;
 		} catch (e) {
+			this.logger.log('---------- PROCESS END WITH ERROR ----------');
 			const errorMessage = e.response ? e.response.data : e.message;
 			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
 			throw new Error(`An error ocurred in read contract getAllCustomers on clientWebAdapter `);

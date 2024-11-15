@@ -20,10 +20,11 @@ export class ERC20ManagerBlockchainAdapter implements ERC20ManagerBlockchainToke
 		try {
 			const { email } = params;
 			const privateKey = await getPrivateKeyFromVault(email);
+			console.log('privateKey', privateKey);
 			if (!privateKey) throw new Error('Private key not found in Vault');
 
 			const user = await getUserByEmail(email);
-
+			console.log('user', user);
 			const { ERC20_CONTRACT_ADDRESS, PROVIDER } = process.env;
 			if (!ERC20_CONTRACT_ADDRESS || !PROVIDER) {
 				throw new Error('Missing required environment variables');

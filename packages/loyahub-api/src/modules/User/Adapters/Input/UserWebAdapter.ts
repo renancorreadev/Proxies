@@ -80,9 +80,16 @@ export class UserWebAdapter {
 			} else {
 				throw new Error('Bad request');
 			}
-		} catch (e) {
-			this.logger.error(`Error : ${JSON.stringify(e.message)}`);
-			throw new HttpException({ message: e.message, error: 'Bad Request' }, e.statusCode || HttpStatus.BAD_REQUEST);
+		} catch (error) {
+			this.logger.log('---------- PROCESS END WITH ERROR ----------');
+			this.logger.error(`Error : ${JSON.stringify(error.message)}`);
+			throw new HttpException(
+				{
+					message: error.message,
+					error: 'Bad Request',
+				},
+				error.statusCode || HttpStatus.BAD_REQUEST,
+			);
 		}
 	}
 
@@ -118,9 +125,9 @@ export class UserWebAdapter {
 			}
 
 			return result;
-		} catch (e) {
-			this.logger.error(`Error in getClientData: ${e.message}`);
-			throw new HttpException(e.message, e.statusCode || HttpStatus.NOT_FOUND);
+		} catch (error) {
+			this.logger.error(`Error in getClientData: ${error.message}`);
+			throw new HttpException(error.message, error.statusCode || HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -141,7 +148,14 @@ export class UserWebAdapter {
 	@ApiNotFoundResponse({ description: 'Segment not found' })
 	@Get('/get/:email')
 	async getClientData(@Param('email') email: string) {
-		return await this.userService.getUser(email);
+		try {
+			this.logger.log('----------PROCESS BEGIN ----------');
+			this.logger.log(`Running User Web adapter`);
+			this.logger.log(`email: ${email}`);
+		} catch (error) {
+			this.logger.error(`Error in getClientData: ${error.message}`);
+			throw new HttpException(error.message, error.statusCode || HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	/// --------------------------------------------------------------------------------------
@@ -170,9 +184,9 @@ export class UserWebAdapter {
 			this.logger.log(`updateUserDTO: ${JSON.stringify(updateUserDTO)}`);
 			this.logger.log('---------- PROCESS END ----------');
 			return await this.userService.updateUser(email, updateUserDTO);
-		} catch (e) {
-			this.logger.error(`Error in updateUser: ${e.message}`);
-			throw new HttpException(e.message, e.statusCode || HttpStatus.BAD_REQUEST);
+		} catch (error) {
+			this.logger.error(`Error in updateUser: ${error.message}`);
+			throw new HttpException(error.message, error.statusCode || HttpStatus.BAD_REQUEST);
 		}
 	}
 }

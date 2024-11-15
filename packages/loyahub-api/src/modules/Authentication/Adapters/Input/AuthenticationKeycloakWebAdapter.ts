@@ -20,8 +20,13 @@ export class KeycloakAuthWebAdapter {
 			this.logger.log('---------- PROCESS BEGIN ----------');
 			this.logger.log('Running AuthenticationKeycloak Web Adapter');
 			this.logger.log('Logging in with Keycloak...');
-			return await this.keycloakAuthService.login(loginDTO);
+
+			const response = await this.keycloakAuthService.login(loginDTO);
+			this.logger.log(`login response: ${JSON.stringify(response)}`);
+			this.logger.log('---------- PROCESS END ----------');
+			return response;
 		} catch (e) {
+			this.logger.log('---------- PROCESS END WITH ERROR ----------');
 			const errorMessage = e.response ? e.response.data : e.message;
 			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
 			throw new Error(`An error ocurred in executing login method on application `);
@@ -34,8 +39,12 @@ export class KeycloakAuthWebAdapter {
 			this.logger.log('---------- PROCESS BEGIN ----------');
 			this.logger.log('Running AuthenticationKeycloak Web Adapter');
 			this.logger.log('Logging out from Keycloak...');
-			await this.keycloakAuthService.logout(body.username);
+			const response = await this.keycloakAuthService.logout(body.username);
+			this.logger.log(`logout response: ${JSON.stringify(response)}`);
+			this.logger.log('---------- PROCESS END ----------');
+			return response;
 		} catch (e) {
+			this.logger.log('---------- PROCESS END WITH ERROR ----------');
 			const errorMessage = e.response ? e.response.data : e.message;
 			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
 			throw new Error(`An error ocurred in executing logout method on application `);
@@ -48,8 +57,12 @@ export class KeycloakAuthWebAdapter {
 			this.logger.log('---------- PROCESS BEGIN ----------');
 			this.logger.log('Running AuthenticationKeycloak Web Adapter');
 			this.logger.log('Refreshing token...');
-			return await this.keycloakAuthService.refresh(username);
+			const response = await this.keycloakAuthService.refresh(username);
+			this.logger.log(`refresh response: ${JSON.stringify(response)}`);
+			this.logger.log('---------- PROCESS END ----------');
+			return response;
 		} catch (e) {
+			this.logger.log('---------- PROCESS END WITH ERROR ----------');
 			const errorMessage = e.response ? e.response.data : e.message;
 			this.logger.error(`Error : ${JSON.stringify(errorMessage)}`);
 			throw new Error(`An error ocurred in executing refresh method on application `);

@@ -1,4 +1,4 @@
-import { ContractTransactionReceipt } from 'ethers';
+import { ContractTransactionReceipt, parseUnits } from 'ethers';
 import { ERC20ManagerBlockchainConnector } from '../ERC20ManagerBlockchainConnector';
 import { BalanceOfParam, TransferToParam, ApproveParam } from '../types/contracts/erc20-manager-types';
 
@@ -12,7 +12,7 @@ export class ERC20ManagerConnector extends ERC20ManagerBlockchainConnector imple
 
 			return Number(balance);
 		} catch (e) {
-			console.error('Erro ao recuperar pontos do cliente:', e);
+			console.error('Erro ao recuperar o balance do token:', e);
 
 			const errorMessage = e instanceof Error ? e.message : 'Unknown error';
 			throw new Error(`Erro na function balanceOf do contrato na EVM: ${errorMessage}`);
@@ -22,7 +22,10 @@ export class ERC20ManagerConnector extends ERC20ManagerBlockchainConnector imple
 	async transferERC20(params: TransferToParam): Promise<ContractTransactionReceipt> {
 		try {
 			const { to, amount } = params;
-			const tx = await this.contract.transfer(to, amount, {
+
+			const parsedAmount = parseUnits(amount.toString(), 18);
+
+			const tx = await this.contract.transfer(to, parsedAmount, {
 				gasLimit: 500000,
 				gasPrice: 0,
 			});
@@ -39,7 +42,9 @@ export class ERC20ManagerConnector extends ERC20ManagerBlockchainConnector imple
 	async approve(params: ApproveParam): Promise<ContractTransactionReceipt> {
 		try {
 			const { spender, amount } = params;
-			const tx = await this.contract.approve(spender, amount, {
+
+			const parsedAmount = parseUnits(amount.toString(), 18);
+			const tx = await this.contract.approve(spender, parsedAmount, {
 				gasLimit: 500000,
 				gasPrice: 0,
 			});

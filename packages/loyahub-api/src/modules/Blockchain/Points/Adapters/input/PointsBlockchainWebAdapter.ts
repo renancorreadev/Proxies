@@ -37,6 +37,7 @@ import { GetClientPointsResponse } from '../../Domain/Dto/HTTPResponse/GetClient
 import { GetClientLevelResponse } from '../../Domain/Dto/HTTPResponse/GetClientLevelResponse';
 
 import { GetUniqueNFTResponse } from '../../Domain/Dto/HTTPResponse/GetUniqueNFTResponse';
+import { GetContractVersionResponse } from '../../Domain/Dto/HTTPResponse/GetContractVersionResponse';
 // import { JwtAuthGuard } from '@/src/modules/Authentication/Guards/Auth.Guard';
 
 // @ApiBearerAuth('JWT-auth')
@@ -173,7 +174,7 @@ export class PointsBlockchainWebAdapter {
 	@ApiForbiddenResponse({ description: 'Forbidden' })
 	@ApiNotFoundResponse({ description: 'Segment not found' })
 	// @UseGuards(JwtAuthGuard)
-	@Get('/:id')
+	@Get('/:id(\\d+)')
 	async getClientPoints(@Param('id') id: number) {
 		try {
 			this.logger.log('---------- PROCESS BEGIN ----------');
@@ -286,10 +287,47 @@ export class PointsBlockchainWebAdapter {
 			});
 		} catch (error) {
 			if (error) {
+				this.logger.log('---------- PROCESS END WITH ERROR ----------');
 				throw new HttpException(error.message, error.code);
 			}
+
 			throw new HttpException(error.message, 500);
 		}
-		this.logger.log('---------- PROCESS END ----------');
+	}
+
+	/// --------------------------------------------------------------------------------------
+	/// ------------------------ GET Contract version  ---------------------
+	/// --------------------------------------------------------------------------------------
+	@ApiOperation({
+		summary: 'Get Contract Version',
+		description: 'Esse Endpoint retorna a versão do contrato atualizável (UUPS)',
+	})
+	@ApiOkResponse({
+		description: 'Success operation',
+		type: String, // Especifica que retorna uma string
+	})
+	@ApiBadRequestResponse({ description: 'Bad request' })
+	@ApiForbiddenResponse({ description: 'Forbidden' })
+	@ApiNotFoundResponse({ description: 'Segment not found' })
+	@ApiInternalServerErrorResponse({ description: 'Unexpected error' })
+	// @UseGuards(JwtAuthGuard) // Descomente se necessário autenticação
+	@Get('/version')
+	async getContractVersion(): Promise<string> {
+		this.logger.log('---------- PROCESS BEGIN ----------');
+		this.logger.log('Running PointBlockchain Web Adapter');
+		this.logger.log(`Execution: getContractVersion`);
+
+		try {
+			// Chamada ao serviço que obtém a versão do contrato
+			const version = await this.pointsBlockchainService.getContractVersion();
+
+			this.logger.log(`Contract version retrieved: ${version}`);
+			this.logger.log('---------- PROCESS END ----------');
+
+			return version;
+		} catch (error) {
+			this.logger.error(`Error retrieving contract version: ${error.message}`);
+			throw new HttpException('An error occurred while getting the contract version', 500);
+		}
 	}
 }
