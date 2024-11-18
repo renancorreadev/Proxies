@@ -5,6 +5,9 @@ import { toast } from 'sonner';
 export const useFetchDrexBalance = (email: string | null) => {
   const [drexBalance, setDrexBalance] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [refresh, setRefresh] = useState<number>(0);
+
+  const refreshDrexBalance = () => setRefresh((prev) => prev + 1);
 
   useEffect(() => {
     if (!email) return;
@@ -34,7 +37,7 @@ export const useFetchDrexBalance = (email: string | null) => {
     };
 
     fetchDrexBalance();
-  }, [email]);
+  }, [email, refresh]);
 
-  return { drexBalance, loading };
+  return { drexBalance, loading, refreshDrexBalance };
 };
