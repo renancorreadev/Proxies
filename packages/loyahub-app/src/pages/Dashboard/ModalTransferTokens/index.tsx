@@ -6,18 +6,20 @@ import { useModal } from '@/context/modal-provider';
 
 interface ModalTransferTokensProps {
   email: string;
+  refreshDrexBalance: () => void;
   onTransferSuccess?: () => void;
 }
 
 export const ModalTransferTokens: React.FC<ModalTransferTokensProps> = ({
   email,
+  refreshDrexBalance,
   onTransferSuccess,
 }) => {
   const { isOpen, closeModal } = useModal();
   const { transferTokens, loading: transferLoading } = useTokenTransfer();
 
   const [recipientAddress, setRecipientAddress] = useState('');
-  const [transferAmount, setTransferAmount] = useState<string>(''); // Inicialmente vazio
+  const [transferAmount, setTransferAmount] = useState<string>(''); // Usar string para lidar melhor com valores vazios
 
   const handleTransfer = async () => {
     if (!email || !recipientAddress || !transferAmount) {
@@ -29,11 +31,12 @@ export const ModalTransferTokens: React.FC<ModalTransferTokensProps> = ({
       await transferTokens({
         email,
         to: recipientAddress,
-        amount: Number(transferAmount),
+        amount: parseFloat(transferAmount), // Converter para número
       });
       toast.success('Transferência realizada com sucesso!');
       setRecipientAddress('');
       setTransferAmount('');
+      refreshDrexBalance(); // Atualiza o saldo Drex
       closeModal();
       onTransferSuccess?.();
     } catch (err) {
@@ -73,7 +76,7 @@ export const ModalTransferTokens: React.FC<ModalTransferTokensProps> = ({
           type="text"
           value={recipientAddress}
           onChange={(e) => setRecipientAddress(e.target.value)}
-          placeholder="Insira o endereço do destinatário"
+          placeholder="0x..."
           className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-700 focus:ring-2 focus:ring-purple-500 focus:outline-none"
         />
       </div>
@@ -85,9 +88,8 @@ export const ModalTransferTokens: React.FC<ModalTransferTokensProps> = ({
           Quantidade de Tokens
         </label>
         <input
-          id="transferAmount"
           type="number"
-          value={transferAmount}
+          value={transferAmount || ''} // Exibe vazio quando transferAmount for ''
           onChange={(e) => setTransferAmount(e.target.value)}
           placeholder="Digite o valor"
           className="w-full p-3 bg-gray-800 text-white rounded-lg border border-gray-700 focus:ring-2 focus:ring-purple-500 focus:outline-none"
