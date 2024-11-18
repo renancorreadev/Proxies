@@ -1,6 +1,7 @@
 import React from 'react';
 import { useFetchTransfers } from '@/hooks/';
 import { MdOutlineArrowUpward, MdOutlineArrowDownward } from 'react-icons/md';
+import { GradientTitle } from '@/components/app/Dashboard/GradientTitle';
 
 interface TransactionHistoryProps {
   walletAddress: string;
@@ -38,19 +39,18 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
   return (
     <div className="flex flex-col gap-6">
       {/* Título com Gradiente */}
-      <h2 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-green-500 text-center mb-6">
-        Extrato
-      </h2>
 
-      {refreshTransfers && (
-        <button
-          onClick={refreshTransfers}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all self-center mb-4"
-        >
-          Atualizar Extrato
-        </button>
-      )}
-
+      <div className="flex flex-row justify-between">
+        <GradientTitle>Extrato</GradientTitle>
+        {refreshTransfers && (
+          <button
+            onClick={refreshTransfers}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all self-center mb-4"
+          >
+            Atualizar Extrato
+          </button>
+        )}
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Painel de Transferências Recebidas */}
         <div className="flex flex-col bg-gradient-to-b from-green-600 to-gray-800 text-white rounded-lg p-6 shadow-lg">

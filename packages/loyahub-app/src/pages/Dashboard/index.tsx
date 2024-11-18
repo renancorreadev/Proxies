@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import { useState } from 'react';
 import {
   useFetchMetadata,
   useFetchPoints,
@@ -13,12 +14,12 @@ import {
   MdOutlinePayment,
 } from 'react-icons/md';
 
-import { Benefit } from '@/helpers/@types/metadata-types';
-
 import { useModal } from '@/context/modal-provider';
+
+// Components
 import { ModalTransferTokens } from './ModalTransferTokens';
 import { TransactionHistory } from './TransactionStory';
-import { useState } from 'react';
+import { Attributes } from './Attributes';
 
 export const Dashboard = () => {
   const { userData } = useUserStore();
@@ -58,7 +59,6 @@ export const Dashboard = () => {
 
   const [transferKey, setTransferKey] = useState(0);
 
-  // Função para atualizar o histórico de transferências
   const refreshTransfers = () => {
     setTransferKey((prev) => prev + 1); // Atualiza a key para forçar o remount
   };
@@ -151,34 +151,8 @@ export const Dashboard = () => {
         )}
       </div>
 
-      <div className="mb-10">
-        <h3 className="text-2xl font-semibold mb-6">Atributos</h3>
-        <ul className="space-y-6">
-          {metadata?.attributes.map((attr, index) => (
-            <li
-              key={index}
-              className="bg-gray-800 bg-opacity-75 rounded-lg shadow-lg p-6"
-            >
-              <p className="text-lg font-medium">{attr.type}</p>
-              {Array.isArray(attr.value) ? (
-                <ul className="mt-2 space-y-2">
-                  {(attr.value as Benefit[]).map((benefit, i) => (
-                    <li key={i} className="text-gray-300">
-                      {benefit.description} -{' '}
-                      {benefit.discount ||
-                        benefit.FreeFrete ||
-                        benefit.promotionLevel ||
-                        benefit.doublePoints}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-gray-400 mt-1">{attr.value}</p>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
+      {/* Atributos */}
+      {metadata && <Attributes attributes={metadata.attributes} />}
       {/* Histórico de Transações */}
       {walletAddress && (
         <TransactionHistory
