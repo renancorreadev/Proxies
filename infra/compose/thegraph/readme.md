@@ -10,7 +10,7 @@
 
 - Configuracoes iniciais:
 
-1. graph init --studio drex \
+1. graph init --studio drex \ 
    --from-contract 0x640c974A4d1cF06d9b0c15669c50eE1D62fA7C14 \
    --network private \
    --node http://localhost:8020/ \

@@ -54,4 +54,20 @@ export class ERC20ManagerConnector extends ERC20ManagerBlockchainConnector imple
 			console.error('Erro ao aprovar o gasto do token Drex:', e);
 		}
 	}
+
+	async transfer(params: TransferToParam): Promise<ContractTransactionReceipt> {
+		try {
+			const { to, amount } = params;
+
+			const parsedAmount = parseUnits(amount.toString(), 18);
+			const tx = await this.contract.transfer(to, parsedAmount, {
+				gasLimit: 500000,
+				gasPrice: 0,
+			});
+
+			return await tx.wait();
+		} catch (e) {
+			console.error('Erro ao transferir token Drex:', e);
+		}
+	}
 }

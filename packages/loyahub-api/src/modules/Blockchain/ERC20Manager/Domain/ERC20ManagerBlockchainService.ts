@@ -5,6 +5,7 @@ import { ERC20ManagerBlockchainTokenUseCase } from '../Port/Input/ERC20ManagerBl
 import { GetBalanceRequestDTO } from './Dto/HTTPRequest/get-balance-request-dto';
 import { ERC20ManagerBlockchainTokenOutputPort } from '../Port/Output/ERC20ManagerBlockchainTokenOutputPort';
 import { ApproveDrexRequestDTO } from './Dto/HTTPRequest/approve-request-dto';
+import { TransferDrexRequestDTO } from './Dto/HTTPRequest/transfer-request-dto';
 
 @Injectable()
 export class ERC20ManagerBlockchainService implements ERC20ManagerBlockchainTokenUseCase {
@@ -35,6 +36,15 @@ export class ERC20ManagerBlockchainService implements ERC20ManagerBlockchainToke
 		} catch (e) {
 			this.logger.error(`Error in ERC20ManagerBlockchainService: ${JSON.stringify(e)}`);
 			throw new Error('An error occurred while approving the Drex');
+		}
+	}
+
+	async transferDrex(params: TransferDrexRequestDTO): Promise<string> {
+		try {
+			return await this.erc20ManagerBlockchainTokenAdapter.transferDrex(params);
+		} catch (e) {
+			this.logger.error(`Error in ERC20ManagerBlockchainService: ${JSON.stringify(e)}`);
+			throw new Error('An error occurred while transferring the Drex');
 		}
 	}
 }
