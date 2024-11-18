@@ -10,6 +10,7 @@ import { getUserByEmail } from '@helper/api';
 /** Connector Blockchain */
 import { ERC20ManagerConnector } from '@helper/blockchain/connector/ERC20ManagerConnector';
 import { ApproveDrexRequestDTO } from '../../Domain/Dto/HTTPRequest/approve-request-dto';
+import { TransferDrexRequestDTO } from '../../Domain/Dto/HTTPRequest/transfer-request-dto';
 config();
 
 @Injectable()
@@ -68,5 +69,28 @@ export class ERC20ManagerBlockchainAdapter implements ERC20ManagerBlockchainToke
 			this.logger.error(`Error: ${JSON.stringify(error.message || error)}`);
 			throw new Error('An error occurred in the approve function on the blockchain');
 		}
+	}
+
+	async transferDrex(params: TransferDrexRequestDTO): Promise<string> {
+		const { email, to, amount } = params;
+		const { ERC20_CONTRACT_ADDRESS, PROVIDER, PRIVATE_KEY } = process.env;
+
+		if (!ERC20_CONTRACT_ADDRESS || !PROVIDER || !PRIVATE_KEY) {
+			throw new Error('Missing required environment variables');
+		}
+
+		const privateKey = await getPrivateKeyFromVault(email);
+
+		if (!privateKey) throw new Error('Private key not found in Vault');
+
+		const drexContractInstance = new ERC20ManagerConnector(ERC20_CONTRACT_ADDRESS, PROVIDER, privateKey);
+
+		const { hash } = await drexContractInstance.transfer({ to, amount });
+
+		return hash;
+	}
+	catch(error) {
+		this.logger.error(`Error: ${JSON.stringify(error.message || error)}`);
+		throw new Error('An error occurred in the transfer function on the blockchain');
 	}
 }

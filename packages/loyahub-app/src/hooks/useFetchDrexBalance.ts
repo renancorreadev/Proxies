@@ -13,7 +13,7 @@ export const useFetchDrexBalance = (email: string | null) => {
       setLoading(true);
       try {
         const response = await axiosConfig.get<number>(
-          `/api/v1/erc20/balanceDrex/?email=${email}`
+          `/api/v1/erc20/token-balance/?email=${email}`
         );
 
         const balanceInEther = Number(response.data) / 1e18;
