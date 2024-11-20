@@ -1,1 +1,0 @@
-/Users/giovanadaue/www/blockchain/customer-rewards-blockchain/packages/subgraph-server/target/debug/subgraph_server: /Users/giovanadaue/www/blockchain/customer-rewards-blockchain/packages/subgraph-server/src/main.rs
