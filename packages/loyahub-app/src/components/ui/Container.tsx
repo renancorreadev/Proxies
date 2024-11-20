@@ -3,16 +3,23 @@ import React from 'react';
 interface ContainerProps {
   children: React.ReactNode;
   className?: string;
+  mxAuto?: boolean;
+  containerClassName?: boolean;
 }
 
-export function Container(props: Readonly<ContainerProps>) {
+export function Container({
+  children,
+  className,
+  mxAuto = true,
+  containerClassName = true,
+}: ContainerProps) {
   return (
     <div
-      className={`container p-8 mx-auto xl:px-0 ${
-        props.className ? props.className : ''
-      }`}
+      className={`p-8 ${mxAuto ? 'mx-auto' : ''} ${
+        containerClassName ? containerClassName : ''
+      } ${className ? className : ''}`}
     >
-      {props.children}
+      {children}
     </div>
   );
 }

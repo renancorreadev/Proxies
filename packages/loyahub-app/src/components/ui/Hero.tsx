@@ -1,12 +1,16 @@
 import { Container } from '@/components/ui/Container';
 
 export const Hero: React.FC = () => (
-  <Container className="flex flex-wrap items-center min-h-[80vh] bg-gradient-to-r from-purple-400 via-indigo-500 to-blue-600">
-    <div className="w-full lg:w-1/2 text-white">
+  <Container
+    containerClassName={false}
+    mxAuto={false}
+    className="flex w-full h-full bg-gradient-to-r from-purple-400 via-indigo-500 to-blue-600"
+  >
+    <div className="w-full lg:w-1/2 text-white mt-6">
       <h1 className="text-5xl font-extrabold tracking-tight mb-5">
         Recompensas e Drex: O Futuro das Finanças
       </h1>
-      <p className="text-xl mb-6">
+      <p className="text-xl mb-6 mx-4">
         Converta pontos em Drex, a moeda digital brasileira, e desbloqueie
         níveis como Premium, Gold e Titanium para maximizar seus ganhos!
       </p>

@@ -11,7 +11,7 @@
     "start:full": "lerna run --parallel --stream --no-bail dev --scope loyahub-blockchain-service --scope loyahub-api --scope loyahub-admin-ui --scope loyahub-app --scope loyahub-doc",
     "start:dev": "lerna run --parallel --stream dev --scope loyahub-api --scope loyahub-blockchain-service",
     "bs:download": "lerna run --scope loyahub-blockchain-service --stream download",
-    "bs": "lerna run --scope loyahub-blockchain-service --stream dev --ignore-missing ",
+    "bs": "lerna run --scope loyahub-blockchain-service --stream dev ",
     "api": "lerna run --scope loyahub-api --stream dev",
     "app": "lerna run --scope loyahub-app --stream dev",
     "admin:ui": "lerna run --scope loyahub-admin-ui --stream dev",
@@ -46,5 +46,6 @@
         }
       }
     }
-  }
+  },
+  "packageManager": "pnpm@9.13.2+sha512.88c9c3864450350e65a33587ab801acf946d7c814ed1134da4a924f6df5a2120fd36b46aab68f7cd1d413149112d53c7db3a4136624cfd00ff1846a0c6cef48a"
 }
