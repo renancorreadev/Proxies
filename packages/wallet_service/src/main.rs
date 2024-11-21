@@ -7,19 +7,25 @@ mod presentation;
 
 use dotenvy::dotenv;
 use std::net::SocketAddr;
+use axum::Router;
 
-#[tokio::main] // Certifique-se de que essa anotação está habilitada corretamente
+#[tokio::main]
 async fn main() {
-    dotenv().ok(); // Carrega variáveis do arquivo .env
+    dotenv().ok();
 
-    // Cria o roteador para gerenciar as rotas
-    let app = presentation::controllers::user_controller::create_router();
+    // Roteadores das funcionalidades
+    let user_router = presentation::controllers::user_controller::create_router();
+    let wallet_router = presentation::controllers::wallet_controller::create_router();
 
-    // Define o endereço para o servidor
+    // Aplicativo principal com sub-rotas
+    let app = Router::new()
+        .nest("/user", user_router)  
+        .nest("/wallet", wallet_router); 
+
+    // Inicializando o servidor
     let addr = SocketAddr::from(([127, 0, 0, 1], config::get_port().parse().unwrap()));
     println!("Server running at http://{}", addr);
 
-    // Inicia o servidor Axum
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
         .await
