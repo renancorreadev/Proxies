@@ -164,7 +164,8 @@ export const Dashboard = () => {
 
       <ModalTransferTokens
         email={email ?? ''}
-        refreshDrexBalance={refreshDrexBalance} // Atualiza o saldo Drex ao transferir
+        sender={walletAddress ?? ''}
+        refreshDrexBalance={refreshDrexBalance}
         onTransferSuccess={() => console.log('Transferência concluída!')}
       />
     </div>

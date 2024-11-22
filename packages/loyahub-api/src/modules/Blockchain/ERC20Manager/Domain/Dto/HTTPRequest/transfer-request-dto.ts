@@ -11,6 +11,16 @@ export class TransferDrexRequestDTO {
 		type: String,
 		required: true,
 		example: '0x0000000000000000000000000000000000000000',
+		description: 'Endereço de remetente',
+	})
+	@IsNotEmpty()
+	@IsString()
+	sender: string;
+
+	@ApiProperty({
+		type: String,
+		required: true,
+		example: '0x0000000000000000000000000000000000000000',
 		description: 'Endereço de destino',
 	})
 	@IsNotEmpty()

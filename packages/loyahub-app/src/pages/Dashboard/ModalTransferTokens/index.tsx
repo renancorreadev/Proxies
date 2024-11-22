@@ -6,12 +6,14 @@ import { useModal } from '@/context/modal-provider';
 
 interface ModalTransferTokensProps {
   email: string;
+  sender: string;
   refreshDrexBalance: () => void;
   onTransferSuccess?: () => void;
 }
 
 export const ModalTransferTokens: React.FC<ModalTransferTokensProps> = ({
   email,
+  sender,
   refreshDrexBalance,
   onTransferSuccess,
 }) => {
@@ -30,8 +32,9 @@ export const ModalTransferTokens: React.FC<ModalTransferTokensProps> = ({
     try {
       await transferTokens({
         email,
+        sender,
         to: recipientAddress,
-        amount: parseFloat(transferAmount), // Converter para número
+        amount: parseFloat(transferAmount),
       });
       toast.success('Transferência realizada com sucesso!');
       setRecipientAddress('');
