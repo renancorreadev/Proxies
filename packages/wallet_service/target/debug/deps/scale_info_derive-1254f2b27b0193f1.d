@@ -1,8 +1,0 @@
-/Users/giovanadaue/www/blockchain/customer-rewards-blockchain/packages/wallet_service/target/debug/deps/libscale_info_derive-1254f2b27b0193f1.dylib: /Users/giovanadaue/.cargo/registry/src/index.crates.io-6f17d22bba15001f/scale-info-derive-2.11.6/src/lib.rs /Users/giovanadaue/.cargo/registry/src/index.crates.io-6f17d22bba15001f/scale-info-derive-2.11.6/src/attr.rs /Users/giovanadaue/.cargo/registry/src/index.crates.io-6f17d22bba15001f/scale-info-derive-2.11.6/src/trait_bounds.rs /Users/giovanadaue/.cargo/registry/src/index.crates.io-6f17d22bba15001f/scale-info-derive-2.11.6/src/utils.rs
-
-/Users/giovanadaue/www/blockchain/customer-rewards-blockchain/packages/wallet_service/target/debug/deps/scale_info_derive-1254f2b27b0193f1.d: /Users/giovanadaue/.cargo/registry/src/index.crates.io-6f17d22bba15001f/scale-info-derive-2.11.6/src/lib.rs /Users/giovanadaue/.cargo/registry/src/index.crates.io-6f17d22bba15001f/scale-info-derive-2.11.6/src/attr.rs /Users/giovanadaue/.cargo/registry/src/index.crates.io-6f17d22bba15001f/scale-info-derive-2.11.6/src/trait_bounds.rs /Users/giovanadaue/.cargo/registry/src/index.crates.io-6f17d22bba15001f/scale-info-derive-2.11.6/src/utils.rs
-
-/Users/giovanadaue/.cargo/registry/src/index.crates.io-6f17d22bba15001f/scale-info-derive-2.11.6/src/lib.rs:
-/Users/giovanadaue/.cargo/registry/src/index.crates.io-6f17d22bba15001f/scale-info-derive-2.11.6/src/attr.rs:
-/Users/giovanadaue/.cargo/registry/src/index.crates.io-6f17d22bba15001f/scale-info-derive-2.11.6/src/trait_bounds.rs:
-/Users/giovanadaue/.cargo/registry/src/index.crates.io-6f17d22bba15001f/scale-info-derive-2.11.6/src/utils.rs:
