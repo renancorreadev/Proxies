@@ -34,7 +34,6 @@ pub async fn create_wallet_endpoint(Json(request): Json<WalletRequest>) -> impl 
             )
         }
         Err(err) => {
-            // Resposta JSON em caso de erro
             (
                 StatusCode::INTERNAL_SERVER_ERROR,
                 Json(json!({
@@ -46,7 +45,7 @@ pub async fn create_wallet_endpoint(Json(request): Json<WalletRequest>) -> impl 
     }
 }
 
-/// Assinatura de uma transação
+
 pub async fn sign_transaction_endpoint(Json(request): Json<SignTransactionRequest>) -> impl IntoResponse {
     match sign_transaction(&request.email, request.transaction).await {
         Ok(signed_tx) => (
@@ -67,7 +66,7 @@ pub async fn sign_transaction_endpoint(Json(request): Json<SignTransactionReques
     }
 }
 
-/// Criação do router
+
 pub fn create_router() -> Router {
     Router::new()
         .route("/create", post(create_wallet_endpoint))

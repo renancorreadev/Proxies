@@ -1,0 +1,16 @@
+services:
+  wallet-engine:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: wallet-engine
+    ports:
+      - "8084:8084"
+    networks:
+      - protocol
+    environment:
+      RUST_LOG: info
+
+networks:
+  protocol:
+    external: true

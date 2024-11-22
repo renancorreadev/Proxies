@@ -15,7 +15,7 @@ struct OuterData {
 
 #[derive(Deserialize)]
 struct InnerData {
-    #[serde(rename = "privateKey")] // Mapeia o nome do campo para corresponder ao JSON
+    #[serde(rename = "privateKey")] 
     private_key: String,
 }
 
@@ -58,9 +58,9 @@ pub async fn retrieve_private_key_from_vault(email: &str) -> Result<String, Box<
         .text()
         .await?;
 
-    println!("Vault Response: {}", response_text); // Log para depuração
+    println!("Vault Response: {}", response_text); 
 
-    // Ajusta a desserialização para lidar com dois níveis de `data`
+
     let response: VaultResponse = serde_json::from_str(&response_text)?;
     Ok(response.data.data.private_key)
 }
