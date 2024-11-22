@@ -23,5 +23,10 @@ pub async fn sign_transaction(
     let private_key = retrieve_private_key_from_vault(email).await?;
     let wallet: LocalWallet = private_key.parse()?;
     let signature = wallet.sign_transaction(&tx).await?;
-    Ok(signature.to_string()) // Converte a assinatura para string
+
+    // Serializa a transação no formato RLP
+    let rlp_signed_tx = tx.rlp_signed(&signature);
+
+    // Retorna a transação serializada como hexadecimal
+    Ok(format!("0x{}", hex::encode(rlp_signed_tx)))
 }

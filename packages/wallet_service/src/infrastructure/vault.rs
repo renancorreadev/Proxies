@@ -5,16 +5,17 @@ use crate::config;
 
 #[derive(Deserialize)]
 struct VaultResponse {
-    data: VaultData,
+    data: OuterData,
 }
 
 #[derive(Deserialize)]
-struct VaultData {
-    data: PrivateKey,
+struct OuterData {
+    data: InnerData,
 }
 
 #[derive(Deserialize)]
-struct PrivateKey {
+struct InnerData {
+    #[serde(rename = "privateKey")] // Mapeia o nome do campo para corresponder ao JSON
     private_key: String,
 }
 
@@ -42,7 +43,6 @@ pub async fn store_private_key_in_vault(email: &str, private_key: &str) -> Resul
     }
 }
 
-/// Recupera uma chave privada do Vault
 pub async fn retrieve_private_key_from_vault(email: &str) -> Result<String, Box<dyn std::error::Error>> {
     let vault_endpoint = config::get_vault_endpoint();
     let vault_token = config::get_vault_token();
@@ -50,13 +50,17 @@ pub async fn retrieve_private_key_from_vault(email: &str) -> Result<String, Box<
     let client = Client::new();
     let url = format!("{}/v1/secret/data/{}", vault_endpoint, email);
 
-    let response: VaultResponse = client
+    let response_text = client
         .get(&url)
         .header("X-Vault-Token", &vault_token)
         .send()
         .await?
-        .json()
+        .text()
         .await?;
 
+    println!("Vault Response: {}", response_text); // Log para depuração
+
+    // Ajusta a desserialização para lidar com dois níveis de `data`
+    let response: VaultResponse = serde_json::from_str(&response_text)?;
     Ok(response.data.data.private_key)
 }

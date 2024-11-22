@@ -7,3 +7,7 @@ export const api = axios.create({
 export function getUserByEmail(email: string) {
 	return api.get(`/user/get/${email}`);
 }
+
+export const signServiceAPI = axios.create({
+	baseURL: process.env.SIGN_SERVICE_API,
+});
