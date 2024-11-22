@@ -8,6 +8,6 @@ export function getUserByEmail(email: string) {
 	return api.get(`/user/get/${email}`);
 }
 
-export const signServiceAPI = axios.create({
+export const walletEngineAPI = axios.create({
 	baseURL: process.env.SIGN_SERVICE_API,
 });

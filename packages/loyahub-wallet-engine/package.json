@@ -1,0 +1,11 @@
+{
+  "name": "loyahub-wallet-engine",
+  "version": "1.0.0",
+  "description": "## Wallet Engine",
+  "scripts": {
+    "dev": "cargo build && cargo run"
+  },
+  "keywords": [],
+  "author": "Renan Correa",
+  "license": "ISC"
+}

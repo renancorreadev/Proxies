@@ -3,8 +3,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { UserEntity } from './db/UserEntity';
 import * as bcrypt from 'bcrypt';
-import { WalletCreator } from '@helper/walletCreator';
-import { storePrivateKeyInVault } from '@helper/vault';
 import { InternalServerError, UserNotFoundError } from '../../Domain/errors/user.errors';
 import { UserRegisterDTORequest } from '../../Domain/DTO/HTTPRequest/userHttpRequest';
 
@@ -14,6 +12,7 @@ import { AddressLocal } from '@helper/blockchain/types/contracts/client-manager-
 import axios from 'axios';
 import { DependencyInjectionTokens } from '@helper/AppConstants';
 
+import { walletEngineAPI } from '@/src/helper/api';
 @Injectable()
 export class UserAdapter {
 	constructor(@Inject(DependencyInjectionTokens.DATA_SOURCE) private readonly dataSource: DataSource) {}
@@ -28,10 +27,10 @@ export class UserAdapter {
 
 		const hashedPassword = await bcrypt.hash(password, 10);
 
-		// 1. Cria uma nova carteira Ethereum
-		const walletCreator = new WalletCreator();
-		const { walletAddress, privateKey } = walletCreator.createNewEthereumWallet();
-		if (!walletAddress || !privateKey) throw new InternalServerError('Failed to create a new Ethereum wallet.');
+		// 1. Cria uma nova wallet usando o serviço wallet-engine
+		const walletResponse = await this.createWalletFromEngine(email);
+		const { walletAddress } = walletResponse;
+		if (!walletAddress) throw new InternalServerError('Failed to create a new Ethereum wallet.');
 
 		const newUser = this.userRepository.create({
 			email,
@@ -51,9 +50,7 @@ export class UserAdapter {
 		// 2. Salva o novo usuário no banco de dados
 		await this.userRepository.save(newUser);
 
-		// 3. Armazena a chave privada no Vault
-		await storePrivateKeyInVault(email, privateKey);
-
+		// 3. Registra o cliente na blockchain
 		await this.registerClient({
 			name: username,
 			age,
@@ -62,12 +59,7 @@ export class UserAdapter {
 			address,
 		});
 
-		const userCreated = {
-			...newUser,
-			privateKey,
-		};
-
-		return userCreated;
+		return newUser;
 	}
 
 	async getUser(email: string): Promise<UserInfo | undefined> {
@@ -117,7 +109,6 @@ export class UserAdapter {
 		try {
 			const { name, age, walletAddress, paymentStatus, address } = registerClientBlockchainDto;
 
-			// Estrutura de dados para `address`, assegurando correspondência exata
 			const addressPayload: AddressLocal = {
 				City: address.City,
 				Street: address.Street,
@@ -125,7 +116,6 @@ export class UserAdapter {
 				HouseNumber: Number(address.HouseNumber),
 			};
 
-			// Dados do `payload`, correspondendo à estrutura JSON fornecida no `curl`
 			const payload = {
 				name,
 				age,
@@ -134,7 +124,6 @@ export class UserAdapter {
 				address: addressPayload,
 			};
 
-			// Configuração da requisição `axios`
 			const config = {
 				method: 'post',
 				maxBodyLength: Infinity,
@@ -151,6 +140,25 @@ export class UserAdapter {
 		} catch (error) {
 			console.error('Erro ao registrar cliente na blockchain:', error);
 			throw new Error('An error occurred in write contract registerClient function on blockchain');
+		}
+	}
+	private async createWalletFromEngine(email: string): Promise<{ walletAddress: string }> {
+		try {
+			const payload = { email };
+			const response = await walletEngineAPI.post(`/wallet/create`, payload, {
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+
+			if (response?.data?.address) {
+				return { walletAddress: response.data.address };
+			} else {
+				throw new Error('Invalid response from wallet engine');
+			}
+		} catch (error) {
+			console.error('Erro ao criar wallet usando o wallet engine:', error);
+			throw new InternalServerError('Failed to create wallet using wallet engine');
 		}
 	}
 }

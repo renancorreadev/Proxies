@@ -2011,6 +2011,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a7a70ba024b9dc04c27ea2f0c0548feb474ec5c54bba33a7f72f873a39d07b24"
 
 [[package]]
+name = "loyahub-wallet-engine"
+version = "0.1.0"
+dependencies = [
+ "axum",
+ "chrono",
+ "diesel",
+ "dotenvy",
+ "ethers",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "tokio",
+]
+
+[[package]]
 name = "matchit"
 version = "0.7.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3768,21 +3783,6 @@ checksum = "29790946404f91d9c5d06f9874efddea1dc06c5efe94541a7d6863108e3a5e4b"
 dependencies = [
  "same-file",
  "winapi-util",
-]
-
-[[package]]
-name = "wallet_service"
-version = "0.1.0"
-dependencies = [
- "axum",
- "chrono",
- "diesel",
- "dotenvy",
- "ethers",
- "reqwest",
- "serde",
- "serde_json",
- "tokio",
 ]
 
 [[package]]

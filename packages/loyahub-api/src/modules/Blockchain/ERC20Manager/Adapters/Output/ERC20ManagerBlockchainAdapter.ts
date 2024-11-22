@@ -16,7 +16,7 @@ config();
 @Injectable()
 export class ERC20ManagerBlockchainAdapter implements ERC20ManagerBlockchainTokenOutputPort {
 	private readonly logger = new Logger('ERC20ManagerBlockchainAdapter');
-	private readonly signServiceAPI = `${process.env.SIGN_SERVICE_API}`;
+	private readonly walletEngineAPI = `${process.env.SIGN_SERVICE_API}`;
 	private readonly provider = process.env.PROVIDER;
 	private readonly contractAddress = process.env.ERC20_CONTRACT_ADDRESS;
 
@@ -52,7 +52,7 @@ export class ERC20ManagerBlockchainAdapter implements ERC20ManagerBlockchainToke
 			const connector = this.getConnector();
 
 			const value = parseUnits(amount.toString(), 18);
-			const { transactionHash } = await connector.approve(email, sender, spender, value, this.signServiceAPI);
+			const { transactionHash } = await connector.approve(email, sender, spender, value, this.walletEngineAPI);
 
 			this.logger.log(`Approve transaction successful: ${transactionHash}`);
 			return true;
@@ -68,7 +68,7 @@ export class ERC20ManagerBlockchainAdapter implements ERC20ManagerBlockchainToke
 			const connector = this.getConnector();
 
 			const value = parseUnits(amount.toString(), 18);
-			const { transactionHash } = await connector.transfer(email, sender, to, value, this.signServiceAPI);
+			const { transactionHash } = await connector.transfer(email, sender, to, value, this.walletEngineAPI);
 
 			this.logger.log(`Transfer transaction successful: ${transactionHash}`);
 			return transactionHash;
