@@ -1,0 +1,16 @@
+{
+	"name": "wallet-engine-rust",
+	"image": "rust:latest",
+	"workspaceFolder": "/home/node/app",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"redhat.vscode-yaml",
+				"rust-lang.rust"
+			]
+		}
+	},
+	"mounts": [
+		"source=${localWorkspaceFolder}/,target=/home/node/app,type=bind"
+	]
+}

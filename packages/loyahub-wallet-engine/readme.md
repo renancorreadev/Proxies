@@ -21,4 +21,10 @@ Criptografia de dados:
 - HMAC: SHA256
 
 
+## Docker 
 
+- Build: `docker build -t loyahub-wallet-engine .`
+
+- Run: `docker-compose up -d`
+
+- Stop: `docker-compose down`

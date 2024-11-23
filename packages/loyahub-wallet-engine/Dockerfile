@@ -1,30 +1,27 @@
-FROM rust:1.79 AS builder
+# Usar a imagem base Rust
+FROM rust:1.79
 
+# Definir o diretório de trabalho dentro do container
 WORKDIR /app
 
+# Copiar apenas os arquivos de dependência primeiro (para aproveitar o cache do Docker)
 COPY Cargo.toml Cargo.lock ./
 
+# Criar um diretório "src" vazio para permitir o build parcial
 RUN mkdir src && echo "// placeholder" > src/lib.rs
 
-RUN cargo fetch
-
-COPY . .
-
-
+# Instalar dependências e compilar parcialmente
 RUN cargo build --release
 
+# Remover o placeholder e copiar o restante do código do projeto
+RUN rm -rf src
+COPY . .
 
-FROM debian:bullseye-slim
+# Compilar o binário no modo release
+RUN cargo build --release
 
-
-RUN apt-get update && apt-get install -y libssl-dev ca-certificates && rm -rf /var/lib/apt/lists/*
-
-WORKDIR /app
-
-
-COPY --from=builder /app/target/release/wallet-engine .
-
-
+# Expor a porta correta
 EXPOSE 8084
 
-CMD ["./wallet-engine"]
+# Comando para executar o binário
+CMD ["./target/release/loyahub-wallet-engine"]

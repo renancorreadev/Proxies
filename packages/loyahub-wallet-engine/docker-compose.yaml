@@ -3,13 +3,16 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: wallet-engine
+    container_name: loyahub-wallet-engine
     ports:
       - "8084:8084"
     networks:
-      - protocol
+      protocol:
+        aliases:
+          - wallet-engine
     environment:
       RUST_LOG: info
+      VAULT_URL: http://vault:8200 
 
 networks:
   protocol:

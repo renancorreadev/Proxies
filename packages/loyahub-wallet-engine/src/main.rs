@@ -13,7 +13,7 @@ use axum::Router;
 async fn main() {
     dotenv().ok();
 
-    /** @dev create routers */
+    //@dev create routers
     let user_router = presentation::controllers::user_controller::create_router();
     let wallet_router = presentation::controllers::wallet_controller::create_router();
 
@@ -22,7 +22,8 @@ async fn main() {
         .nest("/user", user_router)  
         .nest("/wallet", wallet_router); 
 
-    let addr = SocketAddr::from(([127, 0, 0, 1], config::get_port().parse().unwrap()));
+    let addr = SocketAddr::from(([0, 0, 0, 0], config::get_port().parse().unwrap()));
+
     println!("Server running at http://{}", addr);
 
     axum::Server::bind(&addr)
