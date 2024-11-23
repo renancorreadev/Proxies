@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import { useFetchDrexBalance } from '@/hooks';
 import { useUserStore } from '@/store/store';
 import {
   Menu,
@@ -13,6 +14,11 @@ import { Link } from 'react-router-dom';
 
 export const HeaderProfile = () => {
   const { email, userData, isLogged, logout } = useUserStore();
+  const {
+    drexBalance,
+    loading: drexLoading,
+    refreshDrexBalance,
+  } = useFetchDrexBalance(email);
 
   if (!isLogged || !userData) return <p>Loading...</p>;
 
@@ -31,7 +37,19 @@ export const HeaderProfile = () => {
 
   return (
     <div className="flex items-center gap-4">
-      <div>
+      <div className="flex gap-4 items-center">
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 bg-purple-700 text-white rounded-lg p-2">
+            <img
+              src={'./packages/loyahub-app/src/assets/images/realdigital.png'}
+              alt="Drex Icon"
+              className=""
+            />
+            <p className="text-sm font-bold">
+              {drexBalance !== null ? `${drexBalance}` : 'N/A'}
+            </p>
+          </div>
+        </div>
         <p className="text-lg tracking-tight text-slate-300 mb-1">
           Hello, {email ? formatUserName(email) : 'User'}
         </p>
