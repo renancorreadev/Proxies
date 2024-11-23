@@ -127,13 +127,14 @@ export const Dashboard = () => {
           [1, 2].map((key) => <div key={key}>{skeletonLoader}</div>)
         ) : (
           <>
-            <div className="flex flex-col items-center bg-purple-700 text-white rounded-lg p-6 text-center transform hover:scale-105 transition-transform duration-300">
+            <div className="flex flex-col items-center justify-center bg-purple-700 text-white rounded-lg p-6 text-center transform hover:scale-105 transition-transform duration-300 h-full">
               <FaCoins size={40} />
               <h3 className="text-lg font-semibold">Pontos</h3>
               <p className="text-3xl font-bold">
                 {points !== null ? points : 'N/A'}
               </p>
             </div>
+
             <div className="flex flex-col items-center bg-teal-700 text-white rounded-lg p-6 text-center transform hover:scale-105 transition-transform duration-300">
               <MdOutlineAccountBalanceWallet size={40} />
               <h3 className="text-lg font-semibold">Drex</h3>

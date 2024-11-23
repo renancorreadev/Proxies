@@ -41,9 +41,11 @@ export const HeaderProfile = () => {
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2 bg-purple-700 text-white rounded-lg p-2">
             <img
-              src={'./packages/loyahub-app/src/assets/images/realdigital.png'}
+              src={
+                'https://github.com/renancorreadev/loyahub/blob/develop/packages/loyahub-app/src/assets/images/realdigital.png?raw=true'
+              }
               alt="Drex Icon"
-              className=""
+              className="h-7 w-7"
             />
             <p className="text-sm font-bold">
               {drexBalance !== null ? `${drexBalance}` : 'N/A'}
